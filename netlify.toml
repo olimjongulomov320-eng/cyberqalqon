@@ -1,8 +1,8 @@
 [build]
-  command = "cd frontend && npm run build"
+  command = "cd frontend && npm install && npm run build"
   publish = "frontend/.next"
 
 [redirects]
-  for = "/*"
-  to = "/index.html"
-  status = 200
+  - for = "/*"
+    to = "/index.html"
+    status = 200
