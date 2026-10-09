@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+/.next/
+
+# Environment variables
+.env*
+
+# Production build
+out/
+
+# Debug
+.local/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Opencode temp files
+.opencode/
+
+# Replit config
+.replit
+
+# DB snapshots
+db/
+
+# Preview/ docs
+preview.html
+docs/
+
+# Skills lock
+skills-lock.json
+
+# Logs
+*.log
