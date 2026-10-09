@@ -1,0 +1,7 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[context.production]
+  # For SPA routing - redirect all paths to /index.html
+  # This works with the _redirects file at the site root
