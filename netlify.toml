@@ -1,7 +1,8 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+  command = "cd frontend && npm run build"
+  publish = "frontend/.next"
 
-[context.production]
-  # For SPA routing - redirect all paths to /index.html
-  # This works with the _redirects file at the site root
+[redirects]
+  for = "/*"
+  to = "/index.html"
+  status = 200
