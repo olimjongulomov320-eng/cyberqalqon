@@ -1,6 +1,13 @@
 # Dependencies
 node_modules/
-/.next/
+.next/
+*.tsbuildinfo
+
+# Generated PWA service worker artifacts (rebuilt on every build)
+frontend/public/sw.js
+frontend/public/swe-worker-*.js
+frontend/public/workbox-*.js
+frontend/public/fallback-*.js
 
 # Environment variables
 .env*

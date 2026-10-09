@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Outer glow -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-strong" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <!-- Cyan gradient -->
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <!-- Shield gradient -->
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f2340"/>
+      <stop offset="100%" style="stop-color:#080c14"/>
+    </linearGradient>
+    <!-- Glow gradient for crack -->
+    <linearGradient id="crackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle (subtle) -->
+  <circle cx="100" cy="100" r="95" fill="#080c14" opacity="0.95"/>
+  <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(6,182,212,0.15)" stroke-width="1"/>
+
+  <!-- Shield body -->
+  <path d="M100 22 L162 50 L162 108 Q162 150 100 178 Q38 150 38 108 L38 50 Z"
+    fill="url(#shieldGrad)" stroke="url(#cyanGrad)" stroke-width="2.5" filter="url(#glow)"/>
+
+  <!-- Shield inner border -->
+  <path d="M100 32 L152 56 L152 108 Q152 144 100 168 Q48 144 48 108 L48 56 Z"
+    fill="none" stroke="rgba(6,182,212,0.2)" stroke-width="1"/>
+
+  <!-- ── BROKEN LOCK ── -->
+
+  <!-- Lock body (bottom part) — solid, intact -->
+  <rect x="72" y="108" width="56" height="42" rx="6"
+    fill="url(#cyanGrad)" filter="url(#glow)"/>
+
+  <!-- Lock body inner dark -->
+  <rect x="76" y="112" width="48" height="34" rx="4" fill="#080c14" opacity="0.7"/>
+
+  <!-- Keyhole -->
+  <circle cx="100" cy="126" r="7" fill="url(#cyanGrad)"/>
+  <rect x="96.5" y="126" width="7" height="10" rx="2" fill="url(#cyanGrad)"/>
+
+  <!-- Lock shackle LEFT side — intact, attached -->
+  <path d="M82 108 L82 88 Q82 68 100 68"
+    fill="none" stroke="url(#cyanGrad)" stroke-width="9" stroke-linecap="round"
+    filter="url(#glow)"/>
+
+  <!-- Lock shackle RIGHT side — BROKEN, pulled away and rotated -->
+  <!-- The broken piece swings up-right, gap visible at top -->
+  <path d="M118 108 L118 92 Q118 72 104 68"
+    fill="none" stroke="url(#cyanGrad)" stroke-width="9" stroke-linecap="round"
+    opacity="0.5" filter="url(#glow)"
+    transform="rotate(28, 118, 108)"/>
+
+  <!-- Break gap highlight — glowing crack at the shackle break point -->
+  <line x1="97" y1="68" x2="108" y2="65"
+    stroke="#06b6d4" stroke-width="2.5" stroke-linecap="round"
+    filter="url(#glow-strong)" opacity="0.9"/>
+
+  <!-- Spark particles at the break -->
+  <circle cx="104" cy="64" r="2.5" fill="#06b6d4" filter="url(#glow-strong)" opacity="0.9"/>
+  <circle cx="96"  cy="67" r="1.8" fill="#67e8f9" filter="url(#glow-strong)" opacity="0.7"/>
+  <circle cx="110" cy="61" r="1.5" fill="#3b82f6" filter="url(#glow-strong)" opacity="0.8"/>
+  <circle cx="101" cy="58" r="1.2" fill="#06b6d4" filter="url(#glow-strong)" opacity="0.6"/>
+
+  <!-- Scan line across shield (hacker aesthetic) -->
+  <line x1="46" y1="120" x2="154" y2="120"
+    stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
+  <line x1="46" y1="90"  x2="154" y2="90"
+    stroke="rgba(6,182,212,0.08)" stroke-width="1"/>
+
+  <!-- Corner hex-dots (techy detail) -->
+  <circle cx="55"  cy="55"  r="2" fill="rgba(6,182,212,0.4)"/>
+  <circle cx="145" cy="55"  r="2" fill="rgba(6,182,212,0.4)"/>
+  <circle cx="48"  cy="110" r="2" fill="rgba(6,182,212,0.25)"/>
+  <circle cx="152" cy="110" r="2" fill="rgba(6,182,212,0.25)"/>
+
+</svg>
