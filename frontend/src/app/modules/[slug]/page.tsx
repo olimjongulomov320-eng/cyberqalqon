@@ -70,6 +70,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
   const hearts = useHearts();
   const heartsLostOnWrong = useRef(false);
   const topRef = useRef<HTMLDivElement>(null);
+  const exitRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -91,6 +92,42 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
     if (phase !== 'active') return;
     topRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }, [idx, phase]);
+
+  // Exit dialog: move focus in, trap Tab, close on Escape, restore focus after.
+  useEffect(() => {
+    if (!exitOpen) return;
+    const node = exitRef.current;
+    const previous = document.activeElement as HTMLElement | null;
+    node?.querySelector<HTMLElement>('button')?.focus();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setExitOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab' || !node) return;
+      const focusables = node.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      previous?.focus?.();
+    };
+  }, [exitOpen]);
 
   const current = exercises[idx];
 
@@ -527,13 +564,14 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
       {/* Exit confirm */}
       {exitOpen && (
         <div
+          ref={exitRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="exit-title"
-          className="fixed inset-0 z-[60] grid place-items-center bg-surface-950/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] grid animate-fade-in place-items-center bg-surface-950/70 p-4 backdrop-blur-sm"
           onClick={() => setExitOpen(false)}
         >
-          <Card className="w-full max-w-sm" onClick={e => e.stopPropagation()}>
+          <Card className="w-full max-w-sm animate-scale-in" onClick={e => e.stopPropagation()}>
             <h2 id="exit-title" className="text-lg font-bold text-white">{tr('exitLessonTitle')}</h2>
             <p className="mt-1 text-sm text-slate-400">{tr('exitLessonBody')}</p>
             <div className="mt-5 grid grid-cols-2 gap-2">
