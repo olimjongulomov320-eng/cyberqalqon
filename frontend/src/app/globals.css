@@ -23,7 +23,7 @@
 
   /* Focus visible - keyboard only */
   :focus-visible {
-    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-bg rounded-[inherit];
+    @apply outline-none ring-2 ring-cyan-400 ring-offset-2 ring-offset-bg rounded-[inherit];
   }
 
   /* Tabular numbers for XP counters and ranks */
@@ -35,7 +35,7 @@
 
   /* Selection */
   ::selection {
-    @apply bg-primary-500/30 text-white;
+    @apply bg-cyan-500/40 text-white;
   }
 
   /* Scrollbars */
@@ -129,7 +129,7 @@
   .input-base {
     @apply w-full rounded-md bg-surface-800 px-4 py-3 text-sm text-text-primary placeholder-text-muted
            border border-border transition-all duration-150
-           focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none
+           focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 focus:outline-none
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
@@ -230,12 +230,12 @@
 .lesson p { @apply leading-[1.75] text-pretty; }
 .lesson ul { @apply list-disc space-y-1.5 pl-5; }
 .lesson ol { @apply list-decimal space-y-1.5 pl-5; }
-.lesson li::marker { @apply text-primary-500/60; }
+.lesson li::marker { @apply text-cyan-500/60; }
 .lesson strong { @apply font-semibold text-text-primary; }
 .lesson em { @apply text-text-secondary; }
-.lesson a { @apply text-primary-400 underline decoration-primary-400/40 underline-offset-2 hover:decoration-primary-400; }
+.lesson a { @apply text-cyan-400 underline decoration-cyan-400/40 underline-offset-2 hover:decoration-cyan-400; }
 .lesson code {
-  @apply rounded-sm bg-surface-800 px-1.5 py-0.5 font-mono text-[0.8125em] text-primary-400;
+  @apply rounded-sm bg-surface-800 px-1.5 py-0.5 font-mono text-[0.8125em] text-cyan-300;
 }
 .lesson pre {
   @apply my-4 overflow-x-auto rounded-xl border border-border bg-surface-950 p-4 font-mono text-[0.8125rem] leading-relaxed text-success;

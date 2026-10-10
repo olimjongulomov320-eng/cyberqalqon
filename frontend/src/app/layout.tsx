@@ -69,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="grain">
         <a
           href="#main"
-          className="sr-only rounded-lg focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-skip focus:bg-primary-500 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
+          className="sr-only rounded-lg focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-skip focus:bg-cyan-400 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-text-inverse"
         >
           Skip to content / Oʻtish
         </a>

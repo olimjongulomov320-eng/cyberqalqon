@@ -39,7 +39,7 @@ type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 const BUTTON_BASE = 'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-150 ease-spring active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg';
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
-  primary: 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-[0_4px_16px_-4px_rgb(124_58_237_/_0.5)] hover:from-primary-600 hover:to-primary-700 hover:shadow-[0_8px_24px_-8px_rgb(124_58_237_/_0.6)]',
+  primary: 'bg-gradient-to-r from-cyan-400 to-cyan-500 text-text-inverse shadow-[0_4px_16px_-4px_rgb(6_182_212_/_0.45)] hover:from-cyan-300 hover:to-cyan-400 hover:shadow-[0_8px_24px_-8px_rgb(6_182_212_/_0.55)]',
   secondary: 'bg-surface-800 text-text-primary border border-border hover:bg-surface-700 hover:border-border-light',
   success: 'bg-gradient-to-r from-success to-success-dark text-white shadow-[0_4px_16px_-4px_rgb(34_197_94_/_0.4)] hover:shadow-[0_8px_24px_-8px_rgb(34_197_94_/_0.5)]',
   ghost: 'text-text-secondary hover:text-text-primary hover:bg-surface-800',
@@ -112,7 +112,7 @@ type BadgeTone = 'neutral' | 'primary' | 'success' | 'warning' | 'xp' | 'danger'
 
 const BADGE_TONES: Record<BadgeTone, string> = {
   neutral: 'border border-border bg-surface-800 text-text-muted',
-  primary: 'border border-primary-500/30 bg-primary-500/10 text-primary-400',
+  primary: 'border border-cyan-500/30 bg-cyan-500/10 text-cyan-400',
   success: 'border border-success/30 bg-success/10 text-success',
   warning: 'border border-warning/30 bg-warning/10 text-warning',
   xp: 'border border-warning/30 bg-warning/10 text-warning',
@@ -139,7 +139,7 @@ export function Badge({
 type ProgressTone = 'primary' | 'success' | 'warning' | 'xp';
 
 const PROGRESS_TONES: Record<ProgressTone, string> = {
-  primary: 'bg-gradient-to-r from-primary-500 to-primary-400',
+  primary: 'bg-gradient-to-r from-cyan-500 to-cyan-400',
   success: 'bg-gradient-to-r from-success to-success-light',
   warning: 'bg-gradient-to-r from-warning to-warning-light',
   xp: 'bg-gradient-to-r from-warning to-success',
@@ -211,7 +211,7 @@ export function Avatar({
   return (
     <span
       aria-hidden="true"
-      className={`avatar-base shrink-0 ${AVATAR_SIZES[size]} ${ring ? 'ring-2 ring-primary-500/50 ring-offset-2 ring-offset-bg' : ''} ${className}`}
+      className={`avatar-base shrink-0 ${AVATAR_SIZES[size]} ${ring ? 'ring-2 ring-cyan-500/50 ring-offset-2 ring-offset-bg' : ''} ${className}`}
     >
       <span className="opt-center">{emoji}</span>
       <span className="sr-only">{name}</span>
@@ -280,7 +280,7 @@ export function SuccessNote({ children, className = '' }: { children: ReactNode;
 export function InfoNote({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <p
-      className={`flex items-start gap-2 rounded-xl border border-primary-500/30 bg-primary-500/[0.06] px-4 py-3 text-sm leading-relaxed text-primary-400 ${className}`}
+      className={`flex items-start gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/[0.06] px-4 py-3 text-sm leading-relaxed text-cyan-400 ${className}`}
     >
       <span aria-hidden="true" className="shrink-0 font-semibold">i</span>
       <span>{children}</span>
@@ -336,7 +336,7 @@ type ToastType = 'success' | 'error' | 'info' | 'warning';
 const TOAST_STYLES: Record<ToastType, string> = {
   success: 'border-success/30',
   error: 'border-danger/30',
-  info: 'border-primary-500/30',
+  info: 'border-cyan-500/30',
   warning: 'border-warning/30',
 };
 

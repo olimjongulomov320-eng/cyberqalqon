@@ -291,11 +291,11 @@ export default function AuthPage() {
               {mode === m && (
                 <motion.span
                   layoutId="auth-tab"
-                  className="absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-primary-500 to-primary-600 shadow-[0_4px_16px_-6px_rgb(124_58_237_/_0.7)]"
+                  className="absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-cyan-400 to-cyan-500 shadow-[0_4px_16px_-6px_rgb(6_182_212_/_0.7)]"
                   transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                 />
               )}
-              <span className={mode === m ? 'text-white' : 'text-text-muted hover:text-text-secondary'}>
+              <span className={mode === m ? 'text-text-inverse' : 'text-text-muted hover:text-text-secondary'}>
                 {m === 'login' ? tr('login') : tr('register')}
               </span>
             </button>
@@ -399,15 +399,15 @@ export default function AuthPage() {
                     type="checkbox"
                     checked={terms}
                     onChange={e => setTerms(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-border bg-surface-800 text-primary-500 focus:ring-primary-500/30"
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-border bg-surface-800 text-cyan-400 focus:ring-cyan-400/30"
                   />
                   <span className="text-xs leading-relaxed text-text-secondary">
                     {tr('termsIAccept')}{' '}
-                    <Link href="/terms" className="font-medium text-primary-400 underline underline-offset-2 hover:text-primary-300">
+                    <Link href="/terms" className="font-medium text-cyan-400 underline underline-offset-2 hover:text-cyan-300">
                       {tr('terms')}
                     </Link>{' '}
                     {tr('and')}{' '}
-                    <Link href="/privacy" className="font-medium text-primary-400 underline underline-offset-2 hover:text-primary-300">
+                    <Link href="/privacy" className="font-medium text-cyan-400 underline underline-offset-2 hover:text-cyan-300">
                       {tr('privacy')}
                     </Link>
                   </span>
@@ -468,7 +468,7 @@ export default function AuthPage() {
           {isRegister ? tr('alreadyAccount') : tr('noAccount')}{' '}
           <button
             onClick={() => switchMode(isRegister ? 'login' : 'register')}
-            className="font-semibold text-primary-400 transition-colors hover:text-primary-300"
+            className="font-semibold text-cyan-400 transition-colors hover:text-cyan-300"
           >
             {isRegister ? tr('login') : tr('register')}
           </button>
