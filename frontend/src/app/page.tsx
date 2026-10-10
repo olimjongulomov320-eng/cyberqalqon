@@ -5,6 +5,7 @@ import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { fetchPaths, fetchStats, StatsPayload, LeaderboardEntry, fetchLeaderboard } from '@/lib/api';
 import { AchievementBadge, DailyGoal, Flame, RingProgress, XPChip } from '@/components/game';
+import LandingPreview from '@/components/LandingPreview';
 import { achievementMeta, levelFromXp, tierIndex, tierKey } from '@/lib/gamification';
 import { Avatar, Badge, ButtonLink, Card, EmptyState, SectionHeading, Skeleton } from '@/components/ui';
 
@@ -61,6 +62,11 @@ export default function HomePage() {
           <h1 className="display max-w-lg">{tr('heroTitle')}</h1>
           <p className="max-w-md text-sm leading-relaxed text-slate-400">{tr('heroBody')}</p>
           <ButtonLink href="/auth" size="lg">{tr('ctaStart')}</ButtonLink>
+        </section>
+
+        <section aria-labelledby="preview-h" className="mt-6">
+          <SectionHeading><span id="preview-h">{tr('previewTag')}</span></SectionHeading>
+          <LandingPreview />
         </section>
 
         <section aria-labelledby="how-h" className="mt-2">
@@ -130,6 +136,15 @@ export default function HomePage() {
               <p className="num text-xs text-slate-400">
                 {tr('continueHint')} · {continueCtx.position}/{continueCtx.total}
               </p>
+              <div
+                aria-hidden="true"
+                className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-cyan-500/15"
+              >
+                <div
+                  className="fill-x h-full rounded-full bg-cyan-500"
+                  style={{ transform: `scaleX(${continueCtx.position / continueCtx.total})`, transformOrigin: 'left' }}
+                />
+              </div>
             </div>
             <span aria-hidden="true" className="shrink-0 text-xl text-slate-500 transition-colors group-hover:text-cyan-500">›</span>
           </Link>

@@ -5,7 +5,6 @@ import { makeT } from '@/lib/i18n';
 import { ApiError, fetchLeaderboard, LeaderboardEntry } from '@/lib/api';
 import { Avatar, Button, Card, EmptyState, Skeleton } from '@/components/ui';
 
-const PODIUM_TONE: Record<number, string> = { 1: 'text-warning', 2: 'text-slate-300', 3: 'text-success' };
 type Period = 'week' | 'all';
 
 function SegmentedTabs({ period, setPeriod }: { period: Period; setPeriod: (p: Period) => void }) {
@@ -115,11 +114,23 @@ export default function LeaderboardPage() {
                 <li key={entry.user_id}>
                   <div
                     className={`flex items-center gap-3 rounded-lg border px-4 py-3 transition-colors ${
-                      isMe ? 'border-cyan-500/40 bg-cyan-500/[0.06]' : 'border-border bg-surface-900 shadow-card'
+                      isMe
+                        ? 'border-cyan-500/40 bg-cyan-500/[0.06]'
+                        : entry.rank <= 3
+                          ? 'border-warning/20 bg-warning/[0.03]'
+                          : 'border-border bg-surface-900 shadow-card'
                     }`}
                   >
                     <span
-                      className={`num w-7 shrink-0 text-center text-sm font-bold ${PODIUM_TONE[entry.rank] ?? 'text-slate-500'}`}
+                      className={`num grid h-7 w-7 shrink-0 place-items-center rounded-md text-sm font-bold ${
+                        entry.rank === 1
+                          ? 'bg-warning/15 text-warning'
+                          : entry.rank === 2
+                            ? 'bg-slate-300/15 text-slate-200'
+                            : entry.rank === 3
+                              ? 'bg-success/15 text-success'
+                              : 'text-slate-500'
+                      }`}
                     >
                       {entry.rank}
                     </span>

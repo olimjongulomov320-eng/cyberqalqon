@@ -284,6 +284,13 @@ const uz: Dict = {
   ach_web_defender_t: 'Veb himoyachi',
   ach_web_defender_d: '«Veb xavfsizlik» boʻlimini tugating',
   achievementsEmpty: 'Hali yutuq yoʻq — darslarni tugatib oching',
+  previewTag: 'Jonli namuna',
+  previewQ: 'Qaysi qurilma paketlarni toʻgʻri manzilga yoʻnaltiradi?',
+  previewA1: 'Router',
+  previewA2: 'Switch',
+  previewA3: 'Hub',
+  previewPick: 'Toʻgʻri javobni bosing',
+  previewCorrect: 'Toʻgʻri! +3 XP',
 };
 
 const ru: Dict = {
@@ -566,6 +573,13 @@ const ru: Dict = {
   ach_web_defender_t: 'Веб-защитник',
   ach_web_defender_d: 'Завершите раздел «Веб-безопасность»',
   achievementsEmpty: 'Достижений пока нет — зарабатывайте их уроками',
+  previewTag: 'Живая демо',
+  previewQ: 'Какое устройство направляет пакеты по нужному адресу?',
+  previewA1: 'Маршрутизатор',
+  previewA2: 'Коммутатор',
+  previewA3: 'Концентратор',
+  previewPick: 'Нажмите верный ответ',
+  previewCorrect: 'Верно! +3 XP',
 };
 
 /**

@@ -189,6 +189,15 @@
     100% { transform: scale(1); opacity: 1; }
   }
 
+  /* Wrong-answer shake: subtler than a hard jolt, stops after one beat. */
+  @keyframes cq-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px); }
+    45% { transform: translateX(4px); }
+    70% { transform: translateX(-2px); }
+    90% { transform: translateX(1px); }
+  }
+
   @keyframes cq-fall {
     from { transform: translate3d(0, -2rem, 0) rotate(0deg); opacity: 0.9; }
     to { transform: translate3d(0, 105vh, 0) rotate(420deg); opacity: 0; }

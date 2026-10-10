@@ -47,12 +47,24 @@ function PathNode({ m, i }: { m: PathModule; i: number }) {
       {href ? (
         <Link href={href} aria-label={m.title} className="flex flex-col items-center gap-1.5">
           {node}
-          <span className="w-16 truncate text-center text-[0.625rem] font-medium text-slate-400">{m.title}</span>
+          <span
+            title={m.title}
+            className="w-16 text-center text-[0.625rem] font-medium leading-snug text-slate-400"
+            style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+          >
+            {m.title}
+          </span>
         </Link>
       ) : (
         <span className="flex flex-col items-center gap-1.5" aria-disabled={locked}>
           {node}
-          <span className="w-16 truncate text-center text-[0.625rem] font-medium text-slate-600">{m.title}</span>
+          <span
+            title={m.title}
+            className="w-16 text-center text-[0.625rem] font-medium leading-snug text-slate-600"
+            style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+          >
+            {m.title}
+          </span>
         </span>
       )}
     </li>
