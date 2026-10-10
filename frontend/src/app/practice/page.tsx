@@ -7,9 +7,11 @@ import {
   ApiError,
   AnswerValue,
   Exercise,
+  Reveal,
   ReviewPayload,
   ReviewResult,
   fetchReview,
+  practiceAnswer,
   submitReview,
 } from '@/lib/api';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
@@ -30,6 +32,8 @@ export default function PracticePage() {
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<{ id: string; value: AnswerValue }[]>([]);
   const [value, setValue] = useState<AnswerValue | undefined>(undefined);
+  const [checked, setChecked] = useState<{ correct: boolean; explain: string; reveal: Reveal } | null>(null);
+  const [checking, setChecking] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<ReviewResult | null>(null);
 
@@ -44,6 +48,7 @@ export default function PracticePage() {
         setIdx(0);
         setAnswers([]);
         setValue(undefined);
+        setChecked(null);
       }
     } catch (err) {
       setError(err as ApiError);
@@ -64,24 +69,48 @@ export default function PracticePage() {
     setIdx(0);
     setAnswers([]);
     setValue(undefined);
+    setChecked(null);
+    setError(null);
     setPhase('session');
   };
 
+  /**
+   * Grade the current question immediately (stateless — recording happens once
+   * on final submit), then lock it so the learner sees the reveal right away
+   * instead of only at the end of the session.
+   */
+  const check = async () => {
+    if (!ex || !session || checking || checked) return;
+    setError(null);
+    setChecking(true);
+    try {
+      const res = await practiceAnswer(
+        session.module_slug,
+        { exercise_id: ex.id, value: value as AnswerValue },
+        lang
+      );
+      setChecked({ correct: res.correct, explain: res.explain, reveal: res.reveal });
+      setAnswers(prev => [...prev.filter(a => a.id !== ex.id), { id: ex.id, value: value as AnswerValue }]);
+    } catch (err) {
+      setError(err as ApiError);
+    } finally {
+      setChecking(false);
+    }
+  };
+
   const next = async () => {
-    if (!ex) return;
-    const ans = [...answers.filter(a => a.id !== ex.id), { id: ex.id, value: value as AnswerValue }];
-    setAnswers(ans);
+    if (!checked || !session) return;
     if (idx + 1 < exercises.length) {
       setIdx(idx + 1);
       setValue(undefined);
+      setChecked(null);
       return;
     }
-    // Final answer → submit
-    if (!session) return;
+    // Final answer → record the whole session.
     setSubmitting(true);
     try {
       const res = await submitReview(
-        { module_slug: session.module_slug, answers: ans },
+        { module_slug: session.module_slug, answers },
         lang
       );
       setResult(res);
@@ -96,7 +125,6 @@ export default function PracticePage() {
       }
     } catch (err) {
       setError(err as ApiError);
-      setPhase('error');
     } finally {
       setSubmitting(false);
     }
@@ -214,7 +242,7 @@ export default function PracticePage() {
     return (
       <main className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-3xl flex-col px-4 pb-28 sm:pb-12">
         <div className="pt-6">
-          <Progress value={idx} max={exercises.length} label={tr('loadingLesson')} tone="xp" />
+          <Progress value={idx + (checked ? 1 : 0)} max={exercises.length} label={tr('loadingLesson')} tone="xp" />
           <div className="mt-2 flex items-center justify-between">
             <Link href="/practice" className="rounded-md px-1 text-sm text-slate-500 hover:text-white">
               ✕
@@ -232,14 +260,46 @@ export default function PracticePage() {
               ex={ex}
               value={value}
               onChange={setValue}
-              locked={false}
+              locked={Boolean(checked)}
+              reveal={checked?.reveal}
             />
           </Card>
+
+          {checked && (
+            <section
+              aria-live="polite"
+              className={`stagger mt-4 rounded-md border p-4 ${
+                checked.correct ? 'border-success/50 bg-success/10' : 'border-danger/50 bg-danger/10'
+              }`}
+            >
+              <p className={`text-sm font-bold ${checked.correct ? 'text-success' : 'text-danger'}`}>
+                {checked.correct ? tr('correctTitle') : tr('wrongTitle')}
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
+                <span className="font-semibold text-slate-200">{tr('whyLabel')}: </span>
+                {checked.explain}
+              </p>
+            </section>
+          )}
+
+          {error && (
+            <ErrorNote className="mt-4">
+              {error.isOffline ? tr('networkError') : tr('loadError')}
+            </ErrorNote>
+          )}
         </div>
 
-        <Button size="lg" onClick={next} disabled={!ready || submitting} className="w-full">
-          {idx + 1 < exercises.length ? tr('next') : tr('check')}
-        </Button>
+        <div className="flex items-center gap-2">
+          {checked ? (
+            <Button size="lg" className="flex-1" onClick={next} disabled={submitting}>
+              {idx + 1 < exercises.length ? tr('next') : tr('finalResults')}
+            </Button>
+          ) : (
+            <Button size="lg" className="flex-1" onClick={check} disabled={!ready || checking}>
+              {checking ? tr('loading') : tr('check')}
+            </Button>
+          )}
+        </div>
       </main>
     );
   }

@@ -22,7 +22,10 @@ const mono = JetBrains_Mono({
 const TITLE = 'CyberQalqon — kiber xavfsizlikni oʻrganish';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://cyberqalqon.uz'),
+  // Must resolve to the domain that actually serves the app, otherwise the
+  // relative OG/Twitter image URLs below resolve against a host that does not
+  // exist and social previews render with no image.
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://halolhack.netlify.app'),
   title: { default: TITLE, template: '%s · CyberQalqon' },
   description:
     'Qisqa darslar va savollar orqali kiber xavfsizlikni oʻzbek va rus tilida oʻrganing. XP toʻplang, reytingda koʻrinishing.',
