@@ -9,8 +9,10 @@ frontend/public/swe-worker-*.js
 frontend/public/workbox-*.js
 frontend/public/fallback-*.js
 
-# Environment variables
-.env*
+# Environment variables (keep .env.example templates tracked)
+.env
+.env.*
+!.env.example
 
 # Production build
 out/

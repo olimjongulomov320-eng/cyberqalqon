@@ -77,20 +77,33 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
   // from actual XP; nothing is invented).
   const lessonStartXp = useRef<number | null>(null);
 
+  // Refetch on slug AND language: switching lang with a lesson open must reload
+  // the localised title/content/exercises instead of serving the previous
+  // language. `alive` discards stale responses if the slug changes mid-flight.
+  // An in-progress quiz keeps its position — exercise ids are stable across
+  // languages — but the graded reveal is cleared so the explanation re-localises.
   useEffect(() => {
+    let alive = true;
+    setLoadError(null);
     (async () => {
       try {
         const data = await fetchModule(slug, lang);
+        if (!alive) return;
         setModule(data.module);
         setExercises(data.exercises);
-        setPhase('intro');
+        setChecked(null);
+        setPractice(null);
+        setPhase(p => (p === 'loading' ? 'intro' : p));
       } catch (err) {
+        if (!alive) return;
         setLoadError(err as ApiError);
         setPhase('error');
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
+    return () => {
+      alive = false;
+    };
+  }, [slug, lang]);
 
   // Keep the top of the exercise card in view when advancing.
   useEffect(() => {

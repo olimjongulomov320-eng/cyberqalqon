@@ -415,14 +415,6 @@ export default function AuthPage() {
               </>
             )}
 
-            {!isRegister && (
-              <div className="flex justify-end">
-                <span className="text-xs font-medium text-text-muted" title={tr('forgotPasswordUnavailable')}>
-                  {tr('forgotPassword')}
-                </span>
-              </div>
-            )}
-
             <AnimatePresence>
               {error && (
                 <motion.div

@@ -232,7 +232,7 @@ function Match({
                   aria-pressed={isSel}
                   className={`w-full rounded-md border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${cls}`}
                 >
-                  <span className="block">{p.left}</span>
+                  <span className="block break-words">{p.left}</span>
                 </button>
               </li>
             );
@@ -256,7 +256,7 @@ function Match({
                   aria-pressed={Boolean(pairedBy)}
                   className={`w-full rounded-md border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${cls}`}
                 >
-                  <span className="block">{pair.right}</span>
+                  <span className="block break-words">{pair.right}</span>
                 </button>
               </li>
             );

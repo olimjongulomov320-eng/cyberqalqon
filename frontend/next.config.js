@@ -15,12 +15,12 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 // Public API base. Priority:
 //   1. NEXT_PUBLIC_API_URL (set this in Netlify to override)
 //   2. production default -> the Render API created by render.yaml
-//   3. local development -> http://localhost:3011
+//   3. local development -> http://localhost:3001 (matches backend/index.js)
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   (process.env.NODE_ENV === 'production'
     ? 'https://cyberqalqon-api.onrender.com'
-    : 'http://localhost:3011');
+    : 'http://localhost:3001');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

@@ -3,7 +3,9 @@ const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
 
 const router = Router();
-const LANGS = ['uz', 'ru', 'en'];
+// The frontend ships uz/ru dictionaries only (lib/i18n.ts). Accepting more
+// here would let a client persist a locale the UI cannot render.
+const LANGS = ['uz', 'ru'];
 
 // Every /me route is private. Registered once here rather than per-handler.
 router.use(requireAuth);
