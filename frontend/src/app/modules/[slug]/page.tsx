@@ -249,7 +249,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
             </div>
 
             {module.content && (
-              <div className="prose prose-invert max-w-none [&_p]:text-slate-300">
+              <div className="lesson">
                 <ReactMarkdown>{module.content}</ReactMarkdown>
               </div>
             )}
