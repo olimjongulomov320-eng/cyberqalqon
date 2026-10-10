@@ -1,9 +1,10 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
-import { MotionConfig } from 'framer-motion';
+import { MotionConfig, motion } from 'framer-motion';
 import NavBar from '@/components/NavBar';
 import BottomNav from '@/components/BottomNav';
+import { DUR, EASE } from '@/lib/motion';
 
 /**
  * Route-aware shell. The authentication screens run their own full-bleed
@@ -53,11 +54,29 @@ function Shell({ children }: { children: ReactNode }) {
         tabIndex={-1}
         className={`mx-auto w-full flex-1 px-4 pb-24 pt-6 focus:outline-none sm:pb-12 ${width}`}
       >
-        {children}
+        <PageMotion pathname={pathname ?? '/'}>{children}</PageMotion>
       </main>
       <Footer />
       <BottomNav />
     </div>
+  );
+}
+
+/**
+ * Route transition: a short fade + rise keyed by pathname, so navigating
+ * between pages breathes instead of snapping. `MotionConfig reducedMotion`
+ * above downgrades this to a plain fade for users who prefer reduced motion.
+ */
+function PageMotion({ pathname, children }: { pathname: string; children: ReactNode }) {
+  return (
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: DUR.base, ease: EASE }}
+    >
+      {children}
+    </motion.div>
   );
 }
 

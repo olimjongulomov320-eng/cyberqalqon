@@ -74,8 +74,8 @@ function SelectOne({
         const isSel = selected.has(opt.id);
         const isCorr = correctSet.has(opt.id);
         let cls = 'border-border bg-surface-900 text-slate-200 hover:border-border-light hover:bg-surface-700';
-        if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success';
-        else if (locked && isSel && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger';
+        if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
+        else if (locked && isSel && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
         else if (isSel) cls = 'border-cyan-500/70 bg-cyan-500/15 text-white';
         return (
           <button
@@ -138,8 +138,8 @@ function TrueFalse({
         const isSel = value === o.id;
         const isCorr = locked && reveal?.answer === o.id;
         let cls = 'border-border bg-surface-900 text-slate-200 hover:border-border-light hover:bg-surface-700';
-        if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success';
-        else if (locked && isSel && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger';
+        if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
+        else if (locked && isSel && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
         else if (isSel) cls = 'border-cyan-500/70 bg-cyan-500/15 text-white';
         return (
           <button
@@ -219,8 +219,8 @@ function Match({
             const assigned = assignments[p.id];
             const isCorr = locked && reveal?.match_answer?.[p.id] === assigned;
             let cls = 'border-border bg-surface-900 text-slate-200';
-            if (locked && assigned && isCorr) cls = 'border-success/70 bg-success/15 text-success';
-            else if (locked && assigned && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger';
+            if (locked && assigned && isCorr) cls = 'border-success/70 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
+            else if (locked && assigned && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
             else if (isSel) cls = 'border-cyan-500/70 bg-cyan-500/15 text-white';
             else if (assigned) cls = 'border-border-light bg-surface-700 text-slate-100';
             return (
@@ -243,8 +243,8 @@ function Match({
             const pairedBy = Object.entries(assignments).find(([, v]) => v === rightId)?.[0] as string | undefined;
             const isCorr = locked && Boolean(pairedBy) && (pairedBy ? reveal?.match_answer?.[pairedBy] === rightId : false);
             let cls = 'border-border bg-surface-900 text-slate-200 hover:border-border-light hover:bg-surface-700';
-            if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success';
-            else if (locked && pairedBy && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger';
+            if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
+            else if (locked && pairedBy && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
             else if (pairedBy) cls = 'border-border-light bg-surface-700 text-slate-100';
             const pair = ex.pairs.find(p => p.id === rightId)!;
             return (
@@ -332,7 +332,7 @@ function Order({
                   disabled={locked}
                   className={`flex w-full items-center gap-2.5 rounded-md border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${
                     locked && !isCorr
-                      ? 'border-danger/70 bg-danger/10 text-danger'
+                      ? 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]'
                       : 'border-cyan-500/50 bg-cyan-500/10 text-slate-100'
                   }`}
                 >
