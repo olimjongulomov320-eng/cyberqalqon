@@ -96,6 +96,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
 
   const handleCheck = useCallback(async () => {
     if (!current || !user || checking || checked) return;
+    setLoadError(null);
     setChecking(true);
     try {
       const res = await checkAnswer(slug, { exercise_id: current.id, value: value as AnswerValue }, lang);
@@ -143,6 +144,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
   /** Grade the practice answer; on success give the heart back. */
   const gradePractice = useCallback(async () => {
     if (!practice || !user || practice.value === undefined || practice.value === null) return;
+    setLoadError(null);
     setPractice(p => (p ? { ...p, checking: true } : p));
     try {
       const res = await practiceAnswer(slug, { exercise_id: practice.ex.id, value: practice.value as AnswerValue }, lang);
@@ -494,6 +496,13 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
               </div>
             )}
           </Card>
+        )}
+
+        {/* A failed /check or /practice request used to fail silently here. */}
+        {loadError && (
+          <ErrorNote className="mt-4">
+            {loadError.isOffline ? tr('networkError') : tr('loadError')}
+          </ErrorNote>
         )}
       </div>
 

@@ -3,7 +3,11 @@ const path = require('path');
 const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
   cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
+  // Aggressive front-end nav caching also caches the JS/CSS a page references,
+  // which can leave visitors on assets from a previous deploy after a release.
+  // Default navigations already use NetworkFirst, so keep offline nav support
+  // (cacheOnFrontEndNav) but drop the aggressive asset grabbing.
+  aggressiveFrontEndNavCaching: false,
   reloadOnOnline: true,
   disable: process.env.NODE_ENV === 'development',
 });

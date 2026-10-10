@@ -13,6 +13,10 @@ const usersRouter       = require('./routes/users');
 
 const app = express();
 
+// Render terminates TLS at its edge proxy, so the socket address is the proxy's.
+// Trust exactly one hop to recover the real client IP for rate limiting.
+app.set('trust proxy', 1);
+
 app.use(helmet());
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json({ limit: '16kb' }));

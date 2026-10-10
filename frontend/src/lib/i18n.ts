@@ -36,7 +36,7 @@ const uz: Dict = {
   displayName: 'Ism',
   usernameHint: '3–30 belgi: harflar, raqamlar va _',
   emailHint: 'Email manzilingizni kiriting',
-  passwordHint: 'Kamida 8 ta belgi, harf va raqam',
+  passwordHint: 'Kamida 8 belgi: katta va kichik harf hamda raqam',
   passwordStrength: 'Parol kuchli',
   passwordWeak: 'Parol juda oddiy',
   passwordMedium: 'Parol oʻrtacha',
@@ -316,7 +316,7 @@ const ru: Dict = {
   displayName: 'Имя',
   usernameHint: '3–30 символов: буквы, цифры и _',
   emailHint: 'Введите ваш email',
-  passwordHint: 'Мин. 8 символов, буква и цифра',
+  passwordHint: 'Мин. 8 символов: заглавная и строчная буквы, цифра',
   passwordStrength: 'Надежность пароля',
   passwordWeak: 'Слишком простой',
   passwordMedium: 'Средний',
@@ -567,10 +567,22 @@ const ru: Dict = {
 /**
  * Copy for a language that is missing a key falls back to Uzbek, so a partial
  * translation degrades to readable text rather than a raw key on screen.
+ *
+ * The returned translator is cached per language. Both dictionaries are module
+ * constants, so the same `lang` always yields the same function — a stable
+ * reference across renders. This matters because `tr` is commonly used as a
+ * `useEffect`/`useMemo` dependency; returning a fresh closure each call caused
+ * effects to re-run on every render (e.g. the leaderboard fetch loop).
  */
-export function makeT(lang: Lang) {
+const translators: Partial<Record<Lang, (key: string) => string>> = {};
+
+export function makeT(lang: Lang): (key: string) => string {
+  const cached = translators[lang];
+  if (cached) return cached;
   const primary = lang === 'ru' ? ru : uz;
-  return (key: string): string => primary[key] ?? uz[key] ?? key;
+  const translate = (key: string): string => primary[key] ?? uz[key] ?? key;
+  translators[lang] = translate;
+  return translate;
 }
 
 export const t: Record<Lang, Dict> = { uz, ru };

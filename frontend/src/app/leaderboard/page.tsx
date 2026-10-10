@@ -55,7 +55,10 @@ export default function LeaderboardPage() {
         setMyRank(d.my_rank);
       })
       .catch((err: ApiError) => setError(err.isOffline ? tr('networkError') : tr('loadError')));
-  }, [period, attempt, tr, user?.id]);
+    // `tr` is derived from `lang` (and now a stable reference), so depend on the
+    // primitive directly to keep the effect from re-running needlessly.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [period, attempt, lang, user?.id]);
 
   return (
     <div className="space-y-5">

@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { verifyTelegramInitData } = require('../middleware/auth');
 
@@ -8,6 +9,31 @@ const router = Router();
 const BCRYPT_ROUNDS = 12;
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_TTL = '30d';
+
+const rateLimited = (_req, res) =>
+  res.status(429).json({ error: { code: 'RATE_LIMITED', message: 'Too many attempts. Please try again later.' } });
+
+// Brute-force protection. Only failed logins count toward the budget, so a
+// legitimate user is never locked out by their own successful sign-ins.
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true,
+  handler: rateLimited,
+});
+
+// Account creation is rarer, so a tighter cap is safe and stops bulk sign-ups.
+// Kept deliberately above a typical classroom size (shared NAT) so a lab of
+// legitimate students is not blocked.
+const registerLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: rateLimited,
+});
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -45,7 +71,7 @@ router.post('/telegram', async (req, res, next) => {
 });
 
 // POST /auth/register — email + username
-router.post('/register', async (req, res, next) => {
+router.post('/register', registerLimiter, async (req, res, next) => {
   try {
     const { username, email, password, display_name, lang = 'uz' } = req.body;
 
@@ -96,7 +122,7 @@ router.post('/register', async (req, res, next) => {
 });
 
 // POST /auth/login — accepts email or username
-router.post('/login', async (req, res, next) => {
+router.post('/login', loginLimiter, async (req, res, next) => {
   try {
     const { identifier, password } = req.body; // identifier can be email or username
     if (!identifier || !password) {

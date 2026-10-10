@@ -6,13 +6,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, authLogin, authRegister } from '@/lib/api';
-import { Button, Field, ErrorNote, SuccessNote, Divider } from '@/components/ui';
+import { Button, Field, ErrorNote, SuccessNote } from '@/components/ui';
 import { AuthBrandPanel } from '@/components/AuthBrandPanel';
 
 type Mode = 'login' | 'register';
 
 const USERNAME_RE = /^[a-zA-Z0-9_]{3,30}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Mirrors the backend rule (see backend/routes/auth.js): 8+ chars with an
+ *  uppercase letter, a lowercase letter and a digit. Kept in one place so the
+ *  inline validation and the submit gate can never drift apart. */
+function isStrongPassword(pw: string): boolean {
+  return pw.length >= 8 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /\d/.test(pw);
+}
 
 /* ── Password strength ──────────────────────────────────────────────────────── */
 function scorePassword(pw: string): number {
@@ -100,7 +107,6 @@ function PasswordInput({
           aria-label={show ? 'Hide password' : 'Show password'}
           aria-pressed={show}
           className="absolute right-1 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-text-muted transition-colors hover:text-text-primary"
-          tabIndex={-1}
         >
           {show ? (
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -155,9 +161,9 @@ export default function AuthPage() {
     const e: Partial<Record<keyof typeof form, string>> = {};
     if (isRegister) {
       if (!form.display_name.trim()) e.display_name = tr('displayNameHint');
+      if (!USERNAME_RE.test(form.username)) e.username = tr('usernameHint');
       if (!EMAIL_RE.test(form.email)) e.email = tr('emailInvalid');
-      if (form.password.length < 8) e.password = tr('passwordHint');
-      else if (!/[A-Za-z]/.test(form.password) || !/\d/.test(form.password)) e.password = tr('passwordHint');
+      if (!isStrongPassword(form.password)) e.password = tr('passwordHint');
       if (form.confirm && form.confirm !== form.password) e.confirm = tr('passwordMismatch');
     } else {
       if (!form.username.trim()) e.username = tr('loginIdentifierHint');
@@ -172,9 +178,7 @@ export default function AuthPage() {
           form.display_name.trim() &&
             USERNAME_RE.test(form.username) &&
             EMAIL_RE.test(form.email) &&
-            form.password.length >= 8 &&
-            /[A-Za-z]/.test(form.password) &&
-            /\d/.test(form.password) &&
+            isStrongPassword(form.password) &&
             form.confirm === form.password &&
             terms
         )
@@ -326,7 +330,7 @@ export default function AuthPage() {
 
             <Field
               label={isRegister ? tr('username') : tr('loginIdentifier')}
-              error={isRegister && touched.username ? errors.username : !isRegister && touched.username ? errors.username : undefined}
+              error={touched.username ? errors.username : undefined}
               hint={isRegister ? tr('usernameHint') : undefined}
               required
             >
@@ -460,9 +464,7 @@ export default function AuthPage() {
           </motion.form>
         </AnimatePresence>
 
-        <Divider className="my-6">{tr('or')}</Divider>
-
-        <p className="text-center text-sm text-text-secondary">
+        <p className="mt-6 text-center text-sm text-text-secondary">
           {isRegister ? tr('alreadyAccount') : tr('noAccount')}{' '}
           <button
             onClick={() => switchMode(isRegister ? 'login' : 'register')}

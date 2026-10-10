@@ -26,14 +26,16 @@ export function Hearts({ count, label }: { count: number; label: string }) {
 
 /* ── Streak flame ──────────────────────────────────────────────────────────── */
 export function Flame({ streak, short = false }: { streak: number; short?: boolean }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
   return (
     <span className="inline-flex items-center gap-1 text-sm font-bold text-slate-100">
       <span aria-hidden="true" className={streak > 0 ? 'text-warning' : 'opacity-40'}>
         🔥
       </span>
       <span className="num">{streak}</span>
-      {!short && <span className="text-xs font-medium text-slate-400">/ {1}</span>}
-      <span className="sr-only">streak</span>
+      {!short && <span className="text-xs font-medium text-slate-400">{tr('streakDay')}</span>}
+      <span className="sr-only">{tr('streak')}</span>
     </span>
   );
 }
