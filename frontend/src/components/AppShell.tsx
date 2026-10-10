@@ -26,6 +26,15 @@ function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const bare = pathname?.startsWith('/auth');
 
+  // Route widths, owned by the shell so pages never re-declare a container:
+  // lessons and legal prose stay at a reading-measure column; landing,
+  // dashboard, learn map, practice, leaderboard and profile get the wide
+  // composition that suits richer layouts.
+  const narrow = Boolean(
+    pathname?.startsWith('/modules') || pathname?.startsWith('/privacy') || pathname?.startsWith('/terms')
+  );
+  const width = narrow ? 'max-w-3xl' : 'max-w-5xl';
+
   if (bare) {
     return (
       <div className="flex min-h-dvh flex-col">
@@ -42,7 +51,7 @@ function Shell({ children }: { children: ReactNode }) {
       <main
         id="main"
         tabIndex={-1}
-        className="mx-auto w-full max-w-3xl flex-1 px-4 pb-24 pt-6 focus:outline-none sm:pb-12"
+        className={`mx-auto w-full flex-1 px-4 pb-24 pt-6 focus:outline-none sm:pb-12 ${width}`}
       >
         {children}
       </main>
@@ -54,7 +63,7 @@ function Shell({ children }: { children: ReactNode }) {
 
 function Footer() {
   return (
-    <footer className="mx-auto hidden w-full max-w-3xl items-center justify-between gap-4 px-4 pb-8 pt-2 text-xs text-text-muted sm:flex">
+    <footer className="mx-auto hidden w-full max-w-5xl items-center justify-between gap-4 px-4 pb-8 pt-2 text-xs text-text-muted sm:flex">
       <p>CyberQalqon</p>
       <nav className="flex gap-4">
         <a href="/privacy" className="transition-colors hover:text-text-secondary">Privacy</a>

@@ -260,7 +260,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
   /* ── Loading ── */
   if (phase === 'loading' || phase === 'error') {
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-10 sm:pb-12">
+      <div>
         {loadError && (
           <Card>
             <ErrorNote>{loadError.message}</ErrorNote>
@@ -288,7 +288,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
   /* ── Intro card ── */
   if (phase === 'intro' && module) {
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+      <div>
         <Card className="overflow-hidden">
           <div className="flex flex-col gap-4">
             <div className="flex items-start justify-between gap-3">
@@ -349,7 +349,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
     const startLevel = levelFromXp(lessonStartXp.current ?? complete.total_xp).level;
     const leveledUp = endLevel > startLevel;
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-10 sm:pb-12">
+      <div>
         <Confetti show />
         <Card className="overflow-hidden border-cyan-500/30">
           <div className="stagger flex flex-col items-center gap-4 text-center">
@@ -425,7 +425,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
   const practiceReady = practice ? isAnswerReady(practice.ex, practice.value) : false;
 
   return (
-    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-3xl flex-col px-4 pb-28 sm:pb-12">
+    <div className="flex min-h-[calc(100dvh-4rem)] flex-col">
       {/* Top bar */}
       <div ref={topRef} className="scroll-mt-24 pt-6">
         <div className="flex items-center justify-between gap-3">

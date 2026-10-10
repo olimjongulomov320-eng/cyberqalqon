@@ -197,7 +197,7 @@ export default function LearnPage() {
   const { lang } = useApp();
   const tr = makeT(lang);
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+    <div>
       <header className="mb-5">
         <h1 className="display">{tr('learningPath')}</h1>
         <p className="mt-1 text-sm text-slate-400">{tr('choosePath')}</p>

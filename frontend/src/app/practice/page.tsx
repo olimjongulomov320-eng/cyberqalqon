@@ -137,7 +137,7 @@ export default function PracticePage() {
 
   if (!sessionReady || !user) {
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+      <div>
         {!sessionReady ? (
           <div className="flex flex-col gap-3">
             <Skeleton className="h-20 w-full rounded-lg" />
@@ -158,7 +158,7 @@ export default function PracticePage() {
 
   if (phase === 'loading' || phase === 'error') {
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+      <div>
         {error ? (
           <Card>
             <ErrorNote>{error.message}</ErrorNote>
@@ -180,7 +180,7 @@ export default function PracticePage() {
   /* ── Topics overview ── */
   if (phase === 'topics') {
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+      <div>
         <header className="mb-5">
           <h1 className="display">{tr('navPractice')}</h1>
           <p className="mt-1 text-sm text-slate-400">{tr('practiceSubtitle')}</p>
@@ -245,7 +245,7 @@ export default function PracticePage() {
   /* ── Live session ── */
   if (phase === 'session' && ex) {
     return (
-      <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-3xl flex-col px-4 pb-28 sm:pb-12">
+      <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-2xl flex-col">
         <div className="pt-6">
           <Progress value={idx + (checked ? 1 : 0)} max={exercises.length} label={tr('loadingLesson')} tone="xp" />
           <div className="mt-2 flex items-center justify-between">
@@ -316,7 +316,7 @@ export default function PracticePage() {
     const startLevel = levelFromXp(sessionStartXp.current ?? result.total_xp).level;
     const leveledUp = endLevel > startLevel;
     return (
-      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+      <div>
         <Card className="border-cyan-500/30">
           <div className="flex flex-col items-center gap-3 text-center">
             <span aria-hidden="true" className="text-4xl">💪</span>
