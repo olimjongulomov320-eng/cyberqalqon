@@ -53,7 +53,7 @@ export default function HomePage() {
   /* ── Signed out: landing hero ── */
   if (!user) {
     return (
-      <main className="mx-auto w-full max-w-3xl px-4 pb-28 pt-10 sm:pb-16">
+      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-10 sm:pb-16">
         <section className="stagger flex flex-col items-center gap-4 pb-8 text-center">
           <span aria-hidden="true" className="grid h-20 w-20 place-items-center rounded-2xl border border-border bg-surface-900 text-5xl shadow-card edge-light">
             🛡️
@@ -86,7 +86,7 @@ export default function HomePage() {
             ))}
           </Card>
         </section>
-      </main>
+      </div>
     );
   }
 
@@ -96,7 +96,7 @@ export default function HomePage() {
   const tier = tierKey(tierIndex(level.level));
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+    <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
       <div className="stagger flex flex-col gap-4">
         {/* Greeting + level */}
         <header className="flex items-center justify-between gap-3">
@@ -280,7 +280,7 @@ export default function HomePage() {
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }
 

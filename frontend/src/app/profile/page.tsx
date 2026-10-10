@@ -54,25 +54,25 @@ export default function ProfilePage() {
 
   if (!ready) {
     return (
-      <main className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
         <div className="flex flex-col gap-3">
           <Skeleton className="h-24 w-full rounded-lg" />
           <Skeleton className="h-40 w-full rounded-lg" />
         </div>
-      </main>
+      </div>
     );
   }
 
   if (!user) {
     return (
-      <main className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+      <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
         <Card className="p-6 text-center">
           <p className="text-sm text-text-secondary">{tr('signInToAnswer')}</p>
           <div className="mt-4 flex justify-center gap-2">
             <ButtonLink href="/auth">{tr('login')}</ButtonLink>
           </div>
         </Card>
-      </main>
+      </div>
     );
   }
 
@@ -81,7 +81,7 @@ export default function ProfilePage() {
   const goal = stats?.profile.daily_goal_xp ?? user.daily_goal_xp ?? 20;
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
+    <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
       <div className="stagger flex flex-col gap-4">
         <header className="flex flex-col items-center gap-3 text-center">
           <div className="relative">
@@ -298,6 +298,6 @@ export default function ProfilePage() {
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }
