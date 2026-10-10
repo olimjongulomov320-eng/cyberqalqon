@@ -17,6 +17,7 @@ import {
 import { Hearts, Confetti, AchievementBadge, XPChip } from '@/components/game';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { loseHeart, restoreHeart, useHearts } from '@/lib/hearts';
+import { levelFromXp } from '@/lib/gamification';
 import { Button, ButtonLink, Card, ErrorNote, Progress, Skeleton } from '@/components/ui';
 
 type Phase = 'loading' | 'intro' | 'active' | 'celebrate' | 'error';
@@ -71,6 +72,10 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
   const heartsLostOnWrong = useRef(false);
   const topRef = useRef<HTMLDivElement>(null);
   const exitRef = useRef<HTMLDivElement>(null);
+  // XP when the learner pressed "Start lesson" — lets the celebration screen
+  // tell whether this run pushed them over a level boundary (real, computed
+  // from actual XP; nothing is invented).
+  const lessonStartXp = useRef<number | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -307,7 +312,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
             </div>
 
             {user ? (
-              <Button size="lg" onClick={() => setPhase('active')}>
+              <Button size="lg" onClick={() => { lessonStartXp.current = user.total_xp; setPhase('active'); }}>
                 {tr('startLesson')}
               </Button>
             ) : (
@@ -327,6 +332,9 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
   /* ── Celebration ── */
   if (phase === 'celebrate' && complete) {
     const next = complete.next_module_slug ? `/modules/${complete.next_module_slug}` : undefined;
+    const endLevel = levelFromXp(complete.total_xp).level;
+    const startLevel = levelFromXp(lessonStartXp.current ?? complete.total_xp).level;
+    const leveledUp = endLevel > startLevel;
     return (
       <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-10 sm:pb-12">
         <Confetti show />
@@ -335,6 +343,22 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
             <span aria-hidden="true" className="text-5xl">{complete.is_checkpoint ? '🏆' : '🎉'}</span>
             <h1 className="display">{complete.is_checkpoint ? tr('checkpointComplete') : tr('lessonCompleteTitle')}</h1>
             {complete.perfect && <p className="text-sm font-semibold text-success">💎 {tr('perfect')}</p>}
+
+            {leveledUp && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="flex w-full items-center justify-center gap-3 rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-4 py-3 text-left"
+              >
+                <span aria-hidden="true" className="text-2xl">⬆️</span>
+                <div>
+                  <p className="text-sm font-bold text-cyan-300">
+                    {tr('levelUpTitle')} · Lv.{endLevel}
+                  </p>
+                  <p className="text-xs text-slate-400">{tr('levelUpBody')}</p>
+                </div>
+              </div>
+            )}
 
             <div role="status" aria-live="polite" className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 rounded-lg border border-warning/30 bg-warning/15 px-4 py-2 text-xl font-extrabold text-warning">

@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -16,6 +16,7 @@ import {
 } from '@/lib/api';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { XPChip } from '@/components/game';
+import { levelFromXp } from '@/lib/gamification';
 import { Button, ButtonLink, Card, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
 
 type Phase = 'loading' | 'topics' | 'session' | 'results' | 'error';
@@ -36,6 +37,9 @@ export default function PracticePage() {
   const [checking, setChecking] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<ReviewResult | null>(null);
+  // XP when the session began; the results screen compares it to the post-submit
+  // total to surface a level-up (computed from real XP, never fabricated).
+  const sessionStartXp = useRef<number | null>(null);
 
   const load = useCallback(async () => {
     setPhase('loading');
@@ -71,6 +75,7 @@ export default function PracticePage() {
     setValue(undefined);
     setChecked(null);
     setError(null);
+    sessionStartXp.current = user?.total_xp ?? null;
     setPhase('session');
   };
 
@@ -307,6 +312,9 @@ export default function PracticePage() {
   /* ── Results ── */
   if (phase === 'results' && result) {
     const correct = result.results.filter(r => r.correct).length;
+    const endLevel = levelFromXp(result.total_xp).level;
+    const startLevel = levelFromXp(sessionStartXp.current ?? result.total_xp).level;
+    const leveledUp = endLevel > startLevel;
     return (
       <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-8 sm:pb-12">
         <Card className="border-cyan-500/30">
@@ -320,6 +328,22 @@ export default function PracticePage() {
                 {correct}/{result.results.length} {tr('correct').toLowerCase()}
               </span>
             </div>
+
+            {leveledUp && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="flex w-full items-center justify-center gap-3 rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-4 py-3 text-left"
+              >
+                <span aria-hidden="true" className="text-2xl">⬆️</span>
+                <div>
+                  <p className="text-sm font-bold text-cyan-300">
+                    {tr('levelUpTitle')} · Lv.{endLevel}
+                  </p>
+                  <p className="text-xs text-slate-400">{tr('levelUpBody')}</p>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="mt-5 flex flex-col gap-2">
