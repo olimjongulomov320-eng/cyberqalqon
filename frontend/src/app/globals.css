@@ -110,14 +110,20 @@
   /* Optical centering for emoji */
   .opt-center { text-indent: 0.0625em; }
 
-  /* Stagger children */
-  .stagger > * { animation: cq-rise 0.5s cubic-bezier(0.2, 0.9, 0.25, 1) both; }
-  .stagger > *:nth-child(1) { animation-delay: 0.02s; }
-  .stagger > *:nth-child(2) { animation-delay: 0.07s; }
-  .stagger > *:nth-child(3) { animation-delay: 0.12s; }
-  .stagger > *:nth-child(4) { animation-delay: 0.17s; }
-  .stagger > *:nth-child(5) { animation-delay: 0.22s; }
-  .stagger > *:nth-child(6) { animation-delay: 0.27s; }
+  /* Stagger children — first 10 rise in sequence; long lists don't animate
+     every row (bounded work) and the tail must not animate before the head. */
+  .stagger > * { animation: cq-rise 0.55s cubic-bezier(0.2, 0.9, 0.25, 1) both; }
+  .stagger > *:nth-child(1) { animation-delay: 0.03s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.08s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.13s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.18s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.23s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.28s; }
+  .stagger > *:nth-child(7) { animation-delay: 0.33s; }
+  .stagger > *:nth-child(8) { animation-delay: 0.38s; }
+  .stagger > *:nth-child(9) { animation-delay: 0.43s; }
+  .stagger > *:nth-child(10) { animation-delay: 0.48s; }
+  .stagger > *:nth-child(n + 11) { animation: none; }
 
   /* Low bandwidth mode */
   .low-bandwidth body {
