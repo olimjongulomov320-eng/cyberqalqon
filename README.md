@@ -1,6 +1,9 @@
 # cyberqalqon
 Learn cybersecurity and AI's more deeper
 
+> **Start here:** the full product concept — vision, audience, core loop,
+> design language and architecture — lives in **[CONCEPT.md](CONCEPT.md)**.
+
 ## Local development
 
 ```bash
