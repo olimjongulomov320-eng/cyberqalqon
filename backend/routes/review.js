@@ -10,6 +10,12 @@ const {
   reviewXpAmount,
   bumpStreak,
 } = require('../lib/gamification');
+const {
+  isValidKey,
+  requestHash,
+  runIdempotent,
+  IdempotencyConflictError,
+} = require('../lib/idempotency');
 
 const router = Router();
 const pickLang = q => (['uz', 'ru'].includes(q.lang) ? q.lang : 'uz');
@@ -110,14 +116,32 @@ router.get('/', requireAuth, async (req, res, next) => {
  * POST /review/submit — grade a review session.
  * Correct answers restore standing in the weak-topic stats and earn review
  * XP, capped per day so review stays honest but is always worth doing.
+ *
+ * Idempotency: the client sends a per-attempt `idempotency_key`, reused on every
+ * retry of the same submission. All side effects (mistake counters, review XP,
+ * streak, achievements) and the idempotency record commit in one transaction, so
+ * a retry after a timeout — or a concurrent duplicate — applies them at most
+ * once per (user, key). Clients that predate the field fall back to a payload
+ * hash: a timeout retry of the same payload is deduped, while a byte-identical
+ * redo is treated as the same submission.
  */
+const REVIEW_SCOPE = 'review.submit';
+
 router.post('/submit', requireAuth, async (req, res, next) => {
   try {
     const lang = pickLang(req.query);
-    const { module_slug, answers } = req.body ?? {};
+    const { module_slug, answers, idempotency_key } = req.body ?? {};
     if (!module_slug || !Array.isArray(answers)) {
       return res.status(400).json({
         error: { code: 'VALIDATION_ERROR', message: 'module_slug and answers[] are required.' },
+      });
+    }
+    if (idempotency_key !== undefined && !isValidKey(idempotency_key)) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'idempotency_key must be 16-128 url-safe characters.',
+        },
       });
     }
 
@@ -130,43 +154,61 @@ router.post('/submit', requireAuth, async (req, res, next) => {
     }
     const mod = rows[0];
 
-    const results = [];
-    let xp_earned = 0;
+    const hash = requestHash(module_slug, answers);
+    const key = idempotency_key ?? `auto:${hash}`;
 
-    for (const a of answers) {
-      const ex = (mod.exercises ?? []).find(e => e.id === a.id);
-      if (!ex) continue;
-      const correct = grade(ex, a.value);
-      results.push({ id: ex.id, correct, explain: ex.explain[lang], ...answerReveal(ex) });
+    const outcome = await runIdempotent(
+      pool,
+      { userId: req.user.id, scope: REVIEW_SCOPE, key, requestHash: hash },
+      async client => {
+        const results = [];
+        let xp_earned = 0;
 
-      await recordAttempt(req.user.id, mod.id, ex.id, correct);
+        for (const a of answers) {
+          const ex = (mod.exercises ?? []).find(e => e.id === a.id);
+          if (!ex) continue;
+          const correct = grade(ex, a.value);
+          results.push({ id: ex.id, correct, explain: ex.explain[lang], ...answerReveal(ex) });
 
-      if (correct) {
-        // Insert immediately so reviewXpAmount sees this answer's spend and
-        // the daily cap holds across the whole session.
-        const amount = await reviewXpAmount(req.user.id); // null = daily cap spent
-        if (amount !== null && amount > 0) {
-          xp_earned += amount;
-          await pool.query(
-            `INSERT INTO xp_events (user_id, amount, kind, module_id, created_at)
-             VALUES ($1, $2, 'review', $3, now())`,
-            [req.user.id, amount, mod.id]
-          );
+          await recordAttempt(req.user.id, mod.id, ex.id, correct, client);
+
+          if (correct) {
+            // Checked per answer inside the transaction so the daily cap holds
+            // across the whole session and across concurrent submissions.
+            const amount = await reviewXpAmount(req.user.id, client); // null = daily cap spent
+            if (amount !== null && amount > 0) {
+              xp_earned += amount;
+              await client.query(
+                `INSERT INTO xp_events (user_id, amount, kind, module_id, created_at)
+                 VALUES ($1, $2, 'review', $3, now())`,
+                [req.user.id, amount, mod.id]
+              );
+            }
+          }
         }
+
+        await bumpStreak(req.user.id, client);
+        // XP rows are already in; this evaluates achievements + returns snapshot.
+        const { new_achievements, ...snap } = await recordXp(
+          req.user.id,
+          { amount: 0, kind: 'review', moduleId: mod.id, ctx: { reviewed: results.length > 0 } },
+          client
+        );
+
+        return { results, xp_earned, ...snap, new_achievements };
       }
-    }
+    );
 
-    await bumpStreak(req.user.id);
-    // XP rows are already in; this evaluates achievements + returns snapshot.
-    const { new_achievements, ...snap } = await recordXp(req.user.id, {
-      amount: 0,
-      kind: 'review',
-      moduleId: mod.id,
-      ctx: { reviewed: results.length > 0 },
-    });
-
-    res.json({ results, xp_earned, ...snap, new_achievements });
+    res.status(outcome.status).json(outcome.response);
   } catch (err) {
+    if (err instanceof IdempotencyConflictError) {
+      return res.status(409).json({
+        error: {
+          code: 'IDEMPOTENCY_KEY_REUSED',
+          message: 'This idempotency key was already used with a different payload.',
+        },
+      });
+    }
     next(err);
   }
 });

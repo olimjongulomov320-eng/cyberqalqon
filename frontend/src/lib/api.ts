@@ -1,3 +1,6 @@
+import { performFetch, isAbortError, REQUEST_TIMEOUT_MS } from './http';
+import { createInFlight } from './inflight';
+
 const BASE = process.env.NEXT_PUBLIC_API_URL + '/v1';
 
 export class ApiError extends Error {
@@ -13,6 +16,11 @@ export class ApiError extends Error {
   get isOffline() {
     return this.code === 'NETWORK';
   }
+  /** True when the request exceeded the client deadline. The server may or may
+   *  not have processed it, so callers must retry explicitly, never silently. */
+  get isTimeout() {
+    return this.code === 'TIMEOUT';
+  }
 }
 
 function getToken() {
@@ -20,20 +28,30 @@ function getToken() {
   return localStorage.getItem('cq_token');
 }
 
-async function req<T>(path: string, options: RequestInit = {}): Promise<T> {
+async function rawRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
 
   let res: Response;
   try {
-    res = await fetch(BASE + path, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...(options.headers || {}),
+    res = await performFetch(
+      fetch,
+      BASE + path,
+      {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(options.headers || {}),
+        },
       },
-    });
-  } catch {
+      REQUEST_TIMEOUT_MS
+    );
+  } catch (err) {
+    if (isAbortError(err)) {
+      // We hit our own deadline. We cannot tell a waking host from a dead one,
+      // so the copy stays honest ("did not respond") rather than guessing.
+      throw new ApiError('Request timed out', 'TIMEOUT');
+    }
     throw new ApiError('Network unreachable', 'NETWORK');
   }
 
@@ -49,6 +67,19 @@ async function req<T>(path: string, options: RequestInit = {}): Promise<T> {
     );
   }
   return data as T;
+}
+
+// Identical mutations fired concurrently (double taps, racing effects) share a
+// single request. GET/HEAD are left alone: they are safe and often legitimately
+// repeated with different cache timing.
+const inFlight = createInFlight();
+
+function req<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const method = (options.method ?? 'GET').toUpperCase();
+  if (method === 'GET' || method === 'HEAD') return rawRequest<T>(path, options);
+
+  const key = `${method} ${path} ${typeof options.body === 'string' ? options.body : ''}`;
+  return inFlight(key, () => rawRequest<T>(path, options));
 }
 
 function safeParse(text: string): unknown {
@@ -149,7 +180,12 @@ export function fetchReview(lang: string) {
 }
 
 export function submitReview(
-  body: { module_slug: string; answers: { id: string; value: AnswerValue }[] },
+  body: {
+    module_slug: string;
+    answers: { id: string; value: AnswerValue }[];
+    /** Stable per-attempt key, reused on retry so the server dedupes. */
+    idempotency_key?: string;
+  },
   lang: string
 ) {
   return req<ReviewResult>(`/review/submit?lang=${lang}`, {

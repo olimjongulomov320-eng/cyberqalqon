@@ -1,5 +1,6 @@
 'use client';
 import { useCallback, useSyncExternalStore } from 'react';
+import { appDayKey } from './appday';
 
 /**
  * Client-side hearts: 5 max, one per wrong answer, refilled every new day.
@@ -12,16 +13,13 @@ export const MAX_HEARTS = 5;
 const KEY = 'cq_hearts';
 
 interface HeartState {
-  /** ISO date (yyyy-mm-dd, local) the snapshot belongs to. */
+  /** ISO date (yyyy-mm-dd) the snapshot belongs to, in the app timezone. */
   day: string;
   n: number;
 }
 
 function today(): string {
-  const d = new Date();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return `${d.getFullYear()}-${m}-${dd}`;
+  return appDayKey();
 }
 
 function read(): HeartState {

@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
+const { DAY_START, WEEK_START } = require('../lib/time');
 
 const router = Router();
 // The frontend ships uz/ru dictionaries only (lib/i18n.ts). Accepting more
@@ -114,8 +115,8 @@ router.get('/me/stats', async (req, res, next) => {
     const [profile, xp, attempts, achievements, domains, recent] = await Promise.all([
       loadProfile(userId),
       pool.query(
-        `SELECT COALESCE(SUM(amount) FILTER (WHERE created_at >= CURRENT_DATE), 0)::int AS daily_xp,
-                COALESCE(SUM(amount) FILTER (WHERE created_at >= date_trunc('week', now())), 0)::int AS week_xp
+        `SELECT COALESCE(SUM(amount) FILTER (WHERE created_at >= ${DAY_START}), 0)::int AS daily_xp,
+                COALESCE(SUM(amount) FILTER (WHERE created_at >= ${WEEK_START}), 0)::int AS week_xp
            FROM xp_events WHERE user_id = $1`,
         [userId]
       ),

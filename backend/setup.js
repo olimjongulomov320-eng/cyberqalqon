@@ -126,6 +126,25 @@ async function setup() {
       PRIMARY KEY (user_id, key)
     )`);
 
+  /* ── 2b. Idempotency records (duplicate-safe mutations) ─────────────── */
+  // One row per (user, operation, client key). The primary key is the
+  // uniqueness guarantee; `runIdempotent` additionally takes an advisory lock on
+  // the same tuple so concurrent duplicates serialise instead of racing.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS idempotency_keys (
+      user_id      UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      scope        TEXT NOT NULL,
+      key          TEXT NOT NULL,
+      request_hash TEXT NOT NULL,
+      status       SMALLINT NOT NULL DEFAULT 200,
+      response     JSONB NOT NULL DEFAULT '{}'::jsonb,
+      created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+      PRIMARY KEY (user_id, scope, key)
+    )`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_idempotency_created ON idempotency_keys (created_at)`);
+  // Records only need to outlive realistic retry windows; bound growth.
+  await pool.query(`DELETE FROM idempotency_keys WHERE created_at < now() - interval '7 days'`);
+
   /* ── 3. v2 columns ───────────────────────────────────────────────────── */
   for (const sql of [
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS email              TEXT UNIQUE`,

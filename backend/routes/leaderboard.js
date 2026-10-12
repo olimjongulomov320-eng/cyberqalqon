@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const pool = require('../db');
 const { optionalAuth } = require('../middleware/auth');
+const { WEEK_START } = require('../lib/time');
 
 const router = Router();
 
@@ -8,7 +9,7 @@ const WEEK_CTE = `
   WITH weekly AS (
     SELECT user_id, SUM(amount)::int AS total_xp
       FROM xp_events
-     WHERE created_at >= date_trunc('week', now())
+     WHERE created_at >= ${WEEK_START}
      GROUP BY user_id
   )`;
 
@@ -65,7 +66,7 @@ router.get('/', optionalAuth, async (req, res, next) => {
         my_rank = me[0]?.rank ?? null;
       } else {
         const { rows: has } = await pool.query(
-          `SELECT 1 FROM xp_events WHERE user_id = $1 AND created_at >= date_trunc('week', now()) LIMIT 1`,
+          `SELECT 1 FROM xp_events WHERE user_id = $1 AND created_at >= ${WEEK_START} LIMIT 1`,
           [req.user.id]
         );
         my_rank = has.length ? me[0]?.rank ?? null : null;

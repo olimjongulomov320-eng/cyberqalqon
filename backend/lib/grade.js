@@ -158,4 +158,68 @@ function validateExercise(ex, where) {
   return errors;
 }
 
-module.exports = { grade, publicExercise, answerReveal, validateExercise, normalize, TYPES };
+/**
+ * Validate a lesson-completion submission against the authoritative exercise
+ * set. The expected ids come from the curriculum, never from the request, so a
+ * partial, duplicated or fabricated payload can never be graded into lesson XP,
+ * completion or the perfect-lesson achievement.
+ *
+ * Returns { ok: true, count } when every exercise is answered exactly once, or
+ * { ok: false, code, message, missing? } describing the first violation.
+ * Codes: VALIDATION_ERROR | UNKNOWN_EXERCISE | DUPLICATE_EXERCISE |
+ *        INCOMPLETE_SUBMISSION.
+ */
+function validateLessonSubmission(exercises, answers) {
+  if (!Array.isArray(answers) || answers.length === 0) {
+    return { ok: false, code: 'VALIDATION_ERROR', message: 'answers[] must not be empty.' };
+  }
+
+  const expected = new Set();
+  for (const ex of Array.isArray(exercises) ? exercises : []) {
+    if (ex && typeof ex.id === 'string' && ex.id) expected.add(ex.id);
+  }
+
+  const seen = new Set();
+  for (const a of answers) {
+    if (!a || typeof a !== 'object' || Array.isArray(a) || typeof a.id !== 'string' || !a.id) {
+      return {
+        ok: false,
+        code: 'VALIDATION_ERROR',
+        message: 'each answer must be an object with a string id.',
+      };
+    }
+    if (!expected.has(a.id)) {
+      return {
+        ok: false,
+        code: 'UNKNOWN_EXERCISE',
+        message: `unknown exercise id "${a.id}" for this module.`,
+      };
+    }
+    if (seen.has(a.id)) {
+      return { ok: false, code: 'DUPLICATE_EXERCISE', message: `duplicate exercise id "${a.id}".` };
+    }
+    seen.add(a.id);
+  }
+
+  const missing = [...expected].filter(id => !seen.has(id));
+  if (missing.length) {
+    return {
+      ok: false,
+      code: 'INCOMPLETE_SUBMISSION',
+      message: `missing answers for ${missing.length} exercise(s).`,
+      missing,
+    };
+  }
+
+  return { ok: true, count: seen.size };
+}
+
+module.exports = {
+  grade,
+  publicExercise,
+  answerReveal,
+  validateExercise,
+  validateLessonSubmission,
+  normalize,
+  TYPES,
+};

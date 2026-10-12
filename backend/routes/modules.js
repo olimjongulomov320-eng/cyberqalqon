@@ -12,6 +12,7 @@ const {
   bumpStreak,
   CORRECT_XP,
 } = require('../lib/gamification');
+const { validateLessonSubmission } = require('../lib/grade');
 
 const router = Router();
 
@@ -221,11 +222,27 @@ router.post('/:slug/complete', lessonLimiter, requireAuth, async (req, res, next
       return res.status(404).json({ error: { code: 'MODULE_NOT_FOUND', message: 'Module not found.' } });
     }
 
+    // The expected exercise set is derived from the authoritative curriculum,
+    // never from the request. A submission must cover every exercise exactly
+    // once — no missing, duplicate or unknown ids — before any completion, XP
+    // or perfect-lesson achievement is granted. A full retry of the same set is
+    // still valid, so idempotent completion retries keep working.
+    const submission = validateLessonSubmission(m.exercises ?? [], answers);
+    if (!submission.ok) {
+      const status =
+        submission.code === 'INCOMPLETE_SUBMISSION' || submission.code === 'UNKNOWN_EXERCISE'
+          ? 422
+          : 400;
+      return res.status(status).json({
+        error: { code: submission.code, message: submission.message },
+      });
+    }
+
     // Server re-grades everything — the client's opinion never decides XP.
     const results = [];
     for (const a of answers) {
       const ex = (m.exercises ?? []).find(e => e.id === a.id);
-      if (!ex) continue;
+      if (!ex) continue; // defensive: validation guarantees this never triggers
       const correct = grade(ex, a.value);
       results.push({ id: ex.id, correct, explain: ex.explain[lang], ...answerReveal(ex) });
       // Backfill ONLY if /check never recorded this exercise (flaky network).

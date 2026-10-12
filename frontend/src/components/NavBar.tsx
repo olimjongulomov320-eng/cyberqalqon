@@ -51,7 +51,7 @@ export default function NavBar() {
         </nav>
 
         <div className="flex items-center gap-1.5">
-          <LangToggle lang={lang} setLang={setLang} />
+          <LangToggle lang={lang} setLang={setLang} label={tr('languageLabel')} />
           <LowBandwidthToggle on={lowBandwidth} toggle={() => setLowBandwidth(!lowBandwidth)} label={tr('lowBandwidth')} />
 
           {user ? (
@@ -78,9 +78,17 @@ export default function NavBar() {
   );
 }
 
-function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
+function LangToggle({
+  lang,
+  setLang,
+  label,
+}: {
+  lang: Lang;
+  setLang: (l: Lang) => void;
+  label: string;
+}) {
   return (
-    <div role="group" aria-label="Language / Til" className="flex overflow-hidden rounded-md border border-border">
+    <div role="group" aria-label={label} className="flex overflow-hidden rounded-md border border-border">
       {LANGS.map(l => (
         <button
           key={l}

@@ -22,6 +22,22 @@ import { Button, ButtonLink, Card, EmptyState, ErrorNote, Progress, Skeleton } f
 type Phase = 'loading' | 'topics' | 'session' | 'results' | 'error';
 type RevExercise = Exercise;
 
+/**
+ * A stable per-attempt idempotency key. Reused across retries of the same
+ * submission so a retry after a timeout is deduped by the server instead of
+ * double-recording the attempts and review XP.
+ */
+function newIdempotencyKey(): string {
+  try {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+  } catch {
+    /* fall through to the manual key */
+  }
+  return `review-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+}
+
 export default function PracticePage() {
   const { lang, user, setUser, ready: sessionReady } = useApp();
   const tr = makeT(lang);
@@ -40,6 +56,8 @@ export default function PracticePage() {
   // XP when the session began; the results screen compares it to the post-submit
   // total to surface a level-up (computed from real XP, never fabricated).
   const sessionStartXp = useRef<number | null>(null);
+  // Generated once per logical submission and reused on every retry.
+  const submitKey = useRef<string | null>(null);
 
   const load = useCallback(async () => {
     setPhase('loading');
@@ -76,6 +94,7 @@ export default function PracticePage() {
     setChecked(null);
     setError(null);
     sessionStartXp.current = user?.total_xp ?? null;
+    submitKey.current = null;
     setPhase('session');
   };
 
@@ -114,12 +133,14 @@ export default function PracticePage() {
     // Final answer → record the whole session.
     setSubmitting(true);
     try {
+      if (!submitKey.current) submitKey.current = newIdempotencyKey();
       const res = await submitReview(
-        { module_slug: session.module_slug, answers },
+        { module_slug: session.module_slug, answers, idempotency_key: submitKey.current },
         lang
       );
       setResult(res);
       setPhase('results');
+      submitKey.current = null; // a fresh session gets a fresh key
       if (user) {
         setUser({
           ...user,
@@ -161,7 +182,9 @@ export default function PracticePage() {
       <div>
         {error ? (
           <Card>
-            <ErrorNote>{error.message}</ErrorNote>
+            <ErrorNote>
+              {error.isTimeout ? tr('timeoutError') : error.isOffline ? tr('networkError') : error.message}
+            </ErrorNote>
             <div className="mt-4 flex gap-2">
               <Button onClick={load}>{tr('retry')}</Button>
               <ButtonLink href="/learn" variant="secondary">{tr('goLearn')}</ButtonLink>
@@ -289,7 +312,7 @@ export default function PracticePage() {
 
           {error && (
             <ErrorNote className="mt-4">
-              {error.isOffline ? tr('networkError') : tr('loadError')}
+              {error.isTimeout ? tr('timeoutError') : error.isOffline ? tr('networkError') : tr('loadError')}
             </ErrorNote>
           )}
         </div>

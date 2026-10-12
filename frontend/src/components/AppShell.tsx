@@ -4,6 +4,8 @@ import { ReactNode } from 'react';
 import { MotionConfig, motion } from 'framer-motion';
 import NavBar from '@/components/NavBar';
 import BottomNav from '@/components/BottomNav';
+import { useApp } from '@/context/AppContext';
+import { makeT } from '@/lib/i18n';
 import { DUR, EASE } from '@/lib/motion';
 
 /**
@@ -81,12 +83,14 @@ function PageMotion({ pathname, children }: { pathname: string; children: ReactN
 }
 
 function Footer() {
+  const { lang } = useApp();
+  const tr = makeT(lang);
   return (
     <footer className="mx-auto hidden w-full max-w-5xl items-center justify-between gap-4 px-4 pb-8 pt-2 text-xs text-text-muted sm:flex">
       <p>CyberQalqon</p>
       <nav className="flex gap-4">
-        <a href="/privacy" className="transition-colors hover:text-text-secondary">Privacy</a>
-        <a href="/terms" className="transition-colors hover:text-text-secondary">Terms</a>
+        <a href="/privacy" className="transition-colors hover:text-text-secondary">{tr('privacy')}</a>
+        <a href="/terms" className="transition-colors hover:text-text-secondary">{tr('terms')}</a>
       </nav>
     </footer>
   );

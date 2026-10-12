@@ -10,6 +10,7 @@
 
 const pool = require('../db');
 const { grade, publicExercise, answerReveal } = require('./grade');
+const { DAY_START, TODAY } = require('./time');
 
 const LESSON_XP = null; // resolved from modules.xp_reward
 const CORRECT_XP = 3;
@@ -18,27 +19,28 @@ const REVIEW_DAILY_CAP = 30;
 
 /* ── Achievement catalogue ─────────────────────────────────────────────────
    Display copy lives in the frontend (i18n); keys are the contract.
-   Each predicate receives (client-ish helpers, userId, ctx). */
+   Each predicate receives (userId, ctx, ctx, db), where `db` is the pool or the
+   transaction client it must read through. */
 const ACHIEVEMENTS = [
-  { key: 'first_lesson',    test: async (u) => (await completed(u)) >= 1 },
-  { key: 'five_lessons',    test: async (u) => (await completed(u)) >= 5 },
-  { key: 'ten_lessons',     test: async (u) => (await completed(u)) >= 10 },
+  { key: 'first_lesson',    test: async (u, _x, _ctx, db) => (await completed(u, db)) >= 1 },
+  { key: 'five_lessons',    test: async (u, _x, _ctx, db) => (await completed(u, db)) >= 5 },
+  { key: 'ten_lessons',     test: async (u, _x, _ctx, db) => (await completed(u, db)) >= 10 },
   { key: 'perfect_lesson',  test: async (u, _x, ctx) => Boolean(ctx.perfect) },
-  { key: 'streak_7',        test: async (u) => (await streak(u)) >= 7 },
-  { key: 'xp_500',          test: async (u) => (await totalXp(u)) >= 500 },
-  { key: 'xp_2000',         test: async (u) => (await totalXp(u)) >= 2000 },
+  { key: 'streak_7',        test: async (u, _x, _ctx, db) => (await streak(u, db)) >= 7 },
+  { key: 'xp_500',          test: async (u, _x, _ctx, db) => (await totalXp(u, db)) >= 500 },
+  { key: 'xp_2000',         test: async (u, _x, _ctx, db) => (await totalXp(u, db)) >= 2000 },
   { key: 'reviewer',        test: async (u, _x, ctx) => Boolean(ctx.reviewed) },
   { key: 'checkpoint',      test: async (u, _x, ctx) => Boolean(ctx.checkpoint) },
-  { key: 'network_explorer', test: (u) => domainDone(u, 'networking') },
-  { key: 'linux_penguin',   test: (u) => domainDone(u, 'linux') },
-  { key: 'web_defender',    test: (u) => domainDone(u, 'web-security') },
+  { key: 'network_explorer', test: (u, _x, _ctx, db) => domainDone(u, 'networking', db) },
+  { key: 'linux_penguin',   test: (u, _x, _ctx, db) => domainDone(u, 'linux', db) },
+  { key: 'web_defender',    test: (u, _x, _ctx, db) => domainDone(u, 'web-security', db) },
 ];
 
-const completed = u => one(`SELECT COUNT(*)::int AS n FROM user_progress WHERE user_id = $1 AND is_completed`, [u]);
-const streak = u => one(`SELECT current_streak AS n FROM users WHERE id = $1`, [u]);
-const totalXp = u => one(`SELECT total_xp AS n FROM users WHERE id = $1`, [u]);
-const domainDone = async (u, domain) => {
-  const { rows } = await pool.query(
+const completed = (u, db = pool) => one(`SELECT COUNT(*)::int AS n FROM user_progress WHERE user_id = $1 AND is_completed`, [u], db);
+const streak = (u, db = pool) => one(`SELECT current_streak AS n FROM users WHERE id = $1`, [u], db);
+const totalXp = (u, db = pool) => one(`SELECT total_xp AS n FROM users WHERE id = $1`, [u], db);
+const domainDone = async (u, domain, db = pool) => {
+  const { rows } = await db.query(
     `SELECT COUNT(*)::int AS total,
             COUNT(*) FILTER (WHERE up.is_completed)::int AS done
        FROM modules m
@@ -49,8 +51,8 @@ const domainDone = async (u, domain) => {
   return rows[0].total > 0 && rows[0].total === rows[0].done;
 };
 
-async function one(sql, params) {
-  const { rows } = await pool.query(sql, params);
+async function one(sql, params, db = pool) {
+  const { rows } = await db.query(sql, params);
   return rows[0]?.n ?? 0;
 }
 
@@ -61,25 +63,25 @@ async function one(sql, params) {
  * bump the streak (any earned XP counts as activity) and evaluate achievements.
  * Returns a fresh user snapshot + newly unlocked achievement keys.
  */
-async function recordXp(userId, { amount, kind, moduleId = null, exerciseId = null, ctx = {} }) {
+async function recordXp(userId, { amount, kind, moduleId = null, exerciseId = null, ctx = {} }, db = pool) {
   if (amount && amount > 0) {
-    await pool.query(
+    await db.query(
       `INSERT INTO xp_events (user_id, amount, kind, module_id, exercise_id)
        VALUES ($1, $2, $3, $4, $5)`,
       [userId, amount, kind, moduleId, exerciseId]
     );
-    await bumpStreak(userId);
+    await bumpStreak(userId, db);
   }
-  const new_achievements = await evaluateAchievements(userId, ctx);
-  return { ...(await snapshot(userId)), new_achievements };
+  const new_achievements = await evaluateAchievements(userId, ctx, db);
+  return { ...(await snapshot(userId, db)), new_achievements };
 }
 
 /** Everything the lesson UI shows live: XP, streak, daily-goal progress. */
-async function snapshot(userId) {
-  const { rows } = await pool.query(
+async function snapshot(userId, db = pool) {
+  const { rows } = await db.query(
     `SELECT u.total_xp, u.current_streak, u.longest_streak, u.daily_goal_xp,
             COALESCE((SELECT SUM(amount) FROM xp_events x
-                       WHERE x.user_id = u.id AND x.created_at >= CURRENT_DATE), 0)::int AS daily_xp
+                       WHERE x.user_id = u.id AND x.created_at >= ${DAY_START}), 0)::int AS daily_xp
        FROM users u WHERE u.id = $1`,
     [userId]
   );
@@ -92,20 +94,20 @@ async function snapshot(userId) {
 
 /* ── Streak ─────────────────────────────────────────────────────────────── */
 
-async function bumpStreak(userId) {
-  await pool.query(
+async function bumpStreak(userId, db = pool) {
+  await db.query(
     `UPDATE users
         SET current_streak = CASE
-              WHEN last_streak_date = CURRENT_DATE THEN current_streak
-              WHEN last_streak_date = CURRENT_DATE - 1 THEN current_streak + 1
+              WHEN last_streak_date = ${TODAY} THEN current_streak
+              WHEN last_streak_date = ${TODAY} - 1 THEN current_streak + 1
               ELSE 1
             END,
             longest_streak = GREATEST(longest_streak, CASE
-              WHEN last_streak_date = CURRENT_DATE THEN current_streak
-              WHEN last_streak_date = CURRENT_DATE - 1 THEN current_streak + 1
+              WHEN last_streak_date = ${TODAY} THEN current_streak
+              WHEN last_streak_date = ${TODAY} - 1 THEN current_streak + 1
               ELSE 1
             END),
-            last_streak_date = CURRENT_DATE,
+            last_streak_date = ${TODAY},
             last_active_at = now()
       WHERE id = $1`,
     [userId]
@@ -115,8 +117,8 @@ async function bumpStreak(userId) {
 /* ── Achievements ───────────────────────────────────────────────────────── */
 
 /** Returns only the keys unlocked by THIS call (for celebration toasts). */
-async function evaluateAchievements(userId, ctx = {}) {
-  const { rows: owned } = await pool.query(
+async function evaluateAchievements(userId, ctx = {}, db = pool) {
+  const { rows: owned } = await db.query(
     `SELECT key FROM user_achievements WHERE user_id = $1`,
     [userId]
   );
@@ -127,12 +129,12 @@ async function evaluateAchievements(userId, ctx = {}) {
     if (have.has(a.key)) continue;
     let won = false;
     try {
-      won = await a.test(userId, ctx, ctx);
+      won = await a.test(userId, ctx, ctx, db);
     } catch {
       won = false; // never let a stat query block a lesson
     }
     if (!won) continue;
-    await pool.query(
+    await db.query(
       `INSERT INTO user_achievements (user_id, key) VALUES ($1, $2)
        ON CONFLICT DO NOTHING`,
       [userId, a.key]
@@ -144,12 +146,12 @@ async function evaluateAchievements(userId, ctx = {}) {
 
 /* ── Daily goal & review XP cap ─────────────────────────────────────────── */
 
-async function xpToday(userId, kind = null) {
-  const { rows } = await pool.query(
+async function xpToday(userId, kind = null, db = pool) {
+  const { rows } = await db.query(
     `SELECT COALESCE(SUM(amount), 0)::int AS n
        FROM xp_events
       WHERE user_id = $1
-        AND created_at >= CURRENT_DATE
+        AND created_at >= ${DAY_START}
         ${kind ? 'AND kind = $2' : ''}`,
     kind ? [userId, kind] : [userId]
   );
@@ -157,8 +159,8 @@ async function xpToday(userId, kind = null) {
 }
 
 /** Returns null when the cap is spent (caller should award 0). */
-async function reviewXpAmount(userId) {
-  const spent = await xpToday(userId, 'review');
+async function reviewXpAmount(userId, db = pool) {
+  const spent = await xpToday(userId, 'review', db);
   if (spent >= REVIEW_DAILY_CAP) return null;
   return Math.min(REVIEW_XP, REVIEW_DAILY_CAP - spent);
 }
@@ -170,8 +172,8 @@ async function reviewXpAmount(userId) {
  *   firstCorrect — this was ever the first correct answer (drives +XP once)
  *   wrong        — whether this attempt was wrong (drives hearts/weak topics)
  */
-async function recordAttempt(userId, moduleId, exerciseId, correct) {
-  const { rows } = await pool.query(
+async function recordAttempt(userId, moduleId, exerciseId, correct, db = pool) {
+  const { rows } = await db.query(
     correct
       ? `INSERT INTO mistakes (user_id, module_id, exercise_id, correct_count, last_attempt_at)
          VALUES ($1, $2, $3, 1, now())
@@ -192,8 +194,8 @@ async function recordAttempt(userId, moduleId, exerciseId, correct) {
 }
 
 /** Was every exercise in this module answered correctly on the first try? */
-async function perfectRun(userId, moduleId) {
-  const { rows } = await pool.query(
+async function perfectRun(userId, moduleId, db = pool) {
+  const { rows } = await db.query(
     `SELECT COUNT(*)::int AS n
        FROM mistakes
       WHERE user_id = $1 AND module_id = $2 AND wrong_count > 0`,

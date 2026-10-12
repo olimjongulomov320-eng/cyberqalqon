@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, authLogin, authRegister } from '@/lib/api';
+import { safeNextPath } from '@/lib/redirect';
 import { Button, Field, ErrorNote, SuccessNote } from '@/components/ui';
 import { AuthBrandPanel } from '@/components/AuthBrandPanel';
 
@@ -133,8 +134,13 @@ export default function AuthPage() {
   // Read `?next=` lazily on the client only. Nothing rendered depends on it, so
   // it never causes a hydration mismatch — and avoiding `useSearchParams` keeps
   // the form server-rendered instead of flashing a Suspense fallback.
+  // `safeNextPath` only allows same-origin relative paths, so a crafted link
+  // cannot redirect a freshly signed-in user to an external origin.
   const next = useMemo(
-    () => (typeof window === 'undefined' ? '/' : new URLSearchParams(window.location.search).get('next') || '/'),
+    () =>
+      typeof window === 'undefined'
+        ? '/'
+        : safeNextPath(new URLSearchParams(window.location.search).get('next')),
     []
   );
 

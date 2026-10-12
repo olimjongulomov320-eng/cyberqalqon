@@ -133,7 +133,7 @@ function TrueFalse({
     { id: 'false', emoji: '👎', label: tr('optFalse') },
   ] as const;
   return (
-    <div role="radiogroup" className="grid grid-cols-2 gap-2" aria-label="true or false">
+    <div role="radiogroup" className="grid grid-cols-2 gap-2" aria-label={tr('trueFalseLabel')}>
       {options.map(o => {
         const isSel = value === o.id;
         const isCorr = locked && reveal?.answer === o.id;

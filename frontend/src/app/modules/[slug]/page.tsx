@@ -263,7 +263,13 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
       <div>
         {loadError && (
           <Card>
-            <ErrorNote>{loadError.message}</ErrorNote>
+            <ErrorNote>
+              {loadError.isTimeout
+                ? tr('timeoutError')
+                : loadError.isOffline
+                  ? tr('networkError')
+                  : loadError.message}
+            </ErrorNote>
             <div className="mt-4 flex gap-2">
               <Button onClick={() => window.location.reload()}>{tr('retry')}</Button>
               <ButtonLink href="/learn" variant="secondary">{tr('backToModules')}</ButtonLink>
@@ -575,7 +581,11 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
         {/* A failed /check or /practice request used to fail silently here. */}
         {loadError && (
           <ErrorNote className="mt-4">
-            {loadError.isOffline ? tr('networkError') : tr('loadError')}
+            {loadError.isTimeout
+              ? tr('timeoutError')
+              : loadError.isOffline
+                ? tr('networkError')
+                : tr('loadError')}
           </ErrorNote>
         )}
       </div>

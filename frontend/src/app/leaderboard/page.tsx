@@ -15,7 +15,7 @@ function SegmentedTabs({ period, setPeriod }: { period: Period; setPeriod: (p: P
     { id: 'all', label: tr('allTime') },
   ];
   return (
-    <div role="tablist" aria-label="leaderboard period" className="grid grid-cols-2 gap-1 rounded-md border border-border bg-surface-900 p-1">
+    <div role="tablist" aria-label={tr('lbPeriodLabel')} className="grid grid-cols-2 gap-1 rounded-md border border-border bg-surface-900 p-1">
       {tabs.map(t => (
         <button
           key={t.id}

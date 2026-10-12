@@ -3,6 +3,7 @@ import { Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { AppProvider } from '@/context/AppContext';
 import AppShell from '@/components/AppShell';
+import SkipLink from '@/components/SkipLink';
 
 // Manrope instead of Inter: geometric, semi-condensed, unmistakably not the
 // default UI font — and it ships a cyrillic subset, so the ru locale never
@@ -70,14 +71,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="uz" className={`${sans.variable} ${mono.variable}`}>
       <body className="grain">
-        <a
-          href="#main"
-          className="sr-only rounded-lg focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-skip focus:bg-cyan-400 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-text-inverse"
-        >
-          Skip to content / Oʻtish
-        </a>
-
         <AppProvider>
+          <SkipLink />
           <AppShell>{children}</AppShell>
         </AppProvider>
       </body>
