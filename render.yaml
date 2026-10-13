@@ -38,6 +38,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: CORS_ORIGIN
-        value: https://halolhack.netlify.app
+        value: https://olimjongulomov320-eng.github.io
       - key: NODE_VERSION
         value: "22"

@@ -50,7 +50,7 @@ export function AuthBrandPanel({
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="flex items-center gap-3"
         >
-          <Image src="/logo.svg" alt="" width={34} height={34} className="shrink-0" priority />
+          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={34} height={34} className="shrink-0" priority />
           <span className="text-lg font-extrabold tracking-tight text-white">CyberQalqon</span>
         </motion.div>
 

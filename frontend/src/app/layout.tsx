@@ -22,6 +22,10 @@ const mono = JetBrains_Mono({
 
 const TITLE = 'CyberQalqon — kiber xavfsizlikni oʻrganish';
 
+// GitHub Pages serves the app from a sub-path; mirrored here so URLs written by
+// hand (the manifest) match the prefixed ones Next generates.
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export const metadata: Metadata = {
   // Must resolve to the domain that actually serves the app, otherwise the
   // relative OG/Twitter image URLs below resolve against a host that does not
@@ -31,7 +35,7 @@ export const metadata: Metadata = {
   description:
     'Qisqa darslar va savollar orqali kiber xavfsizlikni oʻzbek va rus tilida oʻrganing. XP toʻplang, reytingda koʻrinishing.',
   applicationName: 'CyberQalqon',
-  manifest: '/manifest.json',
+  manifest: `${BASE_PATH}/manifest.json`,
   appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'CyberQalqon' },
   // `appleWebApp.capable` emits the deprecated apple-* tag; Chrome asks for the
   // standard mobile-web-app-capable alongside it. Declaring both silences the

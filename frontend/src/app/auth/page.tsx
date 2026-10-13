@@ -258,7 +258,7 @@ export default function AuthPage() {
             transition={{ type: 'spring', stiffness: 200, damping: 18 }}
             className="grid h-14 w-14 place-items-center rounded-2xl border border-border bg-surface-900 shadow-card edge-light lg:hidden"
           >
-            <Image src="/logo.svg" alt="" width={32} height={32} priority />
+            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={32} height={32} priority />
           </motion.span>
           <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-text-primary lg:mt-0">
             {isRegister ? tr('createAccount') : tr('welcomeBack')}

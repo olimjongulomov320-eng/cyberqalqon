@@ -22,10 +22,30 @@ const API_URL =
     ? 'https://cyberqalqon-api.onrender.com'
     : 'http://localhost:3001');
 
+// GitHub Pages serves a project site under `/<repo>/`, so the app must be built
+// with that prefix. Empty in dev and on root-domain hosts (e.g. Netlify/Vercel),
+// so nothing else changes.
+const BASE_PATH = process.env.BASE_PATH || '';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Static HTML export: no Node server at runtime (GitHub Pages is static-only).
+  // Every route must therefore be prerenderable — see
+  // `src/app/modules/[slug]/page.tsx` for the one dynamic route.
+  output: 'export',
+  // Emit `/learn/index.html` instead of `/learn.html` so GitHub Pages resolves
+  // extensionless URLs consistently.
+  trailingSlash: true,
+  basePath: BASE_PATH || undefined,
+  images: {
+    // No image optimization server in a static export.
+    unoptimized: true,
+  },
   env: {
     NEXT_PUBLIC_API_URL: API_URL,
+    // Exposed so hand-written URLs (public assets, the web manifest) can be
+    // prefixed the same way Next prefixes its own routes and `_next` assets.
+    NEXT_PUBLIC_BASE_PATH: BASE_PATH,
   },
   webpack(config) {
     config.resolve.alias = {

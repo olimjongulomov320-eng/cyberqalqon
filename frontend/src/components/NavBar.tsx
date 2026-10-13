@@ -29,7 +29,7 @@ export default function NavBar() {
           href="/"
           className="-ml-1 flex items-center gap-2.5 rounded-lg px-1 py-1 transition-opacity hover:opacity-85"
         >
-          <Image src="/logo.svg" alt="" width={28} height={28} className="shrink-0" priority />
+          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={28} height={28} className="shrink-0" priority />
           <span className="text-[0.9375rem] font-bold tracking-tight text-white">{tr('appName')}</span>
         </Link>
 
