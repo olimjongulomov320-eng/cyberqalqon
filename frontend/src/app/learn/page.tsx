@@ -4,73 +4,104 @@ import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, fetchPaths, LearningPath, Domain, PathModule } from '@/lib/api';
-import { Card, ErrorNote, EmptyState, Skeleton, ButtonLink } from '@/components/ui';
-import { CheckIcon, CompassIcon, LockIcon, PlayIcon } from '@/components/icons';
+import { Card, ErrorNote, EmptyState, Skeleton, ButtonLink, Badge } from '@/components/ui';
+import { CheckIcon, ChevronRightIcon, CompassIcon, LockIcon, PlayIcon, TrophyIcon } from '@/components/icons';
 
-function nodeStatus(pm: PathModule): 'done' | 'current' | 'open' | 'locked' {
-  return pm.state;
-}
-
-/** One node on the path. Circles are an intentional exception to the squircle
- *  rule: a node is a position on a route, not a control. */
-function PathNode({ m, i }: { m: PathModule; i: number }) {
-  const status = nodeStatus(m);
-  const href = status === 'locked' ? undefined : `/modules/${m.slug}`;
+/** One module on the path: a numbered node on a connected route, plus a card
+ *  carrying the title, exercise count, XP and the module's state. Circles are an
+ *  intentional exception to the squircle rule: a node is a position on a route,
+ *  not a control. The `state`/`href`/locked logic is unchanged from before. */
+function ModuleRow({ m, i, last }: { m: PathModule; i: number; last: boolean }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
+  const status = m.state;
   const locked = status === 'locked';
+  const href = locked ? undefined : `/modules/${m.slug}`;
 
-  const styles: Record<string, string> = {
+  const nodeStyle: Record<PathModule['state'], string> = {
     done: 'border-success/50 bg-success/15 text-success',
-    current: 'border-cyan-400 bg-cyan-400 text-text-inverse shadow-[0_0_0_4px_rgb(34_211_238/0.2)] animate-[cq-pop_0.6s_ease]',
-    open: 'border-border-light bg-surface-700 text-text-primary hover:border-cyan-500/60 hover:text-white',
+    current: 'border-cyan-400 bg-cyan-400 text-text-inverse shadow-[0_0_0_4px_rgb(34_211_238/0.18)] animate-[cq-pop_0.6s_ease]',
+    open: 'border-border-light bg-surface-700 text-text-primary',
     locked: 'border-border bg-surface-800 text-text-muted',
   };
 
-  const content =
+  const nodeIcon =
     status === 'done' ? (
-      <CheckIcon size={20} />
+      <CheckIcon size={18} />
     ) : status === 'current' ? (
-      <PlayIcon size={18} />
+      <PlayIcon size={16} />
     ) : locked ? (
-      <LockIcon size={17} />
+      <LockIcon size={15} />
+    ) : m.kind === 'checkpoint' ? (
+      <TrophyIcon size={16} />
     ) : (
       <span className="num text-sm">{i + 1}</span>
     );
 
-  const statusLabel = { done: 'done', current: 'current', open: 'open', locked: 'locked' }[status];
+  const cardStyle =
+    status === 'current'
+      ? 'border-cyan-500/40 bg-cyan-500/[0.07] hover:border-cyan-400/60'
+      : status === 'done'
+        ? 'border-border bg-surface-900 hover:border-border-light'
+        : locked
+          ? 'border-border/70 bg-surface-950/50'
+          : 'border-border bg-surface-900 hover:border-border-light hover:bg-surface-800';
 
-  const node = (
-    <span
-      aria-label={statusLabel}
-      className={`grid h-12 w-12 shrink-0 place-items-center rounded-full border text-lg font-bold ${styles[status]} ${
-        locked ? '' : 'transition-transform duration-150 hover:scale-105'
-      }`}
-    >
-      {content}
-    </span>
-  );
-
-  const label = (
-    <span
-      title={m.title}
-      className={`w-16 text-center text-[0.625rem] font-medium leading-snug ${locked ? 'text-text-muted' : 'text-text-secondary'}`}
-      style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
-    >
-      {m.title}
-    </span>
+  const row = (
+    <>
+      <div className="min-w-0 flex-1">
+        <p className={`text-sm font-semibold leading-snug ${locked ? 'text-text-muted' : 'text-text-primary'}`}>{m.title}</p>
+        <p className="num mt-1 text-xs text-text-muted">
+          {m.exercise_count} {tr('challenge').toLowerCase()}
+          <span aria-hidden="true"> · </span>
+          {m.xp_reward} XP
+          {m.kind === 'checkpoint' && (
+            <>
+              <span aria-hidden="true"> · </span>
+              {tr('checkpoint')}
+            </>
+          )}
+        </p>
+      </div>
+      <span className="shrink-0">
+        {status === 'done' ? (
+          <Badge tone="success">{tr('stateDone')}</Badge>
+        ) : status === 'current' ? (
+          <Badge tone="primary">{tr('stateCurrent')}</Badge>
+        ) : locked ? (
+          <Badge tone="neutral">{tr('stateLocked')}</Badge>
+        ) : (
+          <ChevronRightIcon size={18} className="text-text-muted" />
+        )}
+      </span>
+    </>
   );
 
   return (
-    <li className="flex flex-col items-center gap-1.5">
+    <li className="flex gap-3">
+      <div className="flex flex-col items-center self-stretch">
+        <span
+          aria-hidden="true"
+          className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border text-base font-bold ${nodeStyle[status]}`}
+        >
+          {nodeIcon}
+        </span>
+        {!last && <span aria-hidden="true" className="mt-1 w-px flex-1 rounded bg-border" />}
+      </div>
       {href ? (
-        <Link href={href} aria-label={m.title} className="flex flex-col items-center gap-1.5">
-          {node}
-          {label}
+        <Link
+          href={href}
+          className={`mb-2 flex min-w-0 flex-1 items-center gap-2 rounded-xl border px-3.5 py-3 transition-colors ${cardStyle}`}
+        >
+          {row}
         </Link>
       ) : (
-        <span className="flex flex-col items-center gap-1.5" aria-disabled={locked}>
-          {node}
-          {label}
-        </span>
+        <div
+          aria-disabled="true"
+          className={`mb-2 flex min-w-0 flex-1 items-center gap-2 rounded-xl border px-3.5 py-3 ${cardStyle}`}
+        >
+          {row}
+        </div>
       )}
     </li>
   );
@@ -83,7 +114,12 @@ function DomainRow({ domain }: { domain: Domain }) {
     <section className="rounded-2xl border border-border bg-surface-900 p-4 shadow-card edge-light">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2.5">
-          <span aria-hidden="true" className="text-xl">{domain.icon}</span>
+          <span
+            aria-hidden="true"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-surface-800 text-lg"
+          >
+            {domain.icon}
+          </span>
           <div className="min-w-0">
             <h3 className="truncate text-sm font-bold text-white">{domain.title}</h3>
             <p className="truncate text-xs text-text-muted">{domain.description}</p>
@@ -93,15 +129,15 @@ function DomainRow({ domain }: { domain: Domain }) {
           {domain.completed}/{domain.total}
         </span>
       </div>
-      <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-surface-800">
+      <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-surface-800">
         <div
           className="fill-x h-full rounded-full bg-cyan-400"
           style={{ transform: `scaleX(${pct / 100})`, transformOrigin: 'left' }}
         />
       </div>
-      <ol className="flex items-start justify-start gap-3 overflow-x-auto pb-1">
+      <ol className="flex flex-col">
         {domain.modules.map((m, i) => (
-          <PathNode key={m.slug} m={m} i={i} />
+          <ModuleRow key={m.slug} m={m} i={i} last={i === domain.modules.length - 1} />
         ))}
       </ol>
     </section>

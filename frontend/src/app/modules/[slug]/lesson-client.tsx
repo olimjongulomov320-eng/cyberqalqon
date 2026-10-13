@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -18,6 +19,7 @@ import { Hearts, Confetti, NewAchievementChip, XPChip } from '@/components/game'
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { loseHeart, restoreHeart, useHearts } from '@/lib/hearts';
 import { levelFromXp } from '@/lib/gamification';
+import { fadeUp, questionIn } from '@/lib/motion';
 import { Badge, Button, ButtonLink, Card, ErrorNote, Progress, Skeleton } from '@/components/ui';
 import {
   ArrowRightIcon,
@@ -26,6 +28,7 @@ import {
   CloseIcon,
   FlameIcon,
   HeartIcon,
+  RefreshIcon,
   SparkleIcon,
   TrophyIcon,
 } from '@/components/icons';
@@ -43,6 +46,68 @@ function Text({ role = 'banner' }: { role?: 'banner' | 'alert' | 'status' }) {
       .
     </span>
   );
+}
+
+type Tr = (key: string) => string;
+
+/** The correct answer as human text, derived purely from the server's graded
+ *  `reveal` payload and the localised exercise. No answer is ever guessed. */
+function revealText(ex: Exercise, r: import('@/lib/api').Reveal, tr: Tr): string {
+  switch (ex.type) {
+    case 'mc':
+    case 'multi': {
+      const ids = r.answers ?? (r.answer ? [r.answer] : []);
+      return ids.map(id => ex.options.find(o => o.id === id)?.text ?? id).join(', ');
+    }
+    case 'tf':
+      return r.answer === 'true' ? tr('optTrue') : r.answer === 'false' ? tr('optFalse') : '';
+    case 'input':
+      return r.answer ?? '';
+    case 'order':
+      return (r.order ?? []).map(id => ex.items.find(i => i.id === id)?.text ?? id).join(' → ');
+    case 'match': {
+      const m = r.match_answer ?? {};
+      return Object.entries(m)
+        .map(([pid, rid]) => {
+          const left = ex.pairs.find(p => p.id === pid)?.left ?? pid;
+          const right = ex.pairs.find(p => p.id === rid)?.right ?? rid;
+          return `${left} = ${right}`;
+        })
+        .join('; ');
+    }
+    default:
+      return '';
+  }
+}
+
+/** The learner's own answer as human text, from the answers kept in state. */
+function answerText(ex: Exercise, value: AnswerValue | undefined, tr: Tr): string {
+  if (value === undefined || value === null) return '';
+  switch (ex.type) {
+    case 'mc':
+    case 'multi': {
+      const ids = Array.isArray(value) ? value : [value];
+      return ids.map(id => ex.options.find(o => o.id === String(id))?.text ?? String(id)).join(', ');
+    }
+    case 'tf':
+      return value === 'true' ? tr('optTrue') : value === 'false' ? tr('optFalse') : '';
+    case 'input':
+      return String(value);
+    case 'order':
+      return (value as string[]).map(id => ex.items.find(i => i.id === id)?.text ?? id).join(' → ');
+    case 'match': {
+      const m = value as Record<string, string>;
+      return Object.entries(m)
+        .map(([pid, rid]) => {
+          const left = ex.pairs.find(p => p.id === pid)?.left ?? pid;
+          const right = ex.pairs.find(p => p.id === rid)?.right ?? rid;
+          return `${left} = ${right}`;
+        })
+        .join('; ');
+    }
+    default:
+      return '';
+  }
 }
 
 export default function LessonView({ slug }: { slug: string }) {
@@ -69,6 +134,7 @@ export default function LessonView({ slug }: { slug: string }) {
   const [complete, setComplete] = useState<CompleteResult | null>(null);
   const [completing, setCompleting] = useState(false);
   const [exitOpen, setExitOpen] = useState(false);
+  const [mistakesOpen, setMistakesOpen] = useState(false);
   const [toasts, setToasts] = useState<string[]>([]);
   const [practice, setPractice] = useState<{
     ex: Exercise;
@@ -266,6 +332,57 @@ export default function LessonView({ slug }: { slug: string }) {
     router.push('/learn');
   }, [router]);
 
+  // Keyboard-first answering: digits pick an option, Enter checks the answer /
+  // advances. Ignored while typing in a field (except Enter on the single-line
+  // answer input, which submits) and whenever a modifier key is held, so we
+  // never shadow browser or assistive shortcuts. Presentation only — grading
+  // still happens server-side.
+  useEffect(() => {
+    if (phase !== 'active') return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const t = e.target as HTMLElement | null;
+      const tag = t?.tagName;
+      const isText = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || Boolean(t?.isContentEditable);
+      const cur = current;
+      const readyNow = cur ? isAnswerReady(cur, value) : false;
+
+      if (e.key === 'Enter') {
+        if (isText && cur?.type !== 'input') return;
+        if (checked) {
+          e.preventDefault();
+          void handleNext();
+        } else if (readyNow && !checking && user) {
+          e.preventDefault();
+          void handleCheck();
+        }
+        return;
+      }
+
+      if (isText || checked || !cur) return;
+
+      if (/^[1-9]$/.test(e.key)) {
+        const i = Number(e.key) - 1;
+        const ids =
+          cur.type === 'mc' || cur.type === 'multi'
+            ? cur.options.map(o => o.id)
+            : cur.type === 'tf'
+              ? ['true', 'false']
+              : null;
+        if (!ids || i >= ids.length) return;
+        e.preventDefault();
+        if (cur.type === 'multi') {
+          const arr = Array.isArray(value) ? (value as string[]) : [];
+          setValue(arr.includes(ids[i]) ? arr.filter(x => x !== ids[i]) : [...arr, ids[i]]);
+        } else {
+          setValue(ids[i]);
+        }
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [phase, current, value, checked, checking, user, handleCheck, handleNext, setValue]);
+
   /* ── Loading ── */
   if (phase === 'loading' || phase === 'error') {
     return (
@@ -360,6 +477,7 @@ export default function LessonView({ slug }: { slug: string }) {
     const endLevel = levelFromXp(complete.total_xp).level;
     const startLevel = levelFromXp(lessonStartXp.current ?? complete.total_xp).level;
     const leveledUp = endLevel > startLevel;
+    const mistakes = complete.results.filter(r => !r.correct);
     return (
       <div>
         <Confetti show />
@@ -423,6 +541,54 @@ export default function LessonView({ slug }: { slug: string }) {
                 ))}
                 <NewAchievementChip title={tr('newAchievement')} />
               </div>
+            )}
+
+            {mistakes.length > 0 ? (
+              <div className="w-full">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setMistakesOpen(v => !v)}
+                  aria-expanded={mistakesOpen}
+                  className="mx-auto"
+                >
+                  <RefreshIcon size={15} />
+                  {tr('reviewMistakes')} ({mistakes.length})
+                </Button>
+                {mistakesOpen && (
+                  <ul className="stagger mt-3 flex flex-col gap-2 text-left">
+                    {mistakes.map(r => {
+                      const ex = exercises.find(e => e.id === r.id);
+                      const mine = answers.find(a => a.id === r.id)?.value;
+                      return (
+                        <li key={r.id} className="rounded-lg border border-danger/25 bg-danger/[0.05] p-3">
+                          {ex && <p className="text-sm font-semibold text-text-primary">{ex.q}</p>}
+                          {ex && (
+                            <p className="mt-1.5 text-xs text-text-muted">
+                              <span className="font-semibold text-text-secondary">{tr('yourAnswer')}: </span>
+                              {answerText(ex, mine, tr) || tr('answerFirst')}
+                            </p>
+                          )}
+                          {ex && (
+                            <p className="mt-1 text-xs text-success">
+                              <span className="font-semibold">{tr('answerIs')}: </span>
+                              {revealText(ex, r, tr)}
+                            </p>
+                          )}
+                          {r.explain && (
+                            <p className="mt-1.5 text-xs leading-relaxed text-text-secondary">
+                              <span className="font-semibold text-text-primary">{tr('whyLabel')}: </span>
+                              {r.explain}
+                            </p>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            ) : (
+              <p className="text-xs font-semibold text-success">{tr('allCorrect')}</p>
             )}
 
             <Text role="status" />
@@ -491,24 +657,29 @@ export default function LessonView({ slug }: { slug: string }) {
 
       {/* Exercise card */}
       <div className="flex flex-1 flex-col justify-center py-6">
-        <Card className="gap-5">
-          {ex ? (
-            <ExerciseRenderer
-              key={ex.id}
-              ex={ex}
-              value={value}
-              onChange={setValue}
-              locked={Boolean(checked)}
-              reveal={checked?.reveal}
-            />
-          ) : (
-            <Skeleton className="h-40 w-full" />
-          )}
-        </Card>
+        <motion.div key={ex?.id ?? 'loading'} variants={questionIn} initial="hidden" animate="visible">
+          <Card className="gap-5">
+            {ex ? (
+              <ExerciseRenderer
+                key={ex.id}
+                ex={ex}
+                value={value}
+                onChange={setValue}
+                locked={Boolean(checked)}
+                reveal={checked?.reveal}
+              />
+            ) : (
+              <Skeleton className="h-40 w-full" />
+            )}
+          </Card>
+        </motion.div>
 
         {/* Feedback panel */}
         {checked && (
-          <section
+          <motion.section
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
             aria-live="polite"
             className={`stagger mt-4 rounded-xl border p-4 ${
               checked.correct ? 'border-success/50 bg-success/[0.08]' : 'border-danger/50 bg-danger/[0.08]'
@@ -527,7 +698,7 @@ export default function LessonView({ slug }: { slug: string }) {
                 <BoltIcon size={14} /> +{checked.xp_earned} XP
               </p>
             )}
-          </section>
+          </motion.section>
         )}
 
         {/* Restore-a-heart pitch */}
@@ -631,6 +802,9 @@ export default function LessonView({ slug }: { slug: string }) {
           </Button>
         )}
       </div>
+      <p className="mt-2 hidden justify-center text-center text-xs text-text-muted sm:flex">
+        {tr('keyboardHint')}
+      </p>
 
       {/* Exit confirm */}
       {exitOpen && (

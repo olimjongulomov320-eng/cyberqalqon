@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { Lang, makeT } from '@/lib/i18n';
 import type { AnswerValue, Exercise } from '@/lib/api';
@@ -90,10 +90,40 @@ function SelectOne({
   const correctSet = new Set(reveal?.answers ?? (reveal?.answer ? [reveal.answer] : []));
   const multi = ex.type === 'multi';
   const hint = multi ? tr('selectSome') : tr('chooseAnswer');
+  const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Arrow keys move focus between options; for single choice they also select,
+  // which is the expected behaviour of an ARIA radio group. Multi-select keeps
+  // focus movement separate from toggling so Space remains the "select" key.
+  const onOptionKey = (e: React.KeyboardEvent, i: number) => {
+    const n = ex.options.length;
+    let next = -1;
+    switch (e.key) {
+      case 'ArrowDown':
+      case 'ArrowRight':
+        next = (i + 1) % n;
+        break;
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        next = (i - 1 + n) % n;
+        break;
+      case 'Home':
+        next = 0;
+        break;
+      case 'End':
+        next = n - 1;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    btnRefs.current[next]?.focus();
+    if (!multi && !locked) onChange(ex.options[next].id);
+  };
 
   return (
     <div className="flex flex-col gap-2" role={multi ? 'group' : 'radiogroup'} aria-label={hint}>
-      {ex.options.map(opt => {
+      {ex.options.map((opt, i) => {
         const isSel = selected.has(opt.id);
         const isCorr = correctSet.has(opt.id);
         const state =
@@ -107,10 +137,16 @@ function SelectOne({
         return (
           <button
             key={opt.id}
+            ref={el => {
+              btnRefs.current[i] = el;
+            }}
             type="button"
+            role={multi ? undefined : 'radio'}
+            aria-checked={multi ? undefined : isSel}
+            aria-pressed={multi ? isSel : undefined}
             onClick={() => (locked ? undefined : onChange(multi ? toggleIn(selected, opt.id) : opt.id))}
+            onKeyDown={e => onOptionKey(e, i)}
             disabled={locked}
-            aria-pressed={isSel}
             className={`flex items-center gap-3 rounded-lg border px-3.5 py-3 text-left text-sm font-medium transition-colors ${
               locked ? 'cursor-default' : 'active:scale-[0.995]'
             } ${optionClass(state)}`}
@@ -159,9 +195,22 @@ function TrueFalse({
     { id: 'true', Icon: CheckIcon, label: tr('optTrue') },
     { id: 'false', Icon: CloseIcon, label: tr('optFalse') },
   ] as const;
+  const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const onOptionKey = (e: React.KeyboardEvent, i: number) => {
+    const n = options.length;
+    let next = -1;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (i + 1) % n;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (i - 1 + n) % n;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = n - 1;
+    else return;
+    e.preventDefault();
+    btnRefs.current[next]?.focus();
+    if (!locked) onChange(options[next].id);
+  };
   return (
     <div role="radiogroup" className="grid grid-cols-2 gap-2" aria-label={tr('trueFalseLabel')}>
-      {options.map(o => {
+      {options.map((o, i) => {
         const isSel = value === o.id;
         const isCorr = locked && reveal?.answer === o.id;
         const state =
@@ -176,10 +225,15 @@ function TrueFalse({
         return (
           <button
             key={o.id}
+            ref={el => {
+              btnRefs.current[i] = el;
+            }}
             type="button"
+            role="radio"
+            aria-checked={isSel}
             onClick={() => !locked && onChange(o.id)}
+            onKeyDown={e => onOptionKey(e, i)}
             disabled={locked}
-            aria-pressed={isSel}
             className={`flex flex-col items-center gap-2 rounded-lg border px-3 py-4 text-sm font-semibold transition-colors ${optionClass(state)}`}
           >
             <Icon size={20} />
@@ -341,6 +395,7 @@ function Order({
   const correct = new Set(reveal?.order ?? []);
   const placed = (Array.isArray(value) ? value : []) as string[];
   const placedSet = new Set(placed);
+  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   // Stable shuffled order of ALL item ids; placed items are filtered out for
   // the pool, so tapping an item toggles it between pool and the answer list.
   const [shuffledAll] = useState(() => shuffle(ex.items.map(i => i.id)));
@@ -352,6 +407,30 @@ function Order({
       onChange(placed.filter(p => p !== id));
     } else {
       onChange([...placed, id]);
+    }
+  };
+
+  // Move a placed item one slot up/down without leaving the keyboard, then
+  // return focus to it so the learner can keep stepping through the order.
+  const move = (id: string, dir: -1 | 1) => {
+    if (locked) return;
+    const i = placed.indexOf(id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= placed.length) return;
+    const next = [...placed];
+    next.splice(i, 1);
+    next.splice(j, 0, id);
+    onChange(next);
+    requestAnimationFrame(() => itemRefs.current[id]?.focus());
+  };
+
+  const onPlacedKey = (e: React.KeyboardEvent, id: string) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      move(id, -1);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      move(id, 1);
     }
   };
 
@@ -370,7 +449,11 @@ function Order({
               <li key={id}>
                 <button
                   type="button"
+                  ref={el => {
+                    itemRefs.current[id] = el;
+                  }}
                   onClick={() => place(id)}
+                  onKeyDown={e => onPlacedKey(e, id)}
                   disabled={locked}
                   className={`flex w-full items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${optionClass(state)}`}
                 >

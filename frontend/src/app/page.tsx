@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
-import { fetchPaths, fetchStats, StatsPayload, LeaderboardEntry, fetchLeaderboard } from '@/lib/api';
+import { fetchPaths, fetchStats, StatsPayload, LeaderboardEntry, fetchLeaderboard, LearningPath } from '@/lib/api';
 import { AchievementBadge, DailyGoal, Flame, RingProgress, XPChip } from '@/components/game';
 import LandingPreview from '@/components/LandingPreview';
 import { achievementMeta, levelFromXp, tierIndex, tierKey } from '@/lib/gamification';
@@ -11,6 +11,7 @@ import { Avatar, Badge, ButtonLink, Card, EmptyState, SectionHeading, Skeleton }
 import {
   ArrowRightIcon,
   BookIcon,
+  CheckIcon,
   ChevronRightIcon,
   CompassIcon,
   FlameIcon,
@@ -32,6 +33,7 @@ export default function HomePage() {
 
   const [stats, setStats] = useState<StatsPayload | null>(null);
   const [continueCtx, setContinueCtx] = useState<{ slug: string; title: string; position: number; total: number } | null>(null);
+  const [paths, setPaths] = useState<LearningPath[]>([]);
   const [top, setTop] = useState<LeaderboardEntry[] | null>(null);
   const [statsFailed, setStatsFailed] = useState(false);
 
@@ -46,6 +48,7 @@ export default function HomePage() {
         setContinueCtx(
           p.continue ? { slug: p.continue.slug, title: p.continue.title, position: p.continue.position, total: p.continue.total } : null
         );
+        setPaths(p.paths);
       } catch {
         if (alive) setStatsFailed(true);
       }
@@ -228,6 +231,79 @@ export default function HomePage() {
           </div>
         </div>
       </Card>
+
+      {/* Learning paths + skill mastery — built from the real /paths data the
+          dashboard already fetches. "Mastery" here is honest: a domain counts as
+          mastered only when every one of its modules is completed. */}
+      {paths.length > 0 && (
+        <section aria-labelledby="paths-h">
+          <SectionHeading
+            action={
+              <Link href="/learn" className="text-xs font-medium text-cyan-400 hover:underline">
+                {tr('viewPath')}
+              </Link>
+            }
+          >
+            <span id="paths-h">{tr('yourPath')}</span>
+          </SectionHeading>
+          <div className="flex flex-col gap-2">
+            {paths.map(path => {
+              const done = path.domains.reduce((n, d) => n + d.completed, 0);
+              const total = path.domains.reduce((n, d) => n + d.total, 0);
+              const pct = total > 0 ? done / total : 0;
+              return (
+                <Card key={path.slug} className="p-4">
+                  <div className="flex items-center gap-2.5">
+                    <span aria-hidden="true" className="text-xl">{path.icon}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-bold text-white">{path.title}</p>
+                      <p className="num text-xs text-text-muted">
+                        {done}/{total} {tr('modulesDone')} · {Math.round(pct * 100)}%
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-800">
+                    <div
+                      className="fill-x h-full rounded-full bg-cyan-400"
+                      style={{ transform: `scaleX(${pct})`, transformOrigin: 'left' }}
+                    />
+                  </div>
+                  {path.domains.length > 0 && (
+                    <ul className="mt-3 flex flex-col gap-2">
+                      {path.domains.map(d => {
+                        const dp = d.total > 0 ? d.completed / d.total : 0;
+                        const mastered = d.total > 0 && d.completed >= d.total;
+                        return (
+                          <li key={d.slug} className="flex items-center gap-2">
+                            <span
+                              aria-hidden="true"
+                              className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border text-[0.625rem] ${
+                                mastered ? 'border-success/40 bg-success/10 text-success' : 'border-border bg-surface-800'
+                              }`}
+                            >
+                              {mastered ? <CheckIcon size={9} /> : d.icon}
+                            </span>
+                            <span className="min-w-0 flex-1 truncate text-xs text-text-secondary">{d.title}</span>
+                            <span aria-hidden="true" className="h-1 w-14 shrink-0 overflow-hidden rounded-full bg-surface-800">
+                              <span
+                                className="fill-x block h-full rounded-full bg-cyan-400/70"
+                                style={{ transform: `scaleX(${dp})`, transformOrigin: 'left' }}
+                              />
+                            </span>
+                            <span className="num w-8 shrink-0 text-right text-[0.6875rem] text-text-muted">
+                              {d.completed}/{d.total}
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </Card>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {statsFailed ? (
         <Card>

@@ -85,3 +85,32 @@ export const overlayFade: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: DUR.fast } },
 };
+
+/** Opacity-only fade — the reduced-motion-safe default for content reveals. */
+export const fadeIn: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: DUR.base, ease: EASE } },
+};
+
+/** Scale-up entrance for celebratory tiles and dialogs. */
+export const scaleIn: Variants = {
+  hidden: { opacity: 0, scale: 0.96 },
+  visible: { opacity: 1, scale: 1, transition: { duration: DUR.base, ease: EASE } },
+};
+
+/**
+ * Question-to-question transition in the lesson runner. Deliberately short and
+ * with no exit phase: the next question must never make the learner wait for a
+ * leaving animation. `MotionConfig reducedMotion="user"` downgrades this to a
+ * plain fade for users who prefer reduced motion.
+ */
+export const questionIn: Variants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: DUR.base, ease: EASE } },
+};
+
+/** Shared press feedback for pressable surfaces (framer-motion `whileTap`). */
+export const tapScale = { scale: 0.985 };
+
+/** `whileInView` defaults for scroll reveals: animate once, a little into view. */
+export const VIEWPORT = { once: true, amount: 0.2 } as const;

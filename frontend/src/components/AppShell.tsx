@@ -7,7 +7,7 @@ import NavBar from '@/components/NavBar';
 import BottomNav from '@/components/BottomNav';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
-import { DUR, EASE } from '@/lib/motion';
+import { fadeUp } from '@/lib/motion';
 
 /**
  * Route-aware shell. The authentication screens run their own full-bleed
@@ -72,12 +72,7 @@ function Shell({ children }: { children: ReactNode }) {
  */
 function PageMotion({ pathname, children }: { pathname: string; children: ReactNode }) {
   return (
-    <motion.div
-      key={pathname}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: DUR.base, ease: EASE }}
-    >
+    <motion.div key={pathname} variants={fadeUp} initial="hidden" animate="visible">
       {children}
     </motion.div>
   );

@@ -209,6 +209,9 @@ const uz: Dict = {
   heartsLabel: 'Yuraklar',
   loadingLesson: 'Dars yuklanmoqda…',
   finalResults: 'Natijalar',
+  keyboardHint: '1–9 tanlash · Enter tekshirish',
+  reviewMistakes: 'Xatolarni koʻrish',
+  allCorrect: 'Xato yoʻq — mukammal!',
 
   // ── Practice / review ──
   practiceSubtitle: 'Xato qilgan joylaringizni mustahkamlang',
@@ -503,6 +506,9 @@ const ru: Dict = {
   heartsLabel: 'Сердца',
   loadingLesson: 'Урок загружается…',
   finalResults: 'Результаты',
+  keyboardHint: '1–9 выбрать · Enter проверить',
+  reviewMistakes: 'Разобрать ошибки',
+  allCorrect: 'Ошибок нет — идеально!',
 
   // ── Практика ──
   practiceSubtitle: 'Закрепите места, где вы ошиблись',
