@@ -215,6 +215,201 @@ IPv4 — четыре числа через точку (каждое от 0 до
   },
 
   {
+    slug: 'subnetting-basics',
+    kind: 'lesson',
+    xp_reward: 20,
+    title: { uz: "Subnet — tarmoqlarni bo'lish", ru: 'Подсети — деление сети' },
+    content: {
+      uz: `## Subnet — tarmoqlarni bo'lish
+
+Bitta katta IP tarmog'ini **subnet**larga (kichik tarmoqlarga) bo'lish mumkin. Buni **subnet mask** belgilaydi.
+
+Misol: **192.168.1.0/24**. Bu yerdagi /24 — manzilning birinchi 24 biti tarmoq uchun, qolgan 8 biti qurilmalar uchun.
+
+- /24 → jami 256 manzil (254 tasi qurilma uchun)
+- /25 → 128 manzil (126 tasi qurilma uchun)
+- /26 → 64 manzil (62 tasi qurilma uchun)
+
+Prefiks soni qanchalik **katta** bo'lsa, subnetga shuncha **kam** qurilma sig'adi.
+
+> **Xavfsizlik:** subnetlar tarmoqni bo'laklarga bo'ladi. Buzg'unchi bir bo'lakka kirsa ham, segmentatsiya unga boshqa bo'laklarga o'tishni qiyinlashtiradi.`,
+      ru: `## Подсети — деление сети
+
+Большую IP-сеть можно разделить на **подсети**. Это определяет **маска подсети** (subnet mask).
+
+Пример: **192.168.1.0/24**. Число /24 означает: первые 24 бита адреса — для сети, оставшиеся 8 бит — для устройств.
+
+- /24 → всего 256 адресов (254 для устройств)
+- /25 → 128 адресов (126 для устройств)
+- /26 → 64 адреса (62 для устройств)
+
+Чем **больше** префикс, тем **меньше** устройств помещается в подсеть.
+
+> **Безопасность:** подсети делят сеть на части. Даже если злоумышленник попадёт в одну часть, сегментация мешает ему перейти в другие.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Nechta foydalanish mumkin bo'lgan (usable) manzil bor /26 subnetda?",
+          ru: 'Сколько пригодных для устройств адресов в подсети /26?',
+        },
+        options: [
+          { id: 'a', uz: '62', ru: '62' },
+          { id: 'b', uz: '64', ru: '64' },
+          { id: 'c', uz: '126', ru: '126' },
+          { id: 'd', uz: '254', ru: '254' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "/26 — jami 64 manzil. Bittasi tarmoq, bittasi broadcast uchun ketadi, qolgan 62 tasi qurilmaga beriladi. Shu sababli har doim 2 tani ayiramiz.",
+          ru: '/26 — всего 64 адреса. Один из них адрес сети, один — широковещательный, остаётся 62 для устройств. Поэтому всегда вычитаем 2.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: "Prefiks soni qanchalik katta bo'lsa (masalan /26, /24 dan), bitta subnetga shuncha ko'p qurilma sig'adi.",
+          ru: 'Чем больше число префикса (например, /26 вместо /24), тем больше устройств помещается в одну подсеть.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Aksincha: prefiks katta bo'lsa, subnet kichik bo'ladi. /24 da 254 qurilma, /26 da esa atigi 62 ta.",
+          ru: 'Наоборот: чем больше префикс, тем меньше подсеть. В /24 — 254 устройства, а в /26 — всего 62.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'input',
+        q: {
+          uz: '/24 tarmoqda jami nechta IP manzil bor? (faqat raqam yozing)',
+          ru: 'Сколько всего IP-адресов в сети /24? (введите только число)',
+        },
+        answer: '256',
+        accepted: ['256'],
+        explain: {
+          uz: "/24 da oxirgi 8 bit qurilmalar uchun, ya'ni 2^8 = 256 manzil. Ulardan 254 tasi amalda ishlatiladi.",
+          ru: '/24 — последние 8 бит для устройств, то есть 2^8 = 256 адресов. Из них на практике используется 254.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'multi',
+        q: {
+          uz: "Subnetlarga bo'lishning qaysi afzalliklari to'g'ri? (bir nechtasini tanlang)",
+          ru: 'Какие преимущества даёт деление на подсети? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: 'Broadcast trafigini kamaytiradi', ru: 'Уменьшает широковещательный трафик' },
+          { id: 'b', uz: "Tarmoqni bo'laklab xavfsizlikni oshiradi", ru: 'Делит сеть на части и повышает безопасность' },
+          { id: 'c', uz: 'Internet provayderini avtomatik almashtiradi', ru: 'Автоматически меняет интернет-провайдера' },
+          { id: 'd', uz: 'Tarmoqni boshqarishni osonlashtiradi', ru: 'Упрощает управление сетью' },
+        ],
+        answers: ['a', 'b', 'd'],
+        explain: {
+          uz: "Segmentatsiya broadcast'ni kamaytiradi, xavfsizlikni oshiradi va boshqaruvni osonlashtiradi. Provayderni almashtirishga esa aloqasi yo'q.",
+          ru: 'Сегментация снижает широковещательный трафик, повышает безопасность и упрощает управление. К смене провайдера это отношения не имеет.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'mac-arp-switching',
+    kind: 'lesson',
+    xp_reward: 20,
+    title: { uz: 'MAC manzil, ARP va switch', ru: 'MAC-адрес, ARP и коммутатор' },
+    content: {
+      uz: `## MAC manzil, ARP va switch
+
+Har bir tarmoq kartasi (NIC) zavodda berilgan **MAC manzil**ga ega: masalan **00:1A:2B:3C:4D:5E**. Bu qurilmaning "jismoniy" manzili.
+
+- **Switch** — MAC manzillar jadvali bo'yicha paketni faqat kerakli portga yuboradi.
+- **Hub** — paketni barcha portlarga yuboradi (eski va xavfli usul).
+- **ARP** — IP manzilni MAC manzilga bog'laydi: "192.168.1.5 kimning MAC manzili?"
+
+> **Xavfsizlik:** ARP spoofing — buzg'unchi o'zini boshqa qurilma kabi ko'rsatib, trafikni o'g'irlashi mumkin. Shu sababli katta tarmoqlarda dinamik ARP nazorati qo'llanadi.`,
+      ru: `## MAC-адрес, ARP и коммутатор
+
+У каждой сетевой карты (NIC) есть **MAC-адрес** с завода: например **00:1A:2B:3C:4D:5E**. Это «физический» адрес устройства.
+
+- **Коммутатор (switch)** — по таблице MAC-адресов отправляет пакет только в нужный порт.
+- **Концентратор (hub)** — отправляет пакет во все порты (старый и небезопасный способ).
+- **ARP** — сопоставляет IP-адрес и MAC-адрес: «192.168.1.5 — это чей MAC-адрес?»
+
+> **Безопасность:** ARP-спуфинг — злоумышленник выдаёт себя за другое устройство и может перехватывать трафик. Поэтому в больших сетях применяют защиту динамического ARP.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Switch paketni qaysi manzilga qarab kerakli portga yo'naltiradi?",
+          ru: 'По какому адресу коммутатор направляет пакет в нужный порт?',
+        },
+        options: [
+          { id: 'a', uz: 'MAC manzil', ru: 'MAC-адрес' },
+          { id: 'b', uz: 'Domen nomi', ru: 'Доменное имя' },
+          { id: 'c', uz: 'HTTP sarlavhasi', ru: 'HTTP-заголовок' },
+          { id: 'd', uz: 'Fayl nomi', ru: 'Имя файла' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Switch 2-qatlamda (Data Link) ishlaydi va MAC manzillar jadvalidan foydalanadi. IP manzillar bilan router shug'ullanadi.",
+          ru: 'Коммутатор работает на канальном уровне и использует таблицу MAC-адресов. С IP-адресами работает маршрутизатор.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'input',
+        q: {
+          uz: "IP manzilni MAC manzilga bog'lovchi protokol nomi (inglizcha, 3 harf): ____",
+          ru: 'Название протокола, связывающего IP-адрес с MAC-адресом (три латинские буквы): ____',
+        },
+        answer: 'arp',
+        accepted: ['arp'],
+        explain: {
+          uz: "ARP (Address Resolution Protocol) 192.168.1.5 qaysi MAC manzilda? degan savolga javob beradi va javobni ARP jadvalida saqlaydi.",
+          ru: 'ARP (Address Resolution Protocol) отвечает на вопрос «какому MAC-адресу соответствует 192.168.1.5?» и хранит ответ в ARP-таблице.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'tf',
+        q: {
+          uz: 'Hub paketni faqat kerakli portga yuboradi, boshqalarga emas.',
+          ru: 'Концентратор (hub) отправляет пакет только в нужный порт, а не во все.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Yo'q — hub paketni barcha portlarga yuboradi, shu sababli trafik ko'payadi va uni tutib olish osonlashadi. Buni switch hal qiladi.",
+          ru: 'Нет — концентратор рассылает пакет во все порты: трафик растёт, и перехватить его проще. Эту проблему решает коммутатор.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'match',
+        q: {
+          uz: 'Tushunchani vazifasi bilan moslang',
+          ru: 'Соотнесите понятие с его задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'MAC manzil', ru: 'MAC-адрес' }, right: { uz: 'Qurilmaning jismoniy manzili', ru: 'Физический адрес устройства' } },
+          { id: 'p2', left: { uz: 'Switch', ru: 'Коммутатор' }, right: { uz: "MAC jadvali bo'yicha yo'naltiradi", ru: 'Направляет по таблице MAC-адресов' } },
+          { id: 'p3', left: { uz: 'ARP', ru: 'ARP' }, right: { uz: "IP va MAC ni bog'laydi", ru: 'Связывает IP и MAC' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
+        explain: {
+          uz: "MAC — qurilmaning doimiy manzili, switch uni jadval orqali ishlatadi, ARP esa IP va MAC o'rtasidagi ko'prik.",
+          ru: 'MAC — постоянный адрес устройства, коммутатор использует его через таблицу, а ARP — мост между IP и MAC.',
+        },
+      },
+    ],
+  },
+
+  {
     slug: 'dns-basics',
     kind: 'lesson',
     xp_reward: 20,
@@ -426,6 +621,120 @@ Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligi
   },
 
   {
+    slug: 'osi-and-tcp-ip-models',
+    kind: 'lesson',
+    xp_reward: 20,
+    title: { uz: 'OSI va TCP/IP modellari', ru: 'Модели OSI и TCP/IP' },
+    content: {
+      uz: `## OSI va TCP/IP modellari
+
+Tarmoq orqali ma'lumot yuborilganda u **qatlamlar** (layers) bo'ylab bosqichma-bosqich o'tadi. Ikki mashhur model bor.
+
+**OSI modeli** — nazariy asos, 7 qatlam:
+1. **Physical** — kabel, signal
+2. **Data Link** — MAC manzil, switch
+3. **Network** — IP manzil, router
+4. **Transport** — TCP/UDP, portlar
+5. **Session** — sessiyani boshqarish
+6. **Presentation** — shifrlash, kodlash
+7. **Application** — HTTP, DNS, brauzer
+
+**TCP/IP modeli** — amalda ishlatiladi, 4 qatlam: Link → Internet → Transport → Application.
+
+> **Xavfsizlik:** har bir qatlam o'z himoyasiga muhtoj. Fizik himoyadan (kabel) shifrlashgacha — bir qatlamdagi zaiflik butun tizimga ta'sir qiladi.`,
+      ru: `## Модели OSI и TCP/IP
+
+Когда данные идут по сети, они проходят **уровни** (layers) шаг за шагом. Есть две известные модели.
+
+**Модель OSI** — теоретическая основа, 7 уровней:
+1. **Физический** — кабель, сигнал
+2. **Канальный** — MAC-адрес, коммутатор
+3. **Сетевой** — IP-адрес, маршрутизатор
+4. **Транспортный** — TCP/UDP, порты
+5. **Сеансовый** — управление сессией
+6. **Представления** — шифрование, кодирование
+7. **Прикладной** — HTTP, DNS, браузер
+
+**Модель TCP/IP** — применяется на практике, 4 уровня: канальный → интернет → транспортный → прикладной.
+
+> **Безопасность:** каждому уровню нужна своя защита. От защиты кабеля до шифрования — слабость на одном уровне влияет на всю систему.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: 'Router (marshrutizator) OSI modelining qaysi qatlamida ishlaydi?',
+          ru: 'На каком уровне модели OSI работает маршрутизатор?',
+        },
+        options: [
+          { id: 'a', uz: 'Network (tarmoq)', ru: 'Сетевой (Network)' },
+          { id: 'b', uz: 'Physical (fizik)', ru: 'Физический (Physical)' },
+          { id: 'c', uz: 'Transport (transport)', ru: 'Транспортный (Transport)' },
+          { id: 'd', uz: 'Application (amaliy)', ru: 'Прикладной (Application)' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Router IP manzillar bilan ishlaydi va turli tarmoqlarni bog'laydi — bu Network qatlami. Switch Data Link, kabel esa Physical qatlamda ishlaydi.",
+          ru: 'Маршрутизатор работает с IP-адресами и соединяет разные сети — это сетевой уровень. Коммутатор — канальный, кабель — физический.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'match',
+        q: {
+          uz: 'OSI qatlamini uning vazifasi bilan moslang',
+          ru: 'Соотнесите уровень OSI с его задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'Network', ru: 'Сетевой' }, right: { uz: "IP manzillash va yo'naltirish", ru: 'IP-адресация и маршрутизация' } },
+          { id: 'p2', left: { uz: 'Transport', ru: 'Транспортный' }, right: { uz: 'Portlar, TCP/UDP', ru: 'Порты, TCP/UDP' } },
+          { id: 'p3', left: { uz: 'Application', ru: 'Прикладной' }, right: { uz: 'HTTP, DNS — dastur protokollari', ru: 'HTTP, DNS — протоколы приложений' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
+        explain: {
+          uz: 'Har bir qatlamning aniq vazifasi bor: Network IP bilan, Transport portlar bilan, Application esa HTTP va DNS kabi protokollar bilan ishlaydi.',
+          ru: 'У каждого уровня своя задача: сетевой работает с IP, транспортный — с портами, прикладной — с протоколами вроде HTTP и DNS.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'order',
+        q: {
+          uz: "OSI qatlamlarini pastdan yuqoriga to'g'ri tartibda joylang",
+          ru: 'Расположите уровни OSI снизу вверх в правильном порядке',
+        },
+        items: [
+          { id: 'i1', uz: 'Physical', ru: 'Физический' },
+          { id: 'i2', uz: 'Data Link', ru: 'Канальный' },
+          { id: 'i3', uz: 'Network', ru: 'Сетевой' },
+          { id: 'i4', uz: 'Transport', ru: 'Транспортный' },
+          { id: 'i5', uz: 'Application', ru: 'Прикладной' },
+        ],
+        order: ['i1', 'i2', 'i3', 'i4', 'i5'],
+        explain: {
+          uz: "Ma'lumot pastdan yuqoriga ko'tariladi: Physical → Data Link → Network → Transport → ... → Application. Yuboruvchi qatlamlarga bo'ladi, qabul qiluvchi qayta yig'adi.",
+          ru: 'Данные поднимаются снизу вверх: Физический → Канальный → Сетевой → Транспортный → ... → Прикладной. Отправитель разбивает данные по уровням, получатель собирает обратно.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'input',
+        q: {
+          uz: 'OSI modelida nechta qatlam bor? (raqam yozing)',
+          ru: 'Сколько уровней в модели OSI? (введите число)',
+        },
+        answer: '7',
+        accepted: ['7', 'yetti'],
+        explain: {
+          uz: "OSI — 7 qatlam. TCP/IP esa soddalashtirilgan 4 qatlamli model bo'lib, amalda asosan shu ishlatiladi.",
+          ru: 'В OSI 7 уровней. TCP/IP — упрощённая модель из 4 уровней, именно она применяется на практике.',
+        },
+      },
+    ],
+  },
+
+  {
     slug: 'http-and-https',
     kind: 'lesson',
     xp_reward: 25,
@@ -523,6 +832,198 @@ Kodlar: **200** — joyida, **404** — topilmadi, **500** — serverda xato.`,
         explain: {
           uz: "POST — serverga ma'lumot yuboradi (parol, ro'yxatdan o'tish formasi). GET esa serverdan ma'lumot SO'RAYDI va faqat o'qish uchun ishlatiladi.",
           ru: 'POST отправляет данные на сервер (пароль, форма регистрации). GET запрашивает данные у сервера и используется только для чтения.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'tls-certificates',
+    kind: 'lesson',
+    xp_reward: 20,
+    title: { uz: 'HTTPS, TLS va sertifikatlar', ru: 'HTTPS, TLS и сертификаты' },
+    content: {
+      uz: `## HTTPS, TLS va sertifikatlar
+
+**HTTPS** — bu HTTP protokoli **TLS** shifrlash ustida ishlaydigan varianti. Brauzerdagi qulf belgisi (🔒) shuni bildiradi.
+
+TLS ikki asosiy ishni bajaradi:
+1. **Shifrlash** — ma'lumot yo'lda o'qilmasligi.
+2. **Autentifikatsiya** — sayt haqiqatan o'sha sayt ekanini isbotlash.
+
+**Sertifikat** — bu saytning "pasporti". Uni **sertifikat markazi (CA)** beradi. Brauzer sertifikatga ishonadi va shundan keyin aloqani boshlaydi.
+
+> **Xavfsizlik:** qulfsiz HTTP saytga parol kiritsangiz, u ochiq matnda ketishi mumkin. Har doim HTTPS ishlatilganini tekshiring.`,
+      ru: `## HTTPS, TLS и сертификаты
+
+**HTTPS** — это протокол HTTP поверх шифрования **TLS**. Значок замка (🔒) в браузере говорит именно об этом.
+
+TLS делает две основные вещи:
+1. **Шифрование** — данные невозможно прочитать в пути.
+2. **Аутентификация** — подтверждение, что сайт действительно тот, за кого себя выдаёт.
+
+**Сертификат** — это «паспорт» сайта. Его выдаёт **центр сертификации (CA)**. Браузер доверяет сертификату и только потом начинает обмен.
+
+> **Безопасность:** если ввести пароль на HTTP-сайте без замка, он может уйти открытым текстом. Всегда проверяйте, что используется HTTPS.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: 'Brauzerdagi qulf belgisi (🔒) nimani bildiradi?',
+          ru: 'Что означает значок замка (🔒) в браузере?',
+        },
+        options: [
+          { id: 'a', uz: 'Sayt HTTPS (TLS) orqali shifrlangan', ru: 'Сайт использует HTTPS (TLS) и шифрование' },
+          { id: 'b', uz: 'Sayt juda tez ishlaydi', ru: 'Сайт работает очень быстро' },
+          { id: 'c', uz: 'Sayt reklamasiz ishlaydi', ru: 'Сайт работает без рекламы' },
+          { id: 'd', uz: 'Sayt endigina yaratilgan', ru: 'Сайт только что создан' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Qulf TLS orqali shifrlangan va sertifikat tekshirilganini bildiradi. Tezlik yoki reklamaga aloqasi yo'q.",
+          ru: 'Замок означает, что соединение зашифровано через TLS и сертификат проверен. К скорости или рекламе это отношения не имеет.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'multi',
+        q: {
+          uz: 'TLS qaysi ishlarni bajaradi? (bir nechtasini tanlang)',
+          ru: 'Какие задачи выполняет TLS? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: "Ma'lumotni shifrlaydi", ru: 'Шифрует данные' },
+          { id: 'b', uz: 'Tomonni autentifikatsiya qiladi', ru: 'Аутентифицирует сторону' },
+          { id: 'c', uz: 'Sayt dizaynini chiroyli qiladi', ru: 'Делает дизайн сайта красивым' },
+          { id: 'd', uz: "Ma'lumot yaxlitligini tekshiradi", ru: 'Проверяет целостность данных' },
+        ],
+        answers: ['a', 'b', 'd'],
+        explain: {
+          uz: "TLS uch ish qiladi: shifrlash, autentifikatsiya va yaxlitlikni tekshirish. Dizayn esa bunga aloqasi yo'q.",
+          ru: 'TLS делает три вещи: шифрование, аутентификацию и проверку целостности. Дизайн к этому отношения не имеет.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'tf',
+        q: {
+          uz: "Har qanday sayt o'zi uchun sertifikat imzolab, brauzerda ishonchli qilib ko'rsata oladi.",
+          ru: 'Любой сайт может сам подписать себе сертификат и стать доверенным в браузере.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Brauzer faqat ishonchli CA (sertifikat markazi) imzolagan sertifikatga ishonadi. O'zi imzolangan sertifikat ogohlantirish chiqaradi.",
+          ru: 'Браузер доверяет только сертификатам, подписанным доверенным CA. Самоподписанный сертификат вызывает предупреждение.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'input',
+        q: {
+          uz: "HTTPS nomidagi S harfi nimani bildiradi? (inglizcha so'z)",
+          ru: 'Что означает буква S в названии HTTPS? (английское слово)',
+        },
+        answer: 'secure',
+        accepted: ['secure', 'security'],
+        explain: {
+          uz: "HTTPS — HyperText Transfer Protocol Secure. S — Secure, ya'ni TLS bilan shifrlangan degani.",
+          ru: 'HTTPS — HyperText Transfer Protocol Secure. S означает «Secure», то есть шифрование через TLS.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'routing-and-nat',
+    kind: 'lesson',
+    xp_reward: 20,
+    title: { uz: 'Routing va NAT', ru: 'Маршрутизация и NAT' },
+    content: {
+      uz: `## Routing va NAT
+
+**Router** turli tarmoqlarni bog'laydi va paketni manzilga qarab yo'naltiradi. Uning **routing table** (yo'naltirish jadvali) qaysi paket qayerga ketishini aytadi. Uy tarmog'ingizdagi router — **default gateway**.
+
+**NAT (Network Address Translation)** — ichki (private) manzillarni bitta tashqi (public) manzilga almashtiradi. Shu sababli butun uy tarmog'i internetga bitta IP bilan chiqadi.
+
+> **Xavfsizlik:** NAT tashqaridan ichki qurilmalarni to'g'ridan-to'g'ri ko'rinmas qiladi — bu tabiiy himoya qatlami. Lekin NAT to'liq firewall o'rnini bosmaydi.`,
+      ru: `## Маршрутизация и NAT
+
+**Маршрутизатор (router)** соединяет разные сети и направляет пакет по адресу. Его **таблица маршрутизации** (routing table) говорит, куда идёт какой пакет. Маршрутизатор в домашней сети — это **default gateway**.
+
+**NAT (Network Address Translation)** — заменяет внутренние (private) адреса на один внешний (public). Поэтому вся домашняя сеть выходит в интернет под одним IP.
+
+> **Безопасность:** NAT скрывает внутренние устройства от прямого доступа снаружи — это естественный слой защиты. Но NAT не заменяет полноценный файрвол.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Ichki (private) manzillarni tashqi (public) manzilga almashtiruvchi texnologiya qaysi?",
+          ru: 'Какая технология заменяет внутренние (private) адреса на внешний (public)?',
+        },
+        options: [
+          { id: 'a', uz: 'NAT', ru: 'NAT' },
+          { id: 'b', uz: 'DNS', ru: 'DNS' },
+          { id: 'c', uz: 'DHCP', ru: 'DHCP' },
+          { id: 'd', uz: 'ARP', ru: 'ARP' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "NAT ichki manzillarni bitta tashqi IP ortiga yashiradi. DNS nomni IP ga aylantiradi, DHCP manzil beradi, ARP esa IP va MAC ni bog'laydi.",
+          ru: 'NAT прячет внутренние адреса за одним внешним IP. DNS переводит имя в IP, DHCP выдаёт адреса, а ARP связывает IP и MAC.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: "NAT tufayli butun uy tarmog'i internetga bitta public IP bilan chiqadi.",
+          ru: 'Благодаря NAT вся домашняя сеть выходит в интернет под одним публичным IP.',
+        },
+        answer: 'true',
+        explain: {
+          uz: "To'g'ri — router NAT orqali barcha ichki qurilmalar trafigini bitta tashqi IP dan chiqaradi. Bu IP manzillarni tejaydi.",
+          ru: 'Верно — через NAT маршрутизатор выпускает трафик всех внутренних устройств под одним внешним IP. Это экономит адреса.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'order',
+        q: {
+          uz: "Paketning router orqali o'tish bosqichlarini tartiblang (birinchisi — birinchi qadam)",
+          ru: 'Расставьте этапы прохождения пакета через маршрутизатор по порядку (первый — самый первый)',
+        },
+        items: [
+          { id: 'i1', uz: 'Paket routerga keladi', ru: 'Пакет приходит на маршрутизатор' },
+          { id: 'i2', uz: 'Routing table tekshiriladi', ru: 'Проверяется таблица маршрутизации' },
+          { id: 'i3', uz: 'Paket kerakli interfeysga yuboriladi', ru: 'Пакет отправляется в нужный интерфейс' },
+        ],
+        order: ['i1', 'i2', 'i3'],
+        explain: {
+          uz: "Router avval paketni qabul qiladi, keyin routing table bo'yicha eng yaxshi yo'lni tanlaydi va paketni kerakli interfeysga uzatadi.",
+          ru: 'Маршрутизатор сначала принимает пакет, затем по таблице маршрутизации выбирает лучший маршрут и передаёт пакет в нужный интерфейс.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'mc',
+        q: {
+          uz: "Router paketning qayerga ketishini qaysi ma'lumot asosida aniqlaydi?",
+          ru: 'На основе каких данных маршрутизатор определяет, куда идти пакету?',
+        },
+        options: [
+          { id: 'a', uz: "Routing table (yo'naltirish jadvali)", ru: 'Таблица маршрутизации (routing table)' },
+          { id: 'b', uz: 'MAC manzillar jadvali', ru: 'Таблица MAC-адресов' },
+          { id: 'c', uz: 'DNS keshi', ru: 'Кэш DNS' },
+          { id: 'd', uz: 'TLS sertifikati', ru: 'Сертификат TLS' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Qaror routing table asosida qabul qilinadi. MAC jadvali switch'da, DNS va TLS esa boshqa vazifalarni bajaradi.",
+          ru: 'Решение принимается по таблице маршрутизации. Таблица MAC — у коммутатора, DNS и TLS выполняют другие задачи.',
         },
       },
     ],
@@ -642,6 +1143,101 @@ Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** — chiq
   },
 
   {
+    slug: 'vpn-and-proxy',
+    kind: 'lesson',
+    xp_reward: 20,
+    title: { uz: 'VPN va proksi', ru: 'VPN и прокси' },
+    content: {
+      uz: `## VPN va proksi
+
+**VPN (Virtual Private Network)** — qurilmangizdan serverga shifrlangan tunnel ochadi. Shu tunnel ichida trafik shifrlanadi.
+
+- **VPN** — butun trafikni shifrlaydi; umumiy WiFi yoki provayder sizning trafigingizni o'qiy olmaydi.
+- **Proksi** — alohida dastur uchun vositachi server; ko'pincha shifrlamaydi, faqat so'rovni boshqasiga uzatadi.
+
+Muhim farq: VPN deyarli butun qurilma trafigini himoyalaydi, proksi esa odatda faqat bitta dasturni.
+
+> **Xavfsizlik:** umumiy (ochiq) WiFi'da VPN trafikni yashirin saqlaydi. Lekin VPN sizni butunlay "ko'rinmas" qilmaydi — u faqat tunnelni shifrlaydi.`,
+      ru: `## VPN и прокси
+
+**VPN (Virtual Private Network)** — создаёт зашифрованный туннель от устройства к серверу. Внутри этого туннеля трафик шифруется.
+
+- **VPN** — шифрует весь трафик; публичный Wi-Fi или провайдер не видят содержимое.
+- **Прокси** — сервер-посредник для отдельной программы; обычно не шифрует, а лишь пересылает запрос дальше.
+
+Важное отличие: VPN защищает почти весь трафик устройства, а прокси — обычно только одну программу.
+
+> **Безопасность:** в открытом Wi-Fi VPN скрывает трафик. Но VPN не делает вас полностью «невидимым» — он шифрует только туннель.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Umumiy (ochiq) WiFi'da trafikni shifrlash uchun eng mos vosita qaysi?",
+          ru: 'Какое средство лучше всего подходит для шифрования трафика в открытом Wi-Fi?',
+        },
+        options: [
+          { id: 'a', uz: 'VPN', ru: 'VPN' },
+          { id: 'b', uz: 'Proksi', ru: 'Прокси' },
+          { id: 'c', uz: 'DNS', ru: 'DNS' },
+          { id: 'd', uz: 'NAT', ru: 'NAT' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "VPN butun trafikni shifrlangan tunnelga o'raydi, shu sababli ochiq WiFi'da eng ishonchli. Proksi esa ko'pincha shifrlamaydi.",
+          ru: 'VPN заворачивает весь трафик в зашифрованный туннель, поэтому в открытом Wi-Fi он надёжнее всего. Прокси обычно не шифрует.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: 'Proksi odatda butun qurilma trafigini shifrlaydi.',
+          ru: 'Прокси обычно шифрует трафик всего устройства.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Yo'q — proksi odatda bitta dastur so'rovlarini uzatadi va shifrlamaydi. Butun qurilma trafigini VPN shifrlaydi.",
+          ru: 'Нет — прокси обычно пересылает запросы одной программы и не шифрует. Весь трафик устройства шифрует VPN.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'match',
+        q: {
+          uz: 'Vosita yoki tushunchani tavsifi bilan moslang',
+          ru: 'Соотнесите средство или понятие с его описанием',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'VPN', ru: 'VPN' }, right: { uz: 'Shifrlangan tunnel, butun trafik', ru: 'Зашифрованный туннель, весь трафик' } },
+          { id: 'p2', left: { uz: 'Proksi', ru: 'Прокси' }, right: { uz: "Vositachi server, ko'pincha bitta dastur", ru: 'Сервер-посредник, обычно одна программа' } },
+          { id: 'p3', left: { uz: 'Tunnel', ru: 'Туннель' }, right: { uz: 'Shifrlangan aloqa kanali', ru: 'Зашифрованный канал связи' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
+        explain: {
+          uz: "VPN shifrlangan tunnel quradi, proksi esa vositachi bo'lib so'rovni uzatadi. Tunnel — bu shifrlangan kanalning nomi.",
+          ru: 'VPN строит зашифрованный туннель, а прокси выступает посредником и пересылает запрос. Туннель — это название зашифрованного канала.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'input',
+        q: {
+          uz: 'Shifrlangan aloqa kanali inglizcha nima deb ataladi? ____ (6 harf)',
+          ru: 'Как по-английски называется зашифрованный канал связи? ____ (6 букв)',
+        },
+        answer: 'tunnel',
+        accepted: ['tunnel'],
+        explain: {
+          uz: "VPN shifrlangan tunnel ochadi — uning ichini ko'rib bo'lmaydi, faqat ikki uchi ma'lum.",
+          ru: 'VPN открывает зашифрованный туннель — его содержимое не видно, известны только две конечные точки.',
+        },
+      },
+    ],
+  },
+
+  {
     slug: 'checkpoint-networking',
     kind: 'checkpoint',
     xp_reward: 50,
@@ -649,14 +1245,14 @@ Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** — chiq
     content: {
       uz: `## 🏆 Nazorat
 
-Tarmoqlar bo'yicha bilimingizni tekshiring: IP manzillar, DNS, TCP/UDP, HTTP/HTTPS va firewall — hammasi birlashtirilgan.
+Tarmoqlar bo'yicha bilimingizni tekshiring: IP manzillar, subnetlar, routing, DNS, TCP/UDP, HTTP/HTTPS, TLS va firewall — hammasi birlashtirilgan.
 
 Savollar o'tgan darslardan, biroz murakkabroq. Har birida eng to'g'ri javobni tanlang.
 
 Omad!`,
       ru: `## 🏆 Проверка
 
-Проверьте знания по сетям: IP-адреса, DNS, TCP/UDP, HTTP/HTTPS и файрвол — всё в одном месте.
+Проверьте знания по сетям: IP-адреса, подсети, маршрутизация, DNS, TCP/UDP, HTTP/HTTPS, TLS и файрвол — всё в одном месте.
 
 Вопросы чуть сложнее предыдущих уроков. В каждом выберите самый верный ответ.
 

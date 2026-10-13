@@ -340,6 +340,532 @@ Qizil belgilar:
   },
 
   {
+    slug: 'input-validation',
+    kind: 'lesson',
+    xp_reward: 25,
+    title: { uz: 'Kiritmani tekshirish', ru: 'Проверка входных данных' },
+    content: {
+      uz: `## Kiritmani tekshirish
+
+**Qoida:** foydalanuvchi kiritgan har qanday ma'lumot — ishonchsiz.
+
+Himoya ikki qadamdan iborat:
+
+- **Tekshirish (validation)** — ma'lumot kutilgan shaklga mos keladimi? Tur, uzunlik, format.
+- **Kodlash / tozalash (encoding / sanitization)** — ma'lumot ishlatiladigan joyga xavfsiz joylashtiriladimi?
+
+**Ikki yondashuv:**
+- **Oq ro'yxat (allowlist):** faqat ma'lum to'g'ri shaklni qabul qilish. Eng ishonchli.
+- **Qora ro'yxat (denylist):** ma'lum xavfli belgilarni taqiqlash. Yangi hiyla doim topiladi.
+
+> **Xavfsizlik:** tekshirish har doim **serverda** bo'lishi kerak. Brauzerdagi (client) tekshirishni chetlab o'tish oson — u faqat qulaylik uchun.`,
+      ru: `## Проверка входных данных
+
+**Правило:** любые данные, введённые пользователем, — недоверенные.
+
+Защита состоит из двух шагов:
+
+- **Проверка (validation)** — соответствует ли ввод ожидаемой форме? Тип, длина, формат.
+- **Кодирование / очистка (encoding / sanitization)** — безопасно ли ввод вставляется туда, где используется?
+
+**Два подхода:**
+- **Белый список (allowlist):** принимать только известную правильную форму. Самый надёжный.
+- **Чёрный список (denylist):** запрещать известные опасные символы. Новую уловку найдут всегда.
+
+> **Безопасность:** проверка всегда должна быть **на сервере**. Проверку в браузере (клиентскую) легко обойти — она только для удобства.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: 'Kiritmani tekshirish uchun eng ishonchli yondashuv qaysi?',
+          ru: 'Какой подход к проверке ввода самый надёжный?',
+        },
+        options: [
+          { id: 'a', uz: "Oq ro'yxat: faqat ma'lum to'g'ri shaklni qabul qilish", ru: 'Белый список: принимать только известную правильную форму' },
+          { id: 'b', uz: "Qora ro'yxat: xavfli belgilarni taqiqlash", ru: 'Чёрный список: запрещать опасные символы' },
+          { id: 'c', uz: 'Faqat brauzerda tekshirish', ru: 'Проверять только в браузере' },
+          { id: 'd', uz: 'Umuman tekshirmaslik', ru: 'Вообще не проверять' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Oq ro'yxat eng xavfsiz: u faqat kutilgan shaklni o'tkazadi. Qora ro'yxat esa to'liq bo'la olmaydi — har yangi hiyla uni chetlab o'tadi.",
+          ru: 'Белый список безопаснее: он пропускает только ожидаемую форму. Чёрный список не может быть полным — каждая новая уловка его обходит.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: "Brauzerdagi tekshirish yetarli, chunki foydalanuvchi uni o'zgartira olmaydi.",
+          ru: 'Проверки в браузере достаточно, потому что пользователь не может её изменить.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Brauzer tekshiruvini chetlab o'tish oson — so'rovni to'g'ridan-to'g'ri yuborish mumkin. Shuning uchun haqiqiy tekshirish serverda bo'ladi; brauzerdagisi faqat qulaylik uchun.",
+          ru: 'Клиентскую проверку легко обойти — запрос можно отправить напрямую. Настоящая проверка идёт на сервере; браузерная нужна лишь для удобства.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'multi',
+        q: {
+          uz: "Kiritmani tekshirishda nimani nazorat qilish kerak? (bir nechtasini tanlang)",
+          ru: 'Что нужно контролировать при проверке ввода? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: 'Tur (raqam, matn)', ru: 'Тип (число, текст)' },
+          { id: 'b', uz: 'Uzunlik', ru: 'Длину' },
+          { id: 'c', uz: 'Format (masalan, email)', ru: 'Формат (например, email)' },
+          { id: 'd', uz: 'Faqat rang', ru: 'Только цвет' },
+        ],
+        answers: ['a', 'b', 'c'],
+        explain: {
+          uz: "Tur, uzunlik va format — kiritma kutilgan doirada ekanini bildiradi. Yaxshi tekshirilgan kiritma keyingi himoyalar (SQLi, XSS) uchun ham mustahkam asos bo'ladi.",
+          ru: 'Тип, длина и формат показывают, что ввод в ожидаемых границах. Хорошо проверенный ввод — прочная основа и для других защит (SQLi, XSS).',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'match',
+        q: {
+          uz: "Tushunchani uning vazifasi bilan moslang",
+          ru: 'Соотнесите понятие с его задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'Validation', ru: 'Validation' }, right: { uz: "Shakl to'g'riligini tekshirish", ru: 'Проверка правильности формы' } },
+          { id: 'p2', left: { uz: 'Encoding', ru: 'Encoding' }, right: { uz: "Ma'lumotni ishlatiladigan joyga xavfsiz joylashtirish", ru: 'Безопасная вставка данных туда, где они используются' } },
+          { id: 'p3', left: { uz: 'Allowlist', ru: 'Allowlist' }, right: { uz: "Faqat to'g'ri shaklni qabul qilish", ru: 'Принимать только правильную форму' } },
+          { id: 'p4', left: { uz: 'Client-side tekshirish', ru: 'Клиентская проверка' }, right: { uz: 'Faqat qulaylik, xavfsizlik emas', ru: 'Только удобство, не безопасность' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "Validation shaklni tekshiradi, encoding joylashtirishni xavfsiz qiladi, allowlist faqat to'g'riini o'tkazadi, client-side tekshirish esa xavfsizlik kafolati emas.",
+          ru: 'Validation проверяет форму, encoding делает вставку безопасной, allowlist пропускает только правильное, а клиентская проверка — не гарантия безопасности.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'csrf',
+    kind: 'lesson',
+    xp_reward: 25,
+    title: { uz: "CSRF — begona saytdan so'rov", ru: 'CSRF — запрос с чужого сайта' },
+    content: {
+      uz: `## CSRF nima?
+
+**CSRF (Cross-Site Request Forgery)** — tizimga kirgan foydalanuvchi nomidan, u bilmagan holda so'rov yuborish.
+
+Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tdingiz. O'sha sayt yashirincha bankingizga "pul o'tkaz" so'rovini yubordi — brauzeringiz cookie'ni avtomatik qo'shadi va bank so'rovni sizdan kelgan deb o'ylaydi.
+
+**Nega ishlaydi:** brauzer cookie'ni har so'rovga o'zi qo'shadi — sayt so'rov kimdan kelganini parol bilan emas, cookie bilan biladi.
+
+**Himoya:**
+- **CSRF token** — formaga yashirin, taxmin qilib bo'lmaydigan qiymat; usiz so'rov rad etiladi.
+- **SameSite cookie** — cookie faqat shu saytdan kelgan so'rovga qo'shiladi.
+
+> **Xavfsizlik:** muhim amallar (pul, parol almashtirish) CSRF token talab qilishi kerak.`,
+      ru: `## Что такое CSRF
+
+**CSRF (Cross-Site Request Forgery)** — отправка запроса от имени вошедшего пользователя без его ведома.
+
+Представьте: вы вошли в банк. Затем перешли на другой (враждебный) сайт. Он тайком отправил в ваш банк запрос «перевести деньги» — браузер автоматически приложит cookie, и банк решит, что запрос от вас.
+
+**Почему работает:** браузер сам прикладывает cookie к каждому запросу — сайт понимает, кто отправил запрос, по cookie, а не по паролю.
+
+**Защита:**
+- **CSRF-токен** — скрытое, непредсказуемое значение; без него запрос отклоняется.
+- **SameSite cookie** — cookie прикладывается только к запросам с этого же сайта.
+
+> **Безопасность:** важные действия (деньги, смена пароля) должны требовать CSRF-токен.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "CSRF hujumida buzg'unchi nimaga tayanadi?",
+          ru: 'На что опирается злоумышленник при CSRF?',
+        },
+        options: [
+          { id: 'a', uz: "Brauzer cookie'ni so'rovga avtomatik qo'shishiga", ru: 'На то, что браузер сам прикладывает cookie к запросу' },
+          { id: 'b', uz: 'Parolni bilishiga', ru: 'На знание пароля' },
+          { id: 'c', uz: 'Serverning sekin ishlashiga', ru: 'На медленную работу сервера' },
+          { id: 'd', uz: "HTTPS yo'qligiga", ru: 'На отсутствие HTTPS' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "CSRF brauzerning cookie'ni avtomatik qo'shish xususiyatidan foydalanadi. Buzg'unchi parolni bilmaydi — sayt so'rovni cookie bo'yicha tanidi.",
+          ru: 'CSRF использует то, что браузер автоматически прикладывает cookie. Пароль злоумышленник не знает — сайт опознал запрос по cookie.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: "HTTPS ishlatilsa CSRF hujumi butunlay to'xtaydi.",
+          ru: 'Если используется HTTPS, CSRF полностью прекращается.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Yo'q — HTTPS trafikni shifrlaydi, lekin CSRF boshqa sababdan ishlaydi (cookie avtomatik yuboriladi). CSRF token va SameSite aynan shunga qarshi qaratilgan.",
+          ru: 'Нет — HTTPS шифрует трафик, но CSRF работает по другой причине (cookie отправляется автоматически). Именно против этого направлены CSRF-токен и SameSite.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'multi',
+        q: {
+          uz: "CSRF dan himoyalanishga nima yordam beradi? (bir nechtasini tanlang)",
+          ru: 'Что помогает защититься от CSRF? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: 'CSRF token', ru: 'CSRF-токен' },
+          { id: 'b', uz: 'SameSite cookie', ru: 'SameSite cookie' },
+          { id: 'c', uz: 'Muhim amallar uchun qayta tasdiqlash', ru: 'Повторное подтверждение для важных действий' },
+          { id: 'd', uz: "Barcha o'zgartirishni GET orqali yuborish", ru: 'Отправлять все изменения через GET' },
+        ],
+        answers: ['a', 'b', 'c'],
+        explain: {
+          uz: "Token va SameSite cookie so'rov haqiqiy formadan kelganini bildiradi, qayta tasdiq qo'shimcha to'siq. O'zgartirishni GET'ga o'tkazish esa aksincha xavfni oshiradi.",
+          ru: 'Токен и SameSite показывают, что запрос пришёл с настоящей формы, а повторное подтверждение — дополнительный барьер. Перевод изменений на GET, наоборот, повышает риск.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'match',
+        q: {
+          uz: "Tushunchani uning vazifasi bilan moslang",
+          ru: 'Соотнесите понятие с его задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'CSRF token', ru: 'CSRF-токен' }, right: { uz: "Formaning haqiqiyligini isbotlaydi", ru: 'Подтверждает подлинность формы' } },
+          { id: 'p2', left: { uz: 'SameSite cookie', ru: 'SameSite cookie' }, right: { uz: "Cookie boshqa saytdan kelmasin", ru: 'Чтобы cookie не приходил с другого сайта' } },
+          { id: 'p3', left: { uz: 'CSRF', ru: 'CSRF' }, right: { uz: "Foydalanuvchi nomidan yashirin so'rov", ru: 'Скрытый запрос от имени пользователя' } },
+          { id: 'p4', left: { uz: "O'zgartirishni faqat GET bilan", ru: 'Изменения только через GET' }, right: { uz: "Xatoni yanada xavfli qiladi", ru: 'Делает ошибку ещё опаснее' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "Token va SameSite so'rovni himoyalaydi, CSRF ning o'zi hujum usuli, o'zgartirishni GET bilan yuborish esa himoyani buzadi.",
+          ru: 'Токен и SameSite защищают запрос, сам CSRF — способ атаки, а изменение через GET ломает защиту.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'authentication-and-sessions',
+    kind: 'lesson',
+    xp_reward: 30,
+    title: { uz: 'Autentifikatsiya va seanslar', ru: 'Аутентификация и сессии' },
+    content: {
+      uz: `## Autentifikatsiya va seanslar
+
+**Autentifikatsiya (authn)** — siz kimsiz? **Avtorizatsiya (authz)** — nima qilishga haqqingiz bor? Bu ikki xil narsa.
+
+**Seans (session):** bir marta parol bilan kirasiz, keyin server sizni **cookie** bilan taniydi. Har so'rovda parol so'ralmaydi.
+
+**Xavflar va himoya:**
+- **Seans ID o'g'irlanishi** — ID taxmin qilib bo'lmaydigan bo'lishi kerak. \`HttpOnly\` cookie uni JavaScript'dan yashiradi.
+- **Session fixation** — hujumchi oldindan ID beradi. Yechim: **kirgandan keyin** ID ni yangilash.
+- **Chiqishdan keyin** seansni serverda bekor qilish kerak (shunchaki cookie o'chirish yetmaydi).
+
+> **Xavfsizlik:** parol hech qachon URL yoki logda ko'rinmasin; seans cookie'lari \`HttpOnly\` + \`Secure\` bo'lsin.`,
+      ru: `## Аутентификация и сессии
+
+**Аутентификация (authn)** — кто вы? **Авторизация (authz)** — что вам разрешено? Это разные вещи.
+
+**Сессия:** вы один раз входите по паролю, дальше сервер узнаёт вас по **cookie**. Пароль не спрашивается при каждом запросе.
+
+**Риски и защита:**
+- **Кража ID сессии** — ID не должен быть предсказуемым. Флаг \`HttpOnly\` прячет cookie от JavaScript.
+- **Фиксация сессии** — злоумышленник заранее навязывает ID. Решение: **сменить ID после входа**.
+- **После выхода** сессию нужно аннулировать на сервере (просто удалить cookie недостаточно).
+
+> **Безопасность:** пароль не должен появляться в URL или логах; cookie сессии должны иметь \`HttpOnly\` + \`Secure\`.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: 'Autentifikatsiya va avtorizatsiya orasidagi farq nima?',
+          ru: 'В чём разница между аутентификацией и авторизацией?',
+        },
+        options: [
+          { id: 'a', uz: 'Authn — siz kimsiz, authz — nimaga haqqingiz bor', ru: 'Authn — кто вы, authz — что вам разрешено' },
+          { id: 'b', uz: 'Ikkalasi bir xil narsa', ru: 'Это одно и то же' },
+          { id: 'c', uz: 'Authn — parol, authz — login', ru: 'Authn — пароль, authz — логин' },
+          { id: 'd', uz: 'Authz faqat adminlar uchun', ru: 'Authz только для администраторов' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Avval autentifikatsiya (kimligingizni tasdiqlash), keyin avtorizatsiya (ruxsatlaringiz). Biri ikkinchisini almashtirmaydi.",
+          ru: 'Сначала аутентификация (подтверждение личности), затем авторизация (ваши права). Одно не заменяет другое.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: "Foydalanuvchi chiqqanda cookie'ni o'chirish yetarli, serverda seansni bekor qilish shart emas.",
+          ru: 'При выходе достаточно удалить cookie, аннулировать сессию на сервере не нужно.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Cookie'ni o'chirish faqat brauzerda ishlaydi, lekin o'g'irlangan seans ID serverda hali ham amalda qoladi. Shuning uchun seansni serverda ham bekor qilish kerak.",
+          ru: 'Удаление cookie действует только в браузере, но украденный ID сессии на сервере остаётся активным. Поэтому сессию нужно аннулировать и на сервере.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'multi',
+        q: {
+          uz: "Seans xavfsizligi uchun qaysi choralar to'g'ri? (bir nechtasini tanlang)",
+          ru: 'Какие меры для безопасности сессии верны? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: "Cookie'ga HttpOnly va Secure qo'yish", ru: 'Установить cookie HttpOnly и Secure' },
+          { id: 'b', uz: 'Kirgandan keyin seans ID ni yangilash', ru: 'Обновлять ID сессии после входа' },
+          { id: 'c', uz: "ID ni taxmin qilib bo'lmaydigan qilish", ru: 'Делать ID непредсказуемым' },
+          { id: 'd', uz: "Seans ID ni URL'da yuborish", ru: 'Передавать ID сессии в URL' },
+        ],
+        answers: ['a', 'b', 'c'],
+        explain: {
+          uz: "HttpOnly/Secure cookie'ni himoyalaydi, ID yangilash session fixation'ni to'xtatadi, tasodifiy ID taxminni qiyinlashtiradi. ID'ni URL'da yuborish esa uni log va tarixda oshkor qiladi.",
+          ru: 'HttpOnly/Secure защищают cookie, смена ID останавливает фиксацию сессии, случайный ID усложняет подбор. Передача ID в URL, наоборот, раскрывает его в логах и истории.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'input',
+        q: {
+          uz: "Seans ID ni JavaScript'dan yashiradigan cookie bayrog'i (inglizcha): ______",
+          ru: 'Флаг cookie, скрывающий ID сессии от JavaScript (по-английски): ______',
+        },
+        answer: 'httponly',
+        accepted: ['httponly', 'http only', 'http-only'],
+        explain: {
+          uz: "Bu — HttpOnly. U cookie'ni JavaScript o'qiy olmaydigan qiladi, shuning uchun XSS orqali seans ID ni o'g'irlash qiyinlashadi.",
+          ru: 'Это HttpOnly. Он делает cookie недоступным для чтения из JavaScript, поэтому украсть ID сессии через XSS сложнее.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'broken-access-control',
+    kind: 'lesson',
+    xp_reward: 30,
+    title: { uz: 'Buzilgan ruxsat nazorati (IDOR)', ru: 'Нарушенный контроль доступа (IDOR)' },
+    content: {
+      uz: `## Buzilgan ruxsat nazorati (IDOR)
+
+**IDOR (Insecure Direct Object Reference)** — boshqa odamning obyektiga to'g'ridan-to'g'ri murojaat qilish.
+
+Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz — boshqa odamning ma'lumotini ko'rasizmi? Agar ha bo'lsa, server **har so'rovda ruxsatni tekshirmayapti**.
+
+**Asosiy xato:** server ID ni to'g'ri deb biladi, lekin "bu ID sizga tegishlimi?" deb so'ramaydi.
+
+**Himoya:**
+- **Har bir** so'rovda ruxsatni tekshirish (kim so'rayapti + nimaga haqqi bor).
+- Obyekt egasini server tomonda aniqlash, ID ga ko'r-ko'rona ishonmaslik.
+- Eng kam imtiyoz (least privilege) tamoyili.
+
+> **Xavfsizlik:** foydalanuvchi kiritgan ID hech qachon ruxsat tekshiruvi o'rnini bosmaydi. "Tekshirilmagan" so'rov — eng ko'p uchraydigan zaifliklardan biri.`,
+      ru: `## Нарушенный контроль доступа (IDOR)
+
+**IDOR (Insecure Direct Object Reference)** — прямое обращение к чужому объекту.
+
+Пример: ваш аккаунт — \`?id=100\`. Если заменить на \`101\`, увидите ли вы чужие данные? Если да, значит сервер **не проверяет права при каждом запросе**.
+
+**Главная ошибка:** сервер считает ID корректным, но не спрашивает: «принадлежит ли этот ID вам?»
+
+**Защита:**
+- Проверять права при **каждом** запросе (кто запрашивает + что ему разрешено).
+- Определять владельца объекта на сервере, не доверять ID вслепую.
+- Принцип наименьших привилегий (least privilege).
+
+> **Безопасность:** введённый пользователем ID никогда не заменяет проверку прав. «Непроверенный» запрос — одна из самых частых уязвимостей.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: 'IDOR zaifligining asosiy sababi nima?',
+          ru: 'Какова основная причина уязвимости IDOR?',
+        },
+        options: [
+          { id: 'a', uz: "Server har so'rovda ruxsatni tekshirmaydi", ru: 'Сервер не проверяет права при каждом запросе' },
+          { id: 'b', uz: 'Parol juda qisqa', ru: 'Слишком короткий пароль' },
+          { id: 'c', uz: "HTTPS yo'q", ru: 'Отсутствует HTTPS' },
+          { id: 'd', uz: 'Baza sekin ishlaydi', ru: 'База работает медленно' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "IDOR aynan ruxsat tekshiruvi yetishmasligidan kelib chiqadi: server obyektni topadi, lekin 'bu so'rovchiga tegishlimi?' deb tekshirmaydi.",
+          ru: 'IDOR возникает именно из-за нехватки проверки прав: сервер находит объект, но не проверяет «принадлежит ли он запрашивающему?».',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: "Foydalanuvchi ID sini uzun va tasodifiy qilish IDOR muammosini to'liq yechadi.",
+          ru: 'Длинный и случайный ID пользователя полностью решает проблему IDOR.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Tasodifiy ID taxminni qiyinlashtiradi, lekin yechim emas — havola ulashilsa yoki ID oshkor bo'lsa, muammo qaytadi. Haqiqiy yechim — har so'rovda ruxsatni tekshirish.",
+          ru: 'Случайный ID усложняет подбор, но это не решение: если ссылку перешлют или ID раскроется, проблема вернётся. Настоящее решение — проверять права при каждом запросе.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'multi',
+        q: {
+          uz: "IDOR dan himoyalanish uchun nima qilish kerak? (bir nechtasini tanlang)",
+          ru: 'Что нужно делать для защиты от IDOR? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: "Har so'rovda ruxsatni tekshirish", ru: 'Проверять права при каждом запросе' },
+          { id: 'b', uz: 'Obyekt egasini serverda aniqlash', ru: 'Определять владельца объекта на сервере' },
+          { id: 'c', uz: "Least privilege qo'llash", ru: 'Применять least privilege' },
+          { id: 'd', uz: "ID ni tekshirmasdan ishonish", ru: 'Доверять ID без проверки' },
+        ],
+        answers: ['a', 'b', 'c'],
+        explain: {
+          uz: "Ruxsat tekshiruvi, egasini serverda aniqlash va eng kam imtiyoz — uchtasi birga himoya beradi. ID'ga ko'r-ko'rona ishonish esa aynan zaiflikning sababi.",
+          ru: 'Проверка прав, определение владельца на сервере и наименьшие привилегии вместе дают защиту. Доверие к ID без проверки — как раз причина уязвимости.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'match',
+        q: {
+          uz: "Tushunchani uning vazifasi bilan moslang",
+          ru: 'Соотнесите понятие с его задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'IDOR', ru: 'IDOR' }, right: { uz: "Boshqa odam obyektiga murojaat", ru: 'Обращение к чужому объекту' } },
+          { id: 'p2', left: { uz: 'Ruxsat tekshiruvi', ru: 'Проверка прав' }, right: { uz: "Har so'rovda bajarilishi kerak", ru: 'Должна выполняться при каждом запросе' } },
+          { id: 'p3', left: { uz: 'Least privilege', ru: 'Least privilege' }, right: { uz: 'Faqat kerakli huquqni berish', ru: 'Давать только необходимые права' } },
+          { id: 'p4', left: { uz: "ID'ga ko'r-ko'rona ishonish", ru: 'Доверие к ID вслепую' }, right: { uz: 'Zaiflikka olib keladigan xato', ru: 'Ошибка, ведущая к уязвимости' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "IDOR — hujum turi, ruxsat tekshiruvi va least privilege — himoya, ID'ga ko'r-ko'rona ishonish esa zaiflikning ildizi.",
+          ru: 'IDOR — способ атаки, проверка прав и least privilege — защита, а слепое доверие к ID — корень уязвимости.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'security-headers',
+    kind: 'lesson',
+    xp_reward: 25,
+    title: { uz: 'Xavfsizlik sarlavhalari', ru: 'Заголовки безопасности' },
+    content: {
+      uz: `## Xavfsizlik sarlavhalari
+
+Server javobiga qo'shiladigan **HTTP sarlavhalar** brauzerga himoya qoidalarini aytadi.
+
+- **Content-Security-Policy (CSP)** — qaysi manbadan skript va uslub yuklash mumkin. XSS zararini keskin kamaytiradi.
+- **Strict-Transport-Security (HSTS)** — brauzer saytga faqat HTTPS orqali ulanadi.
+- **X-Content-Type-Options: nosniff** — brauzer fayl turini "o'zi taxmin qilmasin".
+- **X-Frame-Options / frame-ancestors** — saytni begona \`<iframe>\` ichida ochib bo'lmaydi (clickjacking himoyasi).
+
+> **Xavfsizlik:** sarlavhalar yagona davo emas, lekin arzon va kuchli qatlam. Ayniqsa CSP — XSS ga qarshi eng samarali himoyalardan biri.`,
+      ru: `## Заголовки безопасности
+
+**HTTP-заголовки** в ответе сервера сообщают браузеру правила защиты.
+
+- **Content-Security-Policy (CSP)** — из каких источников можно грузить скрипты и стили. Резко снижает ущерб от XSS.
+- **Strict-Transport-Security (HSTS)** — браузер подключается к сайту только по HTTPS.
+- **X-Content-Type-Options: nosniff** — браузер не должен «угадывать» тип файла.
+- **X-Frame-Options / frame-ancestors** — сайт нельзя открыть внутри чужого \`<iframe>\` (защита от clickjacking).
+
+> **Безопасность:** заголовки — не единственное лекарство, но дешёвый и мощный слой. Особенно CSP — одна из самых эффективных защит от XSS.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: 'Qaysi sarlavha XSS zararini kamaytirishga qaratilgan?',
+          ru: 'Какой заголовок направлен на снижение ущерба от XSS?',
+        },
+        options: [
+          { id: 'a', uz: 'Content-Security-Policy (CSP)', ru: 'Content-Security-Policy (CSP)' },
+          { id: 'b', uz: 'X-Content-Type-Options', ru: 'X-Content-Type-Options' },
+          { id: 'c', uz: 'Strict-Transport-Security (HSTS)', ru: 'Strict-Transport-Security (HSTS)' },
+          { id: 'd', uz: 'Content-Length', ru: 'Content-Length' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "CSP qaysi manbalardan skript yuklash mumkinligini cheklaydi — shuning uchun kiritilgan begona skript ko'pincha ishlamaydi. Bu XSS ga qarshi eng kuchli qatlamlardan biri.",
+          ru: 'CSP ограничивает источники, откуда можно грузить скрипты, — поэтому внедрённый чужой скрипт часто не срабатывает. Это один из сильнейших слоёв защиты от XSS.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'match',
+        q: {
+          uz: "Sarlavhani uning vazifasi bilan moslang",
+          ru: 'Соотнесите заголовок с его задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'CSP', ru: 'CSP' }, right: { uz: 'Skript manbalarini cheklaydi', ru: 'Ограничивает источники скриптов' } },
+          { id: 'p2', left: { uz: 'HSTS', ru: 'HSTS' }, right: { uz: 'Faqat HTTPS bilan ulanish', ru: 'Подключение только по HTTPS' } },
+          { id: 'p3', left: { uz: 'X-Frame-Options', ru: 'X-Frame-Options' }, right: { uz: "Clickjacking'ni to'xtatadi", ru: 'Останавливает clickjacking' } },
+          { id: 'p4', left: { uz: 'nosniff', ru: 'nosniff' }, right: { uz: 'Fayl turini taxmin qilmaslik', ru: 'Не угадывать тип файла' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "Har sarlavha o'z vazifasini bajaradi: CSP manbalarni cheklaydi, HSTS HTTPS'ni majbur qiladi, X-Frame-Options iframe'ni bloklaydi, nosniff esa tur taxminini to'xtatadi.",
+          ru: 'Каждый заголовок делает своё: CSP ограничивает источники, HSTS принуждает HTTPS, X-Frame-Options блокирует iframe, nosniff останавливает угадывание типа.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'tf',
+        q: {
+          uz: "Xavfsizlik sarlavhalari SQL injection'ni to'g'ridan-to'g'ri to'xtatadi.",
+          ru: 'Заголовки безопасности напрямую останавливают SQL injection.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Yo'q — sarlavhalar brauzer tomonidagi himoya (XSS, clickjacking, HTTPS majburlash). SQL injection server tomonida, parametrlangan so'rovlar bilan yechiladi.",
+          ru: 'Нет — заголовки защищают на стороне браузера (XSS, clickjacking, принудительный HTTPS). SQL injection закрывается на сервере, параметризованными запросами.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'multi',
+        q: {
+          uz: "Xavfsizlik sarlavhalari haqida qaysi gaplar to'g'ri? (bir nechtasini tanlang)",
+          ru: 'Что верно про заголовки безопасности? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: "Server javobiga qo'shiladi", ru: 'Добавляются в ответ сервера' },
+          { id: 'b', uz: 'Brauzerga himoya qoidalarini beradi', ru: 'Сообщают браузеру правила защиты' },
+          { id: 'c', uz: 'XSS va clickjacking xavfini kamaytiradi', ru: 'Снижают риск XSS и clickjacking' },
+          { id: 'd', uz: "Server kodidagi xatoni o'zi tuzatadi", ru: 'Сами исправляют ошибку в коде сервера' },
+        ],
+        answers: ['a', 'b', 'c'],
+        explain: {
+          uz: "Sarlavhalar server javobiga qo'shilib, brauzerga qoidalar beradi va bir necha xavfni kamaytiradi. Lekin ular server kodidagi xatoni o'zi tuzatmaydi — kod to'g'ri yozilishi kerak.",
+          ru: 'Заголовки добавляются в ответ, сообщают браузеру правила и снижают ряд рисков. Но они не исправляют ошибку в коде сервера сами — код должен быть написан правильно.',
+        },
+      },
+    ],
+  },
+
+  {
     slug: 'checkpoint-web-security',
     kind: 'checkpoint',
     xp_reward: 50,
@@ -347,10 +873,10 @@ Qizil belgilar:
     content: {
       uz: `## 🏆 Nazorat
 
-Veb-xavfsizlik bo'yicha bilimingizni tekshiring: SQLi, XSS va phishing savollari birgalikda beriladi. Javobdan oldin o'ylang.`,
+Veb-xavfsizlik bo'yicha bilimingizni tekshiring: SQLi, XSS, kiritma tekshiruvi, CSRF, seanslar, ruxsat nazorati, xavfsizlik sarlavhalari va phishing. Javobdan oldin o'ylang.`,
       ru: `## 🏆 Проверка
 
-Проверьте знания по веб-безопасности: вопросы по SQLi, XSS и фишингу даны вместе. Подумайте перед ответом.`,
+Проверьте знания по веб-безопасности: SQLi, XSS, проверка ввода, CSRF, сессии, контроль доступа, заголовки безопасности и фишинг. Подумайте перед ответом.`,
     },
     exercises: [
       {

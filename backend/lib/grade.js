@@ -145,6 +145,8 @@ function validateExercise(ex, where) {
       if (!Array.isArray(ex.pairs) || ex.pairs.length < 2) push('match needs >=2 pairs');
       else if (!ex.match_answer || Object.keys(ex.match_answer).length !== ex.pairs.length)
         push('match_answer must map every pair');
+      else if (!ex.pairs.every(p => p && p.left && p.right && p.left.uz && p.left.ru && p.right.uz && p.right.ru))
+        push('match pairs need left/right with uz+ru');
       break;
     case 'order':
       if (!Array.isArray(ex.items) || ex.items.length < 3) push('order needs >=3 items');

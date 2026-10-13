@@ -12,6 +12,10 @@ const DOMAINS = process.env.ONLY
   'networking',
   'linux',
   'web-security',
+  'programming',
+  'defensive-security',
+  'cloud-security',
+  'ethical-testing',
   'it-and-crypto',
 ];
 

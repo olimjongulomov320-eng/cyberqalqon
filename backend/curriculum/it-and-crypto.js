@@ -143,6 +143,109 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
   },
 
   {
+    slug: 'password-hashing',
+    domain: 'crypto',
+    kind: 'lesson',
+    xp_reward: 30,
+    title: { uz: 'Parolni saqlash: tuz va sekinlik', ru: 'Хранение паролей: соль и медленность' },
+    content: {
+      uz: `## Parolni saqlash: hash, tuz va sekinlik
+
+Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
+
+**Muammo 1 — bir xil parol, bir xil hash:** ikki odamda bir xil parol bo'lsa, ikkalasining hash'i ham bir xil. Buzg'unchi buni darhol payqaydi.
+
+**Yechim — tuz (salt):** har bir parolga tasodifiy qo'shimcha qo'shiladi. Endi bir xil parollar ham har xil hash beradi.
+
+**Muammo 2 — tez hash:** MD5 va SHA juda tez ishlaydi. Buzg'unchi sekundiga milliardlab variant sinab ko'radi.
+
+**Yechim — sekin funksiya:** **bcrypt**, **scrypt** va **Argon2** ataylab sekin ishlaydi. Foydalanuvchi bir marta kiradi (0,1 sekund muhim emas), hujumchi esa million marta sinay olmaydi.
+
+> **Xavfsizlik:** parol uchun hech qachon oddiy MD5/SHA ishlatmang. Tuz (salt) + sekin funksiya (bcrypt/Argon2) — sanoat standarti.`,
+      ru: `## Хранение пароля: хеш, соль и медленность
+
+Пароль сначала **хешируют** — это правильно. Но обычного хеша недостаточно.
+
+**Проблема 1 — одинаковый пароль, одинаковый хеш:** если у двух людей один пароль, то и хеш одинаковый. Злоумышленник сразу это заметит.
+
+**Решение — соль (salt):** к каждому паролю добавляется случайная приписка. Теперь даже одинаковые пароли дают разные хеши.
+
+**Проблема 2 — быстрый хеш:** MD5 и SHA работают слишком быстро. Злоумышленник перебирает миллиарды вариантов в секунду.
+
+**Решение — медленная функция:** **bcrypt**, **scrypt** и **Argon2** работают намеренно медленно. Пользователь входит один раз (0,1 секунды не важны), а атакующий не может перебрать миллион раз.
+
+> **Безопасность:** никогда не используйте для паролей обычные MD5/SHA. Соль (salt) + медленная функция (bcrypt/Argon2) — отраслевой стандарт.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Parollarni bazada saqlash uchun qaysi yondashuv to'g'ri?",
+          ru: 'Какой подход к хранению паролей в базе верный?',
+        },
+        options: [
+          { id: 'a', uz: 'bcrypt/Argon2 (tuz bilan, sekin)', ru: 'bcrypt/Argon2 (с солью, медленно)' },
+          { id: 'b', uz: 'MD5 — tez va qulay', ru: 'MD5 — быстро и удобно' },
+          { id: 'c', uz: 'Ochiq matn', ru: 'Открытым текстом' },
+          { id: 'd', uz: 'Faqat SHA1', ru: 'Только SHA1' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Parol uchun tuz + sekin funksiya kerak. MD5 va SHA tez bo'lgani uchun parolga yaroqsiz: ular bilan juda ko'p variantni tez sinab ko'rish mumkin.",
+          ru: 'Для пароля нужны соль и медленная функция. MD5 и SHA слишком быстры для паролей: с ними можно быстро перебрать огромное число вариантов.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'input',
+        q: {
+          uz: "Har bir parolga qo'shiladigan tasodifiy qo'shimcha nima deb ataladi? (inglizcha, 4 harf)",
+          ru: 'Как называется случайная приписка, добавляемая к каждому паролю? (по-английски, 4 буквы)',
+        },
+        answer: 'salt',
+        accepted: ['salt', 'tuz', 'соль'],
+        explain: {
+          uz: "Bu — tuz (salt). Usiz bir xil parollar bir xil hash beradi va buzg'unchi bu bir xillikdan foydalanadi.",
+          ru: 'Это соль (salt). Без неё одинаковые пароли дают одинаковый хеш, и злоумышленник пользуется этим совпадением.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'match',
+        q: {
+          uz: 'Tushunchani uning vazifasi bilan moslang',
+          ru: 'Соотнесите понятие с его задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'Tuz (salt)', ru: 'Соль (salt)' }, right: { uz: 'Bir xil parollarni har xil qiladi', ru: 'Делает одинаковые пароли разными' } },
+          { id: 'p2', left: { uz: 'bcrypt / Argon2', ru: 'bcrypt / Argon2' }, right: { uz: 'Ataylab sekin ishlaydi', ru: 'Работает намеренно медленно' } },
+          { id: 'p3', left: { uz: 'MD5 / SHA1', ru: 'MD5 / SHA1' }, right: { uz: 'Parol uchun yaroqsiz: juda tez', ru: 'Не годится для паролей: слишком быстрый' } },
+          { id: 'p4', left: { uz: 'Rainbow jadval', ru: 'Радужная таблица' }, right: { uz: "Tayyor hash ro'yxati bo'yicha qidiruv", ru: 'Поиск по готовому списку хешей' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "Tuz bir xillikni yo'qotadi, sekin funksiya ko'p urinishni to'xtatadi, MD5/SHA parolga yaramaydi, tayyor jadvallar esa tuz tufayli foydasiz bo'ladi.",
+          ru: 'Соль убирает одинаковость, медленная функция останавливает массовый перебор, MD5/SHA для паролей не годятся, а готовые таблицы из-за соли становятся бесполезны.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'tf',
+        q: {
+          uz: 'Tuz (salt) maxfiy saqlanadi, shuning uchun u hash bilan birga yozilmaydi.',
+          ru: 'Соль (salt) держат в секрете, поэтому её не хранят вместе с хешем.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Tuz maxfiy emas — u hash bilan birga ochiq saqlanadi. Tuzning vazifasi sir saqlash emas, balki bir xil parollarni farqlash. Sir bo'lib qoladigan narsa — parolning o'zi.",
+          ru: 'Соль не секретна — её хранят открыто вместе с хешем. Её задача не хранить тайну, а различать одинаковые пароли. Секретом остаётся сам пароль.',
+        },
+      },
+    ],
+  },
+
+  {
     slug: 'symmetric-vs-asymmetric',
     domain: 'crypto',
     kind: 'lesson',
@@ -256,6 +359,105 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
   },
 
   {
+    slug: 'digital-signatures-and-pki',
+    domain: 'crypto',
+    kind: 'lesson',
+    xp_reward: 30,
+    title: { uz: 'Raqamli imzo va sertifikatlar', ru: 'Цифровая подпись и сертификаты' },
+    content: {
+      uz: `## Raqamli imzo va PKI
+
+Shifrlash maxfiylik beradi. **Raqamli imzo** esa boshqa ishni qiladi: **kim yuborganini** va **o'zgargan-o'zgarmaganini** isbotlaydi.
+
+Imzo **shaxsiy kalit** bilan yaratiladi, **ochiq kalit** bilan tekshiriladi. Boshqa hech kim to'g'ri imzo qo'ya olmaydi — shaxsiy kalit faqat egasida bo'ladi.
+
+**Sertifikat** — bu ochiq kalitning "pasporti": u kimning kaliti ekanini va qaysi **domenga** tegishli ekanini tasdiqlaydi.
+
+**CA (sertifikat markazi) zanjiri:** brauzer CA ga ishonadi → CA saytga sertifikat beradi → sayt shu sertifikat bilan o'zini isbotlaydi.
+
+> **Xavfsizlik:** imzo — bu maxfiylik emas, balki **haqiqiylik va yaxlitlik**. Imzolangan xat o'qilishi mumkin, lekin o'zgartirilsa yoki boshqa odam nomidan yuborilsa — imzo mos kelmaydi.`,
+      ru: `## Цифровая подпись и PKI
+
+Шифрование даёт конфиденциальность. **Цифровая подпись** делает другое: подтверждает, **кто отправил** и **не изменялись ли данные**.
+
+Подпись создаётся **закрытым ключом**, а проверяется **открытым**. Никто другой не сможет поставить верную подпись — закрытый ключ есть только у владельца.
+
+**Сертификат** — «паспорт» открытого ключа: он подтверждает, чей это ключ и какому **домену** принадлежит.
+
+**Цепочка CA (центра сертификации):** браузер доверяет CA → CA выдаёт сертификат сайту → сайт доказывает себя этим сертификатом.
+
+> **Безопасность:** подпись — это не конфиденциальность, а **подлинность и целостность**. Подписанное письмо можно прочитать, но если его изменят или подделают автора — подпись не сойдётся.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Raqamli imzo nimani ta'minlaydi?",
+          ru: 'Что обеспечивает цифровая подпись?',
+        },
+        options: [
+          { id: 'a', uz: "Yuboruvchi haqiqiyligi va yaxlitlik", ru: 'Подлинность отправителя и целостность' },
+          { id: 'b', uz: 'Faqat maxfiylik', ru: 'Только конфиденциальность' },
+          { id: 'c', uz: 'Faylni siqish', ru: 'Сжатие файла' },
+          { id: 'd', uz: 'Internet tezligini oshirish', ru: 'Ускорение интернета' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Imzo kim yuborganini (autentifikatsiya) va ma'lumot o'zgargan-o'zgarmaganini (yaxlitlik) ko'rsatadi. Maxfiylik uchun esa shifrlash kerak — bu boshqa vazifa.",
+          ru: 'Подпись показывает, кто отправил (аутентификация) и не изменены ли данные (целостность). Для конфиденциальности нужно шифрование — это другая задача.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: "Raqamli imzo xatni o'qib bo'lmaydigan qiladi, ya'ni maxfiylik beradi.",
+          ru: 'Цифровая подпись делает письмо нечитаемым, то есть обеспечивает конфиденциальность.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Yo'q — imzo maxfiylik bermaydi, u faqat haqiqiylik va yaxlitlikni isbotlaydi. O'qib bo'lmaydigan qilish uchun shifrlash ishlatiladi.",
+          ru: 'Нет — подпись не даёт конфиденциальности, она подтверждает лишь подлинность и целостность. Чтобы сделать нечитаемым, применяют шифрование.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'match',
+        q: {
+          uz: 'Tushunchani uning vazifasi bilan moslang',
+          ru: 'Соотнесите понятие с его задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'Raqamli imzo', ru: 'Цифровая подпись' }, right: { uz: 'Kim yuborganini isbotlaydi', ru: 'Подтверждает, кто отправил' } },
+          { id: 'p2', left: { uz: 'Sertifikat', ru: 'Сертификат' }, right: { uz: 'Ochiq kalitning pasporti', ru: 'Паспорт открытого ключа' } },
+          { id: 'p3', left: { uz: 'CA (sertifikat markazi)', ru: 'CA (центр сертификации)' }, right: { uz: 'Sertifikat beruvchi ishonchli tomon', ru: 'Доверенная сторона, выдающая сертификаты' } },
+          { id: 'p4', left: { uz: 'Ochiq kalit bilan tekshirish', ru: 'Проверка открытым ключом' }, right: { uz: 'Imzoni tasdiqlaydi', ru: 'Подтверждает подпись' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "Imzo yuboruvchini tasdiqlaydi, sertifikat ochiq kalitni egasiga bog'laydi, CA unga ishonch beradi, ochiq kalit esa imzoni tekshiradi.",
+          ru: 'Подпись подтверждает отправителя, сертификат связывает открытый ключ с владельцем, CA даёт доверие, а открытым ключом проверяют подпись.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'input',
+        q: {
+          uz: "Sayt ochiq kalitining pasporti nima deb ataladi? (inglizcha)",
+          ru: 'Как называется «паспорт» открытого ключа сайта? (по-английски)',
+        },
+        answer: 'certificate',
+        accepted: ['certificate', 'cert', 'sertifikat', 'сертификат'],
+        explain: {
+          uz: "Bu — sertifikat. U domen, ochiq kalit va CA imzosini bir-biriga bog'lab, brauzerga sayt haqiqiy ekanini isbotlaydi.",
+          ru: 'Это сертификат. Он связывает домен, открытый ключ и подпись CA, доказывая браузеру, что сайт подлинный.',
+        },
+      },
+    ],
+  },
+
+  {
     slug: 'checkpoint-crypto',
     domain: 'crypto',
     kind: 'checkpoint',
@@ -264,14 +466,14 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
     content: {
       uz: `## 🏆 Nazorat
 
-Uch ta darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi, biroz murakkabroq savollar — o'ylab javob bering.
+To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi, biroz murakkabroq savollar — o'ylab javob bering.
 
-**O'tilgan mavzular:** hash va shifrlash, simmetrik va asimmetrik kalitlar, HTTPS.`,
+**O'tilgan mavzular:** hash va shifrlash, parolni saqlash (tuz va sekin funksiya), simmetrik va asimmetrik kalitlar, HTTPS, raqamli imzo va sertifikatlar.`,
       ru: `## 🏆 Проверка
 
-Вопросы, проверяющие знания из трёх уроков. На этот раз — ситуации посложнее, отвечайте обдуманно.
+Вопросы, проверяющие знания из четырёх уроков. На этот раз — ситуации посложнее, отвечайте обдуманно.
 
-**Пройденные темы:** хеширование и шифрование, симметричные и асимметричные ключи, HTTPS.`,
+**Пройденные темы:** хеширование и шифрование, хранение паролей (соль и медленная функция), симметричные и асимметричные ключи, HTTPS, цифровая подпись и сертификаты.`,
     },
     exercises: [
       {

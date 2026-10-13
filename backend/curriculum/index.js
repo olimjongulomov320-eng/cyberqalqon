@@ -14,6 +14,10 @@ const FILES = [
   { file: 'networking', domain: 'networking' },
   { file: 'linux', domain: 'linux' },
   { file: 'web-security', domain: 'web-security' },
+  { file: 'programming', domain: 'programming' },
+  { file: 'defensive-security', domain: 'defensive-security' },
+  { file: 'cloud-security', domain: 'cloud-security' },
+  { file: 'ethical-testing', domain: 'ethical-testing' },
   // it-and-crypto.js carries modules for several domains (see `domain` field)
   { file: 'it-and-crypto', domain: null },
 ];
@@ -57,6 +61,15 @@ const DOMAINS = [
   { slug: 'crypto', path: 'cybersecurity', icon: '🔏', order_index: 5,
     title: { uz: 'Kriptografiya', ru: 'Криптография' },
     description: { uz: 'Hash, shifr va kalitlar qanday ishlaydi.', ru: 'Как работают хеши, шифры и ключи.' } },
+  { slug: 'defensive-security', path: 'cybersecurity', icon: '🔎', order_index: 6,
+    title: { uz: 'Himoya va monitoring', ru: 'Защита и мониторинг' },
+    description: { uz: 'Loglar, SIEM, hodisalarga javob va zaifliklarni boshqarish.', ru: 'Логи, SIEM, реагирование на инциденты и управление уязвимостями.' } },
+  { slug: 'cloud-security', path: 'cybersecurity', icon: '☁️', order_index: 7,
+    title: { uz: 'Bulut xavfsizligi', ru: 'Облачная безопасность' },
+    description: { uz: "Bulut modellari, mas'uliyat taqsimoti, IAM va saqlash xavfsizligi.", ru: 'Облачные модели, разделение ответственности, IAM и безопасность хранилищ.' } },
+  { slug: 'ethical-testing', path: 'cybersecurity', icon: '🎯', order_index: 8,
+    title: { uz: 'Etik test', ru: 'Этичное тестирование' },
+    description: { uz: "Ruxsat, razvedka, skanerlash, ekspluatatsiya va hisobot.", ru: 'Разрешение, разведка, сканирование, эксплуатация и отчёт.' } },
   { slug: 'it-basics', path: 'it-fundamentals', icon: '⚙️', order_index: 1,
     title: { uz: 'Kompyuter va tizimlar', ru: 'Компьютер и системы' },
     description: { uz: 'Uskuna, operatsion tizim va ularning vazifasi.', ru: 'Железо, операционные системы и их роль.' } },
@@ -66,6 +79,9 @@ const DOMAINS = [
   { slug: 'git', path: 'it-fundamentals', icon: '🌿', order_index: 3,
     title: { uz: 'Git va versiyalar', ru: 'Git и версии' },
     description: { uz: 'Commit, branch va jamoada ishlash.', ru: 'Коммиты, ветки и работа в команде.' } },
+  { slug: 'programming', path: 'it-fundamentals', icon: '🐍', order_index: 4,
+    title: { uz: 'Dasturlash', ru: 'Программирование' },
+    description: { uz: "Python asoslari va xavfsizlikni avtomatlashtirish.", ru: 'Основы Python и автоматизация безопасности.' } },
 ];
 
 /** All curriculum files flattened, each module tagged with its domain slug. */

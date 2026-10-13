@@ -117,6 +117,222 @@ Serverlar deyarli hammasi Linuxda ishlaydi: ochiq kodli, bepul, barqaror va oyla
   },
 
   {
+    slug: 'linux-command-line',
+    kind: 'lesson',
+    xp_reward: 20,
+    title: { uz: 'Buyruq qatori: navigatsiya', ru: 'Командная строка: навигация' },
+    content: {
+      uz: `## Buyruq qatori: navigatsiya
+
+Terminalda siz doim biron **papka (katalog)** ichida turasiz. Eng kerakli buyruqlar:
+
+| Buyruq | Vazifa |
+|---|---|
+| pwd | Hozir qaysi papkadaligingizni ko'rsatadi |
+| ls | Papkadagi fayllarni sanaydi |
+| cd /etc | Boshqa papkaga o'tish |
+| cd .. | Bir qadam yuqoriga chiqish |
+| man ls | Buyruq haqida qo'llanma |
+
+Fayl bilan ishlash: **cp** (nusxa), **mv** (ko'chirish yoki qayta nomlash), **rm** (o'chirish), **cat** (matnni chiqarish).
+
+> **Xavfsizlik:** \`rm -rf /\` kabi buyruq butun tizimni o'chirib tashlashi mumkin — root bilan juda ehtiyot bo'ling. O'chirishdan oldin \`ls\` bilan tekshirib oling.`,
+      ru: `## Командная строка: навигация
+
+В терминале вы всегда находитесь внутри какой-то **папки (каталога)**. Самые нужные команды:
+
+| Команда | Задача |
+|---|---|
+| pwd | Показывает, в какой папке вы сейчас |
+| ls | Перечисляет файлы в папке |
+| cd /etc | Перейти в другую папку |
+| cd .. | Подняться на шаг выше |
+| man ls | Справка о команде |
+
+Работа с файлами: **cp** (копировать), **mv** (переместить или переименовать), **rm** (удалить), **cat** (показать текст).
+
+> **Безопасность:** команда вроде \`rm -rf /\` может стереть всю систему — с root будьте предельно осторожны. Перед удалением проверяйте \`ls\`.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Hozir qaysi papkada turganingizni qaysi buyruq ko'rsatadi?",
+          ru: 'Какая команда показывает, в какой папке вы находитесь?',
+        },
+        options: [
+          { id: 'a', uz: 'pwd', ru: 'pwd' },
+          { id: 'b', uz: 'ls', ru: 'ls' },
+          { id: 'c', uz: 'cd', ru: 'cd' },
+          { id: 'd', uz: 'rm', ru: 'rm' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "pwd (print working directory) joriy papka yo'lini chiqaradi. ls fayllarni sanaydi, cd papkani o'zgartiradi, rm esa o'chiradi.",
+          ru: 'pwd (print working directory) выводит путь текущей папки. ls перечисляет файлы, cd меняет папку, а rm удаляет.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'match',
+        q: {
+          uz: 'Buyruqni vazifasi bilan moslang',
+          ru: 'Соотнесите команду с её задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'cp', ru: 'cp' }, right: { uz: 'Fayldan nusxa oladi', ru: 'Копирует файл' } },
+          { id: 'p2', left: { uz: 'mv', ru: 'mv' }, right: { uz: "Ko'chiradi yoki qayta nomlaydi", ru: 'Перемещает или переименовывает' } },
+          { id: 'p3', left: { uz: 'rm', ru: 'rm' }, right: { uz: "Faylni o'chiradi", ru: 'Удаляет файл' } },
+          { id: 'p4', left: { uz: 'cat', ru: 'cat' }, right: { uz: 'Fayl matnini chiqaradi', ru: 'Выводит текст файла' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "cp nusxa oladi (asl fayl qoladi), mv ko'chiradi yoki nomini o'zgartiradi, rm o'chiradi, cat esa matnni ko'rsatadi.",
+          ru: 'cp копирует (исходный файл остаётся), mv перемещает или переименовывает, rm удаляет, а cat показывает текст.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'order',
+        q: {
+          uz: "Papkaga kirib, faylni ko'rish bosqichlarini tartiblang (birinchisi — birinchi qadam)",
+          ru: 'Расставьте шаги: зайти в папку и посмотреть файл (первый — самый первый)',
+        },
+        items: [
+          { id: 'i1', uz: "Papkaga o'tish: cd /var/log", ru: 'Перейти в папку: cd /var/log' },
+          { id: 'i2', uz: 'Fayllarni sanash: ls', ru: 'Перечислить файлы: ls' },
+          { id: 'i3', uz: "Fayl matnini ko'rish: cat syslog", ru: 'Показать текст файла: cat syslog' },
+        ],
+        order: ['i1', 'i2', 'i3'],
+        explain: {
+          uz: "Avval kerakli papkaga o'tamiz, keyin ichidagi fayllarni ko'ramiz va oxirida kerakli faylni o'qiymiz. Bu — terminalda ishlashning eng oddiy ketma-ketligi.",
+          ru: 'Сначала переходим в нужную папку, затем смотрим её файлы и в конце читаем нужный файл. Это простейшая последовательность работы в терминале.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'tf',
+        q: {
+          uz: "rm -rf / buyrug'i xavfsiz — u faqat vaqtinchalik fayllarni o'chiradi.",
+          ru: 'Команда rm -rf / безопасна — она удаляет только временные файлы.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Bu buyruq ildizdan (/) hamma narsani majburan o'chirishga urinadi. Root huquqi bilan bajarilsa, tizim butunlay yo'qoladi — shuning uchun root bilan rm dan oldin doim tekshiriladi.",
+          ru: 'Эта команда пытается принудительно удалить всё начиная с корня (/). При правах root система уничтожается полностью — поэтому с root перед rm всегда проверяют.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'linux-filesystem',
+    kind: 'lesson',
+    xp_reward: 20,
+    title: { uz: 'Fayl tizimi tuzilishi', ru: 'Структура файловой системы' },
+    content: {
+      uz: `## Fayl tizimi tuzilishi
+
+Linuxda hamma narsa bitta daraxtdan boshlanadi: ildiz **/**.
+
+| Papka | Nima saqlanadi |
+|---|---|
+| /etc | Sozlamalar (config) fayllari |
+| /home | Foydalanuvchilarning shaxsiy papkalari |
+| /var | Loglar va o'zgaruvchan ma'lumotlar |
+| /bin, /usr/bin | Buyruqlar (programmalar) |
+| /root | root foydalanuvchisining uyi |
+
+Yo'l **absolyut** (/ dan boshlanadi) yoki **nisbiy** (joriy papkadan) bo'ladi.
+
+> **Xavfsizlik:** /etc ichida parol va kalitlarga oid sozlamalar bor. /var/log dagi loglar tizimda nima bo'lganini ko'rsatadi — buzg'unchilikni aniqlashda birinchi qaraladigan joy.`,
+      ru: `## Структура файловой системы
+
+В Linux всё начинается с одного дерева: корень **/**.
+
+| Папка | Что хранится |
+|---|---|
+| /etc | Файлы настроек (config) |
+| /home | Личные папки пользователей |
+| /var | Логи и изменяемые данные |
+| /bin, /usr/bin | Команды (программы) |
+| /root | Домашняя папка пользователя root |
+
+Путь бывает **абсолютным** (начинается с /) или **относительным** (от текущей папки).
+
+> **Безопасность:** в /etc лежат настройки паролей и ключей. Логи в /var/log показывают, что происходило в системе — это первое, что проверяют при поиске взлома.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: 'Tizim sozlamalari odatda qaysi papkada saqlanadi?',
+          ru: 'В какой папке обычно хранятся системные настройки?',
+        },
+        options: [
+          { id: 'a', uz: '/etc', ru: '/etc' },
+          { id: 'b', uz: '/home', ru: '/home' },
+          { id: 'c', uz: '/bin', ru: '/bin' },
+          { id: 'd', uz: '/var', ru: '/var' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "/etc — sozlamalar uchun. /home — foydalanuvchi fayllari, /bin — buyruqlar, /var esa loglar va o'zgaruvchan ma'lumotlar uchun.",
+          ru: '/etc — для настроек. /home — файлы пользователей, /bin — команды, а /var — логи и изменяемые данные.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'match',
+        q: {
+          uz: 'Papkani unda saqlanadigan narsa bilan moslang',
+          ru: 'Соотнесите папку с тем, что в ней хранится',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: '/etc', ru: '/etc' }, right: { uz: 'Sozlamalar', ru: 'Настройки' } },
+          { id: 'p2', left: { uz: '/home', ru: '/home' }, right: { uz: 'Foydalanuvchi papkalari', ru: 'Папки пользователей' } },
+          { id: 'p3', left: { uz: '/var/log', ru: '/var/log' }, right: { uz: 'Loglar', ru: 'Логи' } },
+          { id: 'p4', left: { uz: '/bin', ru: '/bin' }, right: { uz: 'Buyruqlar', ru: 'Команды' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "Har bir papkaning aniq vazifasi bor: sozlama /etc da, odam fayllari /home da, loglar /var/log da, buyruqlar esa /bin da.",
+          ru: 'У каждой папки своё назначение: настройки в /etc, файлы людей в /home, логи в /var/log, а команды в /bin.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'input',
+        q: {
+          uz: 'Linux fayl daraxtining ildizi qanday belgilanadi? (bitta belgi)',
+          ru: 'Как обозначается корень файлового дерева Linux? (один символ)',
+        },
+        answer: '/',
+        accepted: ['/', 'slash', '/ (slash)'],
+        explain: {
+          uz: "Ildiz — bitta qiya chiziq: /. Har bir absolyut yo'l shundan boshlanadi: /etc, /home/ali, /var/log.",
+          ru: 'Корень — один слэш: /. Любой абсолютный путь начинается с него: /etc, /home/ali, /var/log.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'tf',
+        q: {
+          uz: '/var/log papkasida tizim va xizmat loglari saqlanadi.',
+          ru: 'В папке /var/log хранятся системные логи и логи служб.',
+        },
+        answer: 'true',
+        explain: {
+          uz: "Loglar /var/log ichida. Ular tizimda nima sodir bo'lganini, kim qachon kirganini ko'rsatadi — xavfsizlik tekshiruvining boshlanish nuqtasi.",
+          ru: 'Логи лежат в /var/log. Они показывают, что происходило в системе и кто когда входил — это отправная точка проверки безопасности.',
+        },
+      },
+    ],
+  },
+
+  {
     slug: 'linux-permissions',
     kind: 'lesson',
     xp_reward: 25,
@@ -219,6 +435,325 @@ Maxfiy fayllar (SSH kaliti, .env) shu raqam bilan saqlanadi: **chmod 600 id_rsa*
         explain: {
           uz: 'Avval faylning kimlarga tegishli ekanini ajratamiz, keyin har bir guruh uchun raqamlarni yig\'amiz va oxirida tayyor natijani chmod ga beramiz.',
           ru: 'Сначала определяем, кому принадлежит файл, затем складываем числа для каждой группы и в конце передаём готовый результат в chmod.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'linux-users-groups',
+    kind: 'lesson',
+    xp_reward: 25,
+    title: { uz: 'Foydalanuvchilar va guruhlar', ru: 'Пользователи и группы' },
+    content: {
+      uz: `## Foydalanuvchilar va guruhlar
+
+Linux — ko'p foydalanuvchili tizim. Har bir jarayon biron foydalanuvchi nomidan ishlaydi.
+
+- **id** — sizning UID, GID va guruhlaringizni ko'rsatadi.
+- **whoami** — joriy foydalanuvchi nomini chiqaradi.
+- **chown** — fayl egasini o'zgartiradi: \`chown ali fayl.txt\`.
+- **chmod** — fayl ruxsatlarini o'zgartiradi.
+
+Har bir foydalanuvchi kamida bitta **guruh**ga kiradi. Guruh orqali bir nechta odamga bir xil ruxsat berish qulay.
+
+> **Xavfsizlik:** har bir xizmat (masalan, veb-server) alohida **xizmat foydalanuvchisi** nomidan ishlashi kerak. Agar u buzilsa, buzg'unchi faqat shu cheklangan huquqqa ega bo'ladi.`,
+      ru: `## Пользователи и группы
+
+Linux — многопользовательская система. Каждый процесс работает от имени какого-то пользователя.
+
+- **id** — показывает ваш UID, GID и группы.
+- **whoami** — выводит имя текущего пользователя.
+- **chown** — меняет владельца файла: \`chown ali file.txt\`.
+- **chmod** — меняет права файла.
+
+Каждый пользователь входит хотя бы в одну **группу**. Через группу удобно выдать одинаковые права сразу нескольким людям.
+
+> **Безопасность:** каждая служба (например, веб-сервер) должна работать от отдельного **служебного пользователя**. Если её взломают, злоумышленник получит только эти ограниченные права.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Faylning egasini (owner) o'zgartiruvchi buyruq qaysi?",
+          ru: 'Какая команда меняет владельца (owner) файла?',
+        },
+        options: [
+          { id: 'a', uz: 'chown', ru: 'chown' },
+          { id: 'b', uz: 'chmod', ru: 'chmod' },
+          { id: 'c', uz: 'id', ru: 'id' },
+          { id: 'd', uz: 'whoami', ru: 'whoami' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "chown — change owner, egasini almashtiradi. chmod esa ruxsatlarni o'zgartiradi. Bu ikkovini chalkashtirmaslik kerak.",
+          ru: 'chown — change owner, меняет владельца. chmod меняет права. Эти две команды важно не путать.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'input',
+        q: {
+          uz: "Joriy foydalanuvchining UID, GID va guruhlarini ko'rsatuvchi buyruq (2 harf): ____",
+          ru: 'Команда, показывающая UID, GID и группы текущего пользователя (2 буквы): ____',
+        },
+        answer: 'id',
+        accepted: ['id'],
+        explain: {
+          uz: "id buyrug'i sizning identifikatorlaringiz va qaysi guruhlarga kirishingizni bir qatorga chiqaradi. whoami esa faqat nomni ko'rsatadi.",
+          ru: 'Команда id выводит ваши идентификаторы и группы в одной строке. whoami показывает только имя.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'match',
+        q: {
+          uz: 'Buyruqni vazifasi bilan moslang',
+          ru: 'Соотнесите команду с её задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'chown', ru: 'chown' }, right: { uz: "Fayl egasini o'zgartiradi", ru: 'Меняет владельца файла' } },
+          { id: 'p2', left: { uz: 'chmod', ru: 'chmod' }, right: { uz: "Fayl ruxsatlarini o'zgartiradi", ru: 'Меняет права файла' } },
+          { id: 'p3', left: { uz: 'whoami', ru: 'whoami' }, right: { uz: 'Joriy foydalanuvchi nomi', ru: 'Имя текущего пользователя' } },
+          { id: 'p4', left: { uz: 'sudo', ru: 'sudo' }, right: { uz: 'Vaqtincha root huquqi beradi', ru: 'Временно даёт права root' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "chown egalikni, chmod ruxsatni, whoami nomni ko'rsatadi, sudo esa vaqtincha huquqni oshiradi. Har biri o'z ishini qiladi.",
+          ru: 'chown управляет владельцем, chmod — правами, whoami показывает имя, а sudo временно повышает права. У каждой команды своя задача.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'tf',
+        q: {
+          uz: "Veb-server kabi xizmatlar root o'rniga alohida cheklangan xizmat foydalanuvchisi bilan ishlagani xavfsizroq.",
+          ru: 'Службы вроде веб-сервера безопаснее запускать не от root, а от отдельного ограниченного служебного пользователя.',
+        },
+        answer: 'true',
+        explain: {
+          uz: "Agar xizmat cheklangan foydalanuvchi bilan ishlasa, u buzilganda buzg'unchi ham shu cheklangan huquqqa ega bo'ladi — butun tizim emas. Bu least privilege tamoyili.",
+          ru: 'Если служба работает от ограниченного пользователя, то при её взломе злоумышленник получит только эти ограниченные права, а не всю систему. Это принцип наименьших привилегий.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'linux-processes-services',
+    kind: 'lesson',
+    xp_reward: 25,
+    title: { uz: 'Jarayonlar va xizmatlar', ru: 'Процессы и службы' },
+    content: {
+      uz: `## Jarayonlar va xizmatlar
+
+Ishlayotgan dastur — bu **jarayon (process)**. Har biri PID (raqamli identifikator) oladi.
+
+| Buyruq | Vazifa |
+|---|---|
+| ps aux | Barcha jarayonlarni ko'rsatadi |
+| top | Jarayonlarni real vaqtda kuzatadi |
+| kill 1234 | 1234-PID jarayonni to'xtatadi |
+| systemctl status ssh | Xizmat holatini ko'rsatadi |
+| systemctl restart ssh | Xizmatni qayta ishga tushiradi |
+
+**Xizmat (service yoki daemon)** — fon rejimida doim ishlab turadigan dastur: SSH, veb-server, ma'lumotlar bazasi.
+
+> **Xavfsizlik:** keraksiz xizmatlarni o'chirib qo'yish kerak — har bir ochiq xizmat hujum yuzasini kengaytiradi. \`systemctl\` bilan nima ishlayotganini tekshirib turing.`,
+      ru: `## Процессы и службы
+
+Запущенная программа — это **процесс**. Каждый получает PID (числовой идентификатор).
+
+| Команда | Задача |
+|---|---|
+| ps aux | Показывает все процессы |
+| top | Наблюдает за процессами в реальном времени |
+| kill 1234 | Останавливает процесс с PID 1234 |
+| systemctl status ssh | Показывает состояние службы |
+| systemctl restart ssh | Перезапускает службу |
+
+**Служба (service или daemon)** — программа, которая постоянно работает в фоне: SSH, веб-сервер, база данных.
+
+> **Безопасность:** ненужные службы надо отключать — каждая открытая служба расширяет поверхность атаки. Следите за тем, что работает, с помощью \`systemctl\`.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Fon rejimida doim ishlab turadigan dastur nima deb ataladi?",
+          ru: 'Как называется программа, которая постоянно работает в фоне?',
+        },
+        options: [
+          { id: 'a', uz: 'Xizmat (service/daemon)', ru: 'Служба (service/daemon)' },
+          { id: 'b', uz: 'Fayl', ru: 'Файл' },
+          { id: 'c', uz: 'Papka', ru: 'Папка' },
+          { id: 'd', uz: 'Foydalanuvchi', ru: 'Пользователь' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "SSH, veb-server, ma'lumotlar bazasi — bularning hammasi fon xizmatlari. Ular tizim yonganda ishga tushadi va doim kutib turadi.",
+          ru: 'SSH, веб-сервер, база данных — всё это фоновые службы. Они стартуют при загрузке системы и постоянно ожидают запросов.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'input',
+        q: {
+          uz: "Jarayonning raqamli identifikatori qisqartmasi (3 harf): ____",
+          ru: 'Сокращение числового идентификатора процесса (3 буквы): ____',
+        },
+        answer: 'pid',
+        accepted: ['pid'],
+        explain: {
+          uz: "PID (Process ID) — har bir jarayonga beriladigan raqam. kill buyrug'iga aynan shu raqam beriladi: kill 1234.",
+          ru: 'PID (Process ID) — номер, выдаваемый каждому процессу. Именно его передают команде kill: kill 1234.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'match',
+        q: {
+          uz: 'Buyruqni vazifasi bilan moslang',
+          ru: 'Соотнесите команду с её задачей',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'ps', ru: 'ps' }, right: { uz: "Jarayonlar ro'yxatini beradi", ru: 'Выводит список процессов' } },
+          { id: 'p2', left: { uz: 'top', ru: 'top' }, right: { uz: 'Real vaqtda kuzatadi', ru: 'Наблюдает в реальном времени' } },
+          { id: 'p3', left: { uz: 'kill', ru: 'kill' }, right: { uz: "Jarayonni to'xtatadi", ru: 'Останавливает процесс' } },
+          { id: 'p4', left: { uz: 'systemctl', ru: 'systemctl' }, right: { uz: 'Xizmatlarni boshqaradi', ru: 'Управляет службами' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "ps bir lahzalik ro'yxat beradi, top jonli kuzatuv, kill jarayonni to'xtatadi, systemctl esa xizmatlarni yoqadi, o'chiradi va qayta ishga tushiradi.",
+          ru: 'ps даёт разовый список, top — живое наблюдение, kill останавливает процесс, а systemctl включает, выключает и перезапускает службы.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'order',
+        q: {
+          uz: "Yangi xizmatni to'liq ishga tushirish tartibini joylang (birinchisi — birinchi qadam)",
+          ru: 'Расставьте шаги полного запуска новой службы (первый — самый первый)',
+        },
+        items: [
+          { id: 'i1', uz: "O'rnatish: sudo apt install <xizmat>", ru: 'Установить: sudo apt install <служба>' },
+          { id: 'i2', uz: 'Hozir ishga tushirish: systemctl start', ru: 'Запустить сейчас: systemctl start' },
+          { id: 'i3', uz: "Avtoyuklashga qo'shish: systemctl enable", ru: 'Добавить в автозапуск: systemctl enable' },
+        ],
+        order: ['i1', 'i2', 'i3'],
+        explain: {
+          uz: "Avval paket o'rnatiladi, keyin xizmat hozir ishga tushiriladi, va oxirida enable bilan tizim har yonganda avtomatik yonishi ta'minlanadi.",
+          ru: 'Сначала пакет устанавливается, затем служба запускается сейчас, и в конце enable делает так, чтобы она поднималась автоматически при каждой загрузке.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'linux-packages-logs',
+    kind: 'lesson',
+    xp_reward: 25,
+    title: { uz: 'Paketlar va loglar', ru: 'Пакеты и логи' },
+    content: {
+      uz: `## Paketlar va loglar
+
+Dasturlar **paket menejeri** orqali o'rnatiladi va yangilanadi.
+
+| Buyruq (Debian/Ubuntu) | Vazifa |
+|---|---|
+| sudo apt update | Paketlar ro'yxatini yangilaydi |
+| sudo apt install nginx | Dastur o'rnatadi |
+| sudo apt upgrade | O'rnatilgan paketlarni yangilaydi |
+| sudo apt remove nginx | Dasturni o'chiradi |
+
+Fedora va CentOS'da bu ishlarni **dnf** bajaradi.
+
+**Loglar** — tizimda nima bo'lganini yozib boradi. Ubuntu'da ko'p loglar **/var/log** ichida, xizmat loglari esa \`journalctl\` buyrug'i bilan ko'riladi.
+
+> **Xavfsizlik:** muntazam \`apt upgrade\` zaifliklarni yopadi. Loglarni kuzatish esa shubhali faoliyatni (ko'p marta urinilgan parol, kutilmagan xizmat) erta aniqlashga yordam beradi.`,
+      ru: `## Пакеты и логи
+
+Программы устанавливаются и обновляются через **менеджер пакетов**.
+
+| Команда (Debian/Ubuntu) | Задача |
+|---|---|
+| sudo apt update | Обновляет список пакетов |
+| sudo apt install nginx | Устанавливает программу |
+| sudo apt upgrade | Обновляет установленные пакеты |
+| sudo apt remove nginx | Удаляет программу |
+
+В Fedora и CentOS это делает **dnf**.
+
+**Логи** — запись того, что происходило в системе. В Ubuntu большинство логов лежит в **/var/log**, а логи служб смотрят командой \`journalctl\`.
+
+> **Безопасность:** регулярный \`apt upgrade\` закрывает уязвимости. А наблюдение за логами помогает рано заметить подозрительную активность (много попыток входа, неожиданная служба).`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Ubuntu'da o'rnatilgan paketlarni yangilab, zaifliklarni yopuvchi buyruq qaysi?",
+          ru: 'Какая команда обновляет установленные пакеты и закрывает уязвимости в Ubuntu?',
+        },
+        options: [
+          { id: 'a', uz: 'sudo apt upgrade', ru: 'sudo apt upgrade' },
+          { id: 'b', uz: 'sudo apt install', ru: 'sudo apt install' },
+          { id: 'c', uz: 'sudo apt remove', ru: 'sudo apt remove' },
+          { id: 'd', uz: 'systemctl stop', ru: 'systemctl stop' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "apt upgrade o'rnatilgan dasturlarni yangi versiyaga ko'taradi va ma'lum zaifliklarni yopadi. apt install esa yangi dastur qo'shadi.",
+          ru: 'apt upgrade поднимает установленные программы до новых версий и закрывает известные уязвимости. apt install добавляет новую программу.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'match',
+        q: {
+          uz: "Buyruq yoki yo'lni vazifasi bilan moslang",
+          ru: 'Соотнесите команду или путь с его назначением',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'apt update', ru: 'apt update' }, right: { uz: "Paketlar ro'yxatini yangilaydi", ru: 'Обновляет список пакетов' } },
+          { id: 'p2', left: { uz: 'apt install', ru: 'apt install' }, right: { uz: "Dastur o'rnatadi", ru: 'Устанавливает программу' } },
+          { id: 'p3', left: { uz: 'journalctl', ru: 'journalctl' }, right: { uz: "Xizmat loglarini ko'rish", ru: 'Просмотр логов служб' } },
+          { id: 'p4', left: { uz: '/var/log', ru: '/var/log' }, right: { uz: 'Log fayllari joyi', ru: 'Место лог-файлов' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "update faqat ro'yxatni yangilaydi, install dasturni o'rnatadi, journalctl xizmat loglarini ko'rsatadi, /var/log esa log fayllar saqlanadigan papka.",
+          ru: 'update обновляет только список, install устанавливает программу, journalctl показывает логи служб, а /var/log — папка, где лежат лог-файлы.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'input',
+        q: {
+          uz: "Fedora va CentOS'da ishlatiladigan paket menejeri nomi (3 harf): ____",
+          ru: 'Название менеджера пакетов в Fedora и CentOS (3 буквы): ____',
+        },
+        answer: 'dnf',
+        accepted: ['dnf', 'yum'],
+        explain: {
+          uz: "dnf — Fedora/CentOS oilasidagi paket menejeri (avvalgi nomi yum). Debian/Ubuntu esa apt dan foydalanadi.",
+          ru: 'dnf — менеджер пакетов в семействе Fedora/CentOS (прежнее название yum). Debian/Ubuntu использует apt.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'tf',
+        q: {
+          uz: "Loglar faqat xatoliklarni ko'rsatadi, xavfsizlikka aloqasi yo'q.",
+          ru: 'Логи показывают только ошибки и к безопасности отношения не имеют.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Loglar xavfsizlik uchun juda muhim: kim qachon kirgani, muvaffaqiyatsiz urinishlar va g'alati xizmatlar shu yerda ko'rinadi. Shuning uchun ular doim kuzatiladi.",
+          ru: 'Логи очень важны для безопасности: в них видно, кто когда входил, неудачные попытки и подозрительные службы. Поэтому за ними постоянно следят.',
         },
       },
     ],
@@ -342,10 +877,10 @@ Xavfsizlik qatlamlardan iborat: bittasi buzilsa, qolgani to'sib qo'yadi.`,
     content: {
       uz: `## 🏆 Nazorat
 
-Linux bo'yicha bilimingizni tekshiring: ruxsatlar, xavfsiz sozlamalar va buyruqlar birgalikda beriladi. O'ylab javob bering.`,
+Linux bo'yicha bilimingizni tekshiring: buyruqlar, fayl tizimi, ruxsatlar, foydalanuvchilar, xizmatlar, loglar va xavfsiz sozlamalar birgalikda beriladi. O'ylab javob bering.`,
       ru: `## 🏆 Проверка
 
-Проверьте знания по Linux: права, безопасные настройки и команды встречаются вместе. Отвечайте обдуманно.`,
+Проверьте знания по Linux: команды, файловая система, права, пользователи, службы, логи и безопасные настройки встречаются вместе. Отвечайте обдуманно.`,
     },
     exercises: [
       {

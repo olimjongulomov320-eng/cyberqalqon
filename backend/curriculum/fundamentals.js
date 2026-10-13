@@ -420,6 +420,329 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
   },
 
   {
+    slug: 'passwords-and-mfa',
+    kind: 'lesson',
+    xp_reward: 25,
+    title: { uz: 'Parollar va MFA', ru: 'Пароли и MFA' },
+    content: {
+      uz: `## Parollar va MFA
+
+Parol — eng keng tarqalgan himoya, shu sababli eng ko'p nishonga olinadi.
+
+- **Uzunlik murakkablikdan muhimroq:** "men-kiyikni-sevaman-2026" "P@ss1" dan ancha kuchli.
+- **Har bir saytga alohida parol:** bir joyda sizsa, boshqalariga ham o'tadi (credential stuffing).
+- **Parol menejeri:** barcha parollarni eslab qolish shart emas — faqat bitta asosiy parol.
+
+**MFA (ko'p faktorli autentifikatsiya)** — parol yetmaydi: qo'shimcha ikkinchi qadam kerak (SMS kod, ilova kodi, apparat kalit). Parol o'g'irlansa ham, ikkinchi qadam hujumni to'xtatadi.
+
+> **Xavfsizlik:** parol + MFA — eng katta farq qiladigan himoya. Hatto eng yaxshi parol ham bir marta sizib chiqsa, yetarli bo'ladi.`,
+      ru: `## Пароли и MFA
+
+Пароль — самая распространённая защита, поэтому и самая частая цель.
+
+- **Длина важнее сложности:** «люблю-свою-кошку-2026» надёжнее, чем «P@ss1».
+- **Свой пароль для каждого сайта:** утечка на одном ресурсе открывает доступ и к другим (credential stuffing).
+- **Менеджер паролей:** не нужно запоминать всё — достаточно одного главного пароля.
+
+**MFA (многофакторная аутентификация)** — одного пароля мало: нужен второй шаг (код в SMS, код в приложении, аппаратный ключ). Даже если пароль украли, второй шаг остановит злоумышленника.
+
+> **Безопасность:** пароль + MFA — самая эффективная защита. Даже идеальный пароль бесполезен, если он хоть раз утечёт.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: 'Quyidagi parollardan qaysi biri eng kuchli?',
+          ru: 'Какой из этих паролей самый надёжный?',
+        },
+        options: [
+          { id: 'a', uz: 'men-kiyikni-sevaman-2026', ru: 'люблю-свою-кошку-2026' },
+          { id: 'b', uz: 'P@ss1', ru: 'P@ss1' },
+          { id: 'c', uz: '12345678', ru: '12345678' },
+          { id: 'd', uz: 'parol', ru: 'parol' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "Uzun ibora (passphrase) qisqa murakkab paroldan kuchliroq: uni taxmin qilish ancha qiyin, eslab qolish esa oson. Uzunlik eng katta farq qiladi.",
+          ru: 'Длинная фраза (passphrase) надёжнее короткого сложного пароля: её труднее подобрать и легко запомнить. Именно длина даёт наибольший выигрыш.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'tf',
+        q: {
+          uz: "Bitta uzun parolni bir nechta saytda ishlatish xavfsiz, chunki u uzun.",
+          ru: 'Один длинный пароль на нескольких сайтах безопасен, потому что он длинный.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Bir sayt sizib chiqsa, buzg'unchi o'sha parolni boshqa saytlarda sinab ko'radi (credential stuffing). Shuning uchun har bir saytga alohida parol kerak.",
+          ru: 'Если один сайт утечёт, злоумышленник проверит тот же пароль на других сайтах (credential stuffing). Поэтому для каждого сайта нужен свой пароль.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'multi',
+        q: {
+          uz: "MFA haqida qaysi gaplar to'g'ri? (bir nechtasini tanlang)",
+          ru: 'Что верно про MFA? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: "Parolga qo'shimcha ikkinchi qadam qo'shadi", ru: 'Добавляет второй шаг к паролю' },
+          { id: 'b', uz: "Parol o'g'irlansa ham himoya beradi", ru: 'Защищает, даже если пароль украли' },
+          { id: 'c', uz: 'Parolni butunlay keraksiz qiladi', ru: 'Полностью отменяет пароль' },
+          { id: 'd', uz: "SMS, ilova yoki apparat kalit bo'lishi mumkin", ru: 'Может быть SMS, приложение или аппаратный ключ' },
+        ],
+        answers: ['a', 'b', 'd'],
+        explain: {
+          uz: "MFA parol ustiga ikkinchi qadam qo'shadi: birinchi faktor yorilib ketsa ham, ikkinchisi to'sadi. U parol o'rnini bosmaydi, balki uni kuchaytiradi.",
+          ru: 'MFA добавляет второй шаг поверх пароля: если первый фактор скомпрометирован, второй останавливает атаку. Он не отменяет пароль, а усиливает его.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'match',
+        q: {
+          uz: "Atamani uning ma'nosi bilan moslang",
+          ru: 'Соотнесите термин с его значением',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'MFA', ru: 'MFA' }, right: { uz: 'Ikkinchi himoya qadami', ru: 'Второй шаг защиты' } },
+          { id: 'p2', left: { uz: 'Parol menejeri', ru: 'Менеджер паролей' }, right: { uz: 'Barcha parollarni xavfsiz saqlaydi', ru: 'Безопасно хранит все пароли' } },
+          { id: 'p3', left: { uz: 'Credential stuffing', ru: 'Credential stuffing' }, right: { uz: "Sizdirilgan parolni boshqa saytlarda sinash", ru: 'Проверка утёкшего пароля на других сайтах' } },
+          { id: 'p4', left: { uz: 'Brute force', ru: 'Brute force' }, right: { uz: 'Parolni ketma-ket taxmin qilish', ru: 'Подбор пароля перебором' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "MFA — himoya qatlami, menejer — xotira yordamchisi, credential stuffing va brute force esa hujum usullari. Har biri o'z o'rnida.",
+          ru: 'MFA — слой защиты, менеджер — помощник памяти, credential stuffing и brute force — способы атаки. У каждого своё место.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'backups-and-data-protection',
+    kind: 'lesson',
+    xp_reward: 25,
+    title: { uz: "Zaxira nusxa va ma'lumotni himoya", ru: 'Резервные копии и защита данных' },
+    content: {
+      uz: `## Zaxira nusxa va ma'lumotni himoya
+
+**Backup (zaxira nusxa)** — ma'lumotning nusxasi, asosiysi yo'qolsa ham qoladigan.
+
+**3-2-1 qoidasi:**
+- **3** — kamida uchta nusxa (asl + ikki backup)
+- **2** — ikki xil muhitda (masalan, kompyuter va tashqi disk)
+- **1** — bittasi boshqa joyda (bulut yoki ofisdan tashqarida)
+
+**Shifrlash qachon kerak:**
+- **Yo'lda (in transit)** — tarmoqda uzatilganda (HTTPS, VPN).
+- **Saqlashda (at rest)** — diskda yotganda (shifrlangan disk, himoyalangan fayl).
+
+> **Xavfsizlik:** ransomware'ga qarshi eng ishonchli himoya — **sinab ko'rilgan** backup. Nusxa borligiga ishonch hosil qilish uchun tiklashni ham oldindan sinab ko'ring.`,
+      ru: `## Резервные копии и защита данных
+
+**Бэкап (резервная копия)** — копия данных, которая останется, даже если оригинал потеряется.
+
+**Правило 3-2-1:**
+- **3** — минимум три копии (оригинал + два бэкапа)
+- **2** — на двух разных носителях (например, компьютер и внешний диск)
+- **1** — одна копия в другом месте (облако или вне офиса)
+
+**Когда нужно шифрование:**
+- **В пути (in transit)** — при передаче по сети (HTTPS, VPN).
+- **При хранении (at rest)** — когда данные лежат на диске (зашифрованный диск, защищённый файл).
+
+> **Безопасность:** самая надёжная защита от ransomware — **проверенный** бэкап. Чтобы убедиться, что копия есть, попробуйте заранее восстановить из неё.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "3-2-1 qoidasidagi 1 raqami nimani bildiradi?",
+          ru: 'Что означает единица в правиле 3-2-1?',
+        },
+        options: [
+          { id: 'a', uz: 'Kamida bitta nusxa boshqa joyda saqlanadi', ru: 'Минимум одна копия хранится в другом месте' },
+          { id: 'b', uz: 'Faqat bitta nusxa yetarli', ru: 'Достаточно только одной копии' },
+          { id: 'c', uz: 'Kunda bir marta backup olinadi', ru: 'Бэкап делается раз в день' },
+          { id: 'd', uz: 'Bitta parol yetarli', ru: 'Достаточно одного пароля' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "1 — kamida bitta nusxa boshqa joyda (bulut yoki boshqa bino) bo'lishi kerak. Shunda yong'in yoki o'g'irlik bir vaqtda barcha nusxani yo'q qilmaydi.",
+          ru: '1 — минимум одна копия должна быть в другом месте (облако или другое здание). Тогда пожар или кража не уничтожат все копии сразу.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'order',
+        q: {
+          uz: "Ma'lumotni tiklash jarayonini to'g'ri tartibda joylang (birinchisi — birinchi qadam)",
+          ru: 'Расставьте шаги восстановления данных по порядку (первый — самый первый)',
+        },
+        items: [
+          { id: 'i1', uz: "Zarar aniqlanadi", ru: 'Определяется ущерб' },
+          { id: 'i2', uz: 'Toza (zararlanmagan) nusxa tanlanadi', ru: 'Выбирается чистая (незаражённая) копия' },
+          { id: 'i3', uz: "Fayllar qayta tiklanadi", ru: 'Файлы восстанавливаются' },
+          { id: 'i4', uz: "Tizim sog'lom ekani tekshiriladi", ru: 'Проверяется, что система в порядке' },
+        ],
+        order: ['i1', 'i2', 'i3', 'i4'],
+        explain: {
+          uz: "Avval zarar ko'lami aniqlanadi, keyin toza nusxa tanlanadi, fayllar tiklanadi va oxirida tizim sog'lom ekani tekshiriladi — shunda zarar qayta tarqalmaydi.",
+          ru: 'Сначала оценивают масштаб ущерба, затем выбирают чистую копию, восстанавливают файлы и в конце проверяют, что система в порядке, — чтобы заражение не вернулось.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'tf',
+        q: {
+          uz: "Backup borligi yetarli — uni qayta tiklashni sinab ko'rish shart emas.",
+          ru: 'Достаточно того, что бэкап есть — проверять восстановление не нужно.',
+        },
+        answer: 'false',
+        explain: {
+          uz: "Sinab ko'rilmagan backup — ishonchsiz backup. Buzilgan yoki chala nusxa ko'p uchraydi, shuning uchun tiklashni oldindan mashq qilib ko'rish kerak.",
+          ru: 'Непроверенный бэкап — ненадёжный бэкап. Повреждённые или неполные копии встречаются часто, поэтому восстановление стоит заранее опробовать.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'multi',
+        q: {
+          uz: "Ma'lumotni himoya qilishga nima yordam beradi? (bir nechtasini tanlang)",
+          ru: 'Что помогает защитить данные? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: "Yo'lda shifrlash (HTTPS, VPN)", ru: 'Шифрование в пути (HTTPS, VPN)' },
+          { id: 'b', uz: 'Diskda shifrlangan holda saqlash', ru: 'Хранение на диске в зашифрованном виде' },
+          { id: 'c', uz: "Muntazam va tekshirilgan backup", ru: 'Регулярный и проверенный бэкап' },
+          { id: 'd', uz: "Barcha faylni ochiq umumiy papkaga qo'yish", ru: 'Складывать все файлы в открытую общую папку' },
+        ],
+        answers: ['a', 'b', 'c'],
+        explain: {
+          uz: "Shifrlash yo'lda va diskda maxfiylikni saqlaydi, backup esa yo'qotishdan himoya qiladi. Ochiq umumiy papka esa aksincha — xavf tug'diradi.",
+          ru: 'Шифрование в пути и на диске сохраняет конфиденциальность, а бэкап защищает от потери. Открытая общая папка — наоборот, создаёт риск.',
+        },
+      },
+    ],
+  },
+
+  {
+    slug: 'common-attacks',
+    kind: 'lesson',
+    xp_reward: 30,
+    title: { uz: 'Keng tarqalgan hujum turlari', ru: 'Распространённые типы атак' },
+    content: {
+      uz: `## Hujumlarning asosiy oilalari
+
+Hujumlar turli yo'l bilan keladi. Eng ko'p uchraydiganlari:
+
+| Hujum | Maqsadi |
+|---|---|
+| **Phishing** | Odamni aldab ma'lumot berishga undash |
+| **Brute force** | Parolni ketma-ket taxmin qilish |
+| **DoS / DDoS** | Xizmatni to'xtatib qo'yish |
+| **MITM** | Aloqani o'rtada ushlab, kuzatish |
+| **Zero-day** | Hali yamalmagan zaiflikdan foydalanish |
+
+Ko'p hujum **inson** orqali boshlanadi — eng zaif bo'g'in. Texnika kuchli bo'lsa ham, noto'g'ri bosilgan havola hammasini buzadi.
+
+> **Xavfsizlik:** DDoS mavjudlikni (A), MITM va phishing esa maxfiylikni (C) nishonga oladi. Har xil hujumga qarshi har xil himoya kerak.`,
+      ru: `## Основные семейства атак
+
+Атаки приходят разными путями. Самые частые:
+
+| Атака | Цель |
+|---|---|
+| **Фишинг** | Обманом вынудить человека отдать данные |
+| **Brute force** | Подбирать пароль перебором |
+| **DoS / DDoS** | Остановить работу сервиса |
+| **MITM** | Встать в середину канала и подслушивать |
+| **Zero-day** | Использовать ещё не закрытую уязвимость |
+
+Многие атаки начинаются через **человека** — самое слабое звено. Даже сильная техника рушится из-за нажатия неверной ссылки.
+
+> **Безопасность:** DDoS бьёт по доступности (A), а MITM и фишинг — по конфиденциальности (C). Против разных атак нужны разные защиты.`,
+    },
+    exercises: [
+      {
+        id: 'e1',
+        type: 'mc',
+        q: {
+          uz: "Xizmatni to'xtatib, foydalanuvchilarga yetib bo'lmaydigan holga keltiruvchi hujum qaysi?",
+          ru: 'Какая атака останавливает сервис и делает его недоступным для пользователей?',
+        },
+        options: [
+          { id: 'a', uz: 'DoS / DDoS', ru: 'DoS / DDoS' },
+          { id: 'b', uz: 'Phishing', ru: 'Фишинг' },
+          { id: 'c', uz: 'Brute force', ru: 'Brute force' },
+          { id: 'd', uz: 'Backup', ru: 'Бэкап' },
+        ],
+        answer: 'a',
+        explain: {
+          uz: "DoS/DDoS xizmatni haddan tashqari ko'p so'rov bilan to'xtatadi — bu mavjudlikka (Availability) qilingan hujum. Phishing va brute force boshqa maqsadni ko'zlaydi.",
+          ru: 'DoS/DDoS заваливает сервис запросами и останавливает его — это атака на доступность (Availability). Фишинг и brute force преследуют иные цели.',
+        },
+      },
+      {
+        id: 'e2',
+        type: 'match',
+        q: {
+          uz: 'Hujumni uning tavsifi bilan moslang',
+          ru: 'Соотнесите атаку с её описанием',
+        },
+        pairs: [
+          { id: 'p1', left: { uz: 'Phishing', ru: 'Фишинг' }, right: { uz: "Odamni aldab ma'lumot olish", ru: 'Обманом выманить данные' } },
+          { id: 'p2', left: { uz: 'Brute force', ru: 'Brute force' }, right: { uz: 'Parolni ketma-ket taxmin qilish', ru: 'Подбор пароля перебором' } },
+          { id: 'p3', left: { uz: 'MITM', ru: 'MITM' }, right: { uz: "Aloqani o'rtada kuzatish", ru: 'Подслушивать в середине канала' } },
+          { id: 'p4', left: { uz: 'Zero-day', ru: 'Zero-day' }, right: { uz: 'Hali yamalmagan zaiflik', ru: 'Ещё не закрытая уязвимость' } },
+        ],
+        match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
+        explain: {
+          uz: "Har bir atama o'z hujum usulini bildiradi: aldash, taxmin qilish, kuzatish va yangi zaiflikdan foydalanish.",
+          ru: 'Каждый термин означает свой способ атаки: обман, перебор, подслушивание и использование свежей уязвимости.',
+        },
+      },
+      {
+        id: 'e3',
+        type: 'multi',
+        q: {
+          uz: "MITM hujumidan himoyalanishga nima yordam beradi? (bir nechtasini tanlang)",
+          ru: 'Что помогает защититься от MITM? (выберите несколько)',
+        },
+        options: [
+          { id: 'a', uz: 'HTTPS/TLS ishlatish', ru: 'Использовать HTTPS/TLS' },
+          { id: 'b', uz: "Ochiq WiFi'da sezgir ma'lumot kiritmaslik", ru: 'Не вводить чувствительные данные в открытом Wi-Fi' },
+          { id: 'c', uz: 'VPN ishlatish', ru: 'Использовать VPN' },
+          { id: 'd', uz: 'Barcha saytlar uchun bitta parol', ru: 'Один пароль для всех сайтов' },
+        ],
+        answers: ['a', 'b', 'c'],
+        explain: {
+          uz: "TLS aloqani shifrlaydi, ochiq WiFi'da ehtiyot bo'lish va VPN trafikni yashiradi. Bitta umumiy parol esa aksincha — o'g'irlangan parolni hamma joyda foydali qiladi.",
+          ru: 'TLS шифрует канал, осторожность в открытом Wi-Fi и VPN прячут трафик. А один общий пароль, наоборот, делает украденный пароль полезным везде.',
+        },
+      },
+      {
+        id: 'e4',
+        type: 'tf',
+        q: {
+          uz: "Ko'p hujumlar texnik zaiflik emas, balki inson xatosi orqali boshlanadi.",
+          ru: 'Многие атаки начинаются не с технической уязвимости, а с ошибки человека.',
+        },
+        answer: 'true',
+        explain: {
+          uz: "To'g'ri — phishing va ijtimoiy injiniring aynan odamga qaratilgan. Shu sababli xodimlarni o'qitish eng samarali himoyalardan biri hisoblanadi.",
+          ru: 'Верно — фишинг и социальная инженерия нацелены именно на человека. Поэтому обучение сотрудников — одна из самых эффективных защит.',
+        },
+      },
+    ],
+  },
+
+  {
     slug: 'checkpoint-fundamentals',
     kind: 'checkpoint',
     xp_reward: 40,
@@ -427,10 +750,10 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
     content: {
       uz: `## 🏆 Nazorat
 
-Asosiylar bo'yicha bilimingizni tekshiring. Savollar master mavzularidan — o'ylab javob bering.`,
+Asosiylar bo'yicha bilimingizni tekshiring: CIA, tahdidlar, zararli dasturlar, parollar, backup va hujum turlari — o'ylab javob bering.`,
       ru: `## 🏆 Проверка
 
-Проверьте свои знания по основам. Вопросы охватывают все уроки этого раздела — отвечайте обдуманно.`,
+Проверьте знания по основам: CIA, угрозы, вредоносное ПО, пароли, бэкапы и типы атак — отвечайте обдуманно.`,
     },
     exercises: [
       {
