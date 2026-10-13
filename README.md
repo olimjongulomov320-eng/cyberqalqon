@@ -23,4 +23,18 @@ npm run dev                 # http://localhost:3000
 The frontend calls the API at `http://localhost:3001` in development
 (`frontend/next.config.js`), which matches the backend default port
 (`backend/index.js`). In production the frontend falls back to the Render API
-(`https://cyberqalqon-api.onrender.com`); override with `NEXT_PUBLIC_API_URL` if needed. 
+(`https://cyberqalqon-api.onrender.com`); override with `NEXT_PUBLIC_API_URL` if needed.
+
+## Deployment
+
+- **Frontend → GitHub Pages** (project site under `/cyberqalqon/`):
+  `.github/workflows/deploy-pages.yml` builds `frontend/` as a static export on
+  every push to `main` that touches `frontend/`, and can be run manually via
+  `workflow_dispatch`.
+- **Backend → Render:** `render.yaml` provisions the API + Postgres together. The
+  server reseeds the curriculum on start (`setup()`), so content ships with a
+  normal deploy.
+- **Order:** deploy the API first, then rebuild the frontend — the module list is
+  fetched at build time, so a frontend rebuild before the API update freezes a
+  stale module list.
+- Live: <https://olimjongulomov320-eng.github.io/cyberqalqon/> 

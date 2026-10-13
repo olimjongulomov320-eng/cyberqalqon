@@ -23,7 +23,8 @@ structured.
 win in 5 minutes a day. A learner opens the app, answers a few interactive
 questions, earns XP, keeps a streak, reviews their weak topics when the system
 reminds them, and gradually builds a genuinely durable mental model of
-networking, Linux, web security and cryptography — in their own language.
+networking, Linux, web security, cryptography and defensive/cloud security —
+in their own language.
 
 **The promise we make in the UI (from `heroBody`):**
 "Qisqa interaktiv darslar, XP, seriyalar va reytinglar. Har kuni 5 daqiqa —
@@ -79,22 +80,28 @@ real mahorat." / "Короткие интерактивные уроки, XP, с
 ### 2.1 Learning content model (as shipped)
 - **2 learning paths:** *Cybersecurity* (`cybersecurity`) and
   *IT Fundamentals* (`it-fundamentals`).
-- **8 knowledge domains**, 29 modules total:
+- **12 knowledge domains**, 80 modules total:
 
 | Domain | Modules | Focus |
 |---|---|---|
-| 🧠 Fundamentals | 5 | core security concepts |
-| 🌐 Networking | 7 | networks, protocols, addressing |
-| 🐧 Linux | 4 | OS & command line |
-| 🔐 Web security | 4 | web app threats & defenses |
-| 🔏 Cryptography | 3 | ciphers, hashes, PKI basics |
+| 🧠 Fundamentals | 8 | core security concepts |
+| 🌐 Networking | 13 | networks, protocols, addressing |
+| 🐧 Linux | 9 | OS, permissions & command line |
+| 🔐 Web security | 9 | web app threats & defenses |
+| 🔏 Cryptography | 5 | ciphers, hashes, PKI basics |
+| 🔎 Defensive security | 8 | logging, SIEM, incident response, hardening |
+| ☁️ Cloud security | 7 | cloud models, IAM, storage & network safety |
+| 🎯 Ethical testing | 7 | authorization, recon, scanning, reporting |
 | ⚙️ IT basics | 2 | computers & systems |
 | 🗄️ Databases | 2 | data storage concepts |
 | 🌿 Git | 2 | version control |
+| 🐍 Programming | 8 | Python basics for security automation |
 
-- **121 interactive exercises** across 6 types: multiple-choice (`mc`, 36),
-  multi-select (`multi`, 19), true/false (`tf`, 21), matching (`match`, 21),
-  ordering (`order`, 10) and typed command input (`input`, 14).
+- **329 interactive exercises** across 6 types: multiple-choice (`mc`, 89),
+  true/false (`tf`, 70), matching (`match`, 64), multi-select (`multi`, 54),
+  typed command input (`input`, 27) and ordering (`order`, 25).
+- Ethical-testing content is deliberately **conceptual only** — it teaches
+  authorization, scope and reporting, never exploit recipes.
 - Each module = markdown reading (`content`) + ordered `exercises[]`, with an
   `xp_reward`; lessons are authored as plain data (see `backend/curriculum/`),
   so adding a course is **content-only — no page code changes**.
@@ -144,13 +151,14 @@ real mahorat." / "Короткие интерактивные уроки, XP, с
 console" aesthetic that respects the seriousness of the subject without being
 scary.
 
-- **Surface:** deep navy family, toast-dark backgrounds, hairlines and
-  subtle violet/cobalt radial washes, film-grain overlay, soft violet-tinted
-  card shadows.
+- **Surface:** deep navy family, toast-dark backgrounds, hairlines and a single
+  restrained cyan-tinted bloom at the top of the page, film-grain overlay, soft
+  navy-tinted card shadows.
 - **Color roles:** cyan is the single **interactive** color (yes, actions,
-  focus); success/warning/danger are reserved for meaning; the electric-violet
-  and cobalt brand colors stay **decorative** (hero/auth only) so the UI never
-  competes with itself.
+  focus) and the shield brand mark is the same cyan family, so the UI never
+  fights the logo; success/warning/danger are reserved for meaning. There is
+  **no second accent hue** — violet, cobalt and lime were removed from the old
+  palette on purpose.
 - **Type:** Manrope (geometric, semi-condensed, cyrillic-complete for ru) +
   JetBrains Mono for code/numbers; tabular numerals for all XP/rank readouts.
 - **Motion system** (`lib/motion.ts`): one easing + duration token set, shared
@@ -181,7 +189,7 @@ tool that happens to look great, not like a movie prop.
   lesson content itself is re-fetched in the selected language (including
   mid-lesson, per the F1 fix).
 - Backend APIs accept `lang` and return localized titles/content/exercise text;
-  the backend locale whitelist is `uz | ru` (matching what the UI ships).
+  the UI ships `uz | ru`, and unrecognised locale values fall back to `uz`.
 - **English is the natural next locale** — the dictionaries are structured to
   make adding `en` a data-entry task, not a refactor.
 
@@ -190,7 +198,7 @@ tool that happens to look great, not like a movie prop.
 ## 5. Platform & architecture
 
 ```
-┌─────────────── Netlify ───────────────┐        ┌───────── Render ─────────┐
+┌──────────── GitHub Pages ─────────────┐        ┌───────── Render ─────────┐
 │ Next.js 14 (App Router)               │  HTTPS │ Express API (/v1/*)      │
 │ TypeScript + Tailwind + Framer Motion │ ─────▶ │ auth · paths · modules    │
 │ PWA (next-pwa)                        │        │ review · leaderboard ·    │
@@ -224,10 +232,17 @@ tool that happens to look great, not like a movie prop.
   (`scripts/validate-curriculum.js`).
 
 ### 5.3 Deployment
-- `netlify.toml` builds `frontend/` with the Next plugin; API base defaults to
-  the Render URL in production and is overridable via `NEXT_PUBLIC_API_URL`.
-- `render.yaml` provisions the API + free Postgres together; CORS origin and
-  `JWT_SECRET` are injected there.
+- **Frontend → GitHub Pages (project site):** `.github/workflows/deploy-pages.yml`
+  builds `frontend/` as a static HTML export (`output: 'export'`) and publishes
+  it under the `/cyberqalqon/` base path. The API base defaults to the Render
+  URL in production and is overridable via `NEXT_PUBLIC_API_URL`.
+- **Backend → Render:** `render.yaml` provisions the API + free Postgres
+  together; the CORS origin is locked to the GitHub Pages origin and
+  `JWT_SECRET` is injected there. An idempotent `setup()` reseeds the
+  curriculum on every start, so content changes ship with an ordinary deploy.
+- **Ordering matters:** the module list is fetched at build time, so the API
+  must be deployed (and reseeded) *before* the frontend is rebuilt, or the
+  static export bakes in a stale module list.
 - Local dev is documented in `README.md` (backend :3001 ↔ frontend defaults
   to the same port).
 
@@ -239,9 +254,8 @@ tool that happens to look great, not like a movie prop.
   carries `verifyTelegramInitData` for Web App login, and the product is
   deliberately **mobile-first mobile-web** (bottom nav, safe-area insets,
   thumb-friendly targets) while scaling to desktop.
-- The visual identity upgrade (this phase) preserved the orange/mono legacy
-  personality: dark shield brand, the `🛡️` mark, and a deep-navy surfaces
-  family adapted from the original system.
+- The visual identity keeps a dark shield brand — the `🛡️` mark and a
+  deep-navy surfaces family — now unified on a single cyan accent.
 
 ---
 
@@ -287,8 +301,9 @@ tool that happens to look great, not like a movie prop.
 4. **Full history timelines** — XP/streak charts on the profile.
 5. **Community leaderboards** — country/city filters behind the free tier.
 6. **Institutional packs** — educator dashboards for IT academies.
-7. **More content** — new domains (OSINT, cloud security, incident
-   response) via the existing registry pipeline.
+7. **More content** — further domains (e.g. OSINT, digital forensics, mobile)
+   via the existing registry pipeline. Cloud security, defensive security
+   (incl. incident response), ethical testing and programming already shipped.
 
 ---
 
@@ -316,5 +331,5 @@ tool that happens to look great, not like a movie prop.
 | i18n uz/ru | `frontend/src/lib/i18n.ts` |
 | Design tokens & motion | `frontend/tailwind.config.js`, `frontend/src/app/globals.css`, `frontend/src/lib/motion.ts` |
 | App shell & navigation | `frontend/src/components/AppShell.tsx` |
-| Deploy | `netlify.toml`, `render.yaml` |
+| Deploy | `.github/workflows/deploy-pages.yml` (frontend), `render.yaml` (API) |
 | Local dev | `README.md` + `frontend/.env.example` + `backend/.env.example` |
