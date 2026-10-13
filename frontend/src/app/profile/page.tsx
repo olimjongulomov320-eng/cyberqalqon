@@ -6,6 +6,17 @@ import { ApiError, StatsPayload, fetchStats, updateMe } from '@/lib/api';
 import { achievementMeta, tierIndex, tierKey, levelFromXp } from '@/lib/gamification';
 import { RingProgress } from '@/components/game';
 import { Avatar, Badge, Button, ButtonLink, Card, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
+import {
+  BoltIcon,
+  BookIcon,
+  ChartIcon,
+  CheckIcon,
+  CloseIcon,
+  FlameIcon,
+  RefreshIcon,
+  TargetIcon,
+  TrophyBadgeIcon,
+} from '@/components/icons';
 
 const GOALS = [10, 20, 30, 50];
 const AVATARS = ['🦊', '🦉', '🐺', '🦁', '🐼', '🦅', '🐯', '🐸'];
@@ -80,6 +91,13 @@ export default function ProfilePage() {
   const tier = tr(tierKey(tierIndex(level.level)));
   const goal = stats?.profile.daily_goal_xp ?? user.daily_goal_xp ?? 20;
 
+  const stats_ = [
+    { Icon: BoltIcon, label: tr('totalXp'), value: stats?.profile.total_xp, tone: 'text-warning' },
+    { Icon: FlameIcon, label: tr('streak'), value: stats?.profile.current_streak ?? 0, tone: 'text-danger' },
+    { Icon: TrophyBadgeIcon, label: tr('bestStreak'), value: stats?.profile.longest_streak ?? 0, tone: 'text-cyan-300' },
+    { Icon: BookIcon, label: tr('lessonsShort'), value: stats?.profile.modules_completed ?? 0, tone: 'text-text-secondary' },
+  ];
+
   return (
     <div>
       <div className="stagger flex flex-col gap-4">
@@ -91,7 +109,7 @@ export default function ProfilePage() {
             <h1 className="display">{user.display_name}</h1>
             <div className="mt-1 flex items-center justify-center gap-1.5">
               <Badge>{tier}</Badge>
-              <span className="num text-xs text-slate-500">Lv.{level.level}</span>
+              <span className="num text-xs text-text-muted">Lv.{level.level}</span>
             </div>
           </div>
         </header>
@@ -113,13 +131,13 @@ export default function ProfilePage() {
             <Card className="p-4">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-bold text-white">{tr('levelProgress')}</span>
-                <span className="num text-xs text-slate-500">
+                <span className="num text-xs text-text-muted">
                   {level.intoLevel}/{level.toNext} XP
                 </span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-surface-700">
                 <div
-                  className="fill-x h-full rounded-full bg-cyan-500"
+                  className="fill-x h-full rounded-full bg-cyan-400"
                   style={{ transform: `scaleX(${level.intoLevel / level.toNext})`, transformOrigin: 'left' }}
                 />
               </div>
@@ -127,16 +145,11 @@ export default function ProfilePage() {
 
             {/* Stat cards */}
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {[
-                ['⚡', tr('totalXp'), stats.profile.total_xp],
-                ['🔥', tr('streak'), stats.profile.current_streak ?? 0],
-                ['🥇', tr('bestStreak'), stats.profile.longest_streak ?? 0],
-                ['📘', tr('lessonsShort'), stats.profile.modules_completed ?? 0],
-              ].map(([e, label, v]) => (
-                <Card key={String(label)} className="flex flex-col items-center gap-1 p-3 text-center">
-                  <span aria-hidden="true" className="text-lg">{e}</span>
-                  <span className="num text-xl font-extrabold text-white">{String(v)}</span>
-                  <span className="text-[0.6875rem] text-slate-500">{label}</span>
+              {stats_.map(({ Icon, label, value, tone }) => (
+                <Card key={label} className="flex flex-col items-center gap-1.5 p-3 text-center">
+                  <Icon size={18} className={tone} />
+                  <span className="num text-xl font-extrabold text-white">{value}</span>
+                  <span className="text-[0.6875rem] text-text-muted">{label}</span>
                 </Card>
               ))}
             </div>
@@ -146,11 +159,16 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <span className="text-sm font-bold text-white">{tr('statsTitle')}</span>
-                  <p className="num mt-1 text-xs text-slate-400">
+                  <p className="num mt-1 text-xs text-text-secondary">
                     {tr('answersTotal')}: {stats.answers_correct + stats.answers_wrong}
                   </p>
-                  <p className="num text-xs text-slate-500">
-                    ✓ {stats.answers_correct} · ✗ {stats.answers_wrong}
+                  <p className="num mt-0.5 flex items-center gap-2 text-xs">
+                    <span className="inline-flex items-center gap-1 text-success">
+                      <CheckIcon size={13} /> {stats.answers_correct}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-danger">
+                      <CloseIcon size={13} /> {stats.answers_wrong}
+                    </span>
                   </p>
                 </div>
                 <RingProgress
@@ -163,16 +181,16 @@ export default function ProfilePage() {
             </Card>
 
             {/* Strong / weak topics */}
-            {(stats.strong_topics.length > 0 || stats.weak_topics.length > 0) ? (
+            {stats.strong_topics.length > 0 || stats.weak_topics.length > 0 ? (
               <div className="grid gap-3 sm:grid-cols-2">
                 {stats.strong_topics.length > 0 && (
-                  <Card>
-                    <p className="mb-2 px-4 pt-3 text-xs font-bold uppercase tracking-wider text-success">{tr('strongest')}</p>
+                  <Card className="overflow-hidden">
+                    <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-success">{tr('strongest')}</p>
                     <ul className="divide-y divide-border">
                       {stats.strong_topics.slice(0, 4).map(t => (
                         <li key={t.slug} className="flex items-center gap-2.5 px-4 py-2.5">
                           <span aria-hidden="true" className="text-base">{t.icon}</span>
-                          <span className="min-w-0 flex-1 truncate text-sm text-slate-200">{t.title}</span>
+                          <span className="min-w-0 flex-1 truncate text-sm text-text-primary">{t.title}</span>
                           <span className="num text-xs font-bold text-success">{t.accuracy}%</span>
                         </li>
                       ))}
@@ -180,13 +198,13 @@ export default function ProfilePage() {
                   </Card>
                 )}
                 {stats.weak_topics.length > 0 && (
-                  <Card>
-                    <p className="mb-2 px-4 pt-3 text-xs font-bold uppercase tracking-wider text-danger">{tr('weakTopics')}</p>
+                  <Card className="overflow-hidden">
+                    <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-danger">{tr('weakTopics')}</p>
                     <ul className="divide-y divide-border">
                       {stats.weak_topics.slice(0, 4).map(t => (
                         <li key={t.slug} className="flex items-center gap-2.5 px-4 py-2.5">
                           <span aria-hidden="true" className="text-base">{t.icon}</span>
-                          <span className="min-w-0 flex-1 truncate text-sm text-slate-200">{t.title}</span>
+                          <span className="min-w-0 flex-1 truncate text-sm text-text-primary">{t.title}</span>
                           <span className="num text-xs font-bold text-danger">{t.accuracy}%</span>
                         </li>
                       ))}
@@ -196,43 +214,50 @@ export default function ProfilePage() {
               </div>
             ) : (
               <Card>
-                <EmptyState emoji="📊" title={tr('noStatsYet')} body={tr('noStatsBody')} />
+                <EmptyState
+                  icon={<ChartIcon size={26} className="text-text-muted" />}
+                  title={tr('noStatsYet')}
+                  body={tr('noStatsBody')}
+                />
               </Card>
             )}
 
             {/* Recent activity */}
             {stats.recent.length > 0 && (
-              <Card>
-                <p className="mb-2 px-4 pt-3 text-xs font-bold uppercase tracking-wider text-slate-400">{tr('recentActivity')}</p>
+              <Card className="overflow-hidden">
+                <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-text-secondary">{tr('recentActivity')}</p>
                 <ul className="divide-y divide-border">
-                  {stats.recent.slice(0, 5).map((r, i) => (
-                    <li key={i} className="flex items-center gap-3 px-4 py-2.5">
-                      <span aria-hidden="true" className="text-base">{r.kind === 'lesson' ? '📘' : r.kind === 'review' ? '🔁' : '🎯'}</span>
-                      <span className="min-w-0 flex-1 truncate text-sm text-slate-200">
-                        {tr(ACTIVITY_LABEL[r.kind] ?? 'activityLesson')}
-                        {r.module_title ? ` · ${r.module_title}` : ''}
-                      </span>
-                      <span className="num shrink-0 text-xs font-bold text-warning">+{r.amount}</span>
-                    </li>
-                  ))}
+                  {stats.recent.slice(0, 5).map((r, i) => {
+                    const ActivityIcon = r.kind === 'review' ? RefreshIcon : r.kind === 'correct' ? TargetIcon : BookIcon;
+                    return (
+                      <li key={i} className="flex items-center gap-3 px-4 py-2.5">
+                        <ActivityIcon size={16} className="shrink-0 text-text-muted" />
+                        <span className="min-w-0 flex-1 truncate text-sm text-text-primary">
+                          {tr(ACTIVITY_LABEL[r.kind] ?? 'activityLesson')}
+                          {r.module_title ? ` · ${r.module_title}` : ''}
+                        </span>
+                        <span className="num shrink-0 text-xs font-bold text-warning">+{r.amount}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </Card>
             )}
 
             {/* Achievements */}
-            <Card>
-              <p className="mb-2 px-4 pt-3 text-xs font-bold uppercase tracking-wider text-warning">{tr('achievements')}</p>
+            <Card className="overflow-hidden">
+              <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-warning">{tr('achievements')}</p>
               {stats.achievements.length === 0 ? (
-                <p className="px-4 pb-4 text-sm text-slate-500">{tr('achievementsEmpty')}</p>
+                <p className="px-4 pb-4 pt-1 text-sm text-text-muted">{tr('achievementsEmpty')}</p>
               ) : (
-                <ul className="grid grid-cols-2 gap-2 px-4 pb-4 sm:grid-cols-3">
+                <ul className="grid grid-cols-2 gap-2 px-4 pb-4 pt-2 sm:grid-cols-3">
                   {stats.achievements.map(a => {
                     const meta = achievementMeta(a.key, lang, tr);
                     return (
-                      <li key={a.key} className="flex flex-col items-center gap-1 rounded-md border border-border bg-surface-900 px-2 py-3 text-center">
+                      <li key={a.key} className="flex flex-col items-center gap-1 rounded-md border border-border bg-surface-950/60 px-2 py-3 text-center">
                         <span aria-hidden="true" className="text-2xl">{meta?.emoji ?? '🏅'}</span>
-                        <span className="text-xs font-bold text-slate-200">{meta?.title ?? a.key}</span>
-                        <span className="text-[0.625rem] text-slate-500">{tr('achievedOn')}</span>
+                        <span className="text-xs font-bold text-text-primary">{meta?.title ?? a.key}</span>
+                        <span className="text-[0.625rem] text-text-muted">{tr('achievedOn')}</span>
                       </li>
                     );
                   })}
@@ -252,14 +277,14 @@ export default function ProfilePage() {
                         type="button"
                         onClick={() => patch({ avatar_emoji: a })}
                         aria-pressed={user.avatar_emoji === a}
+                        aria-label={a}
                         className={`grid h-10 w-10 place-items-center rounded-md border text-xl transition-colors ${
                           user.avatar_emoji === a
-                            ? 'border-cyan-500 bg-cyan-500/15'
+                            ? 'border-cyan-400 bg-cyan-500/15'
                             : 'border-border bg-surface-900 hover:border-border-light'
                         }`}
                       >
                         <span aria-hidden="true">{a}</span>
-                        <span className="sr-only">{a}</span>
                       </button>
                     ))}
                   </div>
@@ -275,7 +300,9 @@ export default function ProfilePage() {
                         onClick={() => patch({ daily_goal_xp: g })}
                         aria-pressed={goal === g}
                         className={`rounded-md border px-3.5 py-1.5 text-sm font-bold transition-colors ${
-                          goal === g ? 'border-cyan-500 bg-cyan-500/15 text-white' : 'border-border bg-surface-900 text-slate-300 hover:border-border-light'
+                          goal === g
+                            ? 'border-cyan-400 bg-cyan-500/15 text-white'
+                            : 'border-border bg-surface-900 text-text-secondary hover:border-border-light'
                         }`}
                       >
                         <span className="num">{g}</span>
@@ -285,8 +312,8 @@ export default function ProfilePage() {
                 </div>
 
                 {savedAt && (
-                  <p role="status" aria-live="polite" className="text-xs font-semibold text-success">
-                    ✓ {tr('nameSaved')}
+                  <p role="status" aria-live="polite" className="inline-flex items-center gap-1.5 text-xs font-semibold text-success">
+                    <CheckIcon size={14} /> {tr('nameSaved')}
                   </p>
                 )}
               </div>

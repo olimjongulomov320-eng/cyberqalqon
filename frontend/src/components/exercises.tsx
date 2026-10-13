@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { Lang, makeT } from '@/lib/i18n';
 import type { AnswerValue, Exercise } from '@/lib/api';
+import { CheckIcon, CloseIcon } from '@/components/icons';
 
 /* ── Readiness ─────────────────────────────────────────────────────────────── */
 export function isAnswerReady(ex: Exercise, value: AnswerValue | undefined): boolean {
@@ -34,13 +35,33 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+/* Option state → class. Kept in one place so every exercise type reads the
+   same colour language: cyan = selected, emerald = correct, rose = wrong. */
+function optionClass(state: 'idle' | 'paired' | 'selected' | 'correct' | 'wrong') {
+  switch (state) {
+    case 'correct':
+      return 'border-success/60 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
+    case 'wrong':
+      return 'border-danger/60 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
+    case 'selected':
+      return 'border-cyan-500/70 bg-cyan-500/15 text-white';
+    // Paired (assigned but not the active selection): a raised neutral surface
+    // — distinct from flat `idle` and cyan `selected` by elevation, border
+    // weight and text tone rather than hue alone.
+    case 'paired':
+      return 'border-border-light bg-surface-700 text-text-primary';
+    default:
+      return 'border-border bg-surface-900 text-text-secondary hover:border-border-light hover:bg-surface-700';
+  }
+}
+
 /* ── Shared question card ──────────────────────────────────────────────────── */
 function Question({ ex, children }: { ex: Exercise; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-[1.0625rem] font-bold leading-snug text-white sm:text-lg">{ex.q}</h2>
+      <h2 className="text-[1.0625rem] font-bold leading-snug text-white text-pretty sm:text-lg">{ex.q}</h2>
       {ex.code && (
-        <pre className="overflow-x-auto rounded-md border border-border bg-surface-800 px-3 py-2.5 font-mono text-[0.8125rem] leading-relaxed text-cyan-200">
+        <pre className="overflow-x-auto rounded-md border border-border bg-surface-950 px-3 py-2.5 font-mono text-[0.8125rem] leading-relaxed text-cyan-200">
           <code>{ex.code}</code>
         </pre>
       )}
@@ -63,20 +84,26 @@ function SelectOne({
   locked: boolean;
   reveal?: { answer?: string; answers?: string[] };
 }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
   const selected = new Set((Array.isArray(value) ? value : value ? [value] : []) as string[]);
   const correctSet = new Set(reveal?.answers ?? (reveal?.answer ? [reveal.answer] : []));
   const multi = ex.type === 'multi';
-  const hint = multi ? 'selectSome' : 'chooseAnswer';
+  const hint = multi ? tr('selectSome') : tr('chooseAnswer');
 
   return (
     <div className="flex flex-col gap-2" role={multi ? 'group' : 'radiogroup'} aria-label={hint}>
       {ex.options.map(opt => {
         const isSel = selected.has(opt.id);
         const isCorr = correctSet.has(opt.id);
-        let cls = 'border-border bg-surface-900 text-slate-200 hover:border-border-light hover:bg-surface-700';
-        if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
-        else if (locked && isSel && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
-        else if (isSel) cls = 'border-cyan-500/70 bg-cyan-500/15 text-white';
+        const state =
+          locked && isCorr
+            ? 'correct'
+            : locked && isSel && !isCorr
+              ? 'wrong'
+              : isSel
+                ? 'selected'
+                : 'idle';
         return (
           <button
             key={opt.id}
@@ -84,21 +111,21 @@ function SelectOne({
             onClick={() => (locked ? undefined : onChange(multi ? toggleIn(selected, opt.id) : opt.id))}
             disabled={locked}
             aria-pressed={isSel}
-            className={`flex items-center gap-3 rounded-md border px-3.5 py-3 text-left text-sm font-medium transition-colors ${
-              locked ? 'cursor-default' : ''
-            } ${cls}`}
+            className={`flex items-center gap-3 rounded-lg border px-3.5 py-3 text-left text-sm font-medium transition-colors ${
+              locked ? 'cursor-default' : 'active:scale-[0.995]'
+            } ${optionClass(state)}`}
           >
             <span
               aria-hidden="true"
-              className={`grid h-5 w-5 shrink-0 place-items-center rounded-[0.375rem] border text-[0.625rem] font-bold ${
+              className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${
                 isSel ? 'border-cyan-500 bg-cyan-500 text-text-inverse' : 'border-border-light text-transparent'
               }`}
             >
-              {multi ? '✓' : ''}
+              {multi && isSel ? <CheckIcon size={13} /> : null}
             </span>
             <span>{opt.text}</span>
-            {locked && isCorr && <span aria-hidden="true" className="ml-auto text-success">✓</span>}
-            {locked && isSel && !isCorr && <span aria-hidden="true" className="ml-auto text-danger">✗</span>}
+            {locked && isCorr && <CheckIcon size={16} className="ml-auto shrink-0" />}
+            {locked && isSel && !isCorr && <CloseIcon size={16} className="ml-auto shrink-0" />}
           </button>
         );
       })}
@@ -129,18 +156,23 @@ function TrueFalse({
 }) {
   const tr = makeT(lang);
   const options = [
-    { id: 'true', emoji: '👍', label: tr('optTrue') },
-    { id: 'false', emoji: '👎', label: tr('optFalse') },
+    { id: 'true', Icon: CheckIcon, label: tr('optTrue') },
+    { id: 'false', Icon: CloseIcon, label: tr('optFalse') },
   ] as const;
   return (
     <div role="radiogroup" className="grid grid-cols-2 gap-2" aria-label={tr('trueFalseLabel')}>
       {options.map(o => {
         const isSel = value === o.id;
         const isCorr = locked && reveal?.answer === o.id;
-        let cls = 'border-border bg-surface-900 text-slate-200 hover:border-border-light hover:bg-surface-700';
-        if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
-        else if (locked && isSel && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
-        else if (isSel) cls = 'border-cyan-500/70 bg-cyan-500/15 text-white';
+        const state =
+          locked && isCorr
+            ? 'correct'
+            : locked && isSel && !isCorr
+              ? 'wrong'
+              : isSel
+                ? 'selected'
+                : 'idle';
+        const Icon = o.Icon;
         return (
           <button
             key={o.id}
@@ -148,9 +180,9 @@ function TrueFalse({
             onClick={() => !locked && onChange(o.id)}
             disabled={locked}
             aria-pressed={isSel}
-            className={`flex flex-col items-center gap-1.5 rounded-md border px-3 py-4 text-sm font-semibold transition-colors ${cls}`}
+            className={`flex flex-col items-center gap-2 rounded-lg border px-3 py-4 text-sm font-semibold transition-colors ${optionClass(state)}`}
           >
-            <span aria-hidden="true" className="text-xl">{o.emoji}</span>
+            <Icon size={20} />
             <span>{o.label}</span>
           </button>
         );
@@ -211,18 +243,23 @@ function Match({
 
   return (
     <div>
-      <p className="mb-3 text-xs font-medium text-slate-400">{tr('matchHint')}</p>
+      <p className="mb-3 text-xs font-medium text-text-secondary">{tr('matchHint')}</p>
       <div className="grid grid-cols-2 gap-2.5">
         <ul className="flex flex-col gap-2">
           {ex.pairs.map(p => {
             const isSel = sel === p.id;
             const assigned = assignments[p.id];
             const isCorr = locked && reveal?.match_answer?.[p.id] === assigned;
-            let cls = 'border-border bg-surface-900 text-slate-200';
-            if (locked && assigned && isCorr) cls = 'border-success/70 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
-            else if (locked && assigned && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
-            else if (isSel) cls = 'border-cyan-500/70 bg-cyan-500/15 text-white';
-            else if (assigned) cls = 'border-border-light bg-surface-700 text-slate-100';
+            const state =
+              locked && assigned && isCorr
+                ? 'correct'
+                : locked && assigned && !isCorr
+                  ? 'wrong'
+                  : isSel
+                    ? 'selected'
+                    : assigned
+                      ? 'paired'
+                      : 'idle';
             return (
               <li key={p.id}>
                 <button
@@ -230,7 +267,7 @@ function Match({
                   onClick={() => takeLeft(p.id)}
                   disabled={locked}
                   aria-pressed={isSel}
-                  className={`w-full rounded-md border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${cls}`}
+                  className={`h-full w-full rounded-lg border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${optionClass(state)}`}
                 >
                   <span className="block break-words">{p.left}</span>
                 </button>
@@ -242,10 +279,14 @@ function Match({
           {rightOrder.map(rightId => {
             const pairedBy = Object.entries(assignments).find(([, v]) => v === rightId)?.[0] as string | undefined;
             const isCorr = locked && Boolean(pairedBy) && (pairedBy ? reveal?.match_answer?.[pairedBy] === rightId : false);
-            let cls = 'border-border bg-surface-900 text-slate-200 hover:border-border-light hover:bg-surface-700';
-            if (locked && isCorr) cls = 'border-success/70 bg-success/15 text-success animate-[cq-pop_0.35s_ease]';
-            else if (locked && pairedBy && !isCorr) cls = 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]';
-            else if (pairedBy) cls = 'border-border-light bg-surface-700 text-slate-100';
+            const state =
+              locked && isCorr
+                ? 'correct'
+                : locked && pairedBy && !isCorr
+                  ? 'wrong'
+                  : pairedBy
+                    ? 'paired'
+                    : 'idle';
             const pair = ex.pairs.find(p => p.id === rightId)!;
             return (
               <li key={rightId}>
@@ -254,7 +295,7 @@ function Match({
                   onClick={() => takeRight(rightId)}
                   disabled={locked}
                   aria-pressed={Boolean(pairedBy)}
-                  className={`w-full rounded-md border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${cls}`}
+                  className={`h-full w-full rounded-lg border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${optionClass(state)}`}
                 >
                   <span className="block break-words">{pair.right}</span>
                 </button>
@@ -264,14 +305,14 @@ function Match({
         </ul>
       </div>
       <div className="mt-3 flex items-center justify-between">
-        <p className="num text-xs text-slate-500">
+        <p className="num text-xs text-text-muted">
           {Object.keys(assignments).length} / {ex.pairs.length}
         </p>
         <button
           type="button"
           onClick={clearAll}
           disabled={locked || Object.keys(assignments).length === 0}
-          className="text-xs font-semibold text-slate-400 transition-colors hover:text-white disabled:opacity-40"
+          className="text-xs font-semibold text-text-secondary transition-colors hover:text-white disabled:opacity-40"
         >
           {tr('clearOrder')}
         </button>
@@ -318,27 +359,24 @@ function Order({
 
   return (
     <div>
-      <p className="mb-3 text-xs font-medium text-slate-400">{tr('orderHint')}</p>
+      <p className="mb-3 text-xs font-medium text-text-secondary">{tr('orderHint')}</p>
 
       {placed.length > 0 && (
         <ol className="mb-3 flex flex-col gap-1.5">
           {placed.map((id, i) => {
             const isCorr = locked && correct.has(id);
+            const state = locked && !isCorr ? 'wrong' : 'selected';
             return (
               <li key={id}>
                 <button
                   type="button"
                   onClick={() => place(id)}
                   disabled={locked}
-                  className={`flex w-full items-center gap-2.5 rounded-md border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${
-                    locked && !isCorr
-                      ? 'border-danger/70 bg-danger/10 text-danger animate-[cq-shake_0.35s_ease]'
-                      : 'border-cyan-500/50 bg-cyan-500/10 text-slate-100'
-                  }`}
+                  className={`flex w-full items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left text-[0.8125rem] font-medium transition-colors ${optionClass(state)}`}
                 >
-                  <span className="num w-5 text-xs text-slate-500">{i + 1}</span>
+                  <span className="num w-5 text-xs text-text-muted">{i + 1}</span>
                   <span className="flex-1">{itemById(id).text}</span>
-                  <span aria-hidden="true" className="text-slate-500">↑</span>
+                  {!locked && <CloseIcon size={14} className="shrink-0 opacity-60" />}
                 </button>
               </li>
             );
@@ -354,14 +392,14 @@ function Order({
               type="button"
               onClick={() => place(id)}
               disabled={locked}
-              className="rounded-md border border-border bg-surface-900 px-3 py-2 text-[0.8125rem] font-medium text-slate-200 transition-colors hover:border-border-light hover:bg-surface-700"
+              className="rounded-lg border border-border bg-surface-900 px-3 py-2 text-[0.8125rem] font-medium text-text-secondary transition-colors hover:border-border-light hover:bg-surface-700"
             >
               {itemById(id).text}
             </button>
           ))}
         </div>
       )}
-      <p className="num mt-3 text-xs text-slate-500">
+      <p className="num mt-3 text-xs text-text-muted">
         {placed.length} / {ex.items.length}
       </p>
     </div>
@@ -386,9 +424,10 @@ function TextInput({
 }) {
   const tr = makeT(lang);
   const text = (value as string) ?? '';
+  const isRight = locked && Boolean(reveal?.answer) && text.trim().toLowerCase() === reveal!.answer!.toLowerCase();
   return (
     <div>
-      <p className="mb-3 text-xs font-medium text-slate-400">{tr('inputHint')}</p>
+      <p className="mb-3 text-xs font-medium text-text-secondary">{tr('inputHint')}</p>
       <input
         type="text"
         autoComplete="off"
@@ -399,12 +438,8 @@ function TextInput({
         disabled={locked}
         aria-label={tr('typeAnswer')}
         placeholder={tr('typeAnswer')}
-        className={`w-full rounded-md border bg-surface-800 px-3.5 py-3 font-mono text-[0.9375rem] text-white outline-none transition-colors placeholder:text-slate-600 focus:border-cyan-500/70 focus:ring-2 focus:ring-cyan-500/30 ${
-          locked && reveal?.answer && text && text.trim().toLowerCase() === reveal.answer.toLowerCase()
-            ? 'border-success/70 bg-success/10'
-            : locked
-              ? 'border-border'
-              : 'border-border'
+        className={`w-full rounded-lg border bg-surface-800 px-3.5 py-3 font-mono text-[0.9375rem] text-white outline-none transition-colors placeholder:text-text-muted focus:border-cyan-500/70 focus:ring-2 focus:ring-cyan-500/30 ${
+          isRight ? 'border-success/70 bg-success/10' : 'border-border'
         }`}
       />
       {locked && reveal?.answer && (

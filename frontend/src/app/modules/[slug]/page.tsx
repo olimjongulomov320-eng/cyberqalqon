@@ -14,11 +14,21 @@ import {
   fetchModule,
   practiceAnswer,
 } from '@/lib/api';
-import { Hearts, Confetti, AchievementBadge, XPChip } from '@/components/game';
+import { Hearts, Confetti, NewAchievementChip, XPChip } from '@/components/game';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { loseHeart, restoreHeart, useHearts } from '@/lib/hearts';
 import { levelFromXp } from '@/lib/gamification';
-import { Button, ButtonLink, Card, ErrorNote, Progress, Skeleton } from '@/components/ui';
+import { Badge, Button, ButtonLink, Card, ErrorNote, Progress, Skeleton } from '@/components/ui';
+import {
+  ArrowRightIcon,
+  BoltIcon,
+  CheckIcon,
+  CloseIcon,
+  FlameIcon,
+  HeartIcon,
+  SparkleIcon,
+  TrophyIcon,
+} from '@/components/icons';
 
 type Phase = 'loading' | 'intro' | 'active' | 'celebrate' | 'error';
 
@@ -282,9 +292,9 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
               <Skeleton className="h-4 w-2/3" />
               <Skeleton className="h-3 w-full" />
               <Skeleton className="h-3 w-5/6" />
-              <Skeleton className="h-40 w-full rounded-lg" />
+              <Skeleton className="h-40 w-full" />
             </div>
-            <p className="mt-4 text-center text-sm text-slate-500">{tr('loadingLesson')}</p>
+            <p className="mt-4 text-center text-sm text-text-muted">{tr('loadingLesson')}</p>
           </Card>
         )}
       </div>
@@ -296,38 +306,35 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
     return (
       <div>
         <Card className="overflow-hidden">
-          <div className="flex flex-col gap-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
-                  {module.domain_title ?? tr('modules')}
-                </p>
-                <h1 className="display mt-1">{module.title}</h1>
+          <div className="flex flex-col gap-5">
+            <header className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="label text-cyan-300">{module.domain_title ?? tr('modules')}</p>
+                <h1 className="display mt-2">{module.title}</h1>
               </div>
               {module.domain_icon && (
-                <span aria-hidden="true" className="text-3xl">{module.domain_icon}</span>
+                <span aria-hidden="true" className="shrink-0 text-3xl">{module.domain_icon}</span>
               )}
-            </div>
+            </header>
 
             {module.content && (
-              <div className="lesson">
+              <div className="lesson border-t border-border/60 pt-5">
                 <ReactMarkdown>{module.content}</ReactMarkdown>
               </div>
             )}
 
-            <div className="flex items-center gap-4 rounded-md border border-border bg-surface-900 px-3.5 py-3 text-sm">
-              <span className="num text-xs text-slate-400">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-border bg-surface-950/60 px-4 py-3 text-sm">
+              <span className="num inline-flex items-center gap-1.5 text-xs text-text-secondary">
+                <CheckIcon size={14} className="text-cyan-400" />
                 {exercises.length} {tr('challenge').toLowerCase()}
               </span>
-              <span className="num text-xs text-slate-400">·</span>
               <XPChip xp={module.xp_reward} />
-              <span className="num text-xs text-slate-400">·</span>
-              <span className="text-xs text-slate-400">{tr('featReview')}</span>
+              <span className="text-xs text-text-secondary">{tr('featReview')}</span>
             </div>
 
-            <div aria-hidden="true" role="presentation" className="flex items-center gap-0.5">
+            <div className="flex items-center gap-2">
               <Hearts count={hearts} label={tr('heartsLabel')} />
-              <span className="ml-2 text-xs text-slate-500">{tr('heartsLabel')}</span>
+              <span className="text-xs text-text-muted">{tr('heartsLabel')}</span>
             </div>
 
             {user ? (
@@ -339,7 +346,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
                 <ButtonLink href="/auth" size="lg" className="w-full justify-center">
                   {tr('login')}
                 </ButtonLink>
-                <p className="text-center text-xs text-slate-500">{tr('signInToAnswer')}</p>
+                <p className="text-center text-xs text-text-muted">{tr('signInToAnswer')}</p>
               </div>
             )}
           </div>
@@ -359,40 +366,53 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
         <Confetti show />
         <Card className="overflow-hidden border-cyan-500/30">
           <div className="stagger flex flex-col items-center gap-4 text-center">
-            <span aria-hidden="true" className="text-5xl">{complete.is_checkpoint ? '🏆' : '🎉'}</span>
-            <h1 className="display">{complete.is_checkpoint ? tr('checkpointComplete') : tr('lessonCompleteTitle')}</h1>
-            {complete.perfect && <p className="text-sm font-semibold text-success">💎 {tr('perfect')}</p>}
+            <span
+              aria-hidden="true"
+              className="grid h-16 w-16 place-items-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
+            >
+              {complete.is_checkpoint ? <TrophyIcon size={30} /> : <SparkleIcon size={30} />}
+            </span>
+            <h1 className="display">
+              {complete.is_checkpoint ? tr('checkpointComplete') : tr('lessonCompleteTitle')}
+            </h1>
+            {complete.perfect && (
+              <Badge tone="success">
+                <CheckIcon size={13} /> {tr('perfect')}
+              </Badge>
+            )}
 
             {leveledUp && (
               <div
                 role="status"
                 aria-live="polite"
-                className="flex w-full items-center justify-center gap-3 rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-4 py-3 text-left"
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-cyan-500/40 bg-cyan-500/[0.08] px-4 py-3 text-left"
               >
-                <span aria-hidden="true" className="text-2xl">⬆️</span>
+                <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-cyan-500/15 text-cyan-300">
+                  <SparkleIcon size={20} />
+                </span>
                 <div>
                   <p className="text-sm font-bold text-cyan-300">
                     {tr('levelUpTitle')} · Lv.{endLevel}
                   </p>
-                  <p className="text-xs text-slate-400">{tr('levelUpBody')}</p>
+                  <p className="text-xs text-text-secondary">{tr('levelUpBody')}</p>
                 </div>
               </div>
             )}
 
-            <div role="status" aria-live="polite" className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-lg border border-warning/30 bg-warning/15 px-4 py-2 text-xl font-extrabold text-warning">
-                <span aria-hidden="true">⚡</span>
+            <div role="status" aria-live="polite" className="flex flex-wrap items-center justify-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-xl border border-warning/30 bg-warning/10 px-4 py-2 text-xl font-extrabold text-warning">
+                <BoltIcon size={20} />
                 <span className="num">+{complete.xp_earned}</span>
                 <span className="sr-only">XP</span>
               </span>
-              <span className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface-900 px-4 py-2 text-lg font-bold text-slate-200">
-                <span aria-hidden="true">🔥</span>
+              <span className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface-900 px-4 py-2 text-lg font-bold text-text-primary">
+                <FlameIcon size={20} className="text-danger" />
                 <span className="num">{complete.streak}</span>
                 <span className="sr-only">{tr('streak')}</span>
               </span>
             </div>
 
-            <p className="num text-sm text-slate-400">
+            <p className="num text-sm text-text-secondary">
               {tr('accuracy')}: <span className="font-bold text-white">{complete.accuracy}%</span> ·{' '}
               {complete.results.length} {tr('question').toLowerCase()}
             </p>
@@ -402,7 +422,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
                 {complete.new_achievements.map(k => (
                   <span key={k} className="sr-only">{k}</span>
                 ))}
-                <AchievementBadge emoji="🏅" title={tr('newAchievement')} />
+                <NewAchievementChip title={tr('newAchievement')} />
               </div>
             )}
 
@@ -410,8 +430,9 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
 
             <div className="grid w-full gap-2">
               {next && (
-                <Button size="lg" onClick={() => router.push(next)}>
-                  {tr('nextModule')} →
+                <Button size="lg" className="group" onClick={() => router.push(next)}>
+                  {tr('nextModule')}
+                  <ArrowRightIcon size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
                 </Button>
               )}
               <ButtonLink href="/learn" variant={next ? 'secondary' : 'primary'} size="lg">
@@ -439,18 +460,17 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
             type="button"
             onClick={() => setExitOpen(true)}
             aria-label={tr('exitBtn')}
-            className="rounded-md px-1.5 py-1 text-lg leading-none text-slate-500 transition-colors hover:text-white"
+            className="grid h-8 w-8 place-items-center rounded-md text-text-muted transition-colors hover:bg-surface-800 hover:text-white"
           >
-            ✕
+            <CloseIcon size={18} />
           </button>
           <Progress
             value={idx + (checked ? 1 : 0)}
             max={exercises.length}
-            label={tr('loadingLesson')}
-            tone={checked && !checked.correct ? 'xp' : 'primary'}
+            label={`${tr('challenge')} ${idx + 1}/${exercises.length}`}
             className="flex-1"
           />
-          <span className="num text-xs font-bold text-slate-500">
+          <span className="num text-xs font-bold text-text-muted">
             {idx + 1}/{exercises.length}
           </span>
           <Hearts count={hearts} label={tr('heartsLabel')} />
@@ -461,8 +481,8 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
       {toasts.length > 0 && (
         <div aria-live="polite" className="mt-3 flex flex-col gap-1.5">
           {toasts.map(k => (
-            <div key={k} className="flex items-center gap-2 rounded-md border border-warning/40 bg-warning/15 px-3 py-2 text-sm font-bold text-warning">
-              <span aria-hidden="true">🏅</span>
+            <div key={k} className="flex items-center gap-2 rounded-lg border border-warning/40 bg-warning/10 px-3 py-2 text-sm font-bold text-warning">
+              <SparkleIcon size={15} className="shrink-0" />
               <span className="truncate">{tr('newAchievement')}</span>
               <span className="sr-only">{k}</span>
             </div>
@@ -491,20 +511,21 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
         {checked && (
           <section
             aria-live="polite"
-            className={`stagger mt-4 rounded-md border p-4 ${
-              checked.correct ? 'border-success/50 bg-success/10' : 'border-danger/50 bg-danger/10'
+            className={`stagger mt-4 rounded-xl border p-4 ${
+              checked.correct ? 'border-success/50 bg-success/[0.08]' : 'border-danger/50 bg-danger/[0.08]'
             }`}
           >
-            <p className={`text-sm font-bold ${checked.correct ? 'text-success' : 'text-danger'}`}>
+            <p className={`flex items-center gap-1.5 text-sm font-bold ${checked.correct ? 'text-success' : 'text-danger'}`}>
+              {checked.correct ? <CheckIcon size={16} /> : <CloseIcon size={16} />}
               {checked.correct ? tr('correctTitle') : tr('wrongTitle')}
             </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
-              <span className="font-semibold text-slate-200">{tr('whyLabel')}: </span>
+            <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+              <span className="font-semibold text-text-primary">{tr('whyLabel')}: </span>
               {checked.explain}
             </p>
             {checked.xp_earned > 0 && (
               <p role="status" className="num mt-2 inline-flex items-center gap-1 text-xs font-bold text-warning">
-                <span aria-hidden="true">⚡</span> +{checked.xp_earned} XP
+                <BoltIcon size={14} /> +{checked.xp_earned} XP
               </p>
             )}
           </section>
@@ -515,15 +536,18 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
           <Card className="mt-4 border-warning/40">
             {!practice ? (
               <>
-                <p className="text-sm font-bold text-white">🫀 {tr('outOfHearts')}</p>
-                <p className="mt-1 text-xs leading-relaxed text-slate-400">{tr('outOfHeartsBody')}</p>
+                <p className="flex items-center gap-2 text-sm font-bold text-white">
+                  <HeartIcon size={16} className="text-danger" /> {tr('outOfHearts')}
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-text-secondary">{tr('outOfHeartsBody')}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={startPractice}
-                    className="inline-flex items-center justify-center rounded-md border border-warning/40 bg-warning/15 px-4 py-2 text-sm font-bold text-warning transition-colors hover:bg-warning/25"
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-warning/40 bg-warning/10 px-4 py-2 text-sm font-bold text-warning transition-colors hover:bg-warning/20"
                   >
-                    {tr('restoreHeart')} ❤️
+                    <HeartIcon size={15} filled />
+                    {tr('restoreHeart')}
                   </button>
                   <button
                     type="button"
@@ -531,7 +555,7 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
                       heartsLostOnWrong.current = false;
                       setPractice(null);
                     }}
-                    className="inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-semibold text-slate-400 transition-colors hover:text-white"
+                    className="inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-semibold text-text-muted transition-colors hover:text-white"
                   >
                     {tr('next')}
                   </button>
@@ -539,8 +563,9 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
               </>
             ) : (
               <div className="flex flex-col gap-3">
-                <p className="text-sm font-bold text-white">
-                  🫀 {practice.result?.correct ? tr('heartRestored') : tr('restoreHeart')}
+                <p className="flex items-center gap-2 text-sm font-bold text-white">
+                  <HeartIcon size={16} className={practice.result?.correct ? 'text-danger' : 'text-danger'} filled={Boolean(practice.result?.correct)} />
+                  {practice.result?.correct ? tr('heartRestored') : tr('restoreHeart')}
                 </p>
                 <ExerciseRenderer
                   key={practice.ex.id}
@@ -555,14 +580,14 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
                 {practice.result && (
                   <div
                     role="status"
-                    className={`rounded-md border p-3 text-sm leading-relaxed ${
-                      practice.result.correct ? 'border-success/50 bg-success/10 text-success' : 'border-danger/50 bg-danger/10 text-danger'
+                    className={`rounded-lg border p-3 text-sm leading-relaxed ${
+                      practice.result.correct ? 'border-success/50 bg-success/[0.08] text-success' : 'border-danger/50 bg-danger/[0.08] text-danger'
                     }`}
                   >
                     <p className="font-bold">
                       {practice.result.correct ? tr('correctTitle') : tr('wrongTitle')}
                     </p>
-                    <p className="mt-1 text-slate-300">{practice.result.explain}</p>
+                    <p className="mt-1 text-text-secondary">{practice.result.explain}</p>
                   </div>
                 )}
                 <Button
@@ -593,13 +618,13 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
       {/* Action row */}
       <div className="flex items-center gap-2">
         {checked ? (
-          <Button size="lg" className="flex-1" onClick={handleNext} disabled={completing}>
+          <Button size="lg" className="w-full" onClick={handleNext} disabled={completing}>
             {idx + 1 < exercises.length ? tr('next') : tr('gotIt')}
           </Button>
         ) : (
           <Button
             size="lg"
-            className="flex-1"
+            className="w-full"
             onClick={handleCheck}
             disabled={!ready || checking || !user}
           >
@@ -615,12 +640,12 @@ export default function LessonPage({ params }: { params: { slug: string } }) {
           role="dialog"
           aria-modal="true"
           aria-labelledby="exit-title"
-          className="fixed inset-0 z-[60] grid animate-fade-in place-items-center bg-surface-950/70 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-overlay grid animate-fade-in place-items-center bg-surface-950/70 p-4 backdrop-blur-sm"
           onClick={() => setExitOpen(false)}
         >
           <Card className="w-full max-w-sm animate-scale-in" onClick={e => e.stopPropagation()}>
             <h2 id="exit-title" className="text-lg font-bold text-white">{tr('exitLessonTitle')}</h2>
-            <p className="mt-1 text-sm text-slate-400">{tr('exitLessonBody')}</p>
+            <p className="mt-1 text-sm text-text-secondary">{tr('exitLessonBody')}</p>
             <div className="mt-5 grid grid-cols-2 gap-2">
               <Button variant="secondary" onClick={() => setExitOpen(false)}>{tr('stay')}</Button>
               <Button onClick={exitGo}>{tr('exitBtn')}</Button>

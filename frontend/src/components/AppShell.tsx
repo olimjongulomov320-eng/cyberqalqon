@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 import { MotionConfig, motion } from 'framer-motion';
@@ -54,7 +55,7 @@ function Shell({ children }: { children: ReactNode }) {
       <main
         id="main"
         tabIndex={-1}
-        className={`mx-auto w-full flex-1 px-4 pb-24 pt-6 focus:outline-none sm:pb-12 ${width}`}
+        className={`mx-auto w-full flex-1 px-4 pb-28 pt-6 focus:outline-none sm:pb-16 ${width}`}
       >
         <PageMotion pathname={pathname ?? '/'}>{children}</PageMotion>
       </main>
@@ -86,11 +87,11 @@ function Footer() {
   const { lang } = useApp();
   const tr = makeT(lang);
   return (
-    <footer className="mx-auto hidden w-full max-w-5xl items-center justify-between gap-4 px-4 pb-8 pt-2 text-xs text-text-muted sm:flex">
-      <p>CyberQalqon</p>
+    <footer className="mx-auto hidden w-full max-w-5xl items-center justify-between gap-4 border-t border-border/60 px-4 pb-8 pt-4 text-xs text-text-muted sm:flex">
+      <p>CyberQalqon · {tr('tagline')}</p>
       <nav className="flex gap-4">
-        <a href="/privacy" className="transition-colors hover:text-text-secondary">{tr('privacy')}</a>
-        <a href="/terms" className="transition-colors hover:text-text-secondary">{tr('terms')}</a>
+        <Link href="/privacy" className="transition-colors hover:text-text-secondary">{tr('privacy')}</Link>
+        <Link href="/terms" className="transition-colors hover:text-text-secondary">{tr('terms')}</Link>
       </nav>
     </footer>
   );

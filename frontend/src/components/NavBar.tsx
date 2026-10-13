@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { Lang, LANGS, makeT } from '@/lib/i18n';
+import { BoltIcon, SignalOffIcon, SignalOnIcon } from '@/components/icons';
 
 const NAV = [
-  { href: '/', label: 'navHome', emoji: '🏠' },
-  { href: '/learn', label: 'navLearn', emoji: '📘' },
-  { href: '/practice', label: 'navPractice', emoji: '🎯' },
-  { href: '/leaderboard', label: 'leaderboard', emoji: '🏆' },
-  { href: '/profile', label: 'navProfile', emoji: '👤' },
+  { href: '/', label: 'navHome' },
+  { href: '/learn', label: 'navLearn' },
+  { href: '/practice', label: 'navPractice' },
+  { href: '/leaderboard', label: 'leaderboard' },
+  { href: '/profile', label: 'navProfile' },
 ] as const;
 
 export default function NavBar() {
@@ -22,17 +23,17 @@ export default function NavBar() {
     href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-nav border-b border-border bg-surface-950/85 backdrop-blur-md">
+    <header className="sticky top-0 z-nav border-b border-border bg-surface-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-surface-950/70">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4">
         <Link
           href="/"
-          className="-ml-1 flex items-center gap-2 rounded-md px-1 py-1 transition-opacity hover:opacity-80"
+          className="-ml-1 flex items-center gap-2.5 rounded-lg px-1 py-1 transition-opacity hover:opacity-85"
         >
-          <Image src="/logo.svg" alt="" width={26} height={26} className="shrink-0" priority />
+          <Image src="/logo.svg" alt="" width={28} height={28} className="shrink-0" priority />
           <span className="text-[0.9375rem] font-bold tracking-tight text-white">{tr('appName')}</span>
         </Link>
 
-        <nav aria-label={tr('tracks')} className="hidden items-center gap-0.5 sm:flex">
+        <nav aria-label={tr('tracks')} className="hidden items-center gap-1 sm:flex">
           {NAV.map(item => {
             const active = isActive(item.href);
             return (
@@ -41,7 +42,9 @@ export default function NavBar() {
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
                 className={`rounded-md px-2.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${
-                  active ? 'bg-surface-700 text-white' : 'text-slate-400 hover:bg-surface-900 hover:text-slate-200'
+                  active
+                    ? 'bg-surface-800 text-white'
+                    : 'text-text-secondary hover:bg-surface-900 hover:text-text-primary'
                 }`}
               >
                 {tr(item.label)}
@@ -58,16 +61,19 @@ export default function NavBar() {
             <Link
               href="/profile"
               aria-label={user.display_name}
-              className="flex items-center gap-1.5 rounded-md py-1 pl-1 pr-1.5 text-sm font-semibold text-white transition-colors hover:bg-surface-900"
+              className="flex items-center gap-1.5 rounded-lg py-1 pl-1 pr-2 text-sm font-semibold text-white transition-colors hover:bg-surface-900"
             >
               <span aria-hidden="true">{user.avatar_emoji}</span>
-              <span className="num text-xs text-slate-400">{user.total_xp}</span>
+              <span className="num inline-flex items-center gap-0.5 text-xs text-warning">
+                <BoltIcon size={13} className="shrink-0" />
+                {user.total_xp}
+              </span>
               <span className="sr-only">{user.display_name}</span>
             </Link>
           ) : (
             <Link
               href="/auth"
-              className="rounded-md bg-cyan-500 px-3 py-1.5 text-[0.8125rem] font-bold text-text-inverse transition-colors hover:bg-cyan-400"
+              className="rounded-lg bg-cyan-400 px-3 py-1.5 text-[0.8125rem] font-bold text-text-inverse transition-colors hover:bg-cyan-300"
             >
               {tr('login')}
             </Link>
@@ -95,7 +101,7 @@ function LangToggle({
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
           className={`px-1.5 py-1 text-[0.6875rem] font-bold uppercase tracking-wide transition-colors ${
-            lang === l ? 'bg-cyan-500/15 text-cyan-400' : 'text-slate-500 hover:text-slate-300'
+            lang === l ? 'bg-cyan-500/15 text-cyan-300' : 'text-text-muted hover:text-text-secondary'
           }`}
         >
           {l}
@@ -120,11 +126,11 @@ function LowBandwidthToggle({
       role="switch"
       aria-checked={on}
       title={label}
-      className={`rounded-md px-1.5 py-1 text-base leading-none transition-colors ${
-        on ? 'bg-warning/10 text-warning' : 'text-slate-600 hover:text-slate-400'
+      className={`grid h-7 w-7 place-items-center rounded-md transition-colors ${
+        on ? 'bg-warning/10 text-warning' : 'text-text-muted hover:text-text-secondary'
       }`}
     >
-      <span aria-hidden="true">{on ? '📵' : '📶'}</span>
+      {on ? <SignalOffIcon size={16} /> : <SignalOnIcon size={16} />}
       <span className="sr-only">{label}</span>
     </button>
   );

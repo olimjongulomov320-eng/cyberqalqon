@@ -1,44 +1,61 @@
 'use client';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, fetchPaths, LearningPath, Domain, PathModule } from '@/lib/api';
 import { Card, ErrorNote, EmptyState, Skeleton, ButtonLink } from '@/components/ui';
+import { CheckIcon, CompassIcon, LockIcon, PlayIcon } from '@/components/icons';
 
 function nodeStatus(pm: PathModule): 'done' | 'current' | 'open' | 'locked' {
   return pm.state;
 }
 
-/** One node on the path: done ✓, current (pulse), open (number), locked 🔒. */
+/** One node on the path. Circles are an intentional exception to the squircle
+ *  rule: a node is a position on a route, not a control. */
 function PathNode({ m, i }: { m: PathModule; i: number }) {
   const status = nodeStatus(m);
   const href = status === 'locked' ? undefined : `/modules/${m.slug}`;
   const locked = status === 'locked';
 
   const styles: Record<string, string> = {
-    done: 'border-success/60 bg-success/20 text-success',
-    current: 'border-cyan-500 bg-cyan-500 text-text-inverse shadow-[0_0_0_4px_rgb(6_182_212/0.25)] animate-[cq-pop_0.6s_ease]',
-    open: 'border-border-light bg-surface-700 text-slate-200 hover:border-cyan-500/60 hover:text-white',
-    locked: 'border-border bg-surface-800 text-slate-600',
+    done: 'border-success/50 bg-success/15 text-success',
+    current: 'border-cyan-400 bg-cyan-400 text-text-inverse shadow-[0_0_0_4px_rgb(34_211_238/0.2)] animate-[cq-pop_0.6s_ease]',
+    open: 'border-border-light bg-surface-700 text-text-primary hover:border-cyan-500/60 hover:text-white',
+    locked: 'border-border bg-surface-800 text-text-muted',
   };
 
   const content =
     status === 'done' ? (
-      <span aria-label="done">✓</span>
+      <CheckIcon size={20} />
     ) : status === 'current' ? (
-      <span aria-label="current">▶</span>
+      <PlayIcon size={18} />
     ) : locked ? (
-      <span aria-label="locked" className="text-xs">🔒</span>
+      <LockIcon size={17} />
     ) : (
       <span className="num text-sm">{i + 1}</span>
     );
 
+  const statusLabel = { done: 'done', current: 'current', open: 'open', locked: 'locked' }[status];
+
   const node = (
     <span
-      className={`grid h-12 w-12 shrink-0 place-items-center rounded-full border text-lg font-bold ${styles[status]} ${locked ? '' : 'transition-transform hover:scale-105'}`}
+      aria-label={statusLabel}
+      className={`grid h-12 w-12 shrink-0 place-items-center rounded-full border text-lg font-bold ${styles[status]} ${
+        locked ? '' : 'transition-transform duration-150 hover:scale-105'
+      }`}
     >
       {content}
+    </span>
+  );
+
+  const label = (
+    <span
+      title={m.title}
+      className={`w-16 text-center text-[0.625rem] font-medium leading-snug ${locked ? 'text-text-muted' : 'text-text-secondary'}`}
+      style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+    >
+      {m.title}
     </span>
   );
 
@@ -47,24 +64,12 @@ function PathNode({ m, i }: { m: PathModule; i: number }) {
       {href ? (
         <Link href={href} aria-label={m.title} className="flex flex-col items-center gap-1.5">
           {node}
-          <span
-            title={m.title}
-            className="w-16 text-center text-[0.625rem] font-medium leading-snug text-slate-400"
-            style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
-          >
-            {m.title}
-          </span>
+          {label}
         </Link>
       ) : (
         <span className="flex flex-col items-center gap-1.5" aria-disabled={locked}>
           {node}
-          <span
-            title={m.title}
-            className="w-16 text-center text-[0.625rem] font-medium leading-snug text-slate-600"
-            style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
-          >
-            {m.title}
-          </span>
+          {label}
         </span>
       )}
     </li>
@@ -72,27 +77,25 @@ function PathNode({ m, i }: { m: PathModule; i: number }) {
 }
 
 function DomainRow({ domain }: { domain: Domain }) {
-  const { lang } = useApp();
-  const tr = makeT(lang);
   const pct = domain.total > 0 ? Math.round((domain.completed / domain.total) * 100) : 0;
 
   return (
-    <section className="rounded-lg border border-border bg-surface-900 p-4 shadow-card edge-light">
+    <section className="rounded-2xl border border-border bg-surface-900 p-4 shadow-card edge-light">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
+        <div className="flex min-w-0 items-center gap-2.5">
           <span aria-hidden="true" className="text-xl">{domain.icon}</span>
-          <div>
-            <h3 className="text-sm font-bold text-white">{domain.title}</h3>
-            <p className="text-xs text-slate-500">{domain.description}</p>
+          <div className="min-w-0">
+            <h3 className="truncate text-sm font-bold text-white">{domain.title}</h3>
+            <p className="truncate text-xs text-text-muted">{domain.description}</p>
           </div>
         </div>
-        <span className="num text-xs font-bold text-slate-400">
+        <span className="num shrink-0 text-xs font-bold text-text-secondary">
           {domain.completed}/{domain.total}
         </span>
       </div>
-      <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-surface-700">
+      <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-surface-800">
         <div
-          className="fill-x h-full rounded-full bg-cyan-500"
+          className="fill-x h-full rounded-full bg-cyan-400"
           style={{ transform: `scaleX(${pct / 100})`, transformOrigin: 'left' }}
         />
       </div>
@@ -146,9 +149,9 @@ function LearnInner() {
   if (!data) {
     return (
       <div className="flex flex-col gap-3">
-        <Skeleton className="h-24 w-full rounded-lg" />
-        <Skeleton className="h-40 w-full rounded-lg" />
-        <Skeleton className="h-40 w-full rounded-lg" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-40 w-full" />
       </div>
     );
   }
@@ -156,23 +159,23 @@ function LearnInner() {
   const isEmpty = data.paths.every(p => p.domains.every(d => d.modules.length === 0));
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="stagger flex flex-col gap-4">
       {/* Continue strip */}
       {data.continue && (
-        <Card className="flex items-center gap-3 border-cyan-500/30 bg-cyan-500/5">
-          <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-cyan-500/15 text-xl">
-            ▶
+        <Card className="flex items-center gap-3 border-cyan-500/30 bg-cyan-500/[0.06]">
+          <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-cyan-400 text-text-inverse">
+            <PlayIcon size={16} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">{tr('continueLearning')}</p>
+            <p className="label text-cyan-300">{tr('continueLearning')}</p>
             <p className="truncate text-sm font-bold text-white">{data.continue.title}</p>
-            <p className="num text-xs text-slate-400">
+            <p className="num text-xs text-text-secondary">
               {data.continue.position}/{data.continue.total}
             </p>
           </div>
           <Link
             href={`/modules/${data.continue.slug}`}
-            className="shrink-0 rounded-md bg-cyan-500 px-3.5 py-2 text-xs font-bold text-text-inverse transition-colors hover:bg-cyan-400"
+            className="shrink-0 rounded-lg bg-cyan-400 px-3.5 py-2 text-xs font-bold text-text-inverse transition-colors hover:bg-cyan-300"
           >
             {tr('resumeLesson')}
           </Link>
@@ -181,7 +184,7 @@ function LearnInner() {
 
       {isEmpty ? (
         <EmptyState
-          emoji="🧭"
+          icon={<CompassIcon size={26} className="text-text-muted" />}
           title={tr('pathEmptyTitle')}
           body={tr('pathEmptyBody')}
           action={<ButtonLink href="/">{tr('goHome')}</ButtonLink>}
@@ -212,7 +215,7 @@ export default function LearnPage() {
     <div>
       <header className="mb-5">
         <h1 className="display">{tr('learningPath')}</h1>
-        <p className="mt-1 text-sm text-slate-400">{tr('choosePath')}</p>
+        <p className="mt-1.5 text-sm text-text-secondary">{tr('choosePath')}</p>
       </header>
       <LearnInner />
     </div>

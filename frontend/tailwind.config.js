@@ -8,60 +8,30 @@ module.exports = {
         mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
-        // Brand colors — CyberQalqon identity
-        // Primary: Electric Violet
-        primary: {
-          50:  '#f5f0ff',
-          100: '#ebe6ff',
-          200: '#d6ccff',
-          300: '#b8a8ff',
-          400: '#9575ff',
-          500: '#7c3aed',  // Main primary - electric violet
-          600: '#6d28d9',
-          700: '#5b21b6',
-          800: '#4c1d95',
-          900: '#3e1a7a',
-          950: '#2e1065',
-        },
-        // Secondary: Bright Cobalt Blue
-        secondary: {
-          50:  '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',  // Main secondary - bright cobalt
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
-        },
+        // ── Palette ────────────────────────────────────────────────────────────
+        // One interactive accent, locked project-wide: cyan. The brand mark is
+        // the same cyan family, so the UI never fights the logo.
+        //
+        //   cyan     → every interactive surface (buttons, links, focus, active)
+        //   warning  → XP / rewards            success → correct / completion
+        //   danger   → errors / wrong answers  surface/bg/text/border → neutral
+        //
+        // Do not introduce a second accent hue. Violet, cobalt and lime were
+        // removed from the old palette precisely so the accent cannot drift.
+
+        // Accent: restrained cyan / teal
         cyan: {
           50:  '#ecfeff',
           100: '#cffafe',
           200: '#a5f3fc',
-          300: '#67e8f9',
-          400: '#22d3ee',
-          500: '#06b6d4',  // Cyan
+          300: '#67e8f9',  // brightest — hover / emphasis text
+          400: '#22d3ee',  // solid interactive fill + links/icons on dark
+          500: '#06b6d4',  // brand mark + tint base (bg-cyan-500/10 …)
           600: '#0891b2',
           700: '#0e7490',
           800: '#155e75',
           900: '#164e63',
           950: '#083344',
-        },
-        // Accent: Fresh Lime
-        accent: {
-          50:  '#f7fee7',
-          100: '#ecfccb',
-          300: '#d9f99d',
-          400: '#bef264',
-          500: '#a3e635',  // Lime
-          600: '#84cc16',
-          700: '#65a30d',
-          800: '#4d7c0f',
-          900: '#3f6212',
-          950: '#2a4308',
         },
         // Semantic colors
         success: {
@@ -79,7 +49,7 @@ module.exports = {
           DEFAULT: '#ef4444',
           dark: '#dc2626',
         },
-        // Surfaces — Deep navy family
+        // Surfaces — cool navy family (one grey temperature across the app)
         surface: {
           50:  '#f8fafc',
           100: '#f1f5f9',
@@ -91,9 +61,9 @@ module.exports = {
           700: '#334155',
           800: '#1e293b',
           900: '#0f172a',
-          950: '#080c14',  // Deepest navy
+          950: '#080c14',  // deepest navy
         },
-        // Background — deep navy
+        // Background — deep navy (never pure black)
         bg: {
           DEFAULT: '#080c14',
         },
@@ -101,8 +71,10 @@ module.exports = {
         text: {
           primary:   '#f8fafc',
           secondary: '#94a3b8',
-          muted:     '#64748b',
-          inverse:   '#080c14',
+          // AA-checked on every surface it is used on (bg 6.44, surface-900
+          // 5.88, surface-800 4.82) — the old #64748b failed all three.
+          muted:     '#8296ad',
+          inverse:   '#04121a',
         },
         // Borders
         border: {
@@ -111,9 +83,12 @@ module.exports = {
         },
       },
       boxShadow: {
-        // Shadows with subtle violet tint
-        'card': '0 1px 3px 0 rgb(8 12 20 / 0.4), 0 8px 24px -8px rgb(124 58 237 / 0.15)',
-        'card-hover': '0 4px 12px 0 rgb(8 12 20 / 0.5), 0 16px 32px -12px rgb(124 58 237 / 0.2)',
+        // Shadows are tinted to the navy background hue (never pure black) and
+        // suggest a single top light source via the `edge` inset.
+        'card': '0 1px 2px 0 rgb(2 6 16 / 0.5), 0 10px 26px -12px rgb(2 6 16 / 0.75)',
+        'card-hover': '0 2px 6px 0 rgb(2 6 16 / 0.55), 0 18px 40px -16px rgb(2 6 16 / 0.85)',
+        'edge': 'inset 0 1px 0 0 rgb(148 163 184 / 0.06)',
+        'focus': '0 0 0 2px rgb(8 12 20), 0 0 0 4px rgb(34 211 238 / 0.55)',
       },
       borderRadius: {
         'xs': '4px',
@@ -121,7 +96,7 @@ module.exports = {
         'md': '10px',
         'lg': '14px',
         'xl': '18px',
-        '2xl': '24px',
+        '2xl': '22px',
         'full': '9999px',
       },
       spacing: {
@@ -155,7 +130,8 @@ module.exports = {
         '3xl': ['1.875rem', { lineHeight: '1.2', letterSpacing: '-0.025em' }],
         '4xl': ['2.25rem', { lineHeight: '1.15', letterSpacing: '-0.03em' }],
         '5xl': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.035em' }],
-        'display': ['clamp(1.875rem, 4vw, 3rem)', { lineHeight: '1.1', letterSpacing: '-0.03em', fontWeight: '800' }],
+        // Editorial display scale — landing / auth / celebration only.
+        'display': ['clamp(2rem, 5.5vw, 3.25rem)', { lineHeight: '1.05', letterSpacing: '-0.035em', fontWeight: '800' }],
       },
       transitionDuration: {
         '0': '0ms',
@@ -171,7 +147,6 @@ module.exports = {
       },
       transitionTimingFunction: {
         'spring': 'cubic-bezier(0.2, 0.9, 0.25, 1)',
-        'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
         'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
       keyframes: {
@@ -180,20 +155,17 @@ module.exports = {
           '100%': { opacity: '1' },
         },
         'scale-in': {
-          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '0%': { opacity: '0', transform: 'scale(0.97)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
         },
       },
       animation: {
-        'fade-in': 'fade-in 0.3s ease-out',
-        'scale-in': 'scale-in 0.3s cubic-bezier(0.2, 0.9, 0.25, 1)',
-      },
-      backgroundImage: {
-        'gradient-hero': 'linear-gradient(135deg, #080c14 0%, #1e1b4b 50%, #080c14 100%)',
-        'gradient-mesh': 'radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(37,99,235,0.15) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(6,182,212,0.1) 0%, transparent 60%)',
+        'fade-in': 'fade-in 0.25s ease-out',
+        'scale-in': 'scale-in 0.25s cubic-bezier(0.2, 0.9, 0.25, 1)',
       },
       zIndex: {
         nav: '40',
+        overlay: '60',
         skip: '100',
       },
     },

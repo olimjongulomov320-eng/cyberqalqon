@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode, ButtonHTMLAttributes, AnchorHTMLAttributes, HTMLAttributes } from 'react';
+import { ArrowLeftIcon, AlertIcon, CheckIcon } from '@/components/icons';
 
 /* ── Card ────────────────────────────────────────────────────────────────────── */
 export type CardProps = {
@@ -21,8 +22,8 @@ export function Card({
   return (
     <Tag
       className={`
-        rounded-2xl ${bordered ? 'border border-border' : ''} bg-surface-900/80 backdrop-blur-sm shadow-card
-        ${hover ? 'transition-all duration-200 hover:shadow-card-hover hover:border-border-light' : ''}
+        rounded-2xl ${bordered ? 'border border-border' : ''} bg-surface-900 shadow-card edge-light
+        ${hover ? 'transition-[transform,border-color,box-shadow] duration-200 ease-spring hover:-translate-y-0.5 hover:border-border-light hover:shadow-card-hover' : ''}
         ${className}
       `}
       {...rest}
@@ -36,14 +37,17 @@ export function Card({
 type ButtonVariant = 'primary' | 'secondary' | 'success' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 
-const BUTTON_BASE = 'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-150 ease-spring active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg';
+const BUTTON_BASE =
+  'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-spring active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-cyan-400';
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
-  primary: 'bg-gradient-to-r from-cyan-400 to-cyan-500 text-text-inverse shadow-[0_4px_16px_-4px_rgb(6_182_212_/_0.45)] hover:from-cyan-300 hover:to-cyan-400 hover:shadow-[0_8px_24px_-8px_rgb(6_182_212_/_0.55)]',
+  // Solid, single-accent fills. No gradients — the old cyan→cyan gradient
+  // buttons were the loudest generic tell in the shell.
+  primary: 'bg-cyan-400 text-text-inverse shadow-[0_8px_20px_-10px_rgb(6_182_212_/_0.75)] hover:bg-cyan-300',
   secondary: 'bg-surface-800 text-text-primary border border-border hover:bg-surface-700 hover:border-border-light',
-  success: 'bg-gradient-to-r from-success to-success-dark text-white shadow-[0_4px_16px_-4px_rgb(34_197_94_/_0.4)] hover:shadow-[0_8px_24px_-8px_rgb(34_197_94_/_0.5)]',
+  success: 'bg-success text-text-inverse hover:bg-success-light',
   ghost: 'text-text-secondary hover:text-text-primary hover:bg-surface-800',
-  danger: 'bg-gradient-to-r from-danger to-danger-dark text-white shadow-[0_4px_16px_-4px_rgb(239_68_68_/_0.4)] hover:shadow-[0_8px_24px_-8px_rgb(239_68_68_/_0.5)]',
+  danger: 'bg-danger-dark text-white hover:bg-danger focus-visible:ring-danger',
 };
 
 const BUTTON_SIZES: Record<ButtonSize, string> = {
@@ -100,8 +104,8 @@ export function SectionHeading({
   action?: ReactNode;
 }) {
   return (
-    <div className="mb-4 flex items-baseline justify-between gap-4">
-      <h2 className="label">{children}</h2>
+    <div className="mb-3 flex items-baseline justify-between gap-4">
+      <h2 className="text-sm font-bold tracking-tight text-text-primary">{children}</h2>
       {action}
     </div>
   );
@@ -112,7 +116,7 @@ type BadgeTone = 'neutral' | 'primary' | 'success' | 'warning' | 'xp' | 'danger'
 
 const BADGE_TONES: Record<BadgeTone, string> = {
   neutral: 'border border-border bg-surface-800 text-text-muted',
-  primary: 'border border-cyan-500/30 bg-cyan-500/10 text-cyan-400',
+  primary: 'border border-cyan-500/30 bg-cyan-500/10 text-cyan-300',
   success: 'border border-success/30 bg-success/10 text-success',
   warning: 'border border-warning/30 bg-warning/10 text-warning',
   xp: 'border border-warning/30 bg-warning/10 text-warning',
@@ -129,7 +133,7 @@ export function Badge({
   className?: string;
 }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold tracking-wide ${BADGE_TONES[tone]} ${className}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-semibold tracking-wide ${BADGE_TONES[tone]} ${className}`}>
       {children}
     </span>
   );
@@ -139,10 +143,10 @@ export function Badge({
 type ProgressTone = 'primary' | 'success' | 'warning' | 'xp';
 
 const PROGRESS_TONES: Record<ProgressTone, string> = {
-  primary: 'bg-gradient-to-r from-cyan-500 to-cyan-400',
-  success: 'bg-gradient-to-r from-success to-success-light',
-  warning: 'bg-gradient-to-r from-warning to-warning-light',
-  xp: 'bg-gradient-to-r from-warning to-success',
+  primary: 'bg-cyan-400',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  xp: 'bg-warning',
 };
 
 export function Progress({
@@ -186,11 +190,13 @@ export function Progress({
 /* ── Avatar ──────────────────────────────────────────────────────────────────── */
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
+// Squircle avatars (rounded squares) instead of the default circle — the
+// emoji avatar is data, the shape is the design decision.
 const AVATAR_SIZES: Record<AvatarSize, string> = {
   xs: 'h-6 w-6 text-xs rounded-md',
-  sm: 'h-8 w-8 text-sm rounded-lg',
+  sm: 'h-8 w-8 text-sm rounded-md',
   md: 'h-10 w-10 text-base rounded-lg',
-  lg: 'h-12 w-12 text-xl rounded-xl',
+  lg: 'h-12 w-12 text-xl rounded-lg',
   xl: 'h-16 w-16 text-2xl rounded-xl',
   '2xl': 'h-24 w-24 text-4xl rounded-2xl',
 };
@@ -201,20 +207,29 @@ export function Avatar({
   size = 'md',
   ring = false,
   className = '',
+  announce = false,
 }: {
   emoji: string;
+  /** The user's display name. Exposed as the avatar's accessible name only
+   *  when `announce` is set: every current call site already renders the name
+   *  as adjacent visible text, so announcing it here too would duplicate it.
+   *  Set `announce` for an avatar that has no adjacent visible name. */
   name: string;
   size?: AvatarSize;
   ring?: boolean;
   className?: string;
+  announce?: boolean;
 }) {
   return (
     <span
-      aria-hidden="true"
-      className={`avatar-base shrink-0 ${AVATAR_SIZES[size]} ${ring ? 'ring-2 ring-cyan-500/50 ring-offset-2 ring-offset-bg' : ''} ${className}`}
+      role={announce ? 'img' : undefined}
+      aria-label={announce ? name : undefined}
+      aria-hidden={announce ? undefined : true}
+      className={`avatar-base border border-border text-text-primary ${AVATAR_SIZES[size]} ${
+        ring ? 'ring-2 ring-cyan-500/50 ring-offset-2 ring-offset-bg' : ''
+      } ${className}`}
     >
-      <span className="opt-center">{emoji}</span>
-      <span className="sr-only">{name}</span>
+      <span aria-hidden="true" className="opt-center">{emoji}</span>
     </span>
   );
 }
@@ -227,12 +242,14 @@ export function Skeleton({ className = '' }: { className?: string }) {
 /* ── Empty State ─────────────────────────────────────────────────────────────── */
 export function EmptyState({
   emoji,
+  icon,
   title,
   body,
   action,
   className = '',
 }: {
-  emoji: string;
+  emoji?: string;
+  icon?: ReactNode;
   title: string;
   body?: string;
   action?: ReactNode;
@@ -240,11 +257,11 @@ export function EmptyState({
 }) {
   return (
     <div className={`flex flex-col items-center gap-4 px-6 py-12 text-center ${className}`}>
-      <div className="grid h-16 w-16 place-items-center rounded-xl border border-border bg-surface-800 text-3xl shadow-card">
-        <span className="opt-center">{emoji}</span>
+      <div className="grid h-16 w-16 place-items-center rounded-xl border border-border bg-surface-800 text-3xl shadow-card edge-light">
+        {icon ?? <span aria-hidden="true" className="opt-center">{emoji}</span>}
       </div>
       <p className="text-base font-semibold text-text-primary">{title}</p>
-      {body && <p className="max-w-[34ch] text-sm leading-relaxed text-text-secondary">{body}</p>}
+      {body && <p className="max-w-[38ch] text-sm leading-relaxed text-text-secondary">{body}</p>}
       {action && <div className="mt-2">{action}</div>}
     </div>
   );
@@ -255,9 +272,9 @@ export function ErrorNote({ children, className = '' }: { children: ReactNode; c
   return (
     <p
       role="alert"
-      className={`flex items-start gap-2 rounded-xl border border-danger/30 bg-danger/[0.06] px-4 py-3 text-sm leading-relaxed text-danger ${className}`}
+      className={`flex items-start gap-2 rounded-lg border border-danger/30 bg-danger/[0.06] px-4 py-3 text-sm leading-relaxed text-danger ${className}`}
     >
-      <span aria-hidden="true" className="shrink-0 font-semibold">!</span>
+      <AlertIcon size={18} className="mt-0.5 shrink-0" />
       <span>{children}</span>
     </p>
   );
@@ -268,9 +285,9 @@ export function SuccessNote({ children, className = '' }: { children: ReactNode;
   return (
     <p
       role="status"
-      className={`flex items-start gap-2 rounded-xl border border-success/30 bg-success/[0.06] px-4 py-3 text-sm leading-relaxed text-success ${className}`}
+      className={`flex items-start gap-2 rounded-lg border border-success/30 bg-success/[0.06] px-4 py-3 text-sm leading-relaxed text-success ${className}`}
     >
-      <span aria-hidden="true" className="shrink-0 font-semibold">✓</span>
+      <CheckIcon size={18} className="mt-0.5 shrink-0" />
       <span>{children}</span>
     </p>
   );
@@ -283,7 +300,7 @@ export function BackLink({ href, children, className = '' }: { href: string; chi
       href={href}
       className={`-ml-1 inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary ${className}`}
     >
-      <span aria-hidden="true">←</span>
+      <ArrowLeftIcon size={16} />
       {children}
     </Link>
   );
@@ -307,8 +324,8 @@ export function Field({
 }) {
   return (
     <label className={`block ${className}`}>
-      <div className="flex items-center gap-1.5 mb-2">
-        <span className="form-label">{label}</span>
+      <div className="mb-2 flex items-center gap-1.5">
+        <span className="form-label !mb-0">{label}</span>
         {required && <span className="text-danger" aria-hidden="true">*</span>}
       </div>
       {children}

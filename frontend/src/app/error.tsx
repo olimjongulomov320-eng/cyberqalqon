@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { Button, ButtonLink, Card, EmptyState } from '@/components/ui';
+import { AlertIcon } from '@/components/icons';
 
 /**
  * Route-level error boundary. Catches render/runtime errors in any page below
@@ -27,7 +28,7 @@ export default function Error({
   return (
     <Card className="mt-8">
       <EmptyState
-        emoji="⚠️"
+        icon={<AlertIcon size={26} className="text-danger" />}
         title={tr('loadError')}
         body={tr('networkError')}
         action={

@@ -18,6 +18,7 @@ import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { XPChip } from '@/components/game';
 import { levelFromXp } from '@/lib/gamification';
 import { Button, ButtonLink, Card, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
+import { CheckIcon, CloseIcon, ShieldIcon, SparkleIcon, TargetIcon } from '@/components/icons';
 
 type Phase = 'loading' | 'topics' | 'session' | 'results' | 'error';
 type RevExercise = Exercise;
@@ -161,13 +162,15 @@ export default function PracticePage() {
       <div>
         {!sessionReady ? (
           <div className="flex flex-col gap-3">
-            <Skeleton className="h-20 w-full rounded-lg" />
-            <Skeleton className="h-40 w-full rounded-lg" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-40 w-full" />
           </div>
         ) : (
           <Card className="p-6 text-center">
-            <span aria-hidden="true" className="text-3xl">🎯</span>
-            <p className="mt-2 text-sm text-text-secondary">{tr('signInToAnswer')}</p>
+            <span aria-hidden="true" className="mx-auto grid h-14 w-14 place-items-center rounded-xl border border-border bg-surface-800 text-cyan-300">
+              <TargetIcon size={26} />
+            </span>
+            <p className="mt-3 text-sm text-text-secondary">{tr('signInToAnswer')}</p>
             <div className="mt-4 flex justify-center">
               <ButtonLink href="/auth">{tr('login')}</ButtonLink>
             </div>
@@ -192,8 +195,8 @@ export default function PracticePage() {
           </Card>
         ) : (
           <div className="flex flex-col gap-3">
-            <Skeleton className="h-20 w-full rounded-lg" />
-            <Skeleton className="h-40 w-full rounded-lg" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-40 w-full" />
           </div>
         )}
       </div>
@@ -206,49 +209,47 @@ export default function PracticePage() {
       <div>
         <header className="mb-5">
           <h1 className="display">{tr('navPractice')}</h1>
-          <p className="mt-1 text-sm text-slate-400">{tr('practiceSubtitle')}</p>
+          <p className="mt-1.5 text-sm text-text-secondary">{tr('practiceSubtitle')}</p>
         </header>
 
         {!session && (data?.topics.length ?? 0) === 0 ? (
           <EmptyState
-            emoji="🛡️"
+            icon={<ShieldIcon size={26} className="text-text-muted" />}
             title={tr('noReviewTitle')}
             body={tr('noReviewBody')}
             action={<ButtonLink href="/learn">{tr('goLearn')}</ButtonLink>}
           />
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="stagger flex flex-col gap-4">
             {session && (
-              <Card className="border-cyan-500/30 bg-cyan-500/5">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">{tr('reviewSession')}</p>
-                    <p className="truncate text-sm font-bold text-white">{session.module_title}</p>
-                    <p className="num text-xs text-slate-400">
-                      {exercises.length} {tr('question').toLowerCase()} · {tr('weakest')}
-                    </p>
-                  </div>
-                  <Button onClick={start} className="shrink-0">{tr('startLesson')}</Button>
+              <Card className="flex items-center justify-between gap-3 border-cyan-500/30 bg-cyan-500/[0.06]">
+                <div className="min-w-0">
+                  <p className="label text-cyan-300">{tr('reviewSession')}</p>
+                  <p className="truncate text-sm font-bold text-white">{session.module_title}</p>
+                  <p className="num text-xs text-text-secondary">
+                    {exercises.length} {tr('question').toLowerCase()} · {tr('weakest')}
+                  </p>
                 </div>
+                <Button onClick={start} className="shrink-0">{tr('startLesson')}</Button>
               </Card>
             )}
 
             {(data?.topics.length ?? 0) > 0 && (
               <section>
-                <h2 className="mb-2 px-1 text-sm font-bold text-slate-300">{tr('weakTopics')}</h2>
+                <h2 className="mb-2 px-1 text-sm font-bold text-text-primary">{tr('weakTopics')}</h2>
                 <div className="flex flex-col gap-2">
                   {data?.topics.map(t => (
                     <Card key={t.slug} className="flex items-center gap-3">
                       <span aria-hidden="true" className="text-xl">{t.icon}</span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-bold text-white">{t.title}</p>
-                        <p className="num text-xs text-slate-400">
+                        <p className="num text-xs text-text-secondary">
                           {t.wrong} {tr('mistakesCount')} · {t.accuracy}%
                         </p>
                       </div>
-                      <span className="h-1.5 w-16 overflow-hidden rounded-full bg-surface-700">
+                      <span className="h-1.5 w-16 overflow-hidden rounded-full bg-surface-800">
                         <span
-                          className="block h-full rounded-full bg-danger/70"
+                          className="block h-full rounded-full bg-danger/60"
                           style={{ width: `${Math.min(100, t.accuracy)}%` }}
                         />
                       </span>
@@ -270,12 +271,21 @@ export default function PracticePage() {
     return (
       <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-2xl flex-col">
         <div className="pt-6">
-          <Progress value={idx + (checked ? 1 : 0)} max={exercises.length} label={tr('loadingLesson')} tone="xp" />
-          <div className="mt-2 flex items-center justify-between">
-            <Link href="/practice" className="rounded-md px-1 text-sm text-slate-500 hover:text-white">
-              ✕
+          <div className="flex items-center gap-3">
+            <Link
+              href="/practice"
+              aria-label={tr('exitBtn')}
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-text-muted transition-colors hover:bg-surface-800 hover:text-white"
+            >
+              <CloseIcon size={18} />
             </Link>
-            <span className="num text-xs font-bold text-slate-500">
+            <Progress
+              value={idx + (checked ? 1 : 0)}
+              max={exercises.length}
+              label={`${tr('question')} ${idx + 1}/${exercises.length}`}
+              className="flex-1"
+            />
+            <span className="num text-xs font-bold text-text-muted">
               {idx + 1}/{exercises.length}
             </span>
           </div>
@@ -296,15 +306,16 @@ export default function PracticePage() {
           {checked && (
             <section
               aria-live="polite"
-              className={`stagger mt-4 rounded-md border p-4 ${
-                checked.correct ? 'border-success/50 bg-success/10' : 'border-danger/50 bg-danger/10'
+              className={`stagger mt-4 rounded-xl border p-4 ${
+                checked.correct ? 'border-success/50 bg-success/[0.08]' : 'border-danger/50 bg-danger/[0.08]'
               }`}
             >
-              <p className={`text-sm font-bold ${checked.correct ? 'text-success' : 'text-danger'}`}>
+              <p className={`flex items-center gap-1.5 text-sm font-bold ${checked.correct ? 'text-success' : 'text-danger'}`}>
+                {checked.correct ? <CheckIcon size={16} /> : <CloseIcon size={16} />}
                 {checked.correct ? tr('correctTitle') : tr('wrongTitle')}
               </p>
-              <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
-                <span className="font-semibold text-slate-200">{tr('whyLabel')}: </span>
+              <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                <span className="font-semibold text-text-primary">{tr('whyLabel')}: </span>
                 {checked.explain}
               </p>
             </section>
@@ -341,13 +352,18 @@ export default function PracticePage() {
     return (
       <div>
         <Card className="border-cyan-500/30">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <span aria-hidden="true" className="text-4xl">💪</span>
+          <div className="stagger flex flex-col items-center gap-3 text-center">
+            <span
+              aria-hidden="true"
+              className="grid h-16 w-16 place-items-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
+            >
+              <CheckIcon size={30} />
+            </span>
             <h1 className="display">{tr('reviewDoneTitle')}</h1>
-            <p className="text-sm text-slate-400">{tr('reviewDoneBody')}</p>
+            <p className="text-sm text-text-secondary">{tr('reviewDoneBody')}</p>
             <div className="flex items-center gap-2">
               <XPChip xp={result.xp_earned} />
-              <span className="num text-sm text-slate-400">
+              <span className="num text-sm text-text-secondary">
                 {correct}/{result.results.length} {tr('correct').toLowerCase()}
               </span>
             </div>
@@ -356,14 +372,16 @@ export default function PracticePage() {
               <div
                 role="status"
                 aria-live="polite"
-                className="flex w-full items-center justify-center gap-3 rounded-lg border border-cyan-500/40 bg-cyan-500/10 px-4 py-3 text-left"
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-cyan-500/40 bg-cyan-500/[0.08] px-4 py-3 text-left"
               >
-                <span aria-hidden="true" className="text-2xl">⬆️</span>
+                <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-cyan-500/15 text-cyan-300">
+                  <SparkleIcon size={20} />
+                </span>
                 <div>
                   <p className="text-sm font-bold text-cyan-300">
                     {tr('levelUpTitle')} · Lv.{endLevel}
                   </p>
-                  <p className="text-xs text-slate-400">{tr('levelUpBody')}</p>
+                  <p className="text-xs text-text-secondary">{tr('levelUpBody')}</p>
                 </div>
               </div>
             )}
@@ -373,13 +391,15 @@ export default function PracticePage() {
             {result.results.map(r => (
               <div
                 key={r.id}
-                className={`flex items-start gap-2.5 rounded-md border p-3 ${
-                  r.correct ? 'border-success/40 bg-success/5' : 'border-danger/40 bg-danger/5'
+                className={`flex items-start gap-2.5 rounded-lg border p-3 ${
+                  r.correct ? 'border-success/40 bg-success/[0.06]' : 'border-danger/40 bg-danger/[0.06]'
                 }`}
               >
-                <span aria-hidden="true" className="text-sm">{r.correct ? '✅' : '❌'}</span>
+                <span aria-hidden="true" className={`mt-0.5 shrink-0 ${r.correct ? 'text-success' : 'text-danger'}`}>
+                  {r.correct ? <CheckIcon size={16} /> : <CloseIcon size={16} />}
+                </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm leading-snug text-slate-300">{r.explain}</p>
+                  <p className="text-sm leading-snug text-text-secondary">{r.explain}</p>
                 </div>
               </div>
             ))}

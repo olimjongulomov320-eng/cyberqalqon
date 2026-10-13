@@ -1,6 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
@@ -9,6 +10,7 @@ import { ApiError, authLogin, authRegister } from '@/lib/api';
 import { safeNextPath } from '@/lib/redirect';
 import { Button, Field, ErrorNote, SuccessNote } from '@/components/ui';
 import { AuthBrandPanel } from '@/components/AuthBrandPanel';
+import { ArrowLeftIcon, CheckIcon, EyeIcon, EyeOffIcon } from '@/components/icons';
 
 type Mode = 'login' | 'register';
 
@@ -109,18 +111,7 @@ function PasswordInput({
           aria-pressed={show}
           className="absolute right-1 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-text-muted transition-colors hover:text-text-primary"
         >
-          {show ? (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-              <path d="M6.61 6.61A18.5 18.5 0 0 0 2 12s3 8 10 8a9.12 9.12 0 0 0 5.39-1.61" />
-              <line x1="2" y1="2" x2="22" y2="22" />
-            </svg>
-          ) : (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8Z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-          )}
+          {show ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
         </button>
       </div>
     </Field>
@@ -247,10 +238,10 @@ export default function AuthPage() {
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 + i * 0.1 }}
-              className="flex items-center gap-3 text-sm text-slate-300"
+              className="flex items-center gap-3 text-sm text-text-secondary"
             >
-              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/10 text-[0.625rem] font-bold text-accent-400">
-                ✓
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-cyan-500/15 text-cyan-300">
+                <CheckIcon size={13} />
               </span>
               {p}
             </motion.li>
@@ -265,12 +256,9 @@ export default function AuthPage() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-            className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-600 shadow-[0_10px_30px_-10px_rgb(124_58_237_/_0.8)] lg:hidden"
+            className="grid h-14 w-14 place-items-center rounded-2xl border border-border bg-surface-900 shadow-card edge-light lg:hidden"
           >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 2.5 4.5 5.5v6c0 4.6 3.2 8.4 7.5 10 4.3-1.6 7.5-5.4 7.5-10v-6L12 2.5Z" fill="white" fillOpacity="0.95" />
-              <path d="M8.6 12.2 11 14.6l4.6-4.8" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <Image src="/logo.svg" alt="" width={32} height={32} priority />
           </motion.span>
           <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-text-primary lg:mt-0">
             {isRegister ? tr('createAccount') : tr('welcomeBack')}
@@ -297,7 +285,7 @@ export default function AuthPage() {
               {mode === m && (
                 <motion.span
                   layoutId="auth-tab"
-                  className="absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-cyan-400 to-cyan-500 shadow-[0_4px_16px_-6px_rgb(6_182_212_/_0.7)]"
+                  className="absolute inset-0 -z-10 rounded-lg bg-cyan-400 shadow-[0_6px_18px_-8px_rgb(6_182_212_/_0.8)]"
                   transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                 />
               )}
@@ -450,7 +438,7 @@ export default function AuthPage() {
             >
               {loading ? (
                 <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" aria-hidden="true" />
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-text-inverse/30 border-t-text-inverse" aria-hidden="true" />
                   {tr('loading')}
                 </>
               ) : isRegister ? (
@@ -473,8 +461,9 @@ export default function AuthPage() {
         </p>
 
         <p className="mt-6 text-center text-xs text-text-muted">
-          <Link href="/" className="transition-colors hover:text-text-secondary">
-            ← {tr('backToHome')}
+          <Link href="/" className="inline-flex items-center gap-1.5 transition-colors hover:text-text-secondary">
+            <ArrowLeftIcon size={14} />
+            {tr('backToHome')}
           </Link>
         </p>
       </div>

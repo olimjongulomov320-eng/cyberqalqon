@@ -14,11 +14,11 @@ export default function LegalPage({ kind }: { kind: LegalKind }) {
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">
-      <BackLink href="/">← CyberQalqon</BackLink>
+      <BackLink href="/">CyberQalqon</BackLink>
 
       <header>
-        <h1 className="text-xl font-bold tracking-tight text-white">{doc.title}</h1>
-        <p className="mt-1 text-[0.75rem] text-slate-600">{doc.updated}</p>
+        <h1 className="text-2xl font-extrabold tracking-tight text-white text-balance">{doc.title}</h1>
+        <p className="num mt-1 text-[0.75rem] text-text-muted">{doc.updated}</p>
       </header>
 
       <Card className="p-5">

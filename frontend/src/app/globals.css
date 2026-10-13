@@ -14,14 +14,18 @@
 
   body {
     @apply bg-bg text-text-primary font-sans antialiased;
-    background-image:
-      radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(37,99,235,0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(6,182,212,0.04) 0%, transparent 60%);
+    /* A single, restrained cyan-tinted bloom anchored to the top of the page —
+       the old violet + cobalt + cyan three-radial mesh was the loudest "AI
+       gradient" tell in the build. One light source, one hue. */
+    background-image: radial-gradient(
+      120% 80% at 50% -10%,
+      rgb(6 182 212 / 0.08) 0%,
+      rgb(8 12 20 / 0) 55%
+    );
     background-attachment: fixed;
   }
 
-  /* Focus visible - keyboard only */
+  /* Focus visible — keyboard only */
   :focus-visible {
     @apply outline-none ring-2 ring-cyan-400 ring-offset-2 ring-offset-bg rounded-[inherit];
   }
@@ -55,6 +59,10 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      /* Zero the per-item stagger delays (`.stagger > *`) so reduced-motion
+         users see content immediately instead of waiting out a 0.03–0.48s
+         delay before an instant pop-in. */
+      animation-delay: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
@@ -62,24 +70,25 @@
 }
 
 @layer components {
-  /* Film grain overlay */
+  /* Film grain overlay — subtle. Fixed + pointer-events-none so it never
+     repaints a scrolling container. */
   .grain::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: 60;
     pointer-events: none;
-    opacity: 0.35;
+    opacity: 0.16;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.34'/%3E%3C/svg%3E");
   }
 
-  /* Top highlight on cards */
+  /* Top highlight on cards — suggests a single overhead light source. */
   .edge-light {
-    box-shadow: inset 0 1px 0 0 rgb(148 163 184 / 0.05);
+    box-shadow: inset 0 1px 0 0 rgb(148 163 184 / 0.06);
   }
 
-  /* Section label */
+  /* Section label — small caps micro-label */
   .label {
     @apply text-xs font-semibold tracking-wider text-text-muted uppercase;
   }
@@ -134,7 +143,7 @@
   /* Input base styles */
   .input-base {
     @apply w-full rounded-md bg-surface-800 px-4 py-3 text-sm text-text-primary placeholder-text-muted
-           border border-border transition-all duration-150
+           border border-border transition-colors duration-150
            focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 focus:outline-none
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
@@ -203,17 +212,8 @@
     to { transform: translate3d(0, 105vh, 0) rotate(420deg); opacity: 0; }
   }
 
-  /* Animated gradient background */
-  .animate-gradient {
-    background-size: 300% 300%;
-    animation: gradient-shift 8s ease infinite;
-  }
-
-  @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+  /* Text measure helper */
+  .measure { max-width: 65ch; }
 }
 
 /* ── Lesson prose ─────────────────────────────────────────────────────────── */

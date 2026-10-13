@@ -8,6 +8,17 @@ import { AchievementBadge, DailyGoal, Flame, RingProgress, XPChip } from '@/comp
 import LandingPreview from '@/components/LandingPreview';
 import { achievementMeta, levelFromXp, tierIndex, tierKey } from '@/lib/gamification';
 import { Avatar, Badge, ButtonLink, Card, EmptyState, SectionHeading, Skeleton } from '@/components/ui';
+import {
+  ArrowRightIcon,
+  BookIcon,
+  ChevronRightIcon,
+  CompassIcon,
+  FlameIcon,
+  PlayIcon,
+  RefreshIcon,
+  ShieldIcon,
+  TargetIcon,
+} from '@/components/icons';
 
 const ACTIVITY_LABEL: Record<string, string> = {
   lesson: 'activityLesson',
@@ -51,46 +62,69 @@ export default function HomePage() {
       .catch(() => setTop([]));
   }, [user]);
 
-  /* ── Signed out: landing hero ── */
+  /* ── Signed out: landing ── */
   if (!user) {
+    const features = [
+      { Icon: BookIcon, label: tr('featLessons') },
+      { Icon: FlameIcon, label: tr('featStreak') },
+      { Icon: TargetIcon, label: tr('featReview') },
+    ];
+    const steps = [tr('step1'), tr('step2'), tr('step3')];
+
     return (
       <div className="flex flex-col">
-        <section className="stagger flex flex-col items-center gap-4 pb-8 text-center">
-          <span aria-hidden="true" className="grid h-20 w-20 place-items-center rounded-2xl border border-border bg-surface-900 text-5xl shadow-card edge-light">
-            🛡️
-          </span>
-          <h1 className="display max-w-lg">{tr('heroTitle')}</h1>
-          <p className="max-w-md text-sm leading-relaxed text-slate-400">{tr('heroBody')}</p>
-          <ButtonLink href="/auth" size="lg">{tr('ctaStart')}</ButtonLink>
-        </section>
+        {/* Asymmetric hero — copy on the left, the real interactive preview on
+            the right. The preview is the product itself, not a screenshot. */}
+        <section className="grid items-center gap-10 pt-4 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-10">
+          <div className="stagger flex flex-col items-start gap-5">
+            <span className="inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/[0.08] px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300">
+              <ShieldIcon size={14} />
+              {tr('tagline')}
+            </span>
 
-        <section aria-labelledby="preview-h" className="mt-6">
-          <SectionHeading><span id="preview-h">{tr('previewTag')}</span></SectionHeading>
-          <LandingPreview />
-        </section>
+            <h1 className="display text-balance">{tr('heroTitle')}</h1>
 
-        <section aria-labelledby="how-h" className="mt-2">
-          <SectionHeading><span id="how-h">{tr('howItWorks')}</span></SectionHeading>
-          <div className="grid gap-2 sm:grid-cols-3">
-            {[['📖', tr('step1')], ['⚡', tr('step2')], ['🔁', tr('step3')]].map(([e, t], i) => (
-              <Card key={i} className="flex flex-col items-start gap-2.5 p-4">
-                <span aria-hidden="true" className="text-2xl">{e}</span>
-                <p className="text-[0.8125rem] leading-relaxed text-slate-300">{t}</p>
-              </Card>
-            ))}
+            <p className="max-w-[46ch] text-base leading-relaxed text-text-secondary">{tr('heroBody')}</p>
+
+            <ButtonLink href="/auth" size="lg" className="group">
+              {tr('ctaStart')}
+              <ArrowRightIcon size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+            </ButtonLink>
+
+            <ul className="mt-1 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
+              {features.map(({ Icon, label }) => (
+                <li key={label} className="flex items-center gap-2 text-[0.8125rem] font-medium text-text-secondary">
+                  <Icon size={16} className="shrink-0 text-cyan-400" />
+                  {label}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="relative lg:mt-8">
+            {/* Single cyan bloom behind the card — the only glow on the page. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-cyan-500/10 blur-3xl"
+            />
+            <p className="label mb-3">{tr('previewTag')}</p>
+            <LandingPreview />
           </div>
         </section>
 
-        <section aria-labelledby="feat-h" className="mt-6">
-          <SectionHeading><span id="feat-h">{tr('featLessons')}</span></SectionHeading>
-          <Card as="ul" className="divide-y divide-border overflow-hidden">
-            {[['🧩', tr('featLessons')], ['🔥', tr('featStreak')], ['🎯', tr('featReview')]].map(([e, t], i) => (
-              <li key={i} className="flex items-center gap-3 px-4 py-3.5">
-                <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-surface-700 text-lg">{e}</span>
-                <span className="text-[0.9375rem] font-semibold text-slate-200">{t}</span>
+        {/* How it works — an editorial numbered sequence, not three identical
+            cards. The count is the structure. */}
+        <section aria-labelledby="how-h" className="mt-16 border-t border-border/60 pt-10">
+          <p id="how-h" className="label mb-6">{tr('howItWorks')}</p>
+          <ol className="grid gap-8 sm:grid-cols-3 sm:gap-6">
+            {steps.map((step, i) => (
+              <li key={i} className="flex flex-col gap-3">
+                <span className="num text-[0.8125rem] font-bold text-cyan-400">{String(i + 1).padStart(2, '0')}</span>
+                <span aria-hidden="true" className="h-px w-full bg-border" />
+                <p className="text-[0.9375rem] leading-relaxed text-text-secondary text-pretty">{step}</p>
               </li>
             ))}
-          </Card>
+          </ol>
         </section>
       </div>
     );
@@ -102,205 +136,224 @@ export default function HomePage() {
   const tier = tierKey(tierIndex(level.level));
 
   return (
-    <div>
-      <div className="stagger flex flex-col gap-4">
-        {/* Greeting + level */}
-        <header className="flex items-center justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-3">
-            <Avatar emoji={user.avatar_emoji} name={user.display_name} size="lg" ring />
-            <div className="min-w-0">
-              <p className="truncate text-lg font-extrabold tracking-tight text-white">
-                {tr('welcome')}, {user.display_name}
-              </p>
-              <div className="flex items-center gap-1.5">
-                <Badge>{tr(tier)}</Badge>
-                <span className="num text-xs text-slate-500">Lv.{level.level}</span>
-              </div>
+    <div className="stagger flex flex-col gap-4">
+      {/* Greeting + level */}
+      <header className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <Avatar emoji={user.avatar_emoji} name={user.display_name} size="lg" ring />
+          <div className="min-w-0">
+            <p className="truncate text-lg font-extrabold tracking-tight text-white">
+              {tr('welcome')}, {user.display_name}
+            </p>
+            <div className="flex items-center gap-1.5">
+              <Badge>{tr(tier)}</Badge>
+              <span className="num text-xs text-text-muted">Lv.{level.level}</span>
             </div>
           </div>
-          <XPChip xp={user.total_xp} />
-        </header>
-
-        {/* Continue card */}
-        {continueCtx ? (
-          <Link
-            href={`/modules/${continueCtx.slug}`}
-            className="group flex items-center gap-3.5 rounded-lg border border-cyan-500/40 bg-cyan-500/10 p-4 shadow-card transition-colors hover:bg-cyan-500/15"
-          >
-            <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-cyan-500 text-xl text-text-inverse">
-              ▶
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">{tr('continueLearning')}</p>
-              <p className="truncate text-[0.9375rem] font-bold text-white">{continueCtx.title}</p>
-              <p className="num text-xs text-slate-400">
-                {tr('continueHint')} · {continueCtx.position}/{continueCtx.total}
-              </p>
-              <div
-                aria-hidden="true"
-                className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-cyan-500/15"
-              >
-                <div
-                  className="fill-x h-full rounded-full bg-cyan-500"
-                  style={{ transform: `scaleX(${continueCtx.position / continueCtx.total})`, transformOrigin: 'left' }}
-                />
-              </div>
-            </div>
-            <span aria-hidden="true" className="shrink-0 text-xl text-slate-500 transition-colors group-hover:text-cyan-500">›</span>
-          </Link>
-        ) : (
-          <Link
-            href="/learn"
-            className="group flex items-center gap-3.5 rounded-lg border border-border bg-surface-900 p-4 shadow-card transition-colors hover:bg-surface-700"
-          >
-            <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-surface-700 text-xl">🧭</span>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">{tr('learningPath')}</p>
-              <p className="truncate text-[0.9375rem] font-bold text-white">{tr('choosePath')}</p>
-            </div>
-            <span aria-hidden="true" className="shrink-0 text-xl text-slate-500 transition-colors group-hover:text-cyan-500">›</span>
-          </Link>
-        )}
-
-        {/* Stats row */}
-        <div className="grid grid-cols-3 gap-2">
-          <Card className="items-center gap-1 p-3 text-center">
-            <Flame streak={stats?.profile.current_streak ?? user.current_streak ?? 0} short />
-            <span className="text-xs text-slate-500">{tr('streak')}</span>
-          </Card>
-          <Card className="items-center gap-1 p-3 text-center">
-            <span className="num text-lg font-extrabold text-slate-100">{stats?.week_xp ?? 0}</span>
-            <span className="text-xs text-slate-500">{tr('weekXp')}</span>
-          </Card>
-          <Card className="items-center gap-1 p-3 text-center">
-            <span className="num text-lg font-extrabold text-slate-100">
-              {stats?.profile.modules_completed ?? 0}
-            </span>
-            <span className="text-xs text-slate-500">{tr('lessonsShort')}</span>
-          </Card>
         </div>
+        <XPChip xp={user.total_xp} />
+      </header>
 
-        {/* Daily goal + level progress */}
-        <Card className="p-4">
-          <div className="flex items-center justify-between gap-3">
-            <DailyGoal dailyXp={stats?.daily_xp ?? 0} goal={goal} />
-            <div className="flex flex-col items-end gap-1">
-              <RingProgress
-                value={level.intoLevel}
-                max={level.toNext}
-                size={46}
-                stroke={5}
-                label={<span className="num text-[0.625rem] font-bold text-slate-300">{level.intoLevel}</span>}
+      {/* Continue card */}
+      {continueCtx ? (
+        <Link
+          href={`/modules/${continueCtx.slug}`}
+          className="group flex items-center gap-3.5 rounded-xl border border-cyan-500/40 bg-cyan-500/[0.08] p-4 shadow-card transition-colors hover:bg-cyan-500/[0.14]"
+        >
+          <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-cyan-400 text-text-inverse">
+            <PlayIcon size={20} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="label text-cyan-300">{tr('continueLearning')}</p>
+            <p className="truncate text-[0.9375rem] font-bold text-white">{continueCtx.title}</p>
+            <p className="num text-xs text-text-secondary">
+              {tr('continueHint')} · {continueCtx.position}/{continueCtx.total}
+            </p>
+            <div aria-hidden="true" className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-cyan-500/15">
+              <div
+                className="fill-x h-full rounded-full bg-cyan-400"
+                style={{ transform: `scaleX(${continueCtx.position / continueCtx.total})`, transformOrigin: 'left' }}
               />
-              <Link href="/profile" className="text-[0.6875rem] font-medium text-cyan-400 hover:underline">
-                {tr('levelProgress')}
-              </Link>
             </div>
           </div>
-        </Card>
-
-        {statsFailed ? (
-          <Card>
-            <EmptyState emoji="📡" title={tr('loadError')} body={tr('networkError')} />
-          </Card>
-        ) : !stats ? (
-          <div className="flex flex-col gap-3">
-            <Skeleton className="h-24 w-full rounded-lg" />
-            <Skeleton className="h-32 w-full rounded-lg" />
+          <ChevronRightIcon size={20} className="shrink-0 text-text-muted transition-colors group-hover:text-cyan-400" />
+        </Link>
+      ) : (
+        <Link
+          href="/learn"
+          className="group flex items-center gap-3.5 rounded-xl border border-border bg-surface-900 p-4 shadow-card transition-colors hover:bg-surface-800"
+        >
+          <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-surface-800 text-cyan-300">
+            <CompassIcon size={22} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="label">{tr('learningPath')}</p>
+            <p className="truncate text-[0.9375rem] font-bold text-white">{tr('choosePath')}</p>
           </div>
-        ) : (
-          <>
-            {/* Weak topics → practice */}
-            {stats.weak_topics.length > 0 && (
-              <section aria-labelledby="weak-h">
-                <SectionHeading action={<Link href="/practice" className="text-[0.75rem] font-medium text-cyan-400 hover:underline">{tr('sharpSkills')}</Link>}>
-                  <span id="weak-h">{tr('weakTopics')}</span>
-                </SectionHeading>
-                <Card as="ul" className="divide-y divide-border overflow-hidden">
-                  {stats.weak_topics.slice(0, 3).map(t => (
-                    <li key={t.slug} className="flex items-center gap-3 px-4 py-3">
-                      <span aria-hidden="true" className="text-lg">{t.icon}</span>
-                      <span className="min-w-0 flex-1 truncate text-sm font-medium text-slate-200">{t.title}</span>
-                      <span className="num text-xs text-slate-500">{t.accuracy}%</span>
-                      <span aria-hidden="true" className="text-slate-600">›</span>
-                    </li>
-                  ))}
-                </Card>
-              </section>
-            )}
+          <ChevronRightIcon size={20} className="shrink-0 text-text-muted transition-colors group-hover:text-cyan-400" />
+        </Link>
+      )}
 
-            {/* Achievements */}
-            {stats.achievements.length > 0 && (
-              <section aria-labelledby="ach-h">
-                <SectionHeading action={<Link href="/profile" className="text-[0.75rem] font-medium text-cyan-400 hover:underline">{tr('seeAll')}</Link>}>
-                  <span id="ach-h">{tr('achievements')}</span>
-                </SectionHeading>
-                <div className="flex flex-wrap gap-2">
-                  {stats.achievements.slice(0, 6).map(a => {
-                    const meta = achievementMeta(a.key, lang, tr);
-                    return (
-                      <AchievementBadge key={a.key} emoji={meta?.emoji ?? '🏅'} title={meta?.title ?? a.key} />
-                    );
-                  })}
-                </div>
-              </section>
-            )}
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-2">
+        <Card className="flex flex-col items-center gap-1 p-3 text-center">
+          <Flame streak={stats?.profile.current_streak ?? user.current_streak ?? 0} short />
+          <span className="text-xs text-text-muted">{tr('streak')}</span>
+        </Card>
+        <Card className="flex flex-col items-center gap-1 p-3 text-center">
+          <span className="num text-lg font-extrabold text-text-primary">{stats?.week_xp ?? 0}</span>
+          <span className="text-xs text-text-muted">{tr('weekXp')}</span>
+        </Card>
+        <Card className="flex flex-col items-center gap-1 p-3 text-center">
+          <span className="num text-lg font-extrabold text-text-primary">{stats?.profile.modules_completed ?? 0}</span>
+          <span className="text-xs text-text-muted">{tr('lessonsShort')}</span>
+        </Card>
+      </div>
 
-            {/* Recent activity */}
-            {stats.recent.length > 0 && (
-              <section aria-labelledby="act-h">
-                <SectionHeading><span id="act-h">{tr('recentActivity')}</span></SectionHeading>
-                <Card as="ul" className="divide-y divide-border overflow-hidden">
-                  {stats.recent.slice(0, 4).map((r, i) => (
+      {/* Daily goal + level progress */}
+      <Card className="p-4">
+        <div className="flex items-center justify-between gap-3">
+          <DailyGoal dailyXp={stats?.daily_xp ?? 0} goal={goal} />
+          <div className="flex flex-col items-end gap-1">
+            <RingProgress
+              value={level.intoLevel}
+              max={level.toNext}
+              size={46}
+              stroke={5}
+              label={<span className="num text-[0.625rem] font-bold text-text-primary">{level.intoLevel}</span>}
+            />
+            <Link href="/profile" className="text-[0.6875rem] font-medium text-cyan-400 hover:underline">
+              {tr('levelProgress')}
+            </Link>
+          </div>
+        </div>
+      </Card>
+
+      {statsFailed ? (
+        <Card>
+          <EmptyState
+            icon={<CompassIcon size={26} className="text-text-muted" />}
+            title={tr('loadError')}
+            body={tr('networkError')}
+          />
+        </Card>
+      ) : !stats ? (
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+      ) : (
+        <>
+          {/* Weak topics → practice */}
+          {stats.weak_topics.length > 0 && (
+            <section aria-labelledby="weak-h">
+              <SectionHeading
+                action={
+                  <Link href="/practice" className="text-xs font-medium text-cyan-400 hover:underline">
+                    {tr('sharpSkills')}
+                  </Link>
+                }
+              >
+                <span id="weak-h">{tr('weakTopics')}</span>
+              </SectionHeading>
+              <Card as="ul" className="divide-y divide-border overflow-hidden">
+                {stats.weak_topics.slice(0, 3).map(t => (
+                  <li key={t.slug} className="flex items-center gap-3 px-4 py-3">
+                    <span aria-hidden="true" className="text-lg">{t.icon}</span>
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-text-primary">{t.title}</span>
+                    <span className="num text-xs text-text-muted">{t.accuracy}%</span>
+                    <ChevronRightIcon size={16} className="shrink-0 text-text-muted" />
+                  </li>
+                ))}
+              </Card>
+            </section>
+          )}
+
+          {/* Achievements */}
+          {stats.achievements.length > 0 && (
+            <section aria-labelledby="ach-h">
+              <SectionHeading
+                action={
+                  <Link href="/profile" className="text-xs font-medium text-cyan-400 hover:underline">
+                    {tr('seeAll')}
+                  </Link>
+                }
+              >
+                <span id="ach-h">{tr('achievements')}</span>
+              </SectionHeading>
+              <div className="flex flex-wrap gap-2">
+                {stats.achievements.slice(0, 6).map(a => {
+                  const meta = achievementMeta(a.key, lang, tr);
+                  return <AchievementBadge key={a.key} emoji={meta?.emoji ?? '🏅'} title={meta?.title ?? a.key} />;
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Recent activity */}
+          {stats.recent.length > 0 && (
+            <section aria-labelledby="act-h">
+              <SectionHeading><span id="act-h">{tr('recentActivity')}</span></SectionHeading>
+              <Card as="ul" className="divide-y divide-border overflow-hidden">
+                {stats.recent.slice(0, 4).map((r, i) => {
+                  const ActivityIcon = r.kind === 'review' ? RefreshIcon : r.kind === 'correct' ? TargetIcon : BookIcon;
+                  return (
                     <li key={i} className="flex items-center gap-3 px-4 py-2.5">
-                      <span aria-hidden="true" className="text-base">{r.kind === 'lesson' ? '📘' : r.kind === 'review' ? '🔁' : '🎯'}</span>
+                      <ActivityIcon size={16} className="shrink-0 text-text-muted" />
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-slate-200">
+                        <p className="truncate text-sm font-medium text-text-primary">
                           {tr(ACTIVITY_LABEL[r.kind] ?? 'activityLesson')}
                           {r.module_title ? ` · ${r.module_title}` : ''}
                         </p>
                       </div>
                       <span className="num shrink-0 text-xs font-bold text-warning">+{r.amount}</span>
                     </li>
-                  ))}
-                </Card>
-              </section>
-            )}
-
-            {/* Leaderboard preview */}
-            <section aria-labelledby="lb-h">
-              <SectionHeading action={<Link href="/leaderboard" className="text-[0.75rem] font-medium text-cyan-400 hover:underline">{tr('seeAll')}</Link>}>
-                <span id="lb-h">{tr('leaderboard')}</span>
-              </SectionHeading>
-              <Card as="ul" className="divide-y divide-border overflow-hidden">
-                {top && top.length > 0 ? (
-                  top.map(entry => (
-                    <li key={entry.user_id} className="flex items-center gap-3 px-4 py-3">
-                      <Rank rank={entry.rank} />
-                      <Avatar emoji={entry.avatar_emoji} name={entry.display_name} size="sm" />
-                      <span className="min-w-0 flex-1 truncate text-sm font-medium text-slate-200">{entry.display_name}</span>
-                      <span className="num shrink-0 text-sm font-bold text-warning">{entry.total_xp}</span>
-                    </li>
-                  ))
-                ) : (
-                  <li className="px-4 py-6 text-center text-sm text-slate-500">{tr('emptyLeaderboardTitle')}</li>
-                )}
+                  );
+                })}
               </Card>
             </section>
+          )}
 
-            {/* Continue to full path */}
-            <ButtonLink href="/learn" size="lg" className="w-full justify-center">
-              {tr('viewPath')} →
-            </ButtonLink>
-          </>
-        )}
-      </div>
+          {/* Leaderboard preview */}
+          <section aria-labelledby="lb-h">
+            <SectionHeading
+              action={
+                <Link href="/leaderboard" className="text-xs font-medium text-cyan-400 hover:underline">
+                  {tr('seeAll')}
+                </Link>
+              }
+            >
+              <span id="lb-h">{tr('leaderboard')}</span>
+            </SectionHeading>
+            <Card as="ul" className="divide-y divide-border overflow-hidden">
+              {top && top.length > 0 ? (
+                top.map(entry => (
+                  <li key={entry.user_id} className="flex items-center gap-3 px-4 py-3">
+                    <Rank rank={entry.rank} />
+                    <Avatar emoji={entry.avatar_emoji} name={entry.display_name} size="sm" />
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-text-primary">{entry.display_name}</span>
+                    <span className="num shrink-0 text-sm font-bold text-warning">{entry.total_xp}</span>
+                  </li>
+                ))
+              ) : (
+                <li className="px-4 py-6 text-center text-sm text-text-muted">{tr('emptyLeaderboardTitle')}</li>
+              )}
+            </Card>
+          </section>
+
+          {/* Continue to full path */}
+          <ButtonLink href="/learn" size="lg" className="group w-full justify-center">
+            {tr('viewPath')}
+            <ArrowRightIcon size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+          </ButtonLink>
+        </>
+      )}
     </div>
   );
 }
 
 function Rank({ rank }: { rank: number }) {
-  const tone = { 1: 'text-warning', 2: 'text-slate-300', 3: 'text-success' }[rank] ?? 'text-slate-500';
+  const tone = { 1: 'text-warning', 2: 'text-text-secondary', 3: 'text-success' }[rank] ?? 'text-text-muted';
   return (
     <span className={`num w-5 shrink-0 text-center text-sm font-bold ${tone}`} aria-label={`${rank}`}>
       {rank}
