@@ -3,6 +3,9 @@ Learn cybersecurity and AI's more deeper
 
 > **Start here:** the full product concept — vision, audience, core loop,
 > design language and architecture — lives in **[CONCEPT.md](CONCEPT.md)**.
+>
+> **Data model:** the full database entity-relationship diagram lives in
+> **[ERD.md](ERD.md)**.
 
 ## Local development
 

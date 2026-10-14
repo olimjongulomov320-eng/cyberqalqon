@@ -331,5 +331,6 @@ tool that happens to look great, not like a movie prop.
 | i18n uz/ru | `frontend/src/lib/i18n.ts` |
 | Design tokens & motion | `frontend/tailwind.config.js`, `frontend/src/app/globals.css`, `frontend/src/lib/motion.ts` |
 | App shell & navigation | `frontend/src/components/AppShell.tsx` |
+| Database schema (DDL) | `backend/setup.js`; diagram in `ERD.md` |
 | Deploy | `.github/workflows/deploy-pages.yml` (frontend), `render.yaml` (API) |
 | Local dev | `README.md` + `frontend/.env.example` + `backend/.env.example` |
