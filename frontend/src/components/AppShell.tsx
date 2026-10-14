@@ -42,7 +42,7 @@ function Shell({ children }: { children: ReactNode }) {
   if (bare) {
     return (
       <div className="flex min-h-dvh flex-col">
-        <main id="main" tabIndex={-1} className="flex flex-1 items-center px-4 py-8 focus:outline-none sm:px-6 lg:py-12">
+        <main id="main" tabIndex={-1} className="flex flex-1 items-center px-4 py-8 focus:outline-none sm:px-6 sm:py-10 lg:px-8 lg:py-12">
           {children}
         </main>
       </div>
@@ -55,7 +55,7 @@ function Shell({ children }: { children: ReactNode }) {
       <main
         id="main"
         tabIndex={-1}
-        className={`mx-auto w-full flex-1 px-4 pb-28 pt-6 focus:outline-none sm:pb-16 ${width}`}
+        className={`mx-auto w-full flex-1 px-4 pb-28 pt-6 focus:outline-none sm:px-6 sm:pb-16 sm:pt-8 lg:px-8 lg:pt-10 ${width}`}
       >
         <PageMotion pathname={pathname ?? '/'}>{children}</PageMotion>
       </main>
@@ -82,7 +82,7 @@ function Footer() {
   const { lang } = useApp();
   const tr = makeT(lang);
   return (
-    <footer className="mx-auto hidden w-full max-w-5xl items-center justify-between gap-4 border-t border-border/60 px-4 pb-8 pt-4 text-xs text-text-muted sm:flex">
+    <footer className="mx-auto hidden w-full max-w-5xl items-center justify-between gap-4 border-t border-border/60 px-4 pb-8 pt-5 text-xs text-text-muted sm:flex sm:px-6 lg:px-8">
       <p>CyberQalqon · {tr('tagline')}</p>
       <nav className="flex gap-4">
         <Link href="/privacy" className="transition-colors hover:text-text-secondary">{tr('privacy')}</Link>

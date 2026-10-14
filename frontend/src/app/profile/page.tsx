@@ -100,7 +100,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <div className="stagger flex flex-col gap-4">
+      <div className="stagger flex flex-col">
         <header className="flex flex-col items-center gap-3 text-center">
           <div className="relative">
             <Avatar emoji={user.avatar_emoji} name={user.display_name} size="lg" ring />
@@ -128,7 +128,7 @@ export default function ProfilePage() {
         ) : (
           <>
             {/* Level progress */}
-            <Card className="p-4">
+            <Card className="mt-5 p-4">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-bold text-white">{tr('levelProgress')}</span>
                 <span className="num text-xs text-text-muted">
@@ -144,7 +144,7 @@ export default function ProfilePage() {
             </Card>
 
             {/* Stat cards */}
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {stats_.map(({ Icon, label, value, tone }) => (
                 <Card key={label} className="flex flex-col items-center gap-1.5 p-3 text-center">
                   <Icon size={18} className={tone} />
@@ -155,7 +155,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Accuracy */}
-            <Card className="p-4">
+            <Card className="mt-3 p-4">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <span className="text-sm font-bold text-white">{tr('statsTitle')}</span>
@@ -182,7 +182,7 @@ export default function ProfilePage() {
 
             {/* Strong / weak topics */}
             {stats.strong_topics.length > 0 || stats.weak_topics.length > 0 ? (
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {stats.strong_topics.length > 0 && (
                   <Card className="overflow-hidden">
                     <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-success">{tr('strongest')}</p>
@@ -213,7 +213,7 @@ export default function ProfilePage() {
                 )}
               </div>
             ) : (
-              <Card>
+              <Card className="mt-6">
                 <EmptyState
                   icon={<ChartIcon size={26} className="text-text-muted" />}
                   title={tr('noStatsYet')}
@@ -224,7 +224,7 @@ export default function ProfilePage() {
 
             {/* Recent activity */}
             {stats.recent.length > 0 && (
-              <Card className="overflow-hidden">
+              <Card className="mt-6 overflow-hidden">
                 <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-text-secondary">{tr('recentActivity')}</p>
                 <ul className="divide-y divide-border">
                   {stats.recent.slice(0, 5).map((r, i) => {
@@ -245,7 +245,7 @@ export default function ProfilePage() {
             )}
 
             {/* Achievements */}
-            <Card className="overflow-hidden">
+            <Card className="mt-6 overflow-hidden">
               <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-warning">{tr('achievements')}</p>
               {stats.achievements.length === 0 ? (
                 <p className="px-4 pb-4 pt-1 text-sm text-text-muted">{tr('achievementsEmpty')}</p>
@@ -266,7 +266,7 @@ export default function ProfilePage() {
             </Card>
 
             {/* Settings: avatar + daily goal */}
-            <Card className="p-4">
+            <Card className="mt-8 p-4">
               <div className="flex flex-col gap-5">
                 <div>
                   <p className="mb-2 text-sm font-bold text-white">{tr('changeAvatar')}</p>
@@ -319,7 +319,7 @@ export default function ProfilePage() {
               </div>
             </Card>
 
-            <Button variant="secondary" className="w-full justify-center" onClick={logout}>
+            <Button variant="secondary" className="mt-6 w-full justify-center" onClick={logout}>
               {tr('logout')}
             </Button>
           </>

@@ -226,7 +226,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-2 lg:gap-12">
+    <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
       <AuthBrandPanel
         headline={isRegister ? tr('authHeadlineRegister') : tr('authHeadlineLogin')}
         body={isRegister ? tr('authBodyRegister') : tr('authBodyLogin')}

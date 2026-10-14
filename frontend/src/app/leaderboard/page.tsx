@@ -61,7 +61,7 @@ export default function LeaderboardPage() {
   }, [period, attempt, lang, user?.id]);
 
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col">
       <header>
         <h1 className="display">{tr('leaderboard')}</h1>
         <p className="mt-1.5 text-sm text-text-secondary">
@@ -69,10 +69,12 @@ export default function LeaderboardPage() {
         </p>
       </header>
 
-      <SegmentedTabs period={period} setPeriod={setPeriod} />
+      <div className="mt-5">
+        <SegmentedTabs period={period} setPeriod={setPeriod} />
+      </div>
 
       {myRank !== null && user && (
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-cyan-500/35 bg-cyan-500/[0.07] px-4 py-3">
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-cyan-500/35 bg-cyan-500/[0.07] px-4 py-3">
           <span className="text-sm font-medium text-cyan-300">
             {period === 'week' ? tr('yourRank') : tr('allTime')}
           </span>
@@ -80,12 +82,12 @@ export default function LeaderboardPage() {
         </div>
       )}
       {myRank === null && user && (
-        <div className="rounded-xl border border-border bg-surface-900 px-4 py-3 text-sm text-text-muted">
+        <div className="mt-4 rounded-xl border border-border bg-surface-900 px-4 py-3 text-sm text-text-muted">
           {period === 'week' ? tr('notRanked') : tr('notRankedBody')}
         </div>
       )}
 
-      <div id="lb-panel" role="tabpanel" aria-labelledby={`lb-tab-${period}`}>
+      <div id="lb-panel" role="tabpanel" aria-labelledby={`lb-tab-${period}`} className="mt-6">
         {error ? (
           <Card>
             <EmptyState

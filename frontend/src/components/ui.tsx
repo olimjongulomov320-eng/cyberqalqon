@@ -105,7 +105,10 @@ export function SectionHeading({
 }) {
   return (
     <div className="mb-3 flex items-baseline justify-between gap-4">
-      <h2 className="text-sm font-bold tracking-tight text-text-primary">{children}</h2>
+      {/* A real heading step (17px) above the 15px body — the old `text-sm`
+          (13px) heading sat *below* body size, so every section read as a
+          caption instead of a landmark. Weight + white carry the rest. */}
+      <h2 className="text-lg font-bold tracking-tight text-text-primary">{children}</h2>
       {action}
     </div>
   );

@@ -90,7 +90,10 @@
 
   /* Section label — small caps micro-label */
   .label {
-    @apply text-xs font-semibold tracking-wider text-text-muted uppercase;
+    /* break-words: Russian/Uzbek words can be longer than a narrow column
+       (e.g. "Продолжить" at 320px); without it the label paints over its
+       neighbours instead of wrapping. */
+    @apply text-xs font-semibold tracking-wider text-text-muted uppercase break-words;
   }
 
   /* Skeleton loaders */
@@ -107,7 +110,10 @@
 
   /* Display heading */
   .display {
-    @apply text-display font-extrabold tracking-tight text-text-primary text-balance;
+    /* break-words: a single long word in a display heading (RU
+       "кибербезопасности") is wider than a 320px column; wrapping it keeps the
+       page from scrolling horizontally. */
+    @apply text-display font-extrabold tracking-tight text-text-primary text-balance break-words hyphens-auto;
   }
 
   /* Progress bar fill animation */

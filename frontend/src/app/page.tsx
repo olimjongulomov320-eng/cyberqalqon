@@ -17,7 +17,6 @@ import {
   FlameIcon,
   PlayIcon,
   RefreshIcon,
-  ShieldIcon,
   TargetIcon,
 } from '@/components/icons';
 
@@ -78,16 +77,15 @@ export default function HomePage() {
       <div className="flex flex-col">
         {/* Asymmetric hero — copy on the left, the real interactive preview on
             the right. The preview is the product itself, not a screenshot. */}
-        <section className="grid items-center gap-10 pt-4 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-10">
+        <section className="grid grid-cols-1 items-center gap-10 pt-4 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-10">
           <div className="stagger flex flex-col items-start gap-5">
-            <span className="inline-flex items-center gap-2 rounded-full border border-cyan-500/25 bg-cyan-500/[0.08] px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300">
-              <ShieldIcon size={14} />
-              {tr('tagline')}
-            </span>
+            {/* No kicker/eyebrow above the H1. The tagline pill was a rounded
+                badge sitting in the classic "small label over the headline"
+                slot; the tagline already appears in the footer, so the
+                headline now opens the page at full display weight. */}
+            <h1 className="display min-w-0 text-balance">{tr('heroTitle')}</h1>
 
-            <h1 className="display text-balance">{tr('heroTitle')}</h1>
-
-            <p className="max-w-[46ch] text-base leading-relaxed text-text-secondary">{tr('heroBody')}</p>
+            <p className="max-w-[46ch] text-base leading-relaxed text-text-secondary text-pretty">{tr('heroBody')}</p>
 
             <ButtonLink href="/auth" size="lg" className="group">
               {tr('ctaStart')}
@@ -139,15 +137,15 @@ export default function HomePage() {
   const tier = tierKey(tierIndex(level.level));
 
   return (
-    <div className="stagger flex flex-col gap-4">
+    <div className="stagger flex flex-col">
       {/* Greeting + level */}
       <header className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <Avatar emoji={user.avatar_emoji} name={user.display_name} size="lg" ring />
           <div className="min-w-0">
-            <p className="truncate text-lg font-extrabold tracking-tight text-white">
+            <h1 className="truncate text-xl font-extrabold tracking-tight text-white">
               {tr('welcome')}, {user.display_name}
-            </p>
+            </h1>
             <div className="flex items-center gap-1.5">
               <Badge>{tr(tier)}</Badge>
               <span className="num text-xs text-text-muted">Lv.{level.level}</span>
@@ -157,86 +155,91 @@ export default function HomePage() {
         <XPChip xp={user.total_xp} />
       </header>
 
-      {/* Continue card */}
-      {continueCtx ? (
-        <Link
-          href={`/modules/${continueCtx.slug}`}
-          className="group flex items-center gap-3.5 rounded-xl border border-cyan-500/40 bg-cyan-500/[0.08] p-4 shadow-card transition-colors hover:bg-cyan-500/[0.14]"
-        >
-          <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-cyan-400 text-text-inverse">
-            <PlayIcon size={20} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="label text-cyan-300">{tr('continueLearning')}</p>
-            <p className="truncate text-[0.9375rem] font-bold text-white">{continueCtx.title}</p>
-            <p className="num text-xs text-text-secondary">
-              {tr('continueHint')} · {continueCtx.position}/{continueCtx.total}
-            </p>
-            <div aria-hidden="true" className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-cyan-500/15">
-              <div
-                className="fill-x h-full rounded-full bg-cyan-400"
-                style={{ transform: `scaleX(${continueCtx.position / continueCtx.total})`, transformOrigin: 'left' }}
+      {/* Progress snapshot — deliberately tighter (12px) than the
+          subject sections below (32px). */}
+      <div className="mt-4 flex flex-col gap-3">
+
+        {/* Continue card */}
+        {continueCtx ? (
+          <Link
+            href={`/modules/${continueCtx.slug}`}
+            className="group flex items-center gap-3.5 rounded-xl border border-cyan-500/40 bg-cyan-500/[0.08] p-4 shadow-card transition-colors hover:bg-cyan-500/[0.14]"
+          >
+            <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-cyan-400 text-text-inverse">
+              <PlayIcon size={20} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="label text-cyan-300">{tr('continueLearning')}</p>
+              <p className="truncate text-[0.9375rem] font-bold text-white">{continueCtx.title}</p>
+              <p className="num text-xs text-text-secondary">
+                {tr('continueHint')} · {continueCtx.position}/{continueCtx.total}
+              </p>
+              <div aria-hidden="true" className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-cyan-500/15">
+                <div
+                  className="fill-x h-full rounded-full bg-cyan-400"
+                  style={{ transform: `scaleX(${continueCtx.position / continueCtx.total})`, transformOrigin: 'left' }}
+                />
+              </div>
+            </div>
+            <ChevronRightIcon size={20} className="shrink-0 text-text-muted transition-colors group-hover:text-cyan-400" />
+          </Link>
+        ) : (
+          <Link
+            href="/learn"
+            className="group flex items-center gap-3.5 rounded-xl border border-border bg-surface-900 p-4 shadow-card transition-colors hover:bg-surface-800"
+          >
+            <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-surface-800 text-cyan-300">
+              <CompassIcon size={22} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="label">{tr('learningPath')}</p>
+              <p className="truncate text-[0.9375rem] font-bold text-white">{tr('choosePath')}</p>
+            </div>
+            <ChevronRightIcon size={20} className="shrink-0 text-text-muted transition-colors group-hover:text-cyan-400" />
+          </Link>
+        )}
+
+        {/* Stats row */}
+        <div className="grid grid-cols-3 gap-2">
+          <Card className="flex flex-col items-center gap-1 p-3 text-center">
+            <Flame streak={stats?.profile.current_streak ?? user.current_streak ?? 0} short />
+            <span className="text-xs text-text-muted">{tr('streak')}</span>
+          </Card>
+          <Card className="flex flex-col items-center gap-1 p-3 text-center">
+            <span className="num text-lg font-extrabold text-text-primary">{stats?.week_xp ?? 0}</span>
+            <span className="text-xs text-text-muted">{tr('weekXp')}</span>
+          </Card>
+          <Card className="flex flex-col items-center gap-1 p-3 text-center">
+            <span className="num text-lg font-extrabold text-text-primary">{stats?.profile.modules_completed ?? 0}</span>
+            <span className="text-xs text-text-muted">{tr('lessonsShort')}</span>
+          </Card>
+        </div>
+
+        {/* Daily goal + level progress */}
+        <Card className="p-4">
+          <div className="flex items-center justify-between gap-3">
+            <DailyGoal dailyXp={stats?.daily_xp ?? 0} goal={goal} />
+            <div className="flex flex-col items-end gap-1">
+              <RingProgress
+                value={level.intoLevel}
+                max={level.toNext}
+                size={46}
+                stroke={5}
+                label={<span className="num text-[0.625rem] font-bold text-text-primary">{level.intoLevel}</span>}
               />
+              <Link href="/profile" className="text-[0.6875rem] font-medium text-cyan-400 hover:underline">
+                {tr('levelProgress')}
+              </Link>
             </div>
           </div>
-          <ChevronRightIcon size={20} className="shrink-0 text-text-muted transition-colors group-hover:text-cyan-400" />
-        </Link>
-      ) : (
-        <Link
-          href="/learn"
-          className="group flex items-center gap-3.5 rounded-xl border border-border bg-surface-900 p-4 shadow-card transition-colors hover:bg-surface-800"
-        >
-          <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-surface-800 text-cyan-300">
-            <CompassIcon size={22} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="label">{tr('learningPath')}</p>
-            <p className="truncate text-[0.9375rem] font-bold text-white">{tr('choosePath')}</p>
-          </div>
-          <ChevronRightIcon size={20} className="shrink-0 text-text-muted transition-colors group-hover:text-cyan-400" />
-        </Link>
-      )}
-
-      {/* Stats row */}
-      <div className="grid grid-cols-3 gap-2">
-        <Card className="flex flex-col items-center gap-1 p-3 text-center">
-          <Flame streak={stats?.profile.current_streak ?? user.current_streak ?? 0} short />
-          <span className="text-xs text-text-muted">{tr('streak')}</span>
-        </Card>
-        <Card className="flex flex-col items-center gap-1 p-3 text-center">
-          <span className="num text-lg font-extrabold text-text-primary">{stats?.week_xp ?? 0}</span>
-          <span className="text-xs text-text-muted">{tr('weekXp')}</span>
-        </Card>
-        <Card className="flex flex-col items-center gap-1 p-3 text-center">
-          <span className="num text-lg font-extrabold text-text-primary">{stats?.profile.modules_completed ?? 0}</span>
-          <span className="text-xs text-text-muted">{tr('lessonsShort')}</span>
         </Card>
       </div>
-
-      {/* Daily goal + level progress */}
-      <Card className="p-4">
-        <div className="flex items-center justify-between gap-3">
-          <DailyGoal dailyXp={stats?.daily_xp ?? 0} goal={goal} />
-          <div className="flex flex-col items-end gap-1">
-            <RingProgress
-              value={level.intoLevel}
-              max={level.toNext}
-              size={46}
-              stroke={5}
-              label={<span className="num text-[0.625rem] font-bold text-text-primary">{level.intoLevel}</span>}
-            />
-            <Link href="/profile" className="text-[0.6875rem] font-medium text-cyan-400 hover:underline">
-              {tr('levelProgress')}
-            </Link>
-          </div>
-        </div>
-      </Card>
 
       {/* Learning paths + skill mastery — built from the real /paths data the
           dashboard already fetches. "Mastery" here is honest: a domain counts as
           mastered only when every one of its modules is completed. */}
       {paths.length > 0 && (
-        <section aria-labelledby="paths-h">
+        <section aria-labelledby="paths-h" className="mt-8">
           <SectionHeading
             action={
               <Link href="/learn" className="text-xs font-medium text-cyan-400 hover:underline">
@@ -269,12 +272,12 @@ export default function HomePage() {
                     />
                   </div>
                   {path.domains.length > 0 && (
-                    <ul className="mt-3 flex flex-col gap-2">
+                    <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-6">
                       {path.domains.map(d => {
                         const dp = d.total > 0 ? d.completed / d.total : 0;
                         const mastered = d.total > 0 && d.completed >= d.total;
                         return (
-                          <li key={d.slug} className="flex items-center gap-2">
+                          <li key={d.slug} className="flex min-w-0 items-center gap-2">
                             <span
                               aria-hidden="true"
                               className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border text-[0.625rem] ${
@@ -306,7 +309,7 @@ export default function HomePage() {
       )}
 
       {statsFailed ? (
-        <Card>
+        <Card className="mt-8">
           <EmptyState
             icon={<CompassIcon size={26} className="text-text-muted" />}
             title={tr('loadError')}
@@ -314,12 +317,14 @@ export default function HomePage() {
           />
         </Card>
       ) : !stats ? (
-        <div className="flex flex-col gap-3">
+        <div className="mt-8 flex flex-col gap-3">
           <Skeleton className="h-24 w-full" />
           <Skeleton className="h-32 w-full" />
         </div>
       ) : (
-        <>
+        <div className="stagger mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-8">
+          {/* Supporting sections flow two-up on desktop, so the dashboard stops
+              being one 16px-gapped column of equally weighted blocks. */}
           {/* Weak topics → practice */}
           {stats.weak_topics.length > 0 && (
             <section aria-labelledby="weak-h">
@@ -418,11 +423,11 @@ export default function HomePage() {
           </section>
 
           {/* Continue to full path */}
-          <ButtonLink href="/learn" size="lg" className="group w-full justify-center">
+          <ButtonLink href="/learn" size="lg" className="group w-full justify-center lg:col-span-2">
             {tr('viewPath')}
             <ArrowRightIcon size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
           </ButtonLink>
-        </>
+        </div>
       )}
     </div>
   );

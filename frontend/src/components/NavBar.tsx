@@ -24,13 +24,18 @@ export default function NavBar() {
 
   return (
     <header className="sticky top-0 z-nav border-b border-border bg-surface-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-surface-950/70">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4">
+      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
+          aria-label={tr('appName')}
           className="-ml-1 flex items-center gap-2.5 rounded-lg px-1 py-1 transition-opacity hover:opacity-85"
         >
           <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={28} height={28} className="shrink-0" priority />
-          <span className="text-[0.9375rem] font-bold tracking-tight text-white">{tr('appName')}</span>
+          {/* The wordmark is dropped below 360px: at that width the brand lockup
+              plus the language / low-traffic / profile controls no longer fit on
+              one row (they used to push the header ~15px past the viewport). The
+              logo mark, page title and bottom nav still carry the brand. */}
+          <span className="hidden text-[0.9375rem] font-bold tracking-tight text-white min-[360px]:inline">{tr('appName')}</span>
         </Link>
 
         <nav aria-label={tr('tracks')} className="hidden items-center gap-1 sm:flex">
@@ -61,7 +66,7 @@ export default function NavBar() {
             <Link
               href="/profile"
               aria-label={user.display_name}
-              className="flex items-center gap-1.5 rounded-lg py-1 pl-1 pr-2 text-sm font-semibold text-white transition-colors hover:bg-surface-900"
+              className="flex items-center gap-1.5 rounded-lg py-1.5 pl-1 pr-2 text-sm font-semibold text-white transition-colors hover:bg-surface-900"
             >
               <span aria-hidden="true">{user.avatar_emoji}</span>
               <span className="num inline-flex items-center gap-0.5 text-xs text-warning">
@@ -73,7 +78,7 @@ export default function NavBar() {
           ) : (
             <Link
               href="/auth"
-              className="rounded-lg bg-cyan-400 px-3 py-1.5 text-[0.8125rem] font-bold text-text-inverse transition-colors hover:bg-cyan-300"
+              className="rounded-lg bg-cyan-400 px-3.5 py-2 text-[0.8125rem] font-bold text-text-inverse transition-colors hover:bg-cyan-300"
             >
               {tr('login')}
             </Link>
@@ -100,7 +105,7 @@ function LangToggle({
           key={l}
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
-          className={`px-1.5 py-1 text-[0.6875rem] font-bold uppercase tracking-wide transition-colors ${
+          className={`px-2 py-1.5 text-[0.6875rem] font-bold uppercase tracking-wide transition-colors ${
             lang === l ? 'bg-cyan-500/15 text-cyan-300' : 'text-text-muted hover:text-text-secondary'
           }`}
         >
@@ -126,7 +131,7 @@ function LowBandwidthToggle({
       role="switch"
       aria-checked={on}
       title={label}
-      className={`grid h-7 w-7 place-items-center rounded-md transition-colors ${
+      className={`grid h-8 w-8 place-items-center rounded-md transition-colors ${
         on ? 'bg-warning/10 text-warning' : 'text-text-muted hover:text-text-secondary'
       }`}
     >

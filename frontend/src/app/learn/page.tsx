@@ -50,7 +50,7 @@ function ModuleRow({ m, i, last }: { m: PathModule; i: number; last: boolean }) 
   const row = (
     <>
       <div className="min-w-0 flex-1">
-        <p className={`text-sm font-semibold leading-snug ${locked ? 'text-text-muted' : 'text-text-primary'}`}>{m.title}</p>
+        <p className={`text-sm font-semibold leading-snug break-words ${locked ? 'text-text-muted' : 'text-text-primary'}`}>{m.title}</p>
         <p className="num mt-1 text-xs text-text-muted">
           {m.exercise_count} {tr('challenge').toLowerCase()}
           <span aria-hidden="true"> · </span>
@@ -121,7 +121,7 @@ function DomainRow({ domain }: { domain: Domain }) {
             {domain.icon}
           </span>
           <div className="min-w-0">
-            <h3 className="truncate text-sm font-bold text-white">{domain.title}</h3>
+            <h3 className="truncate text-base font-bold text-white">{domain.title}</h3>
             <p className="truncate text-xs text-text-muted">{domain.description}</p>
           </div>
         </div>
@@ -195,10 +195,10 @@ function LearnInner() {
   const isEmpty = data.paths.every(p => p.domains.every(d => d.modules.length === 0));
 
   return (
-    <div className="stagger flex flex-col gap-4">
+    <div className="stagger flex flex-col gap-8">
       {/* Continue strip */}
       {data.continue && (
-        <Card className="flex items-center gap-3 border-cyan-500/30 bg-cyan-500/[0.06]">
+        <Card className="flex items-center gap-3 border-cyan-500/30 bg-cyan-500/[0.06] p-4">
           <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-cyan-400 text-text-inverse">
             <PlayIcon size={16} />
           </span>
@@ -230,7 +230,7 @@ function LearnInner() {
           <div key={path.slug} className="flex flex-col gap-3">
             <div className="flex items-center gap-2 px-1">
               <span aria-hidden="true" className="text-xl">{path.icon}</span>
-              <h2 className="text-base font-extrabold tracking-tight text-white">{path.title}</h2>
+              <h2 className="text-lg font-extrabold tracking-tight text-white">{path.title}</h2>
             </div>
             {path.domains.length === 0 ? (
               <EmptyState emoji={path.icon} title={tr('pathEmptyTitle')} body={tr('pathEmptyBody')} />

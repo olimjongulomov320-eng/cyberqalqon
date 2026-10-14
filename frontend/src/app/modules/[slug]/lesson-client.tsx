@@ -388,7 +388,7 @@ export default function LessonView({ slug }: { slug: string }) {
     return (
       <div>
         {loadError && (
-          <Card>
+          <Card className="p-5">
             <ErrorNote>
               {loadError.isTimeout
                 ? tr('timeoutError')
@@ -421,7 +421,7 @@ export default function LessonView({ slug }: { slug: string }) {
   if (phase === 'intro' && module) {
     return (
       <div>
-        <Card className="overflow-hidden">
+        <Card className="p-5 sm:p-6">
           <div className="flex flex-col gap-5">
             <header className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -481,7 +481,7 @@ export default function LessonView({ slug }: { slug: string }) {
     return (
       <div>
         <Confetti show />
-        <Card className="overflow-hidden border-cyan-500/30">
+        <Card className="p-5 border-cyan-500/30 sm:p-6">
           <div className="stagger flex flex-col items-center gap-4 text-center">
             <span
               aria-hidden="true"
@@ -658,7 +658,7 @@ export default function LessonView({ slug }: { slug: string }) {
       {/* Exercise card */}
       <div className="flex flex-1 flex-col justify-center py-6">
         <motion.div key={ex?.id ?? 'loading'} variants={questionIn} initial="hidden" animate="visible">
-          <Card className="gap-5">
+          <Card className="p-5 sm:p-6">
             {ex ? (
               <ExerciseRenderer
                 key={ex.id}
@@ -703,7 +703,7 @@ export default function LessonView({ slug }: { slug: string }) {
 
         {/* Restore-a-heart pitch */}
         {showHeartsPitch && (
-          <Card className="mt-4 border-warning/40">
+          <Card className="mt-4 border-warning/40 p-4">
             {!practice ? (
               <>
                 <p className="flex items-center gap-2 text-sm font-bold text-white">
@@ -816,7 +816,7 @@ export default function LessonView({ slug }: { slug: string }) {
           className="fixed inset-0 z-overlay grid animate-fade-in place-items-center bg-surface-950/70 p-4 backdrop-blur-sm"
           onClick={() => setExitOpen(false)}
         >
-          <Card className="w-full max-w-sm animate-scale-in" onClick={e => e.stopPropagation()}>
+          <Card className="w-full max-w-sm p-5 animate-scale-in" onClick={e => e.stopPropagation()}>
             <h2 id="exit-title" className="text-lg font-bold text-white">{tr('exitLessonTitle')}</h2>
             <p className="mt-1 text-sm text-text-secondary">{tr('exitLessonBody')}</p>
             <div className="mt-5 grid grid-cols-2 gap-2">

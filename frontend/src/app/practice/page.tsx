@@ -184,7 +184,7 @@ export default function PracticePage() {
     return (
       <div>
         {error ? (
-          <Card>
+          <Card className="p-5">
             <ErrorNote>
               {error.isTimeout ? tr('timeoutError') : error.isOffline ? tr('networkError') : error.message}
             </ErrorNote>
@@ -220,9 +220,9 @@ export default function PracticePage() {
             action={<ButtonLink href="/learn">{tr('goLearn')}</ButtonLink>}
           />
         ) : (
-          <div className="stagger flex flex-col gap-4">
+          <div className="stagger flex flex-col gap-6">
             {session && (
-              <Card className="flex items-center justify-between gap-3 border-cyan-500/30 bg-cyan-500/[0.06]">
+              <Card className="flex items-center justify-between gap-3 border-cyan-500/30 bg-cyan-500/[0.06] p-4">
                 <div className="min-w-0">
                   <p className="label text-cyan-300">{tr('reviewSession')}</p>
                   <p className="truncate text-sm font-bold text-white">{session.module_title}</p>
@@ -236,10 +236,10 @@ export default function PracticePage() {
 
             {(data?.topics.length ?? 0) > 0 && (
               <section>
-                <h2 className="mb-2 px-1 text-sm font-bold text-text-primary">{tr('weakTopics')}</h2>
+                <h2 className="mb-2.5 px-1 text-base font-bold text-text-primary">{tr('weakTopics')}</h2>
                 <div className="flex flex-col gap-2">
                   {data?.topics.map(t => (
-                    <Card key={t.slug} className="flex items-center gap-3">
+                    <Card key={t.slug} className="flex items-center gap-3 p-3">
                       <span aria-hidden="true" className="text-xl">{t.icon}</span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-bold text-white">{t.title}</p>
@@ -292,7 +292,7 @@ export default function PracticePage() {
         </div>
 
         <div className="flex flex-1 flex-col justify-center py-6">
-          <Card className="gap-5">
+          <Card className="p-5 sm:p-6">
             <ExerciseRenderer
               key={ex.id}
               ex={ex}
@@ -351,7 +351,7 @@ export default function PracticePage() {
     const leveledUp = endLevel > startLevel;
     return (
       <div>
-        <Card className="border-cyan-500/30">
+        <Card className="border-cyan-500/30 p-6 sm:p-8">
           <div className="stagger flex flex-col items-center gap-3 text-center">
             <span
               aria-hidden="true"
@@ -405,7 +405,7 @@ export default function PracticePage() {
             ))}
           </div>
 
-          <div className="mt-5 grid gap-2 sm:grid-cols-2">
+          <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
             <ButtonLink href="/practice" className="justify-center">{tr('reviewSession')}</ButtonLink>
             <ButtonLink href="/learn" variant="secondary" className="justify-center">{tr('goLearn')}</ButtonLink>
           </div>
