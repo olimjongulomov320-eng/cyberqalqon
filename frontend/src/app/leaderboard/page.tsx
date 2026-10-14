@@ -114,7 +114,7 @@ export default function LeaderboardPage() {
             />
           </Card>
         ) : (
-          <ol className="stagger space-y-2">
+          <ol className="space-y-2">
             {rows.map(entry => {
               const isMe = user?.id === entry.user_id;
               return (

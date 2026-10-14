@@ -5,7 +5,7 @@ import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, fetchPaths, LearningPath, Domain, PathModule } from '@/lib/api';
 import { Card, ErrorNote, EmptyState, Skeleton, ButtonLink, Badge } from '@/components/ui';
-import { CheckIcon, ChevronRightIcon, CompassIcon, LockIcon, PlayIcon, TrophyIcon } from '@/components/icons';
+import { CheckIcon, ChevronRightIcon, CompassIcon, DomainIcon, LockIcon, PlayIcon, TrophyIcon } from '@/components/icons';
 
 /** One module on the path: a numbered node on a connected route, plus a card
  *  carrying the title, exercise count, XP and the module's state. Circles are an
@@ -20,7 +20,7 @@ function ModuleRow({ m, i, last }: { m: PathModule; i: number; last: boolean }) 
 
   const nodeStyle: Record<PathModule['state'], string> = {
     done: 'border-success/50 bg-success/15 text-success',
-    current: 'border-cyan-400 bg-cyan-400 text-text-inverse shadow-[0_0_0_4px_rgb(34_211_238/0.18)] animate-[cq-pop_0.6s_ease]',
+    current: 'border-cyan-400 bg-cyan-400 text-text-inverse shadow-[0_0_0_4px_rgb(34_211_238/0.18)]',
     open: 'border-border-light bg-surface-700 text-text-primary',
     locked: 'border-border bg-surface-800 text-text-muted',
   };
@@ -116,9 +116,9 @@ function DomainRow({ domain }: { domain: Domain }) {
         <div className="flex min-w-0 items-center gap-2.5">
           <span
             aria-hidden="true"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-surface-800 text-lg"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-surface-800 text-cyan-300"
           >
-            {domain.icon}
+            <DomainIcon slug={domain.slug} size={18} />
           </span>
           <div className="min-w-0">
             <h3 className="truncate text-base font-bold text-white">{domain.title}</h3>
@@ -195,7 +195,7 @@ function LearnInner() {
   const isEmpty = data.paths.every(p => p.domains.every(d => d.modules.length === 0));
 
   return (
-    <div className="stagger flex flex-col gap-8">
+    <div className="flex flex-col gap-8">
       {/* Continue strip */}
       {data.continue && (
         <Card className="flex items-center gap-3 border-cyan-500/30 bg-cyan-500/[0.06] p-4">
@@ -229,11 +229,11 @@ function LearnInner() {
         data.paths.map(path => (
           <div key={path.slug} className="flex flex-col gap-3">
             <div className="flex items-center gap-2 px-1">
-              <span aria-hidden="true" className="text-xl">{path.icon}</span>
+              <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={path.slug} size={20} /></span>
               <h2 className="text-lg font-extrabold tracking-tight text-white">{path.title}</h2>
             </div>
             {path.domains.length === 0 ? (
-              <EmptyState emoji={path.icon} title={tr('pathEmptyTitle')} body={tr('pathEmptyBody')} />
+              <EmptyState icon={<DomainIcon slug={path.slug} size={26} className="text-text-muted" />} title={tr('pathEmptyTitle')} body={tr('pathEmptyBody')} />
             ) : (
               path.domains.map(domain => <DomainRow key={domain.slug} domain={domain} />)
             )}

@@ -1,7 +1,6 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -19,13 +18,13 @@ import { Hearts, Confetti, NewAchievementChip, XPChip } from '@/components/game'
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { loseHeart, restoreHeart, useHearts } from '@/lib/hearts';
 import { levelFromXp } from '@/lib/gamification';
-import { fadeUp, questionIn } from '@/lib/motion';
 import { Badge, Button, ButtonLink, Card, ErrorNote, Progress, Skeleton } from '@/components/ui';
 import {
   ArrowRightIcon,
   BoltIcon,
   CheckIcon,
   CloseIcon,
+  DomainIcon,
   FlameIcon,
   HeartIcon,
   RefreshIcon,
@@ -428,9 +427,7 @@ export default function LessonView({ slug }: { slug: string }) {
                 <p className="label text-cyan-300">{module.domain_title ?? tr('modules')}</p>
                 <h1 className="display mt-2">{module.title}</h1>
               </div>
-              {module.domain_icon && (
-                <span aria-hidden="true" className="shrink-0 text-3xl">{module.domain_icon}</span>
-              )}
+              <span aria-hidden="true" className="shrink-0 text-cyan-300">{module.domain_slug && <DomainIcon slug={module.domain_slug} size={28} />}</span>
             </header>
 
             {module.content && (
@@ -482,7 +479,7 @@ export default function LessonView({ slug }: { slug: string }) {
       <div>
         <Confetti show />
         <Card className="p-5 border-cyan-500/30 sm:p-6">
-          <div className="stagger flex flex-col items-center gap-4 text-center">
+          <div className="flex flex-col items-center gap-4 text-center">
             <span
               aria-hidden="true"
               className="grid h-16 w-16 place-items-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
@@ -556,7 +553,7 @@ export default function LessonView({ slug }: { slug: string }) {
                   {tr('reviewMistakes')} ({mistakes.length})
                 </Button>
                 {mistakesOpen && (
-                  <ul className="stagger mt-3 flex flex-col gap-2 text-left">
+                  <ul className="mt-3 flex flex-col gap-2 text-left">
                     {mistakes.map(r => {
                       const ex = exercises.find(e => e.id === r.id);
                       const mine = answers.find(a => a.id === r.id)?.value;
@@ -617,9 +614,9 @@ export default function LessonView({ slug }: { slug: string }) {
   const practiceReady = practice ? isAnswerReady(practice.ex, practice.value) : false;
 
   return (
-    <div className="flex min-h-[calc(100dvh-4rem)] flex-col">
+    <div className="flex flex-1 flex-col">
       {/* Top bar */}
-      <div ref={topRef} className="scroll-mt-24 pt-6">
+      <div ref={topRef} className="scroll-mt-24">
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"
@@ -656,32 +653,27 @@ export default function LessonView({ slug }: { slug: string }) {
       )}
 
       {/* Exercise card */}
-      <div className="flex flex-1 flex-col justify-center py-6">
-        <motion.div key={ex?.id ?? 'loading'} variants={questionIn} initial="hidden" animate="visible">
-          <Card className="p-5 sm:p-6">
-            {ex ? (
-              <ExerciseRenderer
-                key={ex.id}
-                ex={ex}
-                value={value}
-                onChange={setValue}
-                locked={Boolean(checked)}
-                reveal={checked?.reveal}
-              />
-            ) : (
-              <Skeleton className="h-40 w-full" />
-            )}
-          </Card>
-        </motion.div>
+      <div className="flex flex-1 flex-col justify-center py-3 sm:py-4">
+        <Card className="p-4 sm:p-5">
+          {ex ? (
+            <ExerciseRenderer
+              key={ex.id}
+              ex={ex}
+              value={value}
+              onChange={setValue}
+              locked={Boolean(checked)}
+              reveal={checked?.reveal}
+            />
+          ) : (
+            <Skeleton className="h-40 w-full" />
+          )}
+        </Card>
 
         {/* Feedback panel */}
         {checked && (
-          <motion.section
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
+          <section
             aria-live="polite"
-            className={`stagger mt-4 rounded-xl border p-4 ${
+            className={`mt-3 rounded-xl border p-4 ${
               checked.correct ? 'border-success/50 bg-success/[0.08]' : 'border-danger/50 bg-danger/[0.08]'
             }`}
           >
@@ -698,7 +690,7 @@ export default function LessonView({ slug }: { slug: string }) {
                 <BoltIcon size={14} /> +{checked.xp_earned} XP
               </p>
             )}
-          </motion.section>
+          </section>
         )}
 
         {/* Restore-a-heart pitch */}

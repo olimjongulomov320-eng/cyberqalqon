@@ -237,3 +237,131 @@ export const EyeOffIcon = (p: IconProps) => (
     <path d="M4 4l16 16" />
   </Base>
 );
+
+/* ── Domain / category glyphs ────────────────────────────────────────────────
+   These replace the emoji badges the API ships for learning paths and domains
+   (`icon` on /paths and /stats). Emoji rendered as interface chrome is not a
+   designed icon: it varies by OS font, ignores the stroke grid and reads as
+   decoration. The curriculum keeps its emoji data untouched (that is content),
+   but the UI now draws the badge from this one family, keyed by the stable
+   `slug`. Unknown slugs fall back to the shield. */
+
+export const NetworkIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="5" r="2.2" />
+    <circle cx="5.4" cy="18" r="2.2" />
+    <circle cx="18.6" cy="18" r="2.2" />
+    <path d="M10.6 6.9 6.7 15.8" />
+    <path d="M13.4 6.9 17.3 15.8" />
+    <path d="M7.6 18h8.8" />
+  </Base>
+);
+
+export const TerminalIcon = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="3.6" y="5" width="16.8" height="14" rx="2.2" />
+    <path d="M7.2 9.8 9.8 12l-2.6 2.2" />
+    <path d="M12.4 14.4h3.8" />
+  </Base>
+);
+
+export const GlobeIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8.4" />
+    <path d="M3.7 12h16.6" />
+    <path d="M12 3.6c2.2 2.4 3.4 5.3 3.4 8.4S14.2 18 12 20.4C9.8 18 8.6 15.1 8.6 12S9.8 6 12 3.6Z" />
+  </Base>
+);
+
+export const KeyIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="8.4" cy="12" r="4.1" />
+    <path d="M12.5 12h7.2" />
+    <path d="M16.9 12v2.8" />
+    <path d="M19.7 12v1.9" />
+  </Base>
+);
+
+export const SearchIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="10.6" cy="10.6" r="6" />
+    <path d="M15 15l4.6 4.6" />
+  </Base>
+);
+
+export const CloudIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M7.4 18.5h9.6a3.85 3.85 0 0 0 .5-7.6 5.4 5.4 0 0 0-10.4-1.4 4.2 4.2 0 0 0 .3 9Z" />
+  </Base>
+);
+
+export const CogIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="3.1" />
+    <path d="M12 3.6v3.1M12 17.3v3.1M20.4 12h-3.1M6.7 12H3.6" />
+    <path d="m17.9 6.1-2.1 2.1M8.2 15.8l-2.1 2.1M17.9 17.9l-2.1-2.1M8.2 8.2 6.1 6.1" />
+  </Base>
+);
+
+export const DatabaseIcon = (p: IconProps) => (
+  <Base {...p}>
+    <ellipse cx="12" cy="6.1" rx="7.3" ry="2.9" />
+    <path d="M4.7 6.1v11.8c0 1.6 3.3 2.9 7.3 2.9s7.3-1.3 7.3-2.9V6.1" />
+    <path d="M4.7 12c0 1.6 3.3 2.9 7.3 2.9s7.3-1.3 7.3-2.9" />
+  </Base>
+);
+
+export const GitBranchIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="7" cy="6" r="2.3" />
+    <circle cx="7" cy="18" r="2.3" />
+    <circle cx="17" cy="9" r="2.3" />
+    <path d="M7 8.3v7.4" />
+    <path d="M9.2 6h5.4a1 1 0 0 1 1 1v0.7" />
+  </Base>
+);
+
+export const CodeIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m8.6 7.4-5 4.6 5 4.6" />
+    <path d="m15.4 7.4 5 4.6-5 4.6" />
+  </Base>
+);
+
+export const LaptopIcon = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="4.6" y="5.2" width="14.8" height="10.1" rx="1.6" />
+    <path d="M2.8 18.8h18.4" />
+  </Base>
+);
+
+/** slug → glyph. Keys mirror `backend/curriculum/index.js` (paths + domains). */
+const DOMAIN_ICONS: Record<string, (p: IconProps) => JSX.Element> = {
+  // learning paths
+  cybersecurity: ShieldIcon,
+  'it-fundamentals': LaptopIcon,
+  // cybersecurity domains
+  fundamentals: BookIcon,
+  networking: NetworkIcon,
+  linux: TerminalIcon,
+  'web-security': GlobeIcon,
+  crypto: KeyIcon,
+  'defensive-security': SearchIcon,
+  'cloud-security': CloudIcon,
+  'ethical-testing': TargetIcon,
+  // IT-fundamentals domains
+  'it-basics': CogIcon,
+  databases: DatabaseIcon,
+  git: GitBranchIcon,
+  programming: CodeIcon,
+};
+
+/**
+ * Renders the badge for a curriculum path/domain. Pass the entity's `slug`.
+ * Decorative by default (the adjacent title carries the meaning), so it is
+ * `aria-hidden` like every other glyph in this file.
+ */
+export function DomainIcon({ slug, ...p }: IconProps & { slug?: string }) {
+  const Glyph = (slug && DOMAIN_ICONS[slug]) || ShieldIcon;
+  return <Glyph {...p} />;
+}

@@ -1,14 +1,22 @@
 import type { Variants, Transition } from 'framer-motion';
 
 /**
- * Motion system — single source of truth for animation durations, easing and
- * the reusable variants used across pages and components.
+ * Motion system — single source of truth for animation durations and easing.
  *
- * Rules (kept deliberately simple):
+ * Scope, after the mentor review: motion exists for *interaction feedback* only.
+ * Container entrances were removed entirely — no page fade-up, no per-child
+ * stagger, no question rise, no scroll reveals — so ordinary content is painted
+ * fully visible the moment it renders and can never shift after paint.
+ *
+ * What remains is deliberately short and purposeful:
+ *   · answerCorrect / answerWrong — the exercise reply;
+ *   · dialogIn / overlayFade / scaleIn — modal + overlay state changes;
+ *   · tapScale — press feedback on tactile surfaces.
+ *
+ * Rules:
  *   · transform/opacity only — never layout properties;
- *   · everything is gated by MotionConfig reducedMotion="user" (AppShell), so
- *     OS "reduce motion" skips transforms and keeps quick opacity fades;
- *   · entrances are short (≤ 300ms) so they never feel like the app is slow.
+ *   · gated by MotionConfig reducedMotion="user" (AppShell), so OS "reduce
+ *     motion" skips transforms and keeps quick opacity fades.
  */
 
 export const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -16,44 +24,13 @@ export const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 export const DUR = {
   /** Button / microfeedback pops and shakes. */
   fast: 0.18,
-  /** Card + page entrances, dialog openings. */
+  /** Dialog + answer-reveal beats. */
   base: 0.28,
   /** Progress fills and celebratory reveals. */
   slow: 0.45,
 } as const;
 
 export const EASE_IN_OUT: Transition['ease'] = 'easeOut';
-
-/** Fade + slight rise — the page/route transition default. */
-export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: DUR.base, ease: EASE },
-  },
-};
-
-/** Parent orchestration: staggers children by `delay = index * step`. */
-export const staggerParent = (step = 0.05): Variants => ({
-  hidden: {},
-  visible: { transition: { staggerChildren: step } },
-});
-
-export const staggerChild: Variants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: DUR.base, ease: EASE },
-  },
-};
-
-/** Card hover lift (transform + shadow-ish via border colour only). */
-export const cardHover: Variants = {
-  rest: { y: 0 },
-  hover: { y: -2, transition: { duration: DUR.fast, ease: EASE } },
-};
 
 /** Correct-answer reveal: a quick confidence pop. */
 export const answerCorrect: Variants = {
@@ -86,7 +63,7 @@ export const overlayFade: Variants = {
   visible: { opacity: 1, transition: { duration: DUR.fast } },
 };
 
-/** Opacity-only fade — the reduced-motion-safe default for content reveals. */
+/** Opacity-only fade — the reduced-motion-safe default for inline reveals. */
 export const fadeIn: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: DUR.base, ease: EASE } },
@@ -98,19 +75,5 @@ export const scaleIn: Variants = {
   visible: { opacity: 1, scale: 1, transition: { duration: DUR.base, ease: EASE } },
 };
 
-/**
- * Question-to-question transition in the lesson runner. Deliberately short and
- * with no exit phase: the next question must never make the learner wait for a
- * leaving animation. `MotionConfig reducedMotion="user"` downgrades this to a
- * plain fade for users who prefer reduced motion.
- */
-export const questionIn: Variants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: { opacity: 1, y: 0, transition: { duration: DUR.base, ease: EASE } },
-};
-
 /** Shared press feedback for pressable surfaces (framer-motion `whileTap`). */
 export const tapScale = { scale: 0.985 };
-
-/** `whileInView` defaults for scroll reveals: animate once, a little into view. */
-export const VIEWPORT = { once: true, amount: 0.2 } as const;

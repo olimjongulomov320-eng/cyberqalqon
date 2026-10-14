@@ -59,9 +59,6 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
-      /* Zero the per-item stagger delays (`.stagger > *`) so reduced-motion
-         users see content immediately instead of waiting out a 0.03–0.48s
-         delay before an instant pop-in. */
       animation-delay: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
@@ -125,20 +122,11 @@
   /* Optical centering for emoji */
   .opt-center { text-indent: 0.0625em; }
 
-  /* Stagger children — first 10 rise in sequence; long lists don't animate
-     every row (bounded work) and the tail must not animate before the head. */
-  .stagger > * { animation: cq-rise 0.55s cubic-bezier(0.2, 0.9, 0.25, 1) both; }
-  .stagger > *:nth-child(1) { animation-delay: 0.03s; }
-  .stagger > *:nth-child(2) { animation-delay: 0.08s; }
-  .stagger > *:nth-child(3) { animation-delay: 0.13s; }
-  .stagger > *:nth-child(4) { animation-delay: 0.18s; }
-  .stagger > *:nth-child(5) { animation-delay: 0.23s; }
-  .stagger > *:nth-child(6) { animation-delay: 0.28s; }
-  .stagger > *:nth-child(7) { animation-delay: 0.33s; }
-  .stagger > *:nth-child(8) { animation-delay: 0.38s; }
-  .stagger > *:nth-child(9) { animation-delay: 0.43s; }
-  .stagger > *:nth-child(10) { animation-delay: 0.48s; }
-  .stagger > *:nth-child(n + 11) { animation: none; }
+  /* Deliberately no container entrance animation. Content previously rose in
+     with a per-child stagger (`.stagger > *`, 0.03s–0.48s delays); it made
+     every ordinary list, card and heading animate on render. Content now paints
+     fully visible immediately — no rise, no cascade, no layout shift. Motion is
+     reserved for interaction feedback only. */
 
   /* Low bandwidth mode */
   .low-bandwidth body {
@@ -187,12 +175,6 @@
 }
 
 @layer utilities {
-  /* Rise animation for stagger */
-  @keyframes cq-rise {
-    from { opacity: 0; transform: translate3d(0, 12px, 0); }
-    to { opacity: 1; transform: none; }
-  }
-
   @keyframes cq-sweep {
     from { transform: translate3d(-100%, 0, 0); }
     to { transform: translate3d(100%, 0, 0); }

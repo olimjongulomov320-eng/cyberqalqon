@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, authLogin, authRegister } from '@/lib/api';
@@ -233,18 +233,15 @@ export default function AuthPage() {
       >
         <ul className="mt-8 space-y-3">
           {[tr('authPoint1'), tr('authPoint2'), tr('authPoint3')].map((p, i) => (
-            <motion.li
+            <li
               key={i}
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 + i * 0.1 }}
               className="flex items-center gap-3 text-sm text-text-secondary"
             >
               <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-cyan-500/15 text-cyan-300">
                 <CheckIcon size={13} />
               </span>
               {p}
-            </motion.li>
+            </li>
           ))}
         </ul>
       </AuthBrandPanel>
@@ -252,14 +249,9 @@ export default function AuthPage() {
       <div className="flex flex-col justify-center py-2 sm:py-6">
         {/* mobile brand mark */}
         <div className="mb-8 flex flex-col items-center text-center lg:items-start lg:text-left">
-          <motion.span
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-            className="grid h-14 w-14 place-items-center rounded-2xl border border-border bg-surface-900 shadow-card edge-light lg:hidden"
-          >
+          <span className="grid h-14 w-14 place-items-center rounded-2xl border border-border bg-surface-900 shadow-card edge-light lg:hidden">
             <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={32} height={32} priority />
-          </motion.span>
+          </span>
           <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-text-primary lg:mt-0">
             {isRegister ? tr('createAccount') : tr('welcomeBack')}
           </h1>
@@ -296,159 +288,130 @@ export default function AuthPage() {
           ))}
         </div>
 
-        <AnimatePresence mode="wait">
-          <motion.form
-            key={mode}
-            onSubmit={handleSubmit}
-            noValidate
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25 }}
-            className="space-y-4"
-          >
-            {isRegister && (
-              <Field label={tr('displayName')} error={touched.display_name ? errors.display_name : undefined} required>
-                <input
-                  type="text"
-                  value={form.display_name}
-                  onChange={set('display_name')}
-                  onBlur={() => setTouched(t => ({ ...t, display_name: true }))}
-                  autoComplete="name"
-                  placeholder={tr('displayNamePlaceholder')}
-                  aria-invalid={submitted && Boolean(errors.display_name) || undefined}
-                  className={`input-base ${submitted && errors.display_name ? 'input-error' : ''}`}
-                />
-              </Field>
-            )}
-
-            <Field
-              label={isRegister ? tr('username') : tr('loginIdentifier')}
-              error={touched.username ? errors.username : undefined}
-              hint={isRegister ? tr('usernameHint') : undefined}
-              required
-            >
+        <form key={mode} onSubmit={handleSubmit} noValidate className="space-y-4">
+          {isRegister && (
+            <Field label={tr('displayName')} error={touched.display_name ? errors.display_name : undefined} required>
               <input
-                type={isRegister ? 'text' : 'text'}
-                value={form.username}
-                onChange={set('username')}
-                onBlur={() => setTouched(t => ({ ...t, username: true }))}
-                autoComplete={isRegister ? 'username' : 'username'}
-                autoCapitalize="none"
-                spellCheck={false}
-                placeholder={isRegister ? tr('usernamePlaceholder') : tr('loginIdentifierPlaceholder')}
-                aria-invalid={submitted && Boolean(errors.username) || undefined}
-                className={`input-base ${submitted && errors.username ? 'input-error' : ''}`}
+                type="text"
+                value={form.display_name}
+                onChange={set('display_name')}
+                onBlur={() => setTouched(t => ({ ...t, display_name: true }))}
+                autoComplete="name"
+                placeholder={tr('displayNamePlaceholder')}
+                aria-invalid={submitted && Boolean(errors.display_name) || undefined}
+                className={`input-base ${submitted && errors.display_name ? 'input-error' : ''}`}
               />
             </Field>
+          )}
 
-            {isRegister && (
-              <Field label={tr('email')} error={touched.email ? errors.email : undefined} hint={tr('emailHint')} required>
-                <input
-                  type="email"
-                  value={form.email}
-                  onChange={set('email')}
-                  onBlur={() => setTouched(t => ({ ...t, email: true }))}
-                  autoComplete="email"
-                  autoCapitalize="none"
-                  spellCheck={false}
-                  placeholder={tr('emailPlaceholder')}
-                  aria-invalid={submitted && Boolean(errors.email) || undefined}
-                  className={`input-base ${submitted && errors.email ? 'input-error' : ''}`}
-                />
-              </Field>
-            )}
-
-            <PasswordInput
-              label={tr('password')}
-              value={form.password}
-              onChange={set('password')}
-              onBlur={() => setTouched(t => ({ ...t, password: true }))}
-              autoComplete={isRegister ? 'new-password' : 'current-password'}
-              placeholder={tr('passwordPlaceholder')}
-              invalid={submitted && Boolean(errors.password)}
-              show={showPw}
-              toggle={() => setShowPw(v => !v)}
-              error={touched.password ? errors.password : undefined}
-              hint={isRegister ? tr('passwordHint') : undefined}
+          <Field
+            label={isRegister ? tr('username') : tr('loginIdentifier')}
+            error={touched.username ? errors.username : undefined}
+            hint={isRegister ? tr('usernameHint') : undefined}
+            required
+          >
+            <input
+              type={isRegister ? 'text' : 'text'}
+              value={form.username}
+              onChange={set('username')}
+              onBlur={() => setTouched(t => ({ ...t, username: true }))}
+              autoComplete={isRegister ? 'username' : 'username'}
+              autoCapitalize="none"
+              spellCheck={false}
+              placeholder={isRegister ? tr('usernamePlaceholder') : tr('loginIdentifierPlaceholder')}
+              aria-invalid={submitted && Boolean(errors.username) || undefined}
+              className={`input-base ${submitted && errors.username ? 'input-error' : ''}`}
             />
+          </Field>
 
-            {isRegister && (
-              <>
-                <PasswordStrength password={form.password} tr={tr} />
-                <PasswordInput
-                  label={tr('confirmPassword')}
-                  value={form.confirm}
-                  onChange={set('confirm')}
-                  onBlur={() => setTouched(t => ({ ...t, confirm: true }))}
-                  autoComplete="new-password"
-                  placeholder={tr('confirmPasswordPlaceholder')}
-                  invalid={submitted && Boolean(errors.confirm)}
-                  show={showConfirm}
-                  toggle={() => setShowConfirm(v => !v)}
-                  error={touched.confirm ? errors.confirm : undefined}
+          {isRegister && (
+            <Field label={tr('email')} error={touched.email ? errors.email : undefined} hint={tr('emailHint')} required>
+              <input
+                type="email"
+                value={form.email}
+                onChange={set('email')}
+                onBlur={() => setTouched(t => ({ ...t, email: true }))}
+                autoComplete="email"
+                autoCapitalize="none"
+                spellCheck={false}
+                placeholder={tr('emailPlaceholder')}
+                aria-invalid={submitted && Boolean(errors.email) || undefined}
+                className={`input-base ${submitted && errors.email ? 'input-error' : ''}`}
+              />
+            </Field>
+          )}
+
+          <PasswordInput
+            label={tr('password')}
+            value={form.password}
+            onChange={set('password')}
+            onBlur={() => setTouched(t => ({ ...t, password: true }))}
+            autoComplete={isRegister ? 'new-password' : 'current-password'}
+            placeholder={tr('passwordPlaceholder')}
+            invalid={submitted && Boolean(errors.password)}
+            show={showPw}
+            toggle={() => setShowPw(v => !v)}
+            error={touched.password ? errors.password : undefined}
+            hint={isRegister ? tr('passwordHint') : undefined}
+          />
+
+          {isRegister && (
+            <>
+              <PasswordStrength password={form.password} tr={tr} />
+              <PasswordInput
+                label={tr('confirmPassword')}
+                value={form.confirm}
+                onChange={set('confirm')}
+                onBlur={() => setTouched(t => ({ ...t, confirm: true }))}
+                autoComplete="new-password"
+                placeholder={tr('confirmPasswordPlaceholder')}
+                invalid={submitted && Boolean(errors.confirm)}
+                show={showConfirm}
+                toggle={() => setShowConfirm(v => !v)}
+                error={touched.confirm ? errors.confirm : undefined}
+              />
+              <label className="flex items-start gap-3 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={terms}
+                  onChange={e => setTerms(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border bg-surface-800 text-cyan-400 focus:ring-cyan-400/30"
                 />
-                <label className="flex items-start gap-3 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={terms}
-                    onChange={e => setTerms(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-border bg-surface-800 text-cyan-400 focus:ring-cyan-400/30"
-                  />
-                  <span className="text-xs leading-relaxed text-text-secondary">
-                    {tr('termsIAccept')}{' '}
-                    <Link href="/terms" className="font-medium text-cyan-400 underline underline-offset-2 hover:text-cyan-300">
-                      {tr('terms')}
-                    </Link>{' '}
-                    {tr('and')}{' '}
-                    <Link href="/privacy" className="font-medium text-cyan-400 underline underline-offset-2 hover:text-cyan-300">
-                      {tr('privacy')}
-                    </Link>
-                  </span>
-                </label>
+                <span className="text-xs leading-relaxed text-text-secondary">
+                  {tr('termsIAccept')}{' '}
+                  <Link href="/terms" className="font-medium text-cyan-400 underline underline-offset-2 hover:text-cyan-300">
+                    {tr('terms')}
+                  </Link>{' '}
+                  {tr('and')}{' '}
+                  <Link href="/privacy" className="font-medium text-cyan-400 underline underline-offset-2 hover:text-cyan-300">
+                    {tr('privacy')}
+                  </Link>
+                </span>
+              </label>
+            </>
+          )}
+
+          {error && <ErrorNote>{error}</ErrorNote>}
+          {success && !error && <SuccessNote>{success}</SuccessNote>}
+
+          <Button
+            type="submit"
+            size="lg"
+            disabled={loading || (submitted && !valid)}
+            className="w-full"
+          >
+            {loading ? (
+              <>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-text-inverse/30 border-t-text-inverse" aria-hidden="true" />
+                {tr('loading')}
               </>
+            ) : isRegister ? (
+              tr('createAccountBtn')
+            ) : (
+              tr('loginBtn')
             )}
-
-            <AnimatePresence>
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                >
-                  <ErrorNote>{error}</ErrorNote>
-                </motion.div>
-              )}
-              {success && !error && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                >
-                  <SuccessNote>{success}</SuccessNote>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <Button
-              type="submit"
-              size="lg"
-              disabled={loading || (submitted && !valid)}
-              className="w-full"
-            >
-              {loading ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-text-inverse/30 border-t-text-inverse" aria-hidden="true" />
-                  {tr('loading')}
-                </>
-              ) : isRegister ? (
-                tr('createAccountBtn')
-              ) : (
-                tr('loginBtn')
-              )}
-            </Button>
-          </motion.form>
-        </AnimatePresence>
+          </Button>
+        </form>
 
         <p className="mt-6 text-center text-sm text-text-secondary">
           {isRegister ? tr('alreadyAccount') : tr('noAccount')}{' '}

@@ -18,7 +18,7 @@ import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { XPChip } from '@/components/game';
 import { levelFromXp } from '@/lib/gamification';
 import { Button, ButtonLink, Card, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
-import { CheckIcon, CloseIcon, ShieldIcon, SparkleIcon, TargetIcon } from '@/components/icons';
+import { CheckIcon, CloseIcon, DomainIcon, ShieldIcon, SparkleIcon, TargetIcon } from '@/components/icons';
 
 type Phase = 'loading' | 'topics' | 'session' | 'results' | 'error';
 type RevExercise = Exercise;
@@ -220,7 +220,7 @@ export default function PracticePage() {
             action={<ButtonLink href="/learn">{tr('goLearn')}</ButtonLink>}
           />
         ) : (
-          <div className="stagger flex flex-col gap-6">
+          <div className="flex flex-col gap-6">
             {session && (
               <Card className="flex items-center justify-between gap-3 border-cyan-500/30 bg-cyan-500/[0.06] p-4">
                 <div className="min-w-0">
@@ -240,7 +240,7 @@ export default function PracticePage() {
                 <div className="flex flex-col gap-2">
                   {data?.topics.map(t => (
                     <Card key={t.slug} className="flex items-center gap-3 p-3">
-                      <span aria-hidden="true" className="text-xl">{t.icon}</span>
+                      <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={20} /></span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-bold text-white">{t.title}</p>
                         <p className="num text-xs text-text-secondary">
@@ -306,7 +306,7 @@ export default function PracticePage() {
           {checked && (
             <section
               aria-live="polite"
-              className={`stagger mt-4 rounded-xl border p-4 ${
+              className={`mt-4 rounded-xl border p-4 ${
                 checked.correct ? 'border-success/50 bg-success/[0.08]' : 'border-danger/50 bg-danger/[0.08]'
               }`}
             >
@@ -352,7 +352,7 @@ export default function PracticePage() {
     return (
       <div>
         <Card className="border-cyan-500/30 p-6 sm:p-8">
-          <div className="stagger flex flex-col items-center gap-3 text-center">
+          <div className="flex flex-col items-center gap-3 text-center">
             <span
               aria-hidden="true"
               className="grid h-16 w-16 place-items-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300"

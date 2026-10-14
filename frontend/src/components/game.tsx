@@ -16,9 +16,9 @@ export function Hearts({ count, label }: { count: number; label: string }) {
             key={i}
             size={16}
             filled={alive}
-            className={`transition-all duration-200 ${
+            className={`transition-colors duration-200 ${
               alive ? 'text-danger' : 'text-surface-600'
-            } ${i === count - 1 ? 'animate-[cq-pop_0.3s_ease]' : ''}`}
+            }`}
           />
         );
       })}

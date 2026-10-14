@@ -1,6 +1,5 @@
 'use client';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
 /* ── Brand panel for auth screens ─────────────────────────────────────────────
@@ -10,8 +9,9 @@ import { ReactNode } from 'react';
    events, so the form stays the only interactive region.
 
    The previous version floated seven coloured nodes on infinite loops over a
-   violet→cobalt mesh. Both were removed: infinite motion is banned outright and
-   the multi-hue mesh fought the single-accent rule. */
+   violet→cobalt mesh, and then animated its own copy in (opacity + y, staggered
+   0–0.16s). Both are gone: infinite motion is banned, and entrance animation on
+   ordinary copy is exactly the "fade-up everywhere" tell under review. */
 
 export function AuthBrandPanel({
   headline,
@@ -44,33 +44,18 @@ export function AuthBrandPanel({
       />
 
       <div className="relative z-10 flex h-full flex-col justify-between gap-16 p-10">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="flex items-center gap-3"
-        >
+        <div className="flex items-center gap-3">
           <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={34} height={34} className="shrink-0" priority />
           <span className="text-lg font-extrabold tracking-tight text-white">CyberQalqon</span>
-        </motion.div>
+        </div>
 
         <div>
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-md text-3xl font-extrabold leading-tight tracking-tight text-white text-balance"
-          >
+          <p className="max-w-md text-3xl font-extrabold leading-tight tracking-tight text-white text-balance">
             {headline}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 max-w-sm text-base leading-relaxed text-text-secondary"
-          >
+          </p>
+          <p className="mt-4 max-w-sm text-base leading-relaxed text-text-secondary">
             {body}
-          </motion.p>
+          </p>
 
           {children}
         </div>

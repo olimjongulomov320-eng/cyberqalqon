@@ -12,6 +12,7 @@ import {
   ChartIcon,
   CheckIcon,
   CloseIcon,
+  DomainIcon,
   FlameIcon,
   RefreshIcon,
   TargetIcon,
@@ -100,7 +101,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <div className="stagger flex flex-col">
+      <div className="flex flex-col">
         <header className="flex flex-col items-center gap-3 text-center">
           <div className="relative">
             <Avatar emoji={user.avatar_emoji} name={user.display_name} size="lg" ring />
@@ -189,7 +190,7 @@ export default function ProfilePage() {
                     <ul className="divide-y divide-border">
                       {stats.strong_topics.slice(0, 4).map(t => (
                         <li key={t.slug} className="flex items-center gap-2.5 px-4 py-2.5">
-                          <span aria-hidden="true" className="text-base">{t.icon}</span>
+                          <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={16} /></span>
                           <span className="min-w-0 flex-1 truncate text-sm text-text-primary">{t.title}</span>
                           <span className="num text-xs font-bold text-success">{t.accuracy}%</span>
                         </li>
@@ -203,7 +204,7 @@ export default function ProfilePage() {
                     <ul className="divide-y divide-border">
                       {stats.weak_topics.slice(0, 4).map(t => (
                         <li key={t.slug} className="flex items-center gap-2.5 px-4 py-2.5">
-                          <span aria-hidden="true" className="text-base">{t.icon}</span>
+                          <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={16} /></span>
                           <span className="min-w-0 flex-1 truncate text-sm text-text-primary">{t.title}</span>
                           <span className="num text-xs font-bold text-danger">{t.accuracy}%</span>
                         </li>

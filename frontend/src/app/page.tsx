@@ -14,6 +14,7 @@ import {
   CheckIcon,
   ChevronRightIcon,
   CompassIcon,
+  DomainIcon,
   FlameIcon,
   PlayIcon,
   RefreshIcon,
@@ -78,7 +79,7 @@ export default function HomePage() {
         {/* Asymmetric hero — copy on the left, the real interactive preview on
             the right. The preview is the product itself, not a screenshot. */}
         <section className="grid grid-cols-1 items-center gap-10 pt-4 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-10">
-          <div className="stagger flex flex-col items-start gap-5">
+          <div className="flex flex-col items-start gap-5">
             {/* No kicker/eyebrow above the H1. The tagline pill was a rounded
                 badge sitting in the classic "small label over the headline"
                 slot; the tagline already appears in the footer, so the
@@ -137,7 +138,7 @@ export default function HomePage() {
   const tier = tierKey(tierIndex(level.level));
 
   return (
-    <div className="stagger flex flex-col">
+    <div className="flex flex-col">
       {/* Greeting + level */}
       <header className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
@@ -257,7 +258,7 @@ export default function HomePage() {
               return (
                 <Card key={path.slug} className="p-4">
                   <div className="flex items-center gap-2.5">
-                    <span aria-hidden="true" className="text-xl">{path.icon}</span>
+                    <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={path.slug} size={20} /></span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-bold text-white">{path.title}</p>
                       <p className="num text-xs text-text-muted">
@@ -284,7 +285,7 @@ export default function HomePage() {
                                 mastered ? 'border-success/40 bg-success/10 text-success' : 'border-border bg-surface-800'
                               }`}
                             >
-                              {mastered ? <CheckIcon size={9} /> : d.icon}
+                              {mastered ? <CheckIcon size={9} /> : <DomainIcon slug={d.slug} size={12} className="text-cyan-300" />}
                             </span>
                             <span className="min-w-0 flex-1 truncate text-xs text-text-secondary">{d.title}</span>
                             <span aria-hidden="true" className="h-1 w-14 shrink-0 overflow-hidden rounded-full bg-surface-800">
@@ -322,7 +323,7 @@ export default function HomePage() {
           <Skeleton className="h-32 w-full" />
         </div>
       ) : (
-        <div className="stagger mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-8">
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-8">
           {/* Supporting sections flow two-up on desktop, so the dashboard stops
               being one 16px-gapped column of equally weighted blocks. */}
           {/* Weak topics → practice */}
@@ -340,7 +341,7 @@ export default function HomePage() {
               <Card as="ul" className="divide-y divide-border overflow-hidden">
                 {stats.weak_topics.slice(0, 3).map(t => (
                   <li key={t.slug} className="flex items-center gap-3 px-4 py-3">
-                    <span aria-hidden="true" className="text-lg">{t.icon}</span>
+                    <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={18} /></span>
                     <span className="min-w-0 flex-1 truncate text-sm font-medium text-text-primary">{t.title}</span>
                     <span className="num text-xs text-text-muted">{t.accuracy}%</span>
                     <ChevronRightIcon size={16} className="shrink-0 text-text-muted" />
