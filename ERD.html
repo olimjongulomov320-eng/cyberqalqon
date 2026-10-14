@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CyberQalqon — Database ERD</title>
+<style>
+  :root{
+    --bg:#080c14; --panel:#0f172a; --panel2:#131f36; --line:#1e293b;
+    --text:#e2e8f0; --muted:#94a3b8; --cyan:#06b6d4; --cyan2:#67e8f9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:34px 20px 70px}
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:0}
+  .stats{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 6px}
+  .chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;
+    padding:5px 12px;font-size:12px;color:var(--muted)}
+  .chip b{color:var(--cyan2)}
+  h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    margin:38px 0 12px;font-weight:600}
+  .map{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px}
+  svg{width:100%;height:auto;display:block}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:12px;padding:12px 8px 2px}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .sw{width:22px;height:0;border-top:2px solid #3b4a63;display:inline-block}
+  .sw.dash{border-top-style:dashed}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .card h3{margin:0;padding:10px 14px;font-size:13.5px;background:var(--panel2);
+    border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .card h3 .tag{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:2px 8px;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:6px 11px;border-bottom:1px solid rgba(30,41,59,.65);text-align:left;vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+  .card tbody tr:last-child td{border-bottom:0}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .typ{color:var(--muted)}
+  .note{color:var(--muted)}
+  .foot{padding:7px 11px;border-top:1px solid var(--line);background:rgba(6,182,212,.05);
+    color:#7dd3fc;font-size:11px}
+  .b{display:inline-block;font-size:9px;font-weight:700;border-radius:4px;
+    padding:1px 5px;margin-left:6px;vertical-align:middle;letter-spacing:.04em}
+  .pk{background:rgba(6,182,212,.15);color:var(--cyan2);border:1px solid rgba(6,182,212,.4)}
+  .fk{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.4)}
+  .uk{background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.4)}
+  .relwrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  ul.notes{color:var(--muted);padding-left:20px;margin:0}
+  ul.notes li{margin:7px 0}
+  code{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--cyan2);
+    background:rgba(6,182,212,.08);padding:1px 5px;border-radius:4px;font-size:12px}
+  footer{color:#64748b;font-size:12px;margin-top:40px;border-top:1px solid var(--line);padding-top:16px}
+  a{color:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>CyberQalqon — Database ERD</h1>
+  <p class="sub">Entities, columns and relationships of the CyberQalqon PostgreSQL backend.</p>
+
+  <div class="stats">
+    <span class="chip"><b>9</b> tables</span>
+    <span class="chip"><b>1</b> materialized view</span>
+    <span class="chip"><b>1</b> trigger</span>
+    <span class="chip"><b>10</b> foreign keys</span>
+    <span class="chip"><b>3</b> composite PKs</span>
+    <span class="chip"><b>3</b> logical refs</span>
+  </div>
+
+  <h2>Schema map</h2>
+  <div class="map">
+    <svg viewBox="0 0 1010 540" role="img" aria-label="Entity relationship diagram" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="1010" height="540" fill="#0b1220"/>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 882,78 L 882,112" />
+<path d="M 882,99 L 882,112" /><path d="M 882,99 L 876,112" /><path d="M 882,99 L 888,112" /><path d="M 876,91 L 888,91" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 882,160 L 882,194" />
+<path d="M 882,181 L 882,194" /><path d="M 882,181 L 876,194" /><path d="M 882,181 L 888,194" /><circle cx="882" cy="176" r="3.6" fill="none" /><path d="M 876,187 L 888,187" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 794,218 L 586,54" />
+<path d="M 596.21,62.05 L 586,54" /><path d="M 596.21,62.05 L 589.71,49.29" /><path d="M 596.21,62.05 L 582.29,58.71" /><path d="M 787.51,205.24 L 780.08,214.66" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 794,218 L 586,136" />
+<path d="M 598.09,140.77 L 586,136" /><path d="M 598.09,140.77 L 588.2,130.42" /><path d="M 598.09,140.77 L 583.8,141.58" /><circle cx="779.11" cy="212.13" r="3.6" fill="none" /><path d="M 771.08,202.52 L 766.68,213.68" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 794,218 L 586,218" />
+<path d="M 599,218 L 586,218" /><path d="M 599,218 L 586,212" /><path d="M 599,218 L 586,224" /><path d="M 781,212 L 781,224" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 246,274 L 410,54" />
+<path d="M 402.23,64.42 L 410,54" /><path d="M 402.23,64.42 L 414.81,57.59" /><path d="M 402.23,64.42 L 405.19,50.41" /><path d="M 258.58,267.16 L 248.96,259.99" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 246,274 L 410,136" />
+<path d="M 400.05,144.37 L 410,136" /><path d="M 400.05,144.37 L 413.86,140.59" /><path d="M 400.05,144.37 L 406.14,131.41" /><path d="M 259.81,270.22 L 252.08,261.04" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 246,274 L 410,218" />
+<path d="M 397.7,222.2 L 410,218" /><path d="M 397.7,222.2 L 411.94,223.68" /><path d="M 397.7,222.2 L 408.06,212.32" /><path d="M 260.24,275.48 L 256.36,264.12" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 246,274 L 410,300" />
+<path d="M 397.16,297.96 L 410,300" /><path d="M 397.16,297.96 L 409.06,305.93" /><path d="M 397.16,297.96 L 410.94,294.07" /><path d="M 257.9,281.96 L 259.78,270.11" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round">
+<path d="M 246,274 L 410,382" />
+<path d="M 399.14,374.85 L 410,382" /><path d="M 399.14,374.85 L 406.7,387.01" /><path d="M 399.14,374.85 L 413.3,376.99" /><path d="M 253.56,286.16 L 260.16,276.14" />
+</g>
+<g fill="none" stroke="#3b4a63" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="6 5">
+<path d="M 246,274 L 410,464" />
+<path d="M 401.51,454.16 L 410,464" /><path d="M 401.51,454.16 L 405.46,467.92" /><path d="M 401.51,454.16 L 414.54,460.08" /><path d="M 249.95,287.76 L 259.04,279.92" />
+</g>
+<g>
+<rect x="794" y="30" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="794" y="30" width="4" height="48" rx="2" fill="#06b6d4"/>
+<text x="809" y="52" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">paths</text>
+<text x="809" y="68" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="794" y="112" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="794" y="112" width="4" height="48" rx="2" fill="#06b6d4"/>
+<text x="809" y="134" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">domains</text>
+<text x="809" y="150" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="794" y="194" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="794" y="194" width="4" height="48" rx="2" fill="#06b6d4"/>
+<text x="809" y="216" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">modules</text>
+<text x="809" y="232" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="70" y="250" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="70" y="250" width="4" height="48" rx="2" fill="#10b981"/>
+<text x="85" y="272" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">users</text>
+<text x="85" y="288" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="410" y="30" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="410" y="30" width="4" height="48" rx="2" fill="#10b981"/>
+<text x="425" y="52" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">user_progress</text>
+<text x="425" y="68" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="410" y="112" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="410" y="112" width="4" height="48" rx="2" fill="#10b981"/>
+<text x="425" y="134" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">xp_events</text>
+<text x="425" y="150" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="410" y="194" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="410" y="194" width="4" height="48" rx="2" fill="#10b981"/>
+<text x="425" y="216" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">mistakes</text>
+<text x="425" y="232" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="410" y="276" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="410" y="276" width="4" height="48" rx="2" fill="#10b981"/>
+<text x="425" y="298" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">user_achievements</text>
+<text x="425" y="314" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="410" y="358" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#243b55" stroke-width="1.5"/>
+<rect x="410" y="358" width="4" height="48" rx="2" fill="#10b981"/>
+<text x="425" y="380" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">idempotency_keys</text>
+<text x="425" y="396" fill="#7d8ba1" font-size="10" letter-spacing="1">TABLE</text>
+</g>
+<g>
+<rect x="410" y="440" width="176" height="48" rx="10" fill="#0f1a2e" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6 5"/>
+<rect x="410" y="440" width="4" height="48" rx="2" fill="#f59e0b"/>
+<text x="425" y="462" fill="#e2e8f0" font-size="13.5" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">leaderboard</text>
+<text x="425" y="478" fill="#7d8ba1" font-size="10" letter-spacing="1">VIEW</text>
+</g>
+</svg>
+    <div class="legend">
+      <span><span class="sw"></span> relationship</span>
+      <span><span class="sw dash"></span> derived / view</span>
+      <span>&#9663; crow's foot = many</span>
+      <span>&#9711; = optional (nullable / SET NULL)</span>
+      <span>&#9474; tick = exactly one</span>
+    </div>
+  </div>
+
+  <h2>Entities</h2>
+  <div class="grid">
+  <div class="card">
+    <h3><span class="mono">paths</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">slug<span class="b pk">PK</span></td><td class="typ mono">TEXT</td><td class="note"></td></tr>
+      <tr><td class="mono">icon</td><td class="typ mono">TEXT</td><td class="note">default 🛡️</td></tr>
+      <tr><td class="mono">order_index</td><td class="typ mono">INTEGER</td><td class="note">default 0</td></tr>
+      <tr><td class="mono">title_uz</td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">title_ru</td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">description_uz</td><td class="typ mono">TEXT</td><td class="note">default ''</td></tr>
+      <tr><td class="mono">description_ru</td><td class="typ mono">TEXT</td><td class="note">default ''</td></tr>
+      <tr><td class="mono">created_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3><span class="mono">domains</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">id<span class="b pk">PK</span></td><td class="typ mono">UUID</td><td class="note">gen_random_uuid()</td></tr>
+      <tr><td class="mono">slug<span class="b uk">UK</span></td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">path_slug<span class="b fk">FK</span></td><td class="typ mono">TEXT</td><td class="note">→ paths.slug · NOT NULL</td></tr>
+      <tr><td class="mono">icon</td><td class="typ mono">TEXT</td><td class="note">default 📘</td></tr>
+      <tr><td class="mono">order_index</td><td class="typ mono">INTEGER</td><td class="note">default 0</td></tr>
+      <tr><td class="mono">title_uz</td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">title_ru</td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">description_uz</td><td class="typ mono">TEXT</td><td class="note">default ''</td></tr>
+      <tr><td class="mono">description_ru</td><td class="typ mono">TEXT</td><td class="note">default ''</td></tr>
+      <tr><td class="mono">created_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3><span class="mono">modules</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">id<span class="b pk">PK</span></td><td class="typ mono">UUID</td><td class="note">gen_random_uuid()</td></tr>
+      <tr><td class="mono">slug<span class="b uk">UK</span></td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">title_uz</td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">title_ru</td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">content_uz</td><td class="typ mono">TEXT</td><td class="note">NOT NULL · markdown</td></tr>
+      <tr><td class="mono">content_ru</td><td class="typ mono">TEXT</td><td class="note">NOT NULL · markdown</td></tr>
+      <tr><td class="mono">category</td><td class="typ mono">TEXT</td><td class="note">NOT NULL · legacy alias of domain slug</td></tr>
+      <tr><td class="mono">order_index</td><td class="typ mono">INTEGER</td><td class="note">default 0</td></tr>
+      <tr><td class="mono">xp_reward</td><td class="typ mono">INTEGER</td><td class="note">default 10</td></tr>
+      <tr><td class="mono">challenge</td><td class="typ mono">JSONB</td><td class="note">v1 single challenge · default '{}'</td></tr>
+      <tr><td class="mono">is_published</td><td class="typ mono">BOOLEAN</td><td class="note">default false</td></tr>
+      <tr><td class="mono">created_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      <tr><td class="mono">updated_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      <tr><td class="mono">exercises</td><td class="typ mono">JSONB</td><td class="note">v2 · array of exercise objects</td></tr>
+      <tr><td class="mono">kind</td><td class="typ mono">TEXT</td><td class="note">v2 · lesson | checkpoint · default lesson</td></tr>
+      <tr><td class="mono">domain_id<span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">v2 · → domains.id</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3><span class="mono">users</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">id<span class="b pk">PK</span></td><td class="typ mono">UUID</td><td class="note">gen_random_uuid()</td></tr>
+      <tr><td class="mono">telegram_id<span class="b uk">UK</span></td><td class="typ mono">BIGINT</td><td class="note">nullable</td></tr>
+      <tr><td class="mono">telegram_username</td><td class="typ mono">TEXT</td><td class="note">nullable</td></tr>
+      <tr><td class="mono">username<span class="b uk">UK</span></td><td class="typ mono">TEXT</td><td class="note">nullable · lowercased</td></tr>
+      <tr><td class="mono">email<span class="b uk">UK</span></td><td class="typ mono">TEXT</td><td class="note">nullable</td></tr>
+      <tr><td class="mono">password_hash</td><td class="typ mono">TEXT</td><td class="note">nullable · bcrypt-12</td></tr>
+      <tr><td class="mono">display_name</td><td class="typ mono">TEXT</td><td class="note">NOT NULL</td></tr>
+      <tr><td class="mono">avatar_emoji</td><td class="typ mono">TEXT</td><td class="note">default 🛡️</td></tr>
+      <tr><td class="mono">lang</td><td class="typ mono">TEXT</td><td class="note">default 'uz'</td></tr>
+      <tr><td class="mono">low_bandwidth_mode</td><td class="typ mono">BOOLEAN</td><td class="note">default false</td></tr>
+      <tr><td class="mono">total_xp</td><td class="typ mono">INTEGER</td><td class="note">default 0 · kept by trigger</td></tr>
+      <tr><td class="mono">created_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      <tr><td class="mono">last_active_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      <tr><td class="mono">current_streak</td><td class="typ mono">INTEGER</td><td class="note">v2 · default 0</td></tr>
+      <tr><td class="mono">longest_streak</td><td class="typ mono">INTEGER</td><td class="note">v2 · default 0</td></tr>
+      <tr><td class="mono">last_streak_date</td><td class="typ mono">DATE</td><td class="note">v2 · nullable · Asia/Tashkent</td></tr>
+      <tr><td class="mono">daily_goal_xp</td><td class="typ mono">INTEGER</td><td class="note">v2 · default 20</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3><span class="mono">user_progress</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">id<span class="b pk">PK</span></td><td class="typ mono">UUID</td><td class="note">gen_random_uuid()</td></tr>
+      <tr><td class="mono">user_id<span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">→ users.id · NOT NULL · CASCADE</td></tr>
+      <tr><td class="mono">module_id<span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">→ modules.id · NOT NULL · CASCADE</td></tr>
+      <tr><td class="mono">is_completed</td><td class="typ mono">BOOLEAN</td><td class="note">default false</td></tr>
+      <tr><td class="mono">completed_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">nullable</td></tr>
+      <tr><td class="mono">xp_earned</td><td class="typ mono">INTEGER</td><td class="note">default 0 · v1 mirror</td></tr>
+      <tr><td class="mono">attempts</td><td class="typ mono">INTEGER</td><td class="note">default 0</td></tr>
+      <tr><td class="mono">last_attempt_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">nullable</td></tr>
+      </tbody>
+    </table><div class="foot mono">UNIQUE (user_id, module_id)</div>
+  </div>
+  <div class="card">
+    <h3><span class="mono">xp_events</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">id<span class="b pk">PK</span></td><td class="typ mono">UUID</td><td class="note">gen_random_uuid()</td></tr>
+      <tr><td class="mono">user_id<span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">→ users.id · NOT NULL · CASCADE</td></tr>
+      <tr><td class="mono">amount</td><td class="typ mono">INTEGER</td><td class="note">NOT NULL · CHECK (amount > 0)</td></tr>
+      <tr><td class="mono">kind</td><td class="typ mono">TEXT</td><td class="note">NOT NULL · lesson | correct | review</td></tr>
+      <tr><td class="mono">module_id<span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">→ modules.id · nullable · SET NULL</td></tr>
+      <tr><td class="mono">exercise_id</td><td class="typ mono">TEXT</td><td class="note">nullable · logical → exercises[].id</td></tr>
+      <tr><td class="mono">created_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      </tbody>
+    </table><div class="foot mono">append-only XP ledger · trigger → users.total_xp</div>
+  </div>
+  <div class="card">
+    <h3><span class="mono">mistakes</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">user_id<span class="b pk">PK</span><span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">→ users.id · CASCADE</td></tr>
+      <tr><td class="mono">module_id<span class="b pk">PK</span><span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">→ modules.id · CASCADE</td></tr>
+      <tr><td class="mono">exercise_id<span class="b pk">PK</span></td><td class="typ mono">TEXT</td><td class="note">logical → exercises[].id</td></tr>
+      <tr><td class="mono">wrong_count</td><td class="typ mono">INTEGER</td><td class="note">default 0</td></tr>
+      <tr><td class="mono">correct_count</td><td class="typ mono">INTEGER</td><td class="note">default 0</td></tr>
+      <tr><td class="mono">last_wrong_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">nullable</td></tr>
+      <tr><td class="mono">last_attempt_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">nullable</td></tr>
+      </tbody>
+    </table><div class="foot mono">PK (user_id, module_id, exercise_id)</div>
+  </div>
+  <div class="card">
+    <h3><span class="mono">user_achievements</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">user_id<span class="b pk">PK</span><span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">→ users.id · CASCADE</td></tr>
+      <tr><td class="mono">key<span class="b pk">PK</span></td><td class="typ mono">TEXT</td><td class="note">logical → achievement catalogue</td></tr>
+      <tr><td class="mono">unlocked_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      </tbody>
+    </table><div class="foot mono">PK (user_id, key)</div>
+  </div>
+  <div class="card">
+    <h3><span class="mono">idempotency_keys</span><span class="tag">table</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">user_id<span class="b pk">PK</span><span class="b fk">FK</span></td><td class="typ mono">UUID</td><td class="note">→ users.id · CASCADE</td></tr>
+      <tr><td class="mono">scope<span class="b pk">PK</span></td><td class="typ mono">TEXT</td><td class="note">operation id · e.g. 'review.submit'</td></tr>
+      <tr><td class="mono">key<span class="b pk">PK</span></td><td class="typ mono">TEXT</td><td class="note">client-supplied idempotency key</td></tr>
+      <tr><td class="mono">request_hash</td><td class="typ mono">TEXT</td><td class="note">NOT NULL · body fingerprint</td></tr>
+      <tr><td class="mono">status</td><td class="typ mono">SMALLINT</td><td class="note">default 200</td></tr>
+      <tr><td class="mono">response</td><td class="typ mono">JSONB</td><td class="note">default '{}' · cached body</td></tr>
+      <tr><td class="mono">created_at</td><td class="typ mono">TIMESTAMPTZ</td><td class="note">default now()</td></tr>
+      </tbody>
+    </table><div class="foot mono">PK (user_id, scope, key) · pruned after 7 days</div>
+  </div>
+  <div class="card">
+    <h3><span class="mono">leaderboard</span><span class="tag">view</span></h3>
+    <table>
+      <thead><tr><th>column</th><th>type</th><th>notes</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">user_id<span class="b pk">PK</span></td><td class="typ mono">UUID</td><td class="note">unique index</td></tr>
+      <tr><td class="mono">display_name</td><td class="typ mono">TEXT</td><td class="note"></td></tr>
+      <tr><td class="mono">avatar_emoji</td><td class="typ mono">TEXT</td><td class="note"></td></tr>
+      <tr><td class="mono">total_xp</td><td class="typ mono">INTEGER</td><td class="note"></td></tr>
+      <tr><td class="mono">rank</td><td class="typ mono">BIGINT</td><td class="note">RANK() OVER total_xp DESC</td></tr>
+      <tr><td class="mono">modules_completed</td><td class="typ mono">BIGINT</td><td class="note">count of completed modules</td></tr>
+      </tbody>
+    </table><div class="foot mono">MATERIALIZED VIEW · built from users + user_progress</div>
+  </div>
+  </div>
+
+  <h2>Relationships</h2>
+  <div class="relwrap">
+    <table>
+      <thead><tr><th>parent</th><th>child</th><th>foreign key</th><th>on delete</th><th>cardinality</th></tr></thead>
+      <tbody>
+      <tr><td class="mono">paths</td><td class="mono">domains</td><td class="mono note">domains.path_slug → paths.slug</td><td>CASCADE</td><td class="note">1 path → many domains</td></tr>
+      <tr><td class="mono">domains</td><td class="mono">modules</td><td class="mono note">modules.domain_id → domains.id</td><td>SET NULL</td><td class="note">1 domain → many modules</td></tr>
+      <tr><td class="mono">users</td><td class="mono">user_progress</td><td class="mono note">user_progress.user_id</td><td>CASCADE</td><td class="note">1 user → many rows</td></tr>
+      <tr><td class="mono">modules</td><td class="mono">user_progress</td><td class="mono note">user_progress.module_id</td><td>CASCADE</td><td class="note">1 module → many rows</td></tr>
+      <tr><td class="mono">users</td><td class="mono">xp_events</td><td class="mono note">xp_events.user_id</td><td>CASCADE</td><td class="note">1 user → many events</td></tr>
+      <tr><td class="mono">modules</td><td class="mono">xp_events</td><td class="mono note">xp_events.module_id</td><td>SET NULL (nullable)</td><td class="note">0..1 module per event</td></tr>
+      <tr><td class="mono">users</td><td class="mono">mistakes</td><td class="mono note">mistakes.user_id</td><td>CASCADE</td><td class="note">1 user → many rows</td></tr>
+      <tr><td class="mono">modules</td><td class="mono">mistakes</td><td class="mono note">mistakes.module_id</td><td>CASCADE</td><td class="note">1 module → many rows</td></tr>
+      <tr><td class="mono">users</td><td class="mono">user_achievements</td><td class="mono note">user_achievements.user_id</td><td>CASCADE</td><td class="note">1 user → many unlocks</td></tr>
+      <tr><td class="mono">users</td><td class="mono">idempotency_keys</td><td class="mono note">idempotency_keys.user_id</td><td>CASCADE</td><td class="note">1 user → many keys</td></tr>
+      <tr><td class="mono">users</td><td class="mono">leaderboard</td><td class="mono note">derived (materialized view)</td><td>—</td><td class="note">1 user → 1 row</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Notes</h2>
+  <ul class="notes">
+    <li><b>XP is a ledger.</b> <code>xp_events</code> is the source of truth; the trigger <code>trg_sync_user_xp</code> recomputes <code>users.total_xp</code> on every insert. <code>kind ∈ {lesson, correct, review}</code>.</li>
+    <li><b>Logical (unenforced) references</b> live in code: <code>xp_events.exercise_id</code> and <code>mistakes.exercise_id</code> point into the <code>modules.exercises[]</code> JSON; <code>user_achievements.key</code> maps to the achievement catalogue in <code>backend/lib/gamification.js</code>.</li>
+    <li><b>Legacy / compat columns:</b> <code>modules.category</code> (alias of the domain slug) and <code>modules.challenge</code> (v1 single-challenge JSON) are kept for backward compatibility.</li>
+    <li><b>Not in the database:</b> hearts (client-side <code>localStorage</code>) and auth tokens (stateless 30-day JWTs).</li>
+  </ul>
+
+  <footer>
+    Generated from <code>backend/setup.js</code> (idempotent migrations + curriculum seed). If the schema changes, regenerate this file.
+  </footer>
+</div>
+</body>
+</html>

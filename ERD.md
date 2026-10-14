@@ -7,6 +7,10 @@ Full data model of the CyberQalqon backend (PostgreSQL).
 > server boot (migrations + curriculum seed). This document is a faithful
 > rendering of that file — if they ever diverge, `setup.js` wins.
 
+> **Standalone version:** [`ERD.html`](ERD.html) is a self-contained, offline,
+> dependency-free rendering of this diagram (schema map + full column specs).
+> Open it directly in any browser — no internet or build step required.
+
 - **Engine:** PostgreSQL (Render managed, free tier)
 - **Extension:** `pgcrypto` (`gen_random_uuid()` for UUID primary keys)
 - **Tables:** 9 · **Materialized view:** 1 · **Trigger:** 1
