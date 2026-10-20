@@ -210,4 +210,100 @@ router.get('/me/progress', async (req, res, next) => {
   }
 });
 
+// GET /users/me/attempts — the graded-attempt timeline, newest first.
+//
+// Scoped to the session's own user by construction (there is no user_id
+// parameter), so a learner can only ever read their own history. `offset` is a
+// cursor into `ORDER BY answered_at DESC`, which is stable enough for a
+// personal log: new attempts land at the top and never shift an existing page
+// into a duplicate (they only push rows down, and the caller pages downward).
+// `total` and `has_more` follow `result`; `correct_total`/`wrong_total` are
+// always the whole-history split, so the profile's balance never hides behind
+// an active filter.
+router.get('/me/attempts', async (req, res, next) => {
+  try {
+    const lang = LANGS.includes(req.query.lang) ? req.query.lang : 'uz';
+    const limit = Math.min(50, Math.max(1, Number.parseInt(req.query.limit, 10) || 20));
+    const offset = Math.max(0, Number.parseInt(req.query.offset, 10) || 0);
+    const result = ['correct', 'wrong'].includes(req.query.result) ? req.query.result : null;
+
+    const params = [req.user.id, lang, limit, offset];
+    const where = ['ea.user_id = $1'];
+    if (result) {
+      params.push(result === 'correct');
+      where.push(`ea.correct = $${params.length}`);
+    }
+
+    const [rows, summary, filtered] = await Promise.all([
+      pool.query(
+        `SELECT ea.id, ea.exercise_id, ea.correct, ea.answered_at,
+                m.slug AS module_slug, m.title_${lang} AS module_title,
+                d.slug AS domain_slug, d.icon AS domain_icon,
+                ex.question
+           FROM exercise_attempts ea
+           JOIN modules m ON m.id = ea.module_id
+           LEFT JOIN domains d ON d.id = m.domain_id
+           LEFT JOIN LATERAL (
+             SELECT elem -> 'q' ->> $2 AS question
+               FROM jsonb_array_elements(m.exercises) elem
+              WHERE elem ->> 'id' = ea.exercise_id
+           ) ex ON true
+          WHERE ${where.join(' AND ')}
+          ORDER BY ea.answered_at DESC, ea.seq DESC, ea.id DESC
+          LIMIT $3 OFFSET $4`,
+        params
+      ),
+      // Whole-history split. Deliberately ignores `result`: the profile shows
+      // "N correct / M wrong" as a standing balance, which stays meaningful
+      // even while the list below is filtered to one verdict.
+      pool.query(
+        `SELECT COUNT(*)::int AS total,
+                COUNT(*) FILTER (WHERE correct)::int AS correct_total,
+                COUNT(*) FILTER (WHERE NOT correct)::int AS wrong_total
+           FROM exercise_attempts
+          WHERE user_id = $1`,
+        [req.user.id]
+      ),
+      // Row count matching the REQUESTED filter — `total` and `has_more` follow
+      // this, otherwise paging under a filter would run off the end.
+      result
+        ? pool.query(
+            `SELECT COUNT(*)::int AS total
+               FROM exercise_attempts
+              WHERE user_id = $1 AND correct = $2`,
+            [req.user.id, result === 'correct']
+          )
+        : null,
+    ]);
+
+    const { total: allTotal, correct_total: correctTotal, wrong_total: wrongTotal } =
+      summary.rows[0];
+    const total = filtered ? filtered.rows[0].total : allTotal;
+
+    res.json({
+      attempts: rows.rows.map(r => ({
+        // BIGSERIAL comes back from node-postgres as a string.
+        id: Number(r.id),
+        exercise_id: r.exercise_id,
+        correct: r.correct,
+        answered_at: r.answered_at,
+        // '' rather than null: the UI renders a fallback line, never `null`.
+        question: r.question ?? '',
+        module_slug: r.module_slug,
+        module_title: r.module_title,
+        domain_slug: r.domain_slug ?? null,
+        domain_icon: r.domain_icon ?? null,
+      })),
+      total,
+      correct_total: correctTotal,
+      wrong_total: wrongTotal,
+      limit,
+      offset,
+      has_more: offset + rows.rowCount < total,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

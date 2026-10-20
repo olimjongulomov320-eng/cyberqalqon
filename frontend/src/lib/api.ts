@@ -174,6 +174,35 @@ export function completeModule(
   });
 }
 
+// ── Problems (answer-grading arena over the existing curriculum) ──────────────
+export function fetchProblems(params: {
+  lang: string;
+  domain?: string;
+  difficulty?: Difficulty;
+  type?: ExerciseType;
+  status?: ProblemStatus;
+  q?: string;
+  limit?: number;
+  offset?: number;
+}) {
+  const q = new URLSearchParams({ lang: params.lang });
+  if (params.domain) q.set('domain', params.domain);
+  if (params.difficulty) q.set('difficulty', params.difficulty);
+  if (params.type) q.set('type', params.type);
+  if (params.status) q.set('status', params.status);
+  if (params.q) q.set('q', params.q);
+  if (params.limit != null) q.set('limit', String(params.limit));
+  if (params.offset != null) q.set('offset', String(params.offset));
+  return req<ProblemsPayload>(`/problems?${q}`);
+}
+
+/** One problem, answers stripped. Grading still goes through checkAnswer. */
+export function fetchProblem(moduleSlug: string, exerciseId: string, lang: string) {
+  return req<{ problem: ProblemDetail }>(
+    `/problems/${encodeURIComponent(moduleSlug)}/${encodeURIComponent(exerciseId)}?lang=${lang}`
+  );
+}
+
 // ── Review ────────────────────────────────────────────────────────────────────
 export function fetchReview(lang: string) {
   return req<ReviewPayload>(`/review?lang=${lang}`);
@@ -220,6 +249,20 @@ export function fetchMyProgress() {
   return req<{ progress: ProgressRow[] }>('/users/me/progress');
 }
 
+/** Paged graded-attempt timeline. `result` narrows to one verdict. */
+export function fetchAttempts(params: {
+  lang: string;
+  limit?: number;
+  offset?: number;
+  result?: 'correct' | 'wrong';
+}) {
+  const q = new URLSearchParams({ lang: params.lang });
+  if (params.limit) q.set('limit', String(params.limit));
+  if (params.offset) q.set('offset', String(params.offset));
+  if (params.result) q.set('result', params.result);
+  return req<AttemptsPayload>(`/users/me/attempts?${q.toString()}`);
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 export interface User {
   id: string;
@@ -244,6 +287,12 @@ export interface Reveal {
 }
 
 export type ExerciseType = 'mc' | 'tf' | 'multi' | 'match' | 'order' | 'input';
+
+/** Derived from the module's position inside its domain — see backend/lib/difficulty.js. */
+export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
+
+/** Per-learner state for one exercise, from the `mistakes` aggregate. */
+export type ProblemStatus = 'new' | 'attempted' | 'solved';
 
 export type AnswerValue = string | string[] | Record<string, string> | null;
 
@@ -305,6 +354,9 @@ export interface PathModule {
   xp_reward: number;
   exercise_count: number;
   state: ModuleState;
+  difficulty: Difficulty;
+  /** The module whose completion unlocks this one. Null unless `state` is locked. */
+  prerequisite: { slug: string; title: string } | null;
 }
 
 export interface Domain {
@@ -420,4 +472,84 @@ export interface ProgressRow {
   xp_earned: number;
   attempts: number;
   completed_at: string | null;
+}
+
+/** One graded attempt from the learner's own submission history. */
+export interface AttemptRow {
+  id: number;
+  exercise_id: string;
+  correct: boolean;
+  answered_at: string;
+  /** '' when the exercise text is missing from the curriculum record. */
+  question: string;
+  module_slug: string;
+  module_title: string;
+  domain_slug: string | null;
+  domain_icon: string | null;
+}
+
+export interface AttemptsPayload {
+  attempts: AttemptRow[];
+  /** Row count matching the requested `result` filter. */
+  total: number;
+  /** Whole-history split — independent of the filter, for the summary line. */
+  correct_total: number;
+  wrong_total: number;
+  limit: number;
+  offset: number;
+  has_more: boolean;
+}
+
+/** A problem-arena row: one real curriculum exercise plus derived metadata. */
+export interface ProblemSummary {
+  module_slug: string;
+  exercise_id: string;
+  type: ExerciseType;
+  question: string;
+  domain_slug: string;
+  domain_title: string;
+  domain_icon: string;
+  path_slug: string;
+  path_title: string;
+  module_title: string;
+  module_kind: 'lesson' | 'checkpoint';
+  difficulty: Difficulty;
+  status: ProblemStatus;
+  solved: boolean;
+  attempted: boolean;
+}
+
+export interface ProblemDetail {
+  module_slug: string;
+  exercise_id: string;
+  type: ExerciseType;
+  difficulty: Difficulty;
+  domain_slug: string;
+  domain_title: string;
+  domain_icon: string;
+  path_slug: string;
+  path_title: string;
+  module_title: string;
+  module_kind: 'lesson' | 'checkpoint';
+  status: ProblemStatus;
+  solved: boolean;
+  attempted: boolean;
+  exercise: Exercise;
+}
+
+export interface ProblemsPayload {
+  problems: ProblemSummary[];
+  total: number;
+  limit: number;
+  offset: number;
+  has_more: boolean;
+  catalogue_total: number;
+  solved_total: number;
+  facets: {
+    domains: { slug: string; title: string; icon: string; count: number }[];
+    difficulties: { key: Difficulty; count: number }[];
+    types: { key: ExerciseType; count: number }[];
+    /** Empty when signed out — status is per-learner, never global. */
+    statuses: { key: ProblemStatus; count: number }[];
+  };
 }

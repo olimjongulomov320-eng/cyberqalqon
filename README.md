@@ -6,6 +6,13 @@ Learn cybersecurity and AI's more deeper
 >
 > **Data model:** the full database entity-relationship diagram lives in
 > **[ERD.md](ERD.md)**.
+>
+> **Competitive research:** how HackerRank, KEP.uz, RoboContest and cp.uz
+> compare, plus the prioritised roadmap and what shipped from it — see
+> **[RESEARCH.md](RESEARCH.md)**.
+>
+> **Code judge:** why this app never executes submitted code, and what a safe
+> judge would require — see **[CODE_JUDGE.md](CODE_JUDGE.md)**.
 
 ## Local development
 

@@ -18,7 +18,7 @@ import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { XPChip } from '@/components/game';
 import { levelFromXp } from '@/lib/gamification';
 import { Button, ButtonLink, Card, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
-import { CheckIcon, CloseIcon, DomainIcon, ShieldIcon, SparkleIcon, TargetIcon } from '@/components/icons';
+import { ArrowRightIcon, CheckIcon, CloseIcon, CodeIcon, DomainIcon, ShieldIcon, SparkleIcon, TargetIcon } from '@/components/icons';
 
 type Phase = 'loading' | 'topics' | 'session' | 'results' | 'error';
 type RevExercise = Exercise;
@@ -211,6 +211,25 @@ export default function PracticePage() {
           <h1 className="display">{tr('navPractice')}</h1>
           <p className="mt-1.5 text-sm text-text-secondary">{tr('practiceSubtitle')}</p>
         </header>
+
+        <Card className="mb-6 p-4">
+          <div className="flex items-start gap-3">
+            <span
+              aria-hidden="true"
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-surface-800 text-cyan-300"
+            >
+              <CodeIcon size={18} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-white">{tr('arenaTitle')}</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-text-muted">{tr('arenaBlurb')}</p>
+            </div>
+          </div>
+          <ButtonLink href="/problems" variant="secondary" size="sm" className="mt-3 w-full sm:w-auto">
+            {tr('openArena')}
+            <ArrowRightIcon size={16} />
+          </ButtonLink>
+        </Card>
 
         {!session && (data?.topics.length ?? 0) === 0 ? (
           <EmptyState

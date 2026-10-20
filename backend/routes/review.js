@@ -164,13 +164,16 @@ router.post('/submit', requireAuth, async (req, res, next) => {
         const results = [];
         let xp_earned = 0;
 
+        // Position inside this submission — orders the history rows, all of
+        // which share one `now()` inside the transaction.
+        let seq = 0;
         for (const a of answers) {
           const ex = (mod.exercises ?? []).find(e => e.id === a.id);
           if (!ex) continue;
           const correct = grade(ex, a.value);
           results.push({ id: ex.id, correct, explain: ex.explain[lang], ...answerReveal(ex) });
 
-          await recordAttempt(req.user.id, mod.id, ex.id, correct, client);
+          await recordAttempt(req.user.id, mod.id, ex.id, correct, client, seq++);
 
           if (correct) {
             // Checked per answer inside the transaction so the daily cap holds

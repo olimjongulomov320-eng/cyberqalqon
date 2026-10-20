@@ -3,9 +3,21 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
-import { ApiError, fetchPaths, LearningPath, Domain, PathModule } from '@/lib/api';
+import { ApiError, Difficulty, fetchPaths, LearningPath, Domain, PathModule } from '@/lib/api';
 import { Card, ErrorNote, EmptyState, Skeleton, ButtonLink, Badge } from '@/components/ui';
-import { CheckIcon, ChevronRightIcon, CompassIcon, DomainIcon, LockIcon, PlayIcon, TrophyIcon } from '@/components/icons';
+import { ArrowRightIcon, CheckIcon, ChevronRightIcon, CodeIcon, CompassIcon, DomainIcon, LockIcon, PlayIcon, TrophyIcon } from '@/components/icons';
+
+const DIFF_KEY: Record<Difficulty, string> = {
+  beginner: 'difficultyBeginner',
+  intermediate: 'difficultyIntermediate',
+  advanced: 'difficultyAdvanced',
+};
+
+const DIFF_TONE: Record<Difficulty, 'success' | 'primary' | 'warning'> = {
+  beginner: 'success',
+  intermediate: 'primary',
+  advanced: 'warning',
+};
 
 /** One module on the path: a numbered node on a connected route, plus a card
  *  carrying the title, exercise count, XP and the module's state. Circles are an
@@ -51,17 +63,27 @@ function ModuleRow({ m, i, last }: { m: PathModule; i: number; last: boolean }) 
     <>
       <div className="min-w-0 flex-1">
         <p className={`text-sm font-semibold leading-snug break-words ${locked ? 'text-text-muted' : 'text-text-primary'}`}>{m.title}</p>
-        <p className="num mt-1 text-xs text-text-muted">
-          {m.exercise_count} {tr('challenge').toLowerCase()}
-          <span aria-hidden="true"> · </span>
-          {m.xp_reward} XP
-          {m.kind === 'checkpoint' && (
-            <>
-              <span aria-hidden="true"> · </span>
-              {tr('checkpoint')}
-            </>
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+          {m.difficulty && DIFF_KEY[m.difficulty] && (
+            <Badge tone={DIFF_TONE[m.difficulty]}>{tr(DIFF_KEY[m.difficulty])}</Badge>
           )}
-        </p>
+          <span className="num text-xs text-text-muted">
+            {m.exercise_count} {tr('challenge').toLowerCase()}
+            <span aria-hidden="true"> · </span>
+            {m.xp_reward} XP
+            {m.kind === 'checkpoint' && (
+              <>
+                <span aria-hidden="true"> · </span>
+                {tr('checkpoint')}
+              </>
+            )}
+          </span>
+        </div>
+        {locked && m.prerequisite && (
+          <p className="mt-1.5 text-xs leading-relaxed text-text-muted">
+            {tr('prereqNeeded')} <span className="text-text-secondary">«{m.prerequisite.title}»</span>
+          </p>
+        )}
       </div>
       <span className="shrink-0">
         {status === 'done' ? (
@@ -240,6 +262,25 @@ function LearnInner() {
           </div>
         ))
       )}
+
+      <Card className="p-4">
+        <div className="flex items-start gap-3">
+          <span
+            aria-hidden="true"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-surface-800 text-cyan-300"
+          >
+            <CodeIcon size={18} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-white">{tr('arenaTitle')}</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-text-muted">{tr('arenaBlurb')}</p>
+          </div>
+        </div>
+        <ButtonLink href="/problems" variant="secondary" size="sm" className="mt-3 w-full sm:w-auto">
+          {tr('openArena')}
+          <ArrowRightIcon size={16} />
+        </ButtonLink>
+      </Card>
     </div>
   );
 }

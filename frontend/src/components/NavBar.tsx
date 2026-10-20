@@ -6,13 +6,20 @@ import { useApp } from '@/context/AppContext';
 import { Lang, LANGS, makeT } from '@/lib/i18n';
 import { BoltIcon, SignalOffIcon, SignalOnIcon } from '@/components/icons';
 
-const NAV = [
+type NavItem = { href: string; label: string; wide?: boolean };
+
+// `wide` items only appear from lg up: at 640–1023px the header already fits
+// logo + five links + language/traffic/profile controls, and a sixth link
+// pushed the row past the viewport. Mobile reaches the arena from Practice and
+// Learn, which both carry a dedicated entry card.
+const NAV: NavItem[] = [
   { href: '/', label: 'navHome' },
   { href: '/learn', label: 'navLearn' },
   { href: '/practice', label: 'navPractice' },
+  { href: '/problems', label: 'navProblems', wide: true },
   { href: '/leaderboard', label: 'leaderboard' },
   { href: '/profile', label: 'navProfile' },
-] as const;
+];
 
 export default function NavBar() {
   const { user, lang, setLang, lowBandwidth, setLowBandwidth } = useApp();
@@ -47,6 +54,8 @@ export default function NavBar() {
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
                 className={`rounded-md px-2.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${
+                  item.wide ? 'hidden lg:inline-block' : ''
+                } ${
                   active
                     ? 'bg-surface-800 text-white'
                     : 'text-text-secondary hover:bg-surface-900 hover:text-text-primary'

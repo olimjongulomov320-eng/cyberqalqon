@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const pool = require('../db');
 const { optionalAuth } = require('../middleware/auth');
+const { difficultyForModule } = require('../lib/difficulty');
 
 const router = Router();
 
@@ -48,14 +49,26 @@ router.get('/', optionalAuth, async (req, res, next) => {
       byDomain.get(m.domain_id).push(m);
     }
     const state = new Map(); // module id → state
+    const difficulty = new Map(); // module id → derived difficulty
+    const prerequisite = new Map(); // module id → previous module (for locked nodes)
     for (const list of byDomain.values()) {
       let prevDone = true;
-      for (const m of list) {
+      let prev = null;
+      list.forEach((m, i) => {
         const isDone = doneSet.has(m.id);
         const s = isDone ? 'done' : prevDone ? 'current' : 'locked';
         state.set(m.id, s);
+        difficulty.set(
+          m.id,
+          difficultyForModule({ kind: m.kind, position: i + 1, total: list.length })
+        );
+        // Sequential unlocking means the immediate predecessor is the only
+        // thing standing between a learner and this module; naming it turns
+        // "locked" into an actionable instruction.
+        prerequisite.set(m.id, prev ? { slug: prev.slug, title: prev.title } : null);
         prevDone = isDone;
-      }
+        prev = m;
+      });
     }
 
     // Build the tree.
@@ -91,6 +104,8 @@ router.get('/', optionalAuth, async (req, res, next) => {
               xp_reward: m.xp_reward,
               exercise_count: m.exercise_count,
               state: state.get(m.id),
+              difficulty: difficulty.get(m.id),
+              prerequisite: state.get(m.id) === 'locked' ? prerequisite.get(m.id) : null,
             })),
           };
         }),

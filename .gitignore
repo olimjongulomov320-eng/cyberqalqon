@@ -36,9 +36,8 @@ out/
 # DB snapshots
 db/
 
-# Preview/ docs
+# Preview artefacts
 preview.html
-docs/
 
 # Skills lock
 skills-lock.json

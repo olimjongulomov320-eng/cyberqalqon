@@ -7,6 +7,7 @@ const setup = require('./setup');
 const authRouter        = require('./routes/auth');
 const pathsRouter       = require('./routes/paths');
 const modulesRouter     = require('./routes/modules');
+const problemsRouter    = require('./routes/problems');
 const reviewRouter      = require('./routes/review');
 const leaderboardRouter = require('./routes/leaderboard');
 const usersRouter       = require('./routes/users');
@@ -24,6 +25,7 @@ app.use(express.json({ limit: '16kb' }));
 app.use('/v1/auth',        authRouter);
 app.use('/v1/paths',       pathsRouter);
 app.use('/v1/modules',     modulesRouter);   // per-route limiters live inside
+app.use('/v1/problems',    problemsRouter);  // read-only view over the curriculum
 app.use('/v1/review',      reviewRouter);
 app.use('/v1/leaderboard', leaderboardRouter);
 app.use('/v1/users',       usersRouter);
@@ -37,6 +39,7 @@ app.get('/', (_req, res) => {
       <ul>
         <li><a style="color:#38bdf8" href="/v1/paths">/v1/paths</a> — learning paths</li>
         <li><a style="color:#38bdf8" href="/v1/modules">/v1/modules</a> — list all modules</li>
+        <li><a style="color:#38bdf8" href="/v1/problems?limit=5">/v1/problems</a> — problem arena</li>
         <li><a style="color:#38bdf8" href="/v1/leaderboard?period=week">/v1/leaderboard?period=week</a> — weekly league</li>
         <li><a style="color:#38bdf8" href="/v1/modules/intro-to-networking">/v1/modules/intro-to-networking</a> — sample module</li>
       </ul>

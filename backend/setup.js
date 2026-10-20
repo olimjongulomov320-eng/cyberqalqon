@@ -118,6 +118,38 @@ async function setup() {
     )`);
   await pool.query(`CREATE INDEX IF NOT EXISTS idx_mistakes_user ON mistakes (user_id)`);
 
+  // Append-only timeline of graded attempts. `mistakes` holds one running pair
+  // of counters per (user, module, exercise); this table keeps every individual
+  // verdict so a learner can see what they actually submitted and when.
+  //
+  // Written in the same statement sequence as `mistakes` (see recordAttempt),
+  // so the timeline can never disagree with the aggregates. New table = new
+  // columns of history only; attempts made before this shipped simply have no
+  // rows, and the UI says so rather than inventing a past.
+  //
+  // NB the SQL comments below must not mention a column name in backticks: this
+  // whole statement is itself a JS template literal, and one would end it early.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS exercise_attempts (
+      id          BIGSERIAL PRIMARY KEY,
+      user_id     UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      module_id   UUID NOT NULL REFERENCES modules(id) ON DELETE CASCADE,
+      exercise_id TEXT NOT NULL,
+      correct     BOOLEAN NOT NULL,
+      answered_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      -- Ordering key supplied by the caller. A single review submission records
+      -- several rows inside one request, where now() is identical for all of
+      -- them; without this the order within a session depended on page size.
+      seq         BIGINT NOT NULL DEFAULT 0
+    )`);
+  // The column was added to this table after it first shipped in a local build;
+  // IF NOT EXISTS keeps an older database bootable.
+  await pool.query(
+    `ALTER TABLE exercise_attempts ADD COLUMN IF NOT EXISTS seq BIGINT NOT NULL DEFAULT 0`
+  );
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_exercise_attempts_user_time
+                      ON exercise_attempts (user_id, answered_at DESC, seq DESC, id DESC)`);
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS user_achievements (
       user_id     UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,

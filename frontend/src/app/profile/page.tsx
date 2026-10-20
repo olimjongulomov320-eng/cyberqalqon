@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
-import { makeT } from '@/lib/i18n';
-import { ApiError, StatsPayload, fetchStats, updateMe } from '@/lib/api';
+import { Lang, makeT } from '@/lib/i18n';
+import { ApiError, AttemptRow, StatsPayload, fetchAttempts, fetchStats, updateMe } from '@/lib/api';
 import { achievementMeta, tierIndex, tierKey, levelFromXp } from '@/lib/gamification';
 import { RingProgress } from '@/components/game';
 import { Avatar, Badge, Button, ButtonLink, Card, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
@@ -27,6 +27,156 @@ const ACTIVITY_LABEL: Record<string, string> = {
   correct: 'activityCorrect',
   review: 'activityReview',
 };
+
+const HISTORY_PAGE = 8;
+type HistoryFilter = 'all' | 'correct' | 'wrong';
+
+/**
+ * `dd.MM · HH:mm`, formatted by hand rather than through `Intl`.
+ * Both uz and ru read day-first dates, and the ICU data behind an Uzbek locale
+ * tag varies by build — a fixed numeric shape is the same everywhere and never
+ * degrades into a raw key or a Cyrillic month name.
+ */
+function formatWhen(iso: string) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${p(d.getDate())}.${p(d.getMonth() + 1)} · ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+/**
+ * The learner's own graded-attempt timeline, read from GET /users/me/attempts.
+ *
+ * Fetched here rather than folded into `fetchStats` so the profile does not
+ * pay for a full history on every visit, and so paging stays independent of the
+ * stats cache. Rows are strictly this account's — the endpoint takes no user id.
+ */
+function HistoryCard({ lang }: { lang: Lang }) {
+  const tr = makeT(lang);
+  const [rows, setRows] = useState<AttemptRow[]>([]);
+  const [totals, setTotals] = useState({ correct: 0, wrong: 0 });
+  const [filter, setFilter] = useState<HistoryFilter>('all');
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const resultParam = (f: HistoryFilter) => (f === 'all' ? undefined : f);
+
+  useEffect(() => {
+    let alive = true;
+    setLoading(true);
+    setError(null);
+    fetchAttempts({ lang, limit: HISTORY_PAGE, result: resultParam(filter) })
+      .then(p => {
+        if (!alive) return;
+        setRows(p.attempts);
+        setTotals({ correct: p.correct_total, wrong: p.wrong_total });
+        setHasMore(p.has_more);
+      })
+      .catch(err => {
+        if (alive) setError((err as ApiError).message);
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [lang, filter]);
+
+  const loadMore = () => {
+    setLoadingMore(true);
+    fetchAttempts({ lang, limit: HISTORY_PAGE, offset: rows.length, result: resultParam(filter) })
+      .then(p => {
+        setRows(prev => [...prev, ...p.attempts]);
+        setHasMore(p.has_more);
+      })
+      .catch(err => setError((err as ApiError).message))
+      .finally(() => setLoadingMore(false));
+  };
+
+  return (
+    <Card className="mt-6 overflow-hidden">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 px-4 pt-3">
+        <p className="text-xs font-bold uppercase tracking-wider text-text-secondary">{tr('historyTitle')}</p>
+        <p className="num text-xs text-text-muted">
+          {tr('historyCorrect')}: {totals.correct} · {tr('historyWrong')}: {totals.wrong}
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-2 px-4 pt-2.5" role="group" aria-label={tr('historyTitle')}>
+        {(['all', 'correct', 'wrong'] as HistoryFilter[]).map(f => (
+          <button
+            key={f}
+            type="button"
+            aria-pressed={filter === f}
+            onClick={() => setFilter(f)}
+            className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+              filter === f
+                ? 'border-cyan-500/60 bg-cyan-500/10 text-cyan-200'
+                : 'border-border bg-surface-950/60 text-text-secondary hover:border-cyan-500/40 hover:text-text-primary'
+            }`}
+          >
+            {tr(f === 'all' ? 'historyFilterAll' : f === 'correct' ? 'historyFilterCorrect' : 'historyFilterWrong')}
+          </button>
+        ))}
+      </div>
+
+      {error && (
+        <div className="px-4 pt-3">
+          <ErrorNote>{error}</ErrorNote>
+        </div>
+      )}
+
+      {loading ? (
+        <div className="flex flex-col gap-2 px-4 py-4">
+          <Skeleton className="h-12 w-full rounded-md" />
+          <Skeleton className="h-12 w-full rounded-md" />
+        </div>
+      ) : rows.length === 0 ? (
+        <div className="px-4 pb-4 pt-3">
+          <p className="text-sm font-semibold text-text-primary">
+            {filter === 'all' ? tr('historyEmptyTitle') : tr('historyEmptyFilteredTitle')}
+          </p>
+          <p className="mt-1 text-sm text-text-muted">
+            {filter === 'all' ? tr('historyEmptyBody') : tr('historyEmptyFilteredBody')}
+          </p>
+        </div>
+      ) : (
+        <ul className="divide-y divide-border">
+          {rows.map(a => (
+            <li key={a.id} className="flex items-start gap-3 px-4 py-2.5">
+              <span className={`mt-0.5 shrink-0 ${a.correct ? 'text-success' : 'text-danger'}`}>
+                {a.correct ? <CheckIcon size={16} /> : <CloseIcon size={16} />}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm text-text-primary">
+                  {a.question || tr('historyNoQuestion')}
+                </span>
+                <span className="mt-0.5 flex items-center gap-1.5 text-xs text-text-muted">
+                  {a.domain_slug && <DomainIcon slug={a.domain_slug} size={13} />}
+                  <span className="truncate">{a.module_title}</span>
+                  <span className="num shrink-0">· {formatWhen(a.answered_at)}</span>
+                </span>
+              </span>
+              {/* Icons are decorative; the verdict needs a text equivalent. */}
+              <span className="sr-only">{a.correct ? tr('historyCorrect') : tr('historyWrong')}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {!loading && hasMore && (
+        <div className="px-4 py-3">
+          <Button variant="ghost" size="sm" className="w-full" onClick={loadMore} disabled={loadingMore}>
+            {loadingMore ? tr('historyLoading') : tr('historyLoadMore')}
+          </Button>
+        </div>
+      )}
+    </Card>
+  );
+}
 
 export default function ProfilePage() {
   const { lang, user, setUser, logout, ready } = useApp();
@@ -244,6 +394,9 @@ export default function ProfilePage() {
                 </ul>
               </Card>
             )}
+
+            {/* Submission history — this account's graded attempts, newest first. */}
+            <HistoryCard lang={lang} />
 
             {/* Achievements */}
             <Card className="mt-6 overflow-hidden">

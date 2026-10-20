@@ -171,8 +171,14 @@ async function reviewXpAmount(userId, db = pool) {
  * Record one graded attempt on one exercise. Returns:
  *   firstCorrect — this was ever the first correct answer (drives +XP once)
  *   wrong        — whether this attempt was wrong (drives hearts/weak topics)
+ *
+ * Also appends a row to `exercise_attempts` — the learner-visible timeline read
+ * by GET /users/me/attempts. Both writes share the caller's connection, so a
+ * transaction that rolls back leaves no history behind.
+ *
+ * `seq` orders the rows of one multi-answer submission, which share a timestamp.
  */
-async function recordAttempt(userId, moduleId, exerciseId, correct, db = pool) {
+async function recordAttempt(userId, moduleId, exerciseId, correct, db = pool, seq = 0) {
   const { rows } = await db.query(
     correct
       ? `INSERT INTO mistakes (user_id, module_id, exercise_id, correct_count, last_attempt_at)
@@ -190,6 +196,22 @@ async function recordAttempt(userId, moduleId, exerciseId, correct, db = pool) {
          RETURNING false AS first_correct, mistakes.wrong_count`,
     [userId, moduleId, exerciseId]
   );
+
+  // History row on the SAME connection — inside whatever transaction the caller
+  // opened — so the timeline and the counters commit or roll back together.
+  // Deliberately not best-effort: a failure here fails the request loudly,
+  // exactly as a `mistakes` failure already would, rather than quietly dropping
+  // an attempt out of the learner's record.
+  //
+  // `seq` breaks order ties within one multi-answer submission: every row in a
+  // single request shares one `now()`, so without it the timeline's order would
+  // depend on the page size the client happened to ask for.
+  await db.query(
+    `INSERT INTO exercise_attempts (user_id, module_id, exercise_id, correct, seq)
+     VALUES ($1, $2, $3, $4, $5)`,
+    [userId, moduleId, exerciseId, correct, seq]
+  );
+
   return { firstCorrect: rows[0].first_correct, wrong: !correct, wrongCount: rows[0].wrong_count };
 }
 
