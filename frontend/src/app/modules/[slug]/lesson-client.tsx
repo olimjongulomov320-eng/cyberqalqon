@@ -16,6 +16,7 @@ import {
 } from '@/lib/api';
 import { Hearts, Confetti, NewAchievementChip, XPChip } from '@/components/game';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
+import { AnswerFeedback, answerText, revealText } from '@/components/feedback';
 import { loseHeart, restoreHeart, useHearts } from '@/lib/hearts';
 import { levelFromXp } from '@/lib/gamification';
 import { Badge, Button, ButtonLink, Card, ErrorNote, Progress, Skeleton } from '@/components/ui';
@@ -45,68 +46,6 @@ function Text({ role = 'banner' }: { role?: 'banner' | 'alert' | 'status' }) {
       .
     </span>
   );
-}
-
-type Tr = (key: string) => string;
-
-/** The correct answer as human text, derived purely from the server's graded
- *  `reveal` payload and the localised exercise. No answer is ever guessed. */
-function revealText(ex: Exercise, r: import('@/lib/api').Reveal, tr: Tr): string {
-  switch (ex.type) {
-    case 'mc':
-    case 'multi': {
-      const ids = r.answers ?? (r.answer ? [r.answer] : []);
-      return ids.map(id => ex.options.find(o => o.id === id)?.text ?? id).join(', ');
-    }
-    case 'tf':
-      return r.answer === 'true' ? tr('optTrue') : r.answer === 'false' ? tr('optFalse') : '';
-    case 'input':
-      return r.answer ?? '';
-    case 'order':
-      return (r.order ?? []).map(id => ex.items.find(i => i.id === id)?.text ?? id).join(' → ');
-    case 'match': {
-      const m = r.match_answer ?? {};
-      return Object.entries(m)
-        .map(([pid, rid]) => {
-          const left = ex.pairs.find(p => p.id === pid)?.left ?? pid;
-          const right = ex.pairs.find(p => p.id === rid)?.right ?? rid;
-          return `${left} = ${right}`;
-        })
-        .join('; ');
-    }
-    default:
-      return '';
-  }
-}
-
-/** The learner's own answer as human text, from the answers kept in state. */
-function answerText(ex: Exercise, value: AnswerValue | undefined, tr: Tr): string {
-  if (value === undefined || value === null) return '';
-  switch (ex.type) {
-    case 'mc':
-    case 'multi': {
-      const ids = Array.isArray(value) ? value : [value];
-      return ids.map(id => ex.options.find(o => o.id === String(id))?.text ?? String(id)).join(', ');
-    }
-    case 'tf':
-      return value === 'true' ? tr('optTrue') : value === 'false' ? tr('optFalse') : '';
-    case 'input':
-      return String(value);
-    case 'order':
-      return (value as string[]).map(id => ex.items.find(i => i.id === id)?.text ?? id).join(' → ');
-    case 'match': {
-      const m = value as Record<string, string>;
-      return Object.entries(m)
-        .map(([pid, rid]) => {
-          const left = ex.pairs.find(p => p.id === pid)?.left ?? pid;
-          const right = ex.pairs.find(p => p.id === rid)?.right ?? rid;
-          return `${left} = ${right}`;
-        })
-        .join('; ');
-    }
-    default:
-      return '';
-  }
 }
 
 export default function LessonView({ slug }: { slug: string }) {
@@ -669,28 +608,18 @@ export default function LessonView({ slug }: { slug: string }) {
           )}
         </Card>
 
-        {/* Feedback panel */}
-        {checked && (
-          <section
-            aria-live="polite"
-            className={`mt-3 rounded-xl border p-4 ${
-              checked.correct ? 'border-success/50 bg-success/[0.08]' : 'border-danger/50 bg-danger/[0.08]'
-            }`}
-          >
-            <p className={`flex items-center gap-1.5 text-sm font-bold ${checked.correct ? 'text-success' : 'text-danger'}`}>
-              {checked.correct ? <CheckIcon size={16} /> : <CloseIcon size={16} />}
-              {checked.correct ? tr('correctTitle') : tr('wrongTitle')}
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-              <span className="font-semibold text-text-primary">{tr('whyLabel')}: </span>
-              {checked.explain}
-            </p>
-            {checked.xp_earned > 0 && (
-              <p role="status" className="num mt-2 inline-flex items-center gap-1 text-xs font-bold text-warning">
-                <BoltIcon size={14} /> +{checked.xp_earned} XP
-              </p>
-            )}
-          </section>
+        {/* Feedback panel — verdict, your answer vs the correct one, and the
+            authored explanation. Shared with the arena and review session. */}
+        {checked && ex && (
+          <AnswerFeedback
+            className="mt-3"
+            correct={checked.correct}
+            reveal={checked.reveal}
+            explain={checked.explain}
+            exercise={ex}
+            value={value}
+            xpEarned={checked.xp_earned}
+          />
         )}
 
         {/* Restore-a-heart pitch */}

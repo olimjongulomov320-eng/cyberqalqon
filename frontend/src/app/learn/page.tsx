@@ -3,9 +3,18 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
-import { ApiError, Difficulty, fetchPaths, LearningPath, Domain, PathModule } from '@/lib/api';
+import {
+  ApiError,
+  Difficulty,
+  fetchPaths,
+  fetchStats,
+  LearningPath,
+  Domain,
+  PathModule,
+  TopicStat,
+} from '@/lib/api';
 import { Card, ErrorNote, EmptyState, Skeleton, ButtonLink, Badge } from '@/components/ui';
-import { ArrowRightIcon, CheckIcon, ChevronRightIcon, CodeIcon, CompassIcon, DomainIcon, LockIcon, PlayIcon, TrophyIcon } from '@/components/icons';
+import { ArrowRightIcon, CheckIcon, ChevronRightIcon, CodeIcon, CompassIcon, DomainIcon, LockIcon, PlayIcon, RefreshIcon, TrophyIcon } from '@/components/icons';
 
 const DIFF_KEY: Record<Difficulty, string> = {
   beginner: 'difficultyBeginner',
@@ -166,11 +175,123 @@ function DomainRow({ domain }: { domain: Domain }) {
   );
 }
 
+/**
+ * Real progress across the whole curriculum, counted from the `state` field the
+ * API already assigns to every module. Nothing here is estimated: done counts
+ * `state === 'done'`, review counts modules the learner has attempted without
+ * completing, and the bar is done/total.
+ */
+function PathSummary({ paths }: { paths: LearningPath[] }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
+
+  const all = paths.flatMap(p => p.domains.flatMap(d => d.modules));
+  const total = all.length;
+  const done = all.filter(m => m.state === 'done').length;
+  const current = all.filter(m => m.state === 'current').length;
+  const locked = all.filter(m => m.state === 'locked').length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  const cells: { key: string; label: string; value: number; tone: string }[] = [
+    { key: 'done', label: tr('pathSummaryDone'), value: done, tone: 'text-success' },
+    { key: 'current', label: tr('pathSummaryCurrent'), value: current, tone: 'text-cyan-300' },
+    { key: 'locked', label: tr('pathSummaryLocked'), value: locked, tone: 'text-text-muted' },
+  ];
+
+  return (
+    <Card className="p-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+          {tr('pathOverall')}
+        </p>
+        <p className="num text-sm font-bold text-text-primary">
+          {done}/{total} <span className="text-text-muted">· {pct}%</span>
+        </p>
+      </div>
+      <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-800">
+        <div
+          className="fill-x h-full rounded-full bg-cyan-400"
+          style={{ transform: `scaleX(${pct / 100})`, transformOrigin: 'left' }}
+        />
+      </div>
+      <dl className="mt-3.5 grid grid-cols-3 gap-2">
+        {cells.map(c => (
+          <div key={c.key} className="rounded-lg border border-border bg-surface-950/50 px-2.5 py-2">
+            <dt className="text-[0.6875rem] font-semibold uppercase tracking-wide text-text-muted">
+              {c.label}
+            </dt>
+            <dd className={`num mt-0.5 text-lg font-bold ${c.tone}`}>{c.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </Card>
+  );
+}
+
+/**
+ * The topics the learner should review, sourced from `/me/stats` weak_topics —
+ * domains where real mistakes were recorded. Signed out, or with no mistakes,
+ * it says so rather than inventing a recommendation.
+ */
+function ReviewPanel({ topics, signedIn }: { topics: TopicStat[]; signedIn: boolean }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
+
+  return (
+    <Card className="p-4">
+      <div className="flex items-start gap-3">
+        <span
+          aria-hidden="true"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-surface-800 text-cyan-300"
+        >
+          <RefreshIcon size={18} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-bold text-white">
+            {topics.length > 0 ? tr('pathReviewTitle') : tr('pathNoReview')}
+          </p>
+          <p className="mt-0.5 text-xs leading-relaxed text-text-muted">
+            {topics.length > 0 ? tr('pathReviewBody') : tr('pathNoReviewBody')}
+          </p>
+        </div>
+      </div>
+
+      {topics.length > 0 && (
+        <>
+          <ul className="mt-3 flex flex-wrap gap-1.5">
+            {topics.slice(0, 4).map(t => (
+              <li key={t.slug}>
+                <Badge tone="warning">
+                  <DomainIcon slug={t.slug} size={12} />
+                  {t.title}
+                  <span className="num text-text-muted">{t.wrong}</span>
+                </Badge>
+              </li>
+            ))}
+          </ul>
+          <ButtonLink href="/practice" variant="secondary" size="sm" className="mt-3 w-full sm:w-auto">
+            {tr('pathReviewAction')}
+            <ArrowRightIcon size={16} />
+          </ButtonLink>
+        </>
+      )}
+
+      {topics.length === 0 && !signedIn && (
+        <ButtonLink href="/auth" variant="secondary" size="sm" className="mt-3 w-full sm:w-auto">
+          {tr('login')}
+          <ArrowRightIcon size={16} />
+        </ButtonLink>
+      )}
+    </Card>
+  );
+}
+
 function LearnInner() {
   const { lang, user } = useApp();
   const tr = makeT(lang);
   const [data, setData] = useState<{ paths: LearningPath[]; continue: { slug: string; title: string; position: number; total: number } | null } | null>(null);
   const [error, setError] = useState<ApiError | null>(null);
+  const [weakTopics, setWeakTopics] = useState<TopicStat[]>([]);
 
   useEffect(() => {
     let alive = true;
@@ -192,6 +313,26 @@ function LearnInner() {
       alive = false;
     };
   }, [lang, user?.id]);
+
+  // Weak topics are a signed-in, best-effort signal. A failure here must not
+  // break the path itself, so it is swallowed and simply renders the empty case.
+  useEffect(() => {
+    let alive = true;
+    if (!user) {
+      setWeakTopics([]);
+      return;
+    }
+    fetchStats(lang)
+      .then(s => {
+        if (alive) setWeakTopics(s.weak_topics ?? []);
+      })
+      .catch(() => {
+        if (alive) setWeakTopics([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [lang, user]);
 
   if (error) {
     return (
@@ -218,6 +359,9 @@ function LearnInner() {
 
   return (
     <div className="flex flex-col gap-8">
+      {/* Progress summary — counted from real module states. */}
+      {!isEmpty && <PathSummary paths={data.paths} />}
+
       {/* Continue strip */}
       {data.continue && (
         <Card className="flex items-center gap-3 border-cyan-500/30 bg-cyan-500/[0.06] p-4">
@@ -281,6 +425,8 @@ function LearnInner() {
           <ArrowRightIcon size={16} />
         </ButtonLink>
       </Card>
+
+      <ReviewPanel topics={weakTopics} signedIn={Boolean(user)} />
     </div>
   );
 }

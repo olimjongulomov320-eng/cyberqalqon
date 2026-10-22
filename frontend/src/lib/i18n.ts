@@ -232,6 +232,18 @@ const uz: Dict = {
   arenaTitle: 'Mashq maydoni',
   arenaBlurb: '329 ta masalani mavzu va qiyinlik boʻyicha filtrlab, darsdan tashqarida mashq qiling.',
   openArena: 'Masalalar bazasini ochish',
+
+  // ── Skill path (learn) ──
+  pathSummaryDone: 'Bajarilgan',
+  pathSummaryCurrent: 'Hozirgi bosqich',
+  pathSummaryLocked: 'Yopiq',
+  pathSummaryReview: 'Takrorlash kerak',
+  pathReviewTitle: 'Takrorlash kerak boʻlgan mavzular',
+  pathReviewBody: 'Bu mavzularda koʻproq xato qildingiz — takrorlash sessiyasini boshlang.',
+  pathReviewAction: 'Takrorlashni boshlash',
+  pathNoReview: 'Hozircha takrorlash kerak emas',
+  pathNoReviewBody: 'Xatolar yigʻilganda kuchsiz mavzular shu yerda koʻrinadi.',
+  pathOverall: 'Umumiy jarayon',
   problemsCount: 'ta masala',
   problemsSolved: 'yechilgan',
   filterDomain: 'Mavzu',
@@ -270,6 +282,18 @@ const uz: Dict = {
   problemSearch: 'Qidirish',
   problemSearchPlaceholder: 'Masala matni yoki dars nomi',
   problemSearchClear: 'Qidiruvni tozalash',
+
+  // ── Mission framing (arena detail) ──
+  missionBrief: 'Vazifa',
+  missionObjective: 'Maqsad',
+  missionSkill: 'Koʻnikma',
+  missionObjectiveBody: 'Savolga javob bering va natijani darhol tekshiring.',
+  missionReviewBody: 'Bu koʻnikmani takrorlash tavsiya etiladi — javob notoʻgʻri boʻlgan.',
+  missionReviewAction: 'Shu mavzuni takrorlash',
+  missionNextAction: 'Davom etish',
+  missionStatusNew: 'Hali boshlanmagan',
+  missionStatusAttempted: 'Jarayonda',
+  missionStatusSolved: 'Bajarilgan',
 
   // ── Profile ──
   myProfile: 'Profilim',
@@ -588,6 +612,18 @@ const ru: Dict = {
   arenaTitle: 'Арена практики',
   arenaBlurb: '329 задач с фильтрами по теме и сложности — практика вне уроков.',
   openArena: 'Открыть базу задач',
+
+  // ── Skill path (learn) ──
+  pathSummaryDone: 'Выполнено',
+  pathSummaryCurrent: 'Текущий этап',
+  pathSummaryLocked: 'Закрыто',
+  pathSummaryReview: 'Нужно повторить',
+  pathReviewTitle: 'Темы для повторения',
+  pathReviewBody: 'В этих темах вы чаще ошибались — начните сессию повторения.',
+  pathReviewAction: 'Начать повторение',
+  pathNoReview: 'Пока повторять нечего',
+  pathNoReviewBody: 'Слабые темы появятся здесь, когда накопятся ошибки.',
+  pathOverall: 'Общий прогресс',
   problemsCount: 'задач',
   problemsSolved: 'решено',
   filterDomain: 'Тема',
@@ -626,6 +662,18 @@ const ru: Dict = {
   problemSearch: 'Поиск',
   problemSearchPlaceholder: 'Текст задачи или название урока',
   problemSearchClear: 'Очистить поиск',
+
+  // ── Mission framing (arena detail) ──
+  missionBrief: 'Задание',
+  missionObjective: 'Цель',
+  missionSkill: 'Навык',
+  missionObjectiveBody: 'Ответьте на вопрос и сразу проверьте результат.',
+  missionReviewBody: 'Этот навык стоит повторить — ответ был неверным.',
+  missionReviewAction: 'Повторить тему',
+  missionNextAction: 'Продолжить',
+  missionStatusNew: 'Не начато',
+  missionStatusAttempted: 'В процессе',
+  missionStatusSolved: 'Выполнено',
 
   // ── Профиль ──
   myProfile: 'Мой профиль',

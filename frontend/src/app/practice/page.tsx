@@ -15,6 +15,7 @@ import {
   submitReview,
 } from '@/lib/api';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
+import { AnswerFeedback } from '@/components/feedback';
 import { XPChip } from '@/components/game';
 import { levelFromXp } from '@/lib/gamification';
 import { Button, ButtonLink, Card, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
@@ -322,22 +323,15 @@ export default function PracticePage() {
             />
           </Card>
 
-          {checked && (
-            <section
-              aria-live="polite"
-              className={`mt-4 rounded-xl border p-4 ${
-                checked.correct ? 'border-success/50 bg-success/[0.08]' : 'border-danger/50 bg-danger/[0.08]'
-              }`}
-            >
-              <p className={`flex items-center gap-1.5 text-sm font-bold ${checked.correct ? 'text-success' : 'text-danger'}`}>
-                {checked.correct ? <CheckIcon size={16} /> : <CloseIcon size={16} />}
-                {checked.correct ? tr('correctTitle') : tr('wrongTitle')}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-                <span className="font-semibold text-text-primary">{tr('whyLabel')}: </span>
-                {checked.explain}
-              </p>
-            </section>
+          {checked && ex && (
+            <AnswerFeedback
+              className="mt-4"
+              correct={checked.correct}
+              reveal={checked.reveal}
+              explain={checked.explain}
+              exercise={ex}
+              value={value}
+            />
           )}
 
           {error && (

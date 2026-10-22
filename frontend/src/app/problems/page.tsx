@@ -18,6 +18,7 @@ import {
   fetchProblems,
 } from '@/lib/api';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
+import { AnswerFeedback } from '@/components/feedback';
 import {
   Badge,
   Button,
@@ -27,7 +28,6 @@ import {
   ErrorNote,
   Progress,
   Skeleton,
-  SuccessNote,
 } from '@/components/ui';
 import {
   ArrowLeftIcon,
@@ -35,6 +35,7 @@ import {
   CheckIcon,
   ChevronRightIcon,
   CodeIcon,
+  DomainIcon,
   RefreshIcon,
   SearchIcon,
   TargetIcon,
@@ -554,7 +555,11 @@ export default function ProblemsPage() {
                         className={`w-full rounded-xl border px-4 py-3 text-left transition-colors ${
                           active
                             ? 'border-cyan-500/40 bg-cyan-500/[0.06]'
-                            : 'border-border bg-surface-900 hover:border-border-light'
+                            : p.solved
+                              ? 'border-success/30 bg-surface-900 hover:border-success/50'
+                              : p.attempted
+                                ? 'border-warning/30 bg-surface-900 hover:border-warning/50'
+                                : 'border-border bg-surface-900 hover:border-border-light'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-3">
@@ -562,6 +567,7 @@ export default function ProblemsPage() {
                             <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
                               <Badge tone={DIFF_TONE[p.difficulty]}>{tr(DIFF_KEY[p.difficulty])}</Badge>
                               <Badge>{tr(TYPE_KEY[p.type])}</Badge>
+                              {/* Status is icon + text, never colour alone. */}
                               {p.solved && (
                                 <Badge tone="success">
                                   <CheckIcon size={12} />
@@ -569,7 +575,10 @@ export default function ProblemsPage() {
                                 </Badge>
                               )}
                               {!p.solved && p.attempted && (
-                                <Badge tone="warning">{tr('statusAttempted')}</Badge>
+                                <Badge tone="warning">
+                                  <RefreshIcon size={12} />
+                                  {tr('statusAttempted')}
+                                </Badge>
                               )}
                             </div>
                             <p
@@ -652,13 +661,45 @@ export default function ProblemsPage() {
                   </Badge>
                 </div>
 
+                {/* Mission brief. Every line is a real field: the module is the
+                    objective (this exercise is one step of it), the domain is
+                    the skill being practised, and difficulty/status come from
+                    the curriculum and the learner's own attempts. No invented
+                    scenario prose — the exercise's own question is the task. */}
                 <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
-                  {tr('problemModule')}
+                  {tr('missionBrief')}
                 </p>
                 <h2 className="mt-1 text-base font-bold leading-snug text-white">
                   {detail.module_title}
                 </h2>
-                <p className="mt-0.5 text-xs text-text-muted">{detail.domain_title}</p>
+                <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                  <Badge tone="primary">
+                    <DomainIcon slug={detail.domain_slug} size={12} />
+                    {detail.domain_title}
+                  </Badge>
+                  <Badge>{tr(TYPE_KEY[detail.type])}</Badge>
+                  {detail.solved ? (
+                    <Badge tone="success">
+                      <CheckIcon size={12} />
+                      {tr('missionStatusSolved')}
+                    </Badge>
+                  ) : detail.attempted ? (
+                    <Badge tone="warning">{tr('missionStatusAttempted')}</Badge>
+                  ) : (
+                    <Badge>{tr('missionStatusNew')}</Badge>
+                  )}
+                </div>
+
+                <div className="mt-3 grid gap-1.5 rounded-lg border border-border bg-surface-950/50 px-3 py-2.5 text-xs">
+                  <div className="flex flex-wrap gap-x-1.5">
+                    <span className="font-semibold text-text-muted">{tr('missionObjective')}:</span>
+                    <span className="text-text-secondary">{tr('missionObjectiveBody')}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-x-1.5">
+                    <span className="font-semibold text-text-muted">{tr('missionSkill')}:</span>
+                    <span className="text-text-secondary">{detail.domain_title}</span>
+                  </div>
+                </div>
 
                 <div className="mt-4">
                   <ExerciseRenderer
@@ -672,26 +713,40 @@ export default function ProblemsPage() {
 
                 <div aria-live="polite">
                   {checkError && <ErrorNote className="mt-3">{checkError}</ErrorNote>}
-                  {result &&
-                    (result.correct ? (
-                      <SuccessNote className="mt-3">
-                        {tr('correct')}
-                        {result.xp_earned > 0 && (
-                          <span className="num ml-1">+{result.xp_earned} XP</span>
-                        )}
-                      </SuccessNote>
-                    ) : (
-                      <ErrorNote className="mt-3">{tr('wrong')}</ErrorNote>
-                    ))}
-                  {result?.explain && (
-                    <p className="mt-3 rounded-lg border border-border bg-surface-800 px-4 py-3 text-sm leading-relaxed text-text-secondary">
-                      {result.explain}
-                    </p>
-                  )}
-                  {result && result.new_achievements.length > 0 && (
-                    <p className="mt-2 text-xs font-semibold text-warning">
-                      {result.new_achievements.map(k => tr(`ach_${k}_t`)).join(' · ')}
-                    </p>
+                  {result && (
+                    <AnswerFeedback
+                      className="mt-3"
+                      correct={result.correct}
+                      reveal={result.reveal}
+                      explain={result.explain}
+                      exercise={detail.exercise}
+                      value={value}
+                      xpEarned={result.xp_earned}
+                      action={
+                        result.correct ? (
+                          result.new_achievements.length > 0 ? (
+                            <p className="text-xs font-semibold text-warning">
+                              {result.new_achievements.map(k => tr(`ach_${k}_t`)).join(' · ')}
+                            </p>
+                          ) : undefined
+                        ) : (
+                          // A wrong answer earns a route back to the concept,
+                          // not just a red line: the same domain filter, so the
+                          // learner practises the skill they just missed.
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="text-xs text-text-muted">{tr('missionReviewBody')}</p>
+                            <ButtonLink
+                              href={`/practice`}
+                              variant="secondary"
+                              size="sm"
+                            >
+                              <RefreshIcon size={14} />
+                              {tr('missionReviewAction')}
+                            </ButtonLink>
+                          </div>
+                        )
+                      }
+                    />
                   )}
                 </div>
 

@@ -360,6 +360,14 @@ export default function ProfilePage() {
                         </li>
                       ))}
                     </ul>
+                    {/* Weak topics are only useful if they lead somewhere: the
+                        review session already builds a drill from real mistakes. */}
+                    <div className="px-4 pb-4 pt-1">
+                      <ButtonLink href="/practice" variant="secondary" size="sm" className="w-full justify-center">
+                        <RefreshIcon size={14} />
+                        {tr('pathReviewAction')}
+                      </ButtonLink>
+                    </div>
                   </Card>
                 )}
               </div>
