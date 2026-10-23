@@ -126,18 +126,58 @@ export default function HintLadder({
         );
       }
       case 'pair': {
+        // Only match exercises carry `pairs`. The hint payload has already been
+        // validated as `kind: 'pair'`, so this branch is only reachable here when
+        // `exercise.type === 'match' && result?.kind === 'pair'`.
+        if (exercise.type !== 'match') {
+          return (
+            <p className="text-sm leading-relaxed text-text-secondary">
+              {tr('hintPair')} {result.left_id} = {result.right_id}
+            </p>
+          );
+        }
+
+        const pairs = exercise.pairs;
+        const pairsIndexed = new Map<string, typeof pairs[number]>();
+        for (const p of pairs) {
+          if (p && typeof p === 'object') {
+            // The rendered right label comes from the right item's text field: the
+            // rendered form is { id, text } (api.ts MatchPair) when the backend
+            // localizes, or { id, uz, ru } when the client receives raw pairs.
+            const rid =
+              typeof p.right === 'object' && p.right !== null && 'id' in p.right
+                ? (p.right as { id: string }).id
+                : undefined;
+            if (rid) pairsIndexed.set(rid, p);
+          }
+        }
+
+        const leftPair =
+          pairsIndexed.get(result.left_id) ?? pairs.find(p => p.id === result.left_id);
         const left =
-          exercise.type === 'match'
-            ? exercise.pairs.find(p => p.id === result.left_id)?.left ?? result.left_id
-            : result.left_id;
+          leftPair
+            ? typeof leftPair.left === 'object' && leftPair.left !== null && 'text' in leftPair.left
+              ? (leftPair.left as { text: string }).text
+              : typeof leftPair.left === 'string'
+                ? leftPair.left
+                : undefined
+            : undefined;
+
+        const rightPair =
+          pairsIndexed.get(result.right_id) ?? pairs.find(p => p.id === result.right_id);
         const right =
-          exercise.type === 'match'
-            ? exercise.pairs.find(p => p.id === result.right_id)?.right ?? result.right_id
-            : result.right_id;
+          rightPair
+            ? typeof rightPair.right === 'object' && rightPair.right !== null && 'text' in rightPair.right
+              ? (rightPair.right as { text: string }).text
+              : typeof rightPair.right === 'string'
+                ? rightPair.right
+                : undefined
+            : undefined;
+
         return (
           <p className="text-sm leading-relaxed text-text-secondary">
             <span className="font-semibold text-text-primary">{tr('hintPair')} </span>
-            {left} = {right}
+            {(left ?? result.left_id)} = {(right ?? result.right_id)}
           </p>
         );
       }

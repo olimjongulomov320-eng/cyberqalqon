@@ -104,6 +104,19 @@ test('order with fewer than three steps is unavailable', () => {
   assert.deepEqual(hintLevel2(small), { available: false });
 });
 
+const matchWithRightIds = {
+  id: 'e5b',
+  type: 'match',
+  pairs: [
+    { id: 'p1', left: { uz: 'L1', ru: 'L1' }, right: { id: 'p1', uz: 'R1', ru: 'R1' } },
+    { id: 'p2', left: { uz: 'L2', ru: 'L2' }, right: { id: 'p2', uz: 'R2', ru: 'R2' } },
+    { id: 'p3', left: { uz: 'L3', ru: 'L3' }, right: { id: 'p3', uz: 'R3', ru: 'R3' } },
+  ],
+  match_answer: { p1: 'p1', p2: 'p3', p3: 'p2' },
+  q: { uz: 's', ru: 'с' },
+  explain: { uz: 'i', ru: 'и' },
+};
+
 test('match hint reveals one valid pair only', () => {
   const h = hintLevel2(match);
   assert.equal(h.available, true);
@@ -111,6 +124,35 @@ test('match hint reveals one valid pair only', () => {
   assert.equal(h.left_id, 'p1');
   assert.equal(h.right_id, match.match_answer.p1);
   assert.equal(JSON.stringify(h).includes('p2'), false);
+});
+
+test('match hint right_id equals the pair id when the curriculum reuses pair ids as right ids', () => {
+  // Realistic shape from the published curriculum: right items carry their own
+  // id that duplicates the pair id, so right_id collides with pair ids. The
+  // derivation still picks one correct pair, and the payload only names that
+  // pair id and the matching right-side id — it never names p2 or p3.
+  const h = hintLevel2(matchWithRightIds);
+  assert.equal(h.available, true);
+  assert.equal(h.kind, 'pair');
+  assert.equal(h.left_id, 'p1');
+  assert.equal(h.right_id, 'p1');
+  assert.equal(JSON.stringify(h).includes('p2'), false);
+  assert.equal(JSON.stringify(h).includes('p3'), false);
+  assert.equal(JSON.stringify(h).includes('R2'), false);
+  assert.equal(JSON.stringify(h).includes('R3'), false);
+});
+
+test('match hint does not leak other pairs even when some are incorrect', () => {
+  const h = hintLevel2({
+    ...matchWithRightIds,
+    match_answer: { p1: 'p1', p2: 'p3' },
+  });
+  assert.equal(h.available, true);
+  assert.equal(h.kind, 'pair');
+  assert.equal(h.left_id, 'p1');
+  assert.equal(h.right_id, 'p1');
+  assert.equal(JSON.stringify(h).includes('p2'), false);
+  assert.equal(JSON.stringify(h).includes('p3'), false);
 });
 
 test('input hint returns shape, never the words themselves', () => {
