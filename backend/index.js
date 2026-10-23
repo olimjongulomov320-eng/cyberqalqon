@@ -9,6 +9,7 @@ const pathsRouter       = require('./routes/paths');
 const modulesRouter     = require('./routes/modules');
 const problemsRouter    = require('./routes/problems');
 const reviewRouter      = require('./routes/review');
+const hintsRouter       = require('./routes/hints');
 const leaderboardRouter = require('./routes/leaderboard');
 const usersRouter       = require('./routes/users');
 
@@ -25,6 +26,7 @@ app.use(express.json({ limit: '16kb' }));
 app.use('/v1/auth',        authRouter);
 app.use('/v1/paths',       pathsRouter);
 app.use('/v1/modules',     modulesRouter);   // per-route limiters live inside
+app.use('/v1/modules',     hintsRouter);     // POST /:slug/hint (shares the path)
 app.use('/v1/problems',    problemsRouter);  // read-only view over the curriculum
 app.use('/v1/review',      reviewRouter);
 app.use('/v1/leaderboard', leaderboardRouter);

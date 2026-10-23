@@ -1,25 +1,31 @@
 'use client';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import {
   ApiError,
   AnswerValue,
+  AttemptRow,
   Exercise,
   Reveal,
   ReviewPayload,
   ReviewResult,
+  fetchAttempts,
   fetchReview,
+  fetchStats,
   practiceAnswer,
   submitReview,
 } from '@/lib/api';
+import type { DomainSkillStat } from '@/lib/skills';
+import { dedupeLatest, harderReady } from '@/lib/recommend';
+import Journey from '@/components/Journey';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { AnswerFeedback } from '@/components/feedback';
 import { XPChip } from '@/components/game';
 import { levelFromXp } from '@/lib/gamification';
-import { Button, ButtonLink, Card, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
-import { ArrowRightIcon, CheckIcon, CloseIcon, CodeIcon, DomainIcon, ShieldIcon, SparkleIcon, TargetIcon } from '@/components/icons';
+import { Button, ButtonLink, Card, EmptyState, ErrorNote, Progress, SectionHeading, Skeleton } from '@/components/ui';
+import { ArrowRightIcon, CheckIcon, CloseIcon, CodeIcon, DomainIcon, RefreshIcon, ShieldIcon, SparkleIcon, TargetIcon } from '@/components/icons';
 
 type Phase = 'loading' | 'topics' | 'session' | 'results' | 'error';
 type RevExercise = Exercise;
@@ -60,6 +66,36 @@ export default function PracticePage() {
   const sessionStartXp = useRef<number | null>(null);
   // Generated once per logical submission and reused on every retry.
   const submitKey = useRef<string | null>(null);
+
+  // Real performance behind this hub's recommendations: missed questions come
+  // from the graded-attempt timeline, "ready for harder" from per-domain
+  // accuracy. Both fail soft — an error degrades to an empty section with an
+  // honest message, never to an invented suggestion.
+  const [missed, setMissed] = useState<AttemptRow[] | null>(null);
+  const [skillDomains, setSkillDomains] = useState<DomainSkillStat[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    if (!user) {
+      setMissed(null);
+      setSkillDomains([]);
+      return;
+    }
+    Promise.allSettled([
+      fetchAttempts({ lang, result: 'wrong', limit: 20 }),
+      fetchStats(lang),
+    ]).then(([attemptRes, statsRes]) => {
+      if (!alive) return;
+      setMissed(attemptRes.status === 'fulfilled' ? dedupeLatest(attemptRes.value.attempts).slice(0, 6) : []);
+      setSkillDomains(statsRes.status === 'fulfilled' ? statsRes.value.domains ?? [] : []);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [lang, user?.id]);
+
+  const harder = useMemo(() => harderReady(skillDomains), [skillDomains]);
+  const missedList = missed ?? [];
 
   const load = useCallback(async () => {
     setPhase('loading');
@@ -208,31 +244,34 @@ export default function PracticePage() {
   if (phase === 'topics') {
     return (
       <div>
-        <header className="mb-5">
-          <h1 className="display">{tr('navPractice')}</h1>
-          <p className="mt-1.5 text-sm text-text-secondary">{tr('practiceSubtitle')}</p>
+        <header className="mb-4">
+          <p className="label mb-2 flex items-center gap-1.5 text-cyan-300">
+            <RefreshIcon size={14} aria-hidden="true" /> {tr('stageReview')}
+          </p>
+          <h1 className="display">{tr('reviewTitle')}</h1>
+          <p className="mt-1.5 max-w-[62ch] text-sm text-text-secondary">
+            {tr('practiceSubtitle')}
+          </p>
         </header>
 
-        <Card className="mb-6 p-4">
-          <div className="flex items-start gap-3">
-            <span
-              aria-hidden="true"
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-border bg-surface-800 text-cyan-300"
-            >
-              <CodeIcon size={18} />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold text-white">{tr('arenaTitle')}</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-text-muted">{tr('arenaBlurb')}</p>
-            </div>
-          </div>
-          <ButtonLink href="/problems" variant="secondary" size="sm" className="mt-3 w-full sm:w-auto">
-            {tr('openArena')}
-            <ArrowRightIcon size={16} />
-          </ButtonLink>
-        </Card>
+        <Journey className="mb-5" />
 
-        {!session && (data?.topics.length ?? 0) === 0 ? (
+        {/* Recommended session — the learner's weakest module, most-missed
+            exercises first (server-selected from real recorded mistakes). */}
+        {session && (
+          <Card className="mb-4 flex items-center justify-between gap-3 border-cyan-500/30 bg-cyan-500/[0.06] p-4">
+            <div className="min-w-0">
+              <p className="label text-cyan-300">{tr('reviewSession')}</p>
+              <p className="truncate text-sm font-bold text-white">{session.module_title}</p>
+              <p className="num text-xs text-text-secondary">
+                {exercises.length} {tr('question').toLowerCase()} · {tr('weakest')}
+              </p>
+            </div>
+            <Button onClick={start} className="shrink-0">{tr('startLesson')}</Button>
+          </Card>
+        )}
+
+        {!session && (data?.topics.length ?? 0) === 0 && missedList.length === 0 ? (
           <EmptyState
             icon={<ShieldIcon size={26} className="text-text-muted" />}
             title={tr('noReviewTitle')}
@@ -241,43 +280,159 @@ export default function PracticePage() {
           />
         ) : (
           <div className="flex flex-col gap-6">
-            {session && (
-              <Card className="flex items-center justify-between gap-3 border-cyan-500/30 bg-cyan-500/[0.06] p-4">
-                <div className="min-w-0">
-                  <p className="label text-cyan-300">{tr('reviewSession')}</p>
-                  <p className="truncate text-sm font-bold text-white">{session.module_title}</p>
-                  <p className="num text-xs text-text-secondary">
-                    {exercises.length} {tr('question').toLowerCase()} · {tr('weakest')}
-                  </p>
+            {/* Previously missed questions — from this account's real graded
+                history, newest verdict per task (see lib/recommend). */}
+            <section aria-labelledby="missed-h">
+              <SectionHeading
+                action={
+                  <span className="text-[0.6875rem] text-text-muted">{tr('reviewBasedOn')}</span>
+                }
+              >
+                <span id="missed-h">{tr('reviewMissedTitle')}</span>
+              </SectionHeading>
+              {missed === null ? (
+                <div className="flex flex-col gap-2" aria-busy="true" aria-label={tr('loading')}>
+                  <Skeleton className="h-14 w-full" />
+                  <Skeleton className="h-14 w-full" />
                 </div>
-                <Button onClick={start} className="shrink-0">{tr('startLesson')}</Button>
-              </Card>
-            )}
+              ) : missedList.length === 0 ? (
+                <div className="rounded-xl border border-border bg-surface-900 px-4 py-3.5">
+                  <p className="text-sm font-semibold text-text-primary">
+                    {tr('reviewMissedEmpty')}
+                  </p>
+                  <p className="mt-0.5 text-xs text-text-muted">{tr('reviewMissedEmptyBody')}</p>
+                </div>
+              ) : (
+                <div className="overflow-hidden rounded-xl border border-border bg-surface-900">
+                  <ul className="divide-y divide-border/60">
+                    {missedList.map(a => (
+                      <li key={a.id} className="flex items-center gap-3 px-3 py-2.5">
+                        <span aria-hidden="true" className="shrink-0 text-danger">
+                          <CloseIcon size={15} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-text-primary">
+                            {a.question || tr('historyNoQuestion')}
+                          </p>
+                          <p className="truncate text-xs text-text-muted">{a.module_title}</p>
+                        </div>
+                        <ButtonLink
+                          href={`/problems?module=${encodeURIComponent(a.module_slug)}&exercise=${encodeURIComponent(a.exercise_id)}`}
+                          variant="secondary"
+                          size="sm"
+                          className="shrink-0"
+                        >
+                          {tr('retryAttempt')}
+                        </ButtonLink>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <p className="mt-1.5 px-1 text-[0.6875rem] text-text-muted">
+                {tr('reviewMissedBody')}
+              </p>
+            </section>
 
             {(data?.topics.length ?? 0) > 0 && (
-              <section>
-                <h2 className="mb-2.5 px-1 text-base font-bold text-text-primary">{tr('weakTopics')}</h2>
-                <div className="flex flex-col gap-2">
-                  {data?.topics.map(t => (
-                    <Card key={t.slug} className="flex items-center gap-3 p-3">
-                      <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={20} /></span>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-bold text-white">{t.title}</p>
-                        <p className="num text-xs text-text-secondary">
-                          {t.wrong} {tr('mistakesCount')} · {t.accuracy}%
-                        </p>
-                      </div>
-                      <span className="h-1.5 w-16 overflow-hidden rounded-full bg-surface-800">
+              <section aria-labelledby="weak-h">
+                <SectionHeading><span id="weak-h">{tr('weakTopics')}</span></SectionHeading>
+                <div className="overflow-hidden rounded-xl border border-border bg-surface-900">
+                  <ul className="divide-y divide-border/60">
+                    {data?.topics.map(t => (
+                      <li key={t.slug} className="flex items-center gap-3 px-3 py-2.5">
+                        <span aria-hidden="true" className="shrink-0 text-cyan-300">
+                          <DomainIcon slug={t.slug} size={18} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-bold text-white">{t.title}</p>
+                          <p className="num text-xs text-text-secondary">
+                            {t.wrong} {tr('mistakesCount')} · {t.accuracy}%
+                          </p>
+                        </div>
                         <span
-                          className="block h-full rounded-full bg-danger/60"
-                          style={{ width: `${Math.min(100, t.accuracy)}%` }}
-                        />
-                      </span>
-                    </Card>
-                  ))}
+                          aria-hidden="true"
+                          className="h-1.5 w-12 shrink-0 overflow-hidden rounded-full bg-surface-800 sm:w-16"
+                        >
+                          <span
+                            className="block h-full rounded-full bg-danger/60"
+                            style={{ width: `${Math.min(100, t.accuracy)}%` }}
+                          />
+                        </span>
+                        <ButtonLink
+                          href={`/problems?domain=${encodeURIComponent(t.slug)}`}
+                          variant="secondary"
+                          size="sm"
+                          className="shrink-0"
+                        >
+                          {tr('reviewOpenDomain')}
+                          <ArrowRightIcon size={14} />
+                        </ButtonLink>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </section>
             )}
+
+            {/* Ready for a harder challenge — the rule is printed, and when no
+                domain qualifies the section says so instead of guessing. */}
+            <section aria-labelledby="harder-h">
+              <SectionHeading>
+                <span id="harder-h">{tr('reviewHarderTitle')}</span>
+              </SectionHeading>
+              <p className="mb-2 px-1 text-xs text-text-muted">{tr('reviewHarderBody')}</p>
+              {harder.length === 0 ? (
+                <div className="rounded-xl border border-border bg-surface-900 px-4 py-3.5">
+                  <p className="text-sm font-semibold text-text-primary">
+                    {tr('reviewHarderEmpty')}
+                  </p>
+                  <p className="mt-0.5 text-xs text-text-muted">{tr('reviewHarderEmptyBody')}</p>
+                </div>
+              ) : (
+                <div className="overflow-hidden rounded-xl border border-border bg-surface-900">
+                  <ul className="divide-y divide-border/60">
+                    {harder.map(c => (
+                      <li key={c.slug} className="flex items-center gap-3 px-3 py-2.5">
+                        <span aria-hidden="true" className="shrink-0 text-cyan-300">
+                          <DomainIcon slug={c.slug} size={18} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-bold text-white">{c.title}</p>
+                          <p className="num text-xs text-text-secondary">
+                            {c.accuracy}% · {c.attempts} {tr('answersShort')}
+                          </p>
+                        </div>
+                        <ButtonLink
+                          href={`/problems?domain=${encodeURIComponent(c.slug)}&difficulty=advanced`}
+                          variant="secondary"
+                          size="sm"
+                          className="shrink-0"
+                        >
+                          {tr('reviewOpenDomain')}
+                          <ArrowRightIcon size={14} />
+                        </ButtonLink>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </section>
+
+            {/* Arena shortcut — the practice stage in one line */}
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface-900 px-4 py-3">
+              <div className="min-w-0">
+                <p className="flex items-center gap-1.5 text-sm font-bold text-white">
+                  <CodeIcon size={15} aria-hidden="true" className="text-cyan-300" />
+                  {tr('arenaTitle')}
+                </p>
+                <p className="mt-0.5 text-xs text-text-muted">{tr('arenaBlurb')}</p>
+              </div>
+              <ButtonLink href="/problems" variant="secondary" size="sm">
+                {tr('openArena')}
+                <ArrowRightIcon size={15} />
+              </ButtonLink>
+            </div>
 
             <ButtonLink href="/learn" variant="ghost" className="mx-auto">{tr('goLearn')}</ButtonLink>
           </div>

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const { DAY_START, WEEK_START } = require('../lib/time');
+const { trendFromCounts } = require('../lib/stats');
 
 const router = Router();
 // The frontend ships uz/ru dictionaries only (lib/i18n.ts). Accepting more
@@ -112,7 +113,7 @@ router.get('/me/stats', async (req, res, next) => {
     const lang = ['uz', 'ru'].includes(req.query.lang) ? req.query.lang : 'uz';
     const userId = req.user.id;
 
-    const [profile, xp, attempts, achievements, domains, recent] = await Promise.all([
+    const [profile, xp, attempts, achievements, domains, recent, skillDomains, trend] = await Promise.all([
       loadProfile(userId),
       pool.query(
         `SELECT COALESCE(SUM(amount) FILTER (WHERE created_at >= ${DAY_START}), 0)::int AS daily_xp,
@@ -151,6 +152,44 @@ router.get('/me/stats', async (req, res, next) => {
           LIMIT 6`,
         [userId]
       ),
+      // Skill matrix (Master view): EVERY published domain with this learner's
+      // real graded accuracy and real module completion. Left joins, so a domain
+      // with no attempts still appears — as an honest "not started" row — rather
+      // than silently vanishing from the matrix.
+      pool.query(
+        `SELECT d.slug, d.icon, d.title_${lang} AS title,
+                p.order_index AS path_order, d.order_index,
+                COALESCE(SUM(m.correct_count), 0)::int AS correct,
+                COALESCE(SUM(m.wrong_count), 0)::int AS wrong,
+                (SELECT COUNT(*) FROM modules mm
+                  WHERE mm.domain_id = d.id AND mm.is_published)::int AS modules_total,
+                (SELECT COUNT(*) FROM user_progress up
+                   JOIN modules mm ON mm.id = up.module_id
+                  WHERE up.user_id = $1 AND mm.domain_id = d.id AND up.is_completed)::int AS modules_completed
+           FROM domains d
+           JOIN paths p ON p.slug = d.path_slug
+           LEFT JOIN modules mod ON mod.domain_id = d.id AND mod.is_published
+           LEFT JOIN mistakes m ON m.module_id = mod.id AND m.user_id = $1
+          GROUP BY d.id, p.order_index
+          ORDER BY p.order_index, d.order_index`,
+        [userId]
+      ),
+      // Improvement over time: last 7 days vs the 7 before that, from the
+      // graded-attempt timeline. `lib/stats` decides whether the windows are
+      // thick enough to compare; when they are not, `trend` is null and the UI
+      // says so instead of showing a number built on two answers.
+      pool.query(
+        `SELECT
+           COUNT(*) FILTER (WHERE answered_at >= now() - interval '7 days')::int AS r_total,
+           COUNT(*) FILTER (WHERE answered_at >= now() - interval '7 days' AND correct)::int AS r_correct,
+           COUNT(*) FILTER (WHERE answered_at >= now() - interval '14 days'
+                             AND answered_at <  now() - interval '7 days')::int AS p_total,
+           COUNT(*) FILTER (WHERE answered_at >= now() - interval '14 days'
+                             AND answered_at <  now() - interval '7 days' AND correct)::int AS p_correct
+         FROM exercise_attempts
+        WHERE user_id = $1`,
+        [userId]
+      ),
     ]);
     if (!profile) {
       return res.status(404).json({ error: { code: 'USER_NOT_FOUND', message: 'User no longer exists.' } });
@@ -170,6 +209,12 @@ router.get('/me/stats', async (req, res, next) => {
       }))
       .sort((a, b) => b.accuracy - a.accuracy);
 
+    const tr = trend.rows[0];
+    const trendPayload = trendFromCounts(
+      { total: tr.r_total, correct: tr.r_correct },
+      { total: tr.p_total, correct: tr.p_correct }
+    );
+
     res.json({
       profile,
       daily_xp: xp.rows[0].daily_xp,
@@ -181,6 +226,8 @@ router.get('/me/stats', async (req, res, next) => {
       strong_topics: topics.filter(t => t.correct > 0).slice(0, 3),
       weak_topics: topics.filter(t => t.wrong > 0).reverse().slice(0, 3),
       recent: recent.rows,
+      domains: skillDomains.rows,
+      trend: trendPayload,
     });
   } catch (err) {
     next(err);

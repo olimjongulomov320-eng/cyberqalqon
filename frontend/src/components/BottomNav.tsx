@@ -5,15 +5,20 @@ import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import {
   BookIcon,
+  CodeIcon,
   HomeIcon,
   TargetIcon,
   TrophyIcon,
   UserIcon,
 } from '@/components/icons';
 
+// Six tabs: the arena (03 · Practice) is a first-class stage of the learning
+// journey, so it is reachable directly on mobile instead of only through the
+// desktop-only header link.
 const TABS = [
   { href: '/', label: 'navHome', Icon: HomeIcon },
   { href: '/learn', label: 'navLearn', Icon: BookIcon },
+  { href: '/problems', label: 'navProblems', Icon: CodeIcon },
   { href: '/practice', label: 'navPractice', Icon: TargetIcon },
   { href: '/leaderboard', label: 'leaderboard', Icon: TrophyIcon },
   { href: '/profile', label: 'navProfile', Icon: UserIcon },
@@ -42,12 +47,12 @@ export default function BottomNav() {
               <Link
                 href={tab.href}
                 aria-current={active ? 'page' : undefined}
-                className={`flex h-14 flex-col items-center justify-center gap-1 text-[0.625rem] font-semibold transition-colors ${
+                className={`flex h-14 flex-col items-center justify-center gap-1 px-0.5 text-[0.5625rem] font-semibold transition-colors ${
                   active ? 'text-cyan-300' : 'text-text-muted'
                 }`}
               >
                 <Icon size={20} />
-                <span className="truncate px-1">{tr(tab.label)}</span>
+                <span className="w-full truncate text-center">{tr(tab.label)}</span>
               </Link>
             </li>
           );

@@ -1,5 +1,6 @@
 import { performFetch, isAbortError, REQUEST_TIMEOUT_MS } from './http';
 import { createInFlight } from './inflight';
+import type { DomainSkillStat, SkillTrend } from './skills';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL + '/v1';
 
@@ -144,6 +145,18 @@ export function checkAnswer(
   return req<CheckResult>(`/modules/${encodeURIComponent(slug)}/check?lang=${lang}`, {
     method: 'POST',
     body: JSON.stringify(body),
+  });
+}
+
+/**
+ * Level-2 hint for one exercise. Records no attempt, awards no XP. The server
+ * derives a partial narrowing from the stored answer — the full answer never
+ * travels in this payload.
+ */
+export function fetchHint(slug: string, exerciseId: string) {
+  return req<HintResult>(`/modules/${encodeURIComponent(slug)}/hint`, {
+    method: 'POST',
+    body: JSON.stringify({ exercise_id: exerciseId }),
   });
 }
 
@@ -453,7 +466,20 @@ export interface StatsPayload {
   strong_topics: TopicStat[];
   weak_topics: TopicStat[];
   recent: { kind: string; amount: number; created_at: string; module_title: string | null }[];
+  /** Every published domain with this learner's real accuracy + completion. */
+  domains: DomainSkillStat[];
+  /** Last-7-days vs previous-7-days accuracy; null when either window is thin. */
+  trend: SkillTrend | null;
 }
+
+/** Level-2 hint payload. `available:false` means no honest narrowing exists. */
+export type HintResult =
+  | { available: false }
+  | { available: true; kind: 'eliminate'; ids: string[] }
+  | { available: true; kind: 'count'; count: number }
+  | { available: true; kind: 'first'; id: string }
+  | { available: true; kind: 'pair'; left_id: string; right_id: string }
+  | { available: true; kind: 'shape'; words: number; length: 'short' | 'medium' | 'long' };
 
 export interface LeaderboardEntry {
   user_id: string;

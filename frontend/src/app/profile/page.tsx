@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { Lang, makeT } from '@/lib/i18n';
 import { ApiError, AttemptRow, StatsPayload, fetchAttempts, fetchStats, updateMe } from '@/lib/api';
+import { accuracyOf, proficiency, sortForMatrix, type Proficiency } from '@/lib/skills';
 import { achievementMeta, tierIndex, tierKey, levelFromXp } from '@/lib/gamification';
 import { RingProgress } from '@/components/game';
+import Journey from '@/components/Journey';
 import { Avatar, Badge, Button, ButtonLink, Card, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
 import {
   BoltIcon,
@@ -30,6 +32,119 @@ const ACTIVITY_LABEL: Record<string, string> = {
 
 const HISTORY_PAGE = 8;
 type HistoryFilter = 'all' | 'correct' | 'wrong';
+
+const PROF_KEY: Record<Proficiency, string> = {
+  notStarted: 'profNotStarted',
+  learning: 'profLearning',
+  needsPractice: 'profNeedsPractice',
+  mastered: 'profMastered',
+};
+
+const PROF_TONE: Record<Proficiency, 'neutral' | 'primary' | 'warning' | 'success'> = {
+  notStarted: 'neutral',
+  learning: 'primary',
+  needsPractice: 'warning',
+  mastered: 'success',
+};
+
+/**
+ * SKILL MATRIX — stage 06 (master).
+ *
+ * Proficiency comes from demonstrated performance only: real module completion
+ * plus real graded accuracy per domain (`lib/skills` holds the published rule,
+ * and the rule is printed under the matrix so nothing about a label is a
+ * mystery). XP and streaks live elsewhere on this page and are deliberately
+ * never inputs here. An empty profile renders as "not started" rows, not as a
+ * fabricated 0% score.
+ */
+function SkillMatrix({ stats }: { stats: StatsPayload }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
+  const rows = sortForMatrix(stats.domains ?? []);
+  const trend = stats.trend;
+
+  if (rows.length === 0) return null;
+
+  return (
+    <section aria-labelledby="skills-h" className="mt-6">
+      <div className="mb-2.5 flex items-baseline justify-between gap-3 px-1">
+        <h2 id="skills-h" className="text-base font-bold tracking-tight text-text-primary">
+          {tr('skillsMatrixTitle')}
+        </h2>
+        <span className="text-[0.6875rem] text-text-muted">{tr('skillsMatrixHint')}</span>
+      </div>
+
+      {/* Improvement over time — hidden when either 7-day window has too few
+          graded answers, because a number off two answers is noise. */}
+      <div className="mb-2.5 rounded-xl border border-border bg-surface-900 px-3.5 py-2.5">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-wide text-text-muted">
+          {tr('trendTitle')}
+        </p>
+        {trend ? (
+          <p className="num mt-1 flex flex-wrap items-center gap-2 text-sm text-text-secondary">
+            <span className={`font-bold ${trend.delta > 0 ? 'text-success' : trend.delta < 0 ? 'text-danger' : 'text-text-primary'}`}>
+              {trend.delta > 0 ? '+' : ''}
+              {trend.delta}
+            </span>
+            <span>
+              {tr('trendRecent')}: <span className="font-bold text-text-primary">{trend.recent_accuracy}%</span>
+            </span>
+            <span aria-hidden="true" className="text-text-muted">
+              ·
+            </span>
+            <span>
+              {tr('trendPrev')}:{' '}
+              <span className="font-bold text-text-primary">{trend.previous_accuracy}%</span>
+            </span>
+          </p>
+        ) : (
+          <p className="mt-1 text-xs leading-relaxed text-text-muted">{tr('trendNone')}</p>
+        )}
+      </div>
+
+      <div className="overflow-hidden rounded-xl border border-border bg-surface-900 shadow-card edge-light">
+        <ul className="divide-y divide-border/60">
+          {rows.map(s => {
+            const level = proficiency(s);
+            const acc = accuracyOf(s);
+            const pct =
+              s.modules_total > 0
+                ? Math.round((s.modules_completed / s.modules_total) * 100)
+                : 0;
+            return (
+              <li key={s.slug} className="flex items-center gap-3 px-3 py-2.5 sm:px-4">
+                <span aria-hidden="true" className="shrink-0 text-cyan-300">
+                  <DomainIcon slug={s.slug} size={18} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-text-primary">{s.title}</p>
+                  <p className="num mt-1 flex items-center gap-2 text-[0.6875rem] text-text-muted">
+                    <span>
+                      {s.modules_completed}/{s.modules_total} {tr('modulesDone')}
+                    </span>
+                    <span aria-hidden="true">·</span>
+                    <span>
+                      {tr('accuracy')} {acc === null ? '—' : `${acc}%`}
+                    </span>
+                  </p>
+                  <span aria-hidden="true" className="mt-1.5 flex h-1 w-full overflow-hidden rounded-full bg-surface-800">
+                    <span className="block h-full rounded-full bg-cyan-400" style={{ width: `${pct}%` }} />
+                  </span>
+                </div>
+                <Badge tone={PROF_TONE[level]} className="shrink-0">
+                  {tr(PROF_KEY[level])}
+                </Badge>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <p className="mt-1.5 px-1 text-[0.6875rem] leading-relaxed text-text-muted">
+        {tr('skillsRuleBody')}
+      </p>
+    </section>
+  );
+}
 
 /**
  * `dd.MM · HH:mm`, formatted by hand rather than through `Intl`.
@@ -265,6 +380,8 @@ export default function ProfilePage() {
           </div>
         </header>
 
+        <Journey className="mt-3" />
+
         {error && (
           <Card>
             <ErrorNote>{error.message}</ErrorNote>
@@ -330,6 +447,10 @@ export default function ProfilePage() {
                 />
               </div>
             </Card>
+
+            {/* Skill matrix — the Master view: proficiency from demonstrated
+                performance, printed rule, honest "not started" rows. */}
+            <SkillMatrix stats={stats} />
 
             {/* Strong / weak topics */}
             {stats.strong_topics.length > 0 || stats.weak_topics.length > 0 ? (

@@ -19,6 +19,8 @@ import {
 } from '@/lib/api';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { AnswerFeedback } from '@/components/feedback';
+import Journey from '@/components/Journey';
+import HintLadder from '@/components/HintLadder';
 import {
   Badge,
   Button,
@@ -68,6 +70,17 @@ const STATUS_KEY: Record<ProblemStatus, string> = {
   new: 'statusNew',
   attempted: 'statusAttempted',
   solved: 'statusSolved',
+};
+
+/** What a correct answer means for each exercise type — real semantics of the
+ *  grader (backend/lib/grade.js), shown before the learner commits. */
+const CORRECT_KEY: Record<ExerciseType, string> = {
+  mc: 'correctMc',
+  tf: 'correctTf',
+  multi: 'correctMulti',
+  match: 'correctMatch',
+  order: 'correctOrder',
+  input: 'correctInput',
 };
 
 const DIFFICULTIES: Difficulty[] = ['beginner', 'intermediate', 'advanced'];
@@ -129,6 +142,39 @@ export default function ProblemsPage() {
   // Guards "load more" against a filter change that happens mid-flight.
   const queryKey = useRef('');
 
+  // Deep links (?domain=, ?difficulty=, ?type=, ?status=, ?q=, ?module=,
+  // ?exercise=) let Review/Profile recommendations land on one exact task or a
+  // pre-filtered set. Parsed once, client-side: reading window during render
+  // would break static-export hydration, so the first catalogue fetch waits for
+  // this effect instead of fetching defaults and refetching.
+  const [deepLinked, setDeepLinked] = useState(false);
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const d = q.get('domain');
+    const diff = q.get('difficulty');
+    const t = q.get('type');
+    const st = q.get('status');
+    const text = q.get('q');
+    const m = q.get('module');
+    const e = q.get('exercise');
+
+    if (d) setDomain(d);
+    if (diff && (DIFFICULTIES as string[]).includes(diff)) setDifficulty(diff as Difficulty);
+    if (t && (TYPES as string[]).includes(t)) setType(t as ExerciseType);
+    if (st && (['new', 'attempted', 'solved'] as string[]).includes(st)) {
+      setStatus(st as ProblemStatus);
+    }
+    if (text) {
+      setSearch(text);
+      setDebouncedSearch(text);
+    }
+    if (m && e) {
+      setSelectedModule(m);
+      setSelectedExercise(e);
+    }
+    setDeepLinked(true);
+  }, []);
+
   // Debounce the free-text search so typing does not hit the API per keystroke.
   useEffect(() => {
     const id = setTimeout(() => setDebouncedSearch(search.trim()), 300);
@@ -154,6 +200,7 @@ export default function ProblemsPage() {
   );
 
   useEffect(() => {
+    if (!deepLinked) return; // wait for the one-time deep-link parse
     let alive = true;
     const key = JSON.stringify(params);
     queryKey.current = key;
@@ -176,7 +223,7 @@ export default function ProblemsPage() {
     return () => {
       alive = false;
     };
-  }, [params, user?.id, reloadKey]);
+  }, [params, user?.id, reloadKey, deepLinked]);
 
   const loadMore = useCallback(async () => {
     if (!data?.has_more || loadingMore) return;
@@ -306,6 +353,14 @@ export default function ProblemsPage() {
     selectProblem(pool[Math.floor(Math.random() * pool.length)]);
   };
 
+  /** Clear a graded result so the learner can genuinely re-attempt. XP rules
+   *  are untouched: the server only ever awards the first-ever correct answer. */
+  const retry = () => {
+    setResult(null);
+    setValue(null);
+    setCheckError(null);
+  };
+
   const activeFilters =
     (domain ? 1 : 0) +
     (difficulty ? 1 : 0) +
@@ -355,6 +410,8 @@ export default function ProblemsPage() {
           {tr('problemsSubtitle')}
         </p>
       </div>
+
+      <Journey className="mb-4" />
 
       {data && (
         <Card className="mb-4 p-4">
@@ -699,6 +756,12 @@ export default function ProblemsPage() {
                     <span className="font-semibold text-text-muted">{tr('missionSkill')}:</span>
                     <span className="text-text-secondary">{detail.domain_title}</span>
                   </div>
+                  <div className="flex flex-wrap gap-x-1.5">
+                    <span className="font-semibold text-text-muted">
+                      {tr('whatCountsAsCorrect')}:
+                    </span>
+                    <span className="text-text-secondary">{tr(CORRECT_KEY[detail.type])}</span>
+                  </div>
                 </div>
 
                 <div className="mt-4">
@@ -710,6 +773,19 @@ export default function ProblemsPage() {
                     reveal={result?.reveal}
                   />
                 </div>
+
+                {/* Graduated hints: strategy first, then a server-derived
+                    narrowing — never the answer. Available only before a
+                    graded attempt. */}
+                {user && !result && (
+                  <HintLadder
+                    key={detail.exercise_id}
+                    moduleSlug={detail.module_slug}
+                    exercise={detail.exercise}
+                    lessonHref={`/modules/${detail.module_slug}`}
+                    className="mt-3"
+                  />
+                )}
 
                 <div aria-live="polite">
                   {checkError && <ErrorNote className="mt-3">{checkError}</ErrorNote>}
@@ -768,17 +844,21 @@ export default function ProblemsPage() {
                       <ArrowRightIcon size={16} />
                     </Button>
                     <div className="flex gap-2">
+                      <Button variant="secondary" onClick={retry} className="flex-1">
+                        <RefreshIcon size={15} />
+                        {tr('retryAttempt')}
+                      </Button>
                       <Button variant="secondary" onClick={pickRandom} className="flex-1">
                         {tr('randomProblem')}
                       </Button>
-                      <ButtonLink
-                        href={`/modules/${detail.module_slug}`}
-                        variant="ghost"
-                        className="flex-1"
-                      >
-                        {tr('openLesson')}
-                      </ButtonLink>
                     </div>
+                    <ButtonLink
+                      href={`/modules/${detail.module_slug}`}
+                      variant="ghost"
+                      className="w-full"
+                    >
+                      {tr('openLesson')}
+                    </ButtonLink>
                   </div>
                 ) : (
                   <Button

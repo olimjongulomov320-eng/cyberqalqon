@@ -1,5 +1,6 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import { useApp } from '@/context/AppContext';
@@ -9,11 +10,16 @@ import {
   AnswerValue,
   CompleteResult,
   Exercise,
+  ModuleDetail,
+  PathModule,
   checkAnswer,
   completeModule,
   fetchModule,
+  fetchPaths,
   practiceAnswer,
 } from '@/lib/api';
+import Journey from '@/components/Journey';
+import HintLadder from '@/components/HintLadder';
 import { Hearts, Confetti, NewAchievementChip, XPChip } from '@/components/game';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { AnswerFeedback, answerText, revealText } from '@/components/feedback';
@@ -24,10 +30,12 @@ import {
   ArrowRightIcon,
   BoltIcon,
   CheckIcon,
+  ChevronRightIcon,
   CloseIcon,
   DomainIcon,
   FlameIcon,
   HeartIcon,
+  LockIcon,
   RefreshIcon,
   SparkleIcon,
   TrophyIcon,
@@ -40,11 +48,190 @@ interface AnswerRec {
   value: AnswerValue;
 }
 
+/** Where this module sits in its domain, from the same `/paths` call /learn
+ *  uses. Best-effort context: if it fails the lesson still runs, it just has
+ *  no sequence rail. */
+interface SequenceInfo {
+  domainSlug: string;
+  domainTitle: string;
+  siblings: PathModule[];
+  index: number;
+}
+
 function Text({ role = 'banner' }: { role?: 'banner' | 'alert' | 'status' }) {
   return (
     <span role={role} className="sr-only">
       .
     </span>
+  );
+}
+
+/* ── Workspace rail ──────────────────────────────────────────────────────────
+   The learner's place in the domain sequence plus the lesson text, so an
+   exercise can be answered without leaving the workspace. States come from
+   `/paths` — the same real data the Discover directory renders. */
+
+function RailBlocks({
+  seq,
+  module,
+  showNotes,
+}: {
+  seq: SequenceInfo | null;
+  module: ModuleDetail;
+  showNotes: boolean;
+}) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
+  const total = seq?.siblings.length ?? 0;
+  const pos = seq ? seq.index + 1 : 0;
+
+  return (
+    <>
+      <div className="rounded-xl border border-border bg-surface-900 p-3">
+        <p className="label truncate text-cyan-300">
+          {seq?.domainTitle ?? module.domain_title ?? tr('modules')}
+        </p>
+        <p className="mt-1 truncate text-sm font-bold text-white">{module.title}</p>
+        {seq && (
+          <>
+            <p className="num mt-1 text-xs text-text-secondary">
+              {pos}/{total}
+            </p>
+            <Progress className="mt-2" value={pos} max={total} label={tr('trackProgress')} />
+          </>
+        )}
+      </div>
+
+      {seq && (
+        <nav
+          aria-label={tr('sequenceLabel')}
+          className="overflow-hidden rounded-xl border border-border bg-surface-900"
+        >
+          <p className="border-b border-border/60 px-3 py-2 text-[0.6875rem] font-bold uppercase tracking-wide text-text-muted">
+            {tr('sequenceLabel')}
+          </p>
+          <ol className="max-h-56 divide-y divide-border/50 overflow-y-auto">
+            {seq.siblings.map((m, i) => {
+              const isCurrent = m.slug === module.slug;
+              const locked = m.state === 'locked';
+              const nodeCls =
+                m.state === 'done'
+                  ? 'border-success/50 bg-success/15 text-success'
+                  : isCurrent
+                    ? 'border-cyan-400 bg-cyan-400 text-text-inverse'
+                    : locked
+                      ? 'border-border bg-surface-950 text-text-muted'
+                      : 'border-border-light bg-surface-800 text-text-primary';
+              const inner = (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[0.625rem] font-bold ${nodeCls}`}
+                  >
+                    {m.state === 'done' ? (
+                      <CheckIcon size={10} />
+                    ) : locked ? (
+                      <LockIcon size={9} />
+                    ) : (
+                      <span className="num">{i + 1}</span>
+                    )}
+                  </span>
+                  <span
+                    className={`min-w-0 flex-1 truncate text-xs ${
+                      isCurrent
+                        ? 'font-bold text-white'
+                        : locked
+                          ? 'text-text-muted'
+                          : 'text-text-secondary'
+                    }`}
+                  >
+                    {m.title}
+                  </span>
+                  {isCurrent && (
+                    <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />
+                  )}
+                </>
+              );
+              return (
+                <li key={m.slug}>
+                  {locked ? (
+                    <span aria-disabled="true" className="flex w-full items-center gap-2 px-3 py-2 opacity-70">
+                      {inner}
+                    </span>
+                  ) : (
+                    <Link
+                      href={`/modules/${m.slug}`}
+                      aria-current={isCurrent ? 'step' : undefined}
+                      className={`flex w-full items-center gap-2 px-3 py-2 transition-colors hover:bg-surface-800 ${
+                        isCurrent ? 'bg-cyan-500/[0.07]' : ''
+                      }`}
+                    >
+                      {inner}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      )}
+
+      {showNotes && module.content && (
+        <details className="group overflow-hidden rounded-xl border border-border bg-surface-900">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2.5 text-[0.6875rem] font-bold uppercase tracking-wide text-text-muted [&::-webkit-details-marker]:hidden">
+            {tr('lessonNotes')}
+            <ChevronRightIcon
+              size={13}
+              aria-hidden="true"
+              className="transition-transform group-open:rotate-90"
+            />
+          </summary>
+          <div className="lesson max-h-64 overflow-y-auto border-t border-border/60 px-3 py-2 text-sm">
+            <ReactMarkdown>{module.content}</ReactMarkdown>
+          </div>
+        </details>
+      )}
+    </>
+  );
+}
+
+/** Collapsed summary on mobile, sticky column on desktop — same blocks. */
+function LessonRail({
+  seq,
+  module,
+  showNotes,
+}: {
+  seq: SequenceInfo | null;
+  module: ModuleDetail;
+  showNotes: boolean;
+}) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
+  const blocks = <RailBlocks seq={seq} module={module} showNotes={showNotes} />;
+
+  return (
+    <>
+      <details className="group mb-3 lg:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-xl border border-border bg-surface-900 px-3 py-2.5 text-sm font-semibold text-text-primary [&::-webkit-details-marker]:hidden">
+          <span className="truncate">
+            {seq?.domainTitle ?? module.domain_title ?? tr('modules')}
+            {seq && (
+              <span className="num text-text-muted">
+                {' '}
+                · {seq.index + 1}/{seq.siblings.length}
+              </span>
+            )}
+          </span>
+          <ChevronRightIcon
+            size={14}
+            aria-hidden="true"
+            className="shrink-0 text-text-muted transition-transform group-open:rotate-90"
+          />
+        </summary>
+        <div className="mt-2 flex flex-col gap-2">{blocks}</div>
+      </details>
+      <div className="hidden lg:flex lg:flex-col lg:gap-3">{blocks}</div>
+    </>
   );
 }
 
@@ -81,6 +268,8 @@ export default function LessonView({ slug }: { slug: string }) {
     checking: boolean;
   } | null>(null);
 
+  const [seq, setSeq] = useState<SequenceInfo | null>(null);
+
   const hearts = useHearts();
   const heartsLostOnWrong = useRef(false);
   const topRef = useRef<HTMLDivElement>(null);
@@ -113,6 +302,32 @@ export default function LessonView({ slug }: { slug: string }) {
         setPhase('error');
       }
     })();
+    return () => {
+      alive = false;
+    };
+  }, [slug, lang]);
+
+  // Sibling sequence for the workspace rail. Separate from the module fetch so
+  // a slow or failed /paths never blocks the lesson itself.
+  useEffect(() => {
+    let alive = true;
+    setSeq(null);
+    fetchPaths(lang)
+      .then(res => {
+        if (!alive) return;
+        for (const p of res.paths) {
+          for (const d of p.domains) {
+            const i = d.modules.findIndex(m => m.slug === slug);
+            if (i >= 0) {
+              setSeq({ domainSlug: d.slug, domainTitle: d.title, siblings: d.modules, index: i });
+              return;
+            }
+          }
+        }
+      })
+      .catch(() => {
+        /* optional context — the lesson works without it */
+      });
     return () => {
       alive = false;
     };
@@ -358,8 +573,17 @@ export default function LessonView({ slug }: { slug: string }) {
   /* ── Intro card ── */
   if (phase === 'intro' && module) {
     return (
-      <div>
-        <Card className="p-5 sm:p-6">
+      <div className="flex flex-col gap-3">
+        <Journey
+          sources={{ continueSlug: slug }}
+          stage={module.kind === 'checkpoint' ? 'apply' : 'learn'}
+        />
+        <div className="grid gap-4 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
+          <aside className="lg:sticky lg:top-20">
+            <LessonRail seq={seq} module={module} showNotes={false} />
+          </aside>
+
+          <Card className="p-5 sm:p-6">
           <div className="flex flex-col gap-5">
             <header className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -402,7 +626,8 @@ export default function LessonView({ slug }: { slug: string }) {
               </div>
             )}
           </div>
-        </Card>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -554,6 +779,11 @@ export default function LessonView({ slug }: { slug: string }) {
 
   return (
     <div className="flex flex-1 flex-col">
+      <Journey
+        sources={{ continueSlug: slug }}
+        stage={module?.kind === 'checkpoint' ? 'apply' : 'learn'}
+        className="mb-3"
+      />
       {/* Top bar */}
       <div ref={topRef} className="scroll-mt-24">
         <div className="flex items-center justify-between gap-3">
@@ -591,8 +821,14 @@ export default function LessonView({ slug }: { slug: string }) {
         </div>
       )}
 
-      {/* Exercise card */}
-      <div className="flex flex-1 flex-col justify-center py-3 sm:py-4">
+      {/* Workspace: compact sequence rail (left on desktop, collapsed summary
+          on mobile) + the challenge column. */}
+      <div className="grid flex-1 gap-4 py-3 sm:py-4 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
+        <aside className="lg:sticky lg:top-20">
+          {module && <LessonRail seq={seq} module={module} showNotes />}
+        </aside>
+
+        <div className="flex flex-1 flex-col justify-center">
         <Card className="p-4 sm:p-5">
           {ex ? (
             <ExerciseRenderer
@@ -620,6 +856,13 @@ export default function LessonView({ slug }: { slug: string }) {
             value={value}
             xpEarned={checked.xp_earned}
           />
+        )}
+
+        {/* Graduated hints — strategy first, then a derived narrowing from the
+            server. Hidden once graded: the feedback panel already carries the
+            explanation. */}
+        {!checked && ex && (
+          <HintLadder key={ex.id} moduleSlug={slug} exercise={ex} className="mt-3" />
         )}
 
         {/* Restore-a-heart pitch */}
@@ -704,10 +947,9 @@ export default function LessonView({ slug }: { slug: string }) {
                 : tr('loadError')}
           </ErrorNote>
         )}
-      </div>
 
-      {/* Action row */}
-      <div className="flex items-center gap-2">
+        {/* Action row */}
+        <div className="mt-4 flex items-center gap-2">
         {checked ? (
           <Button size="lg" className="w-full" onClick={handleNext} disabled={completing}>
             {idx + 1 < exercises.length ? tr('next') : tr('gotIt')}
@@ -723,9 +965,11 @@ export default function LessonView({ slug }: { slug: string }) {
           </Button>
         )}
       </div>
-      <p className="mt-2 hidden justify-center text-center text-xs text-text-muted sm:flex">
-        {tr('keyboardHint')}
-      </p>
+        <p className="mt-2 hidden justify-center text-center text-xs text-text-muted sm:flex">
+          {tr('keyboardHint')}
+        </p>
+        </div>
+      </div>
 
       {/* Exit confirm */}
       {exitOpen && (
