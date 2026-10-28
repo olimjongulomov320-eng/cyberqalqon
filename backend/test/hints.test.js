@@ -3,6 +3,7 @@
  */
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const { realRightId } = require('../lib/grade');
 const { hintLevel2 } = require('../lib/hints');
 
 const mc = {
@@ -118,41 +119,35 @@ const matchWithRightIds = {
 };
 
 test('match hint reveals one valid pair only', () => {
-  const h = hintLevel2(match);
-  assert.equal(h.available, true);
-  assert.equal(h.kind, 'pair');
-  assert.equal(h.left_id, 'p1');
-  assert.equal(h.right_id, match.match_answer.p1);
-  assert.equal(JSON.stringify(h).includes('p2'), false);
-});
-
-test('match hint right_id equals the pair id when the curriculum reuses pair ids as right ids', () => {
-  // Realistic shape from the published curriculum: right items carry their own
-  // id that duplicates the pair id, so right_id collides with pair ids. The
-  // derivation still picks one correct pair, and the payload only names that
-  // pair id and the matching right-side id — it never names p2 or p3.
+  // Uses the published shape (right ids are pair ids); see lib/grade.js matchShift.
   const h = hintLevel2(matchWithRightIds);
   assert.equal(h.available, true);
   assert.equal(h.kind, 'pair');
   assert.equal(h.left_id, 'p1');
-  assert.equal(h.right_id, 'p1');
+  assert.equal(realRightId(matchWithRightIds, h.right_id), matchWithRightIds.match_answer.p1);
   assert.equal(JSON.stringify(h).includes('p2'), false);
-  assert.equal(JSON.stringify(h).includes('p3'), false);
+});
+
+test('match hint names the client-visible id of one correct pair', () => {
+  // Right-hand texts reach the client under remapped ids (lib/grade.js), so the
+  // hint's right_id must resolve back to the true match for left_id, and the
+  // payload must not name any other pair's right text.
+  const h = hintLevel2(matchWithRightIds);
+  assert.equal(h.available, true);
+  assert.equal(h.kind, 'pair');
+  assert.equal(h.left_id, 'p1');
+  assert.equal(realRightId(matchWithRightIds, h.right_id), matchWithRightIds.match_answer.p1);
   assert.equal(JSON.stringify(h).includes('R2'), false);
   assert.equal(JSON.stringify(h).includes('R3'), false);
 });
 
-test('match hint does not leak other pairs even when some are incorrect', () => {
-  const h = hintLevel2({
-    ...matchWithRightIds,
-    match_answer: { p1: 'p1', p2: 'p3' },
-  });
+test('match hint still resolves to the true pair when some answers differ', () => {
+  const ex = { ...matchWithRightIds, match_answer: { p1: 'p1', p2: 'p3' } };
+  const h = hintLevel2(ex);
   assert.equal(h.available, true);
   assert.equal(h.kind, 'pair');
   assert.equal(h.left_id, 'p1');
-  assert.equal(h.right_id, 'p1');
-  assert.equal(JSON.stringify(h).includes('p2'), false);
-  assert.equal(JSON.stringify(h).includes('p3'), false);
+  assert.equal(realRightId(ex, h.right_id), 'p1');
 });
 
 test('input hint returns shape, never the words themselves', () => {

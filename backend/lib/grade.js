@@ -305,6 +305,8 @@ module.exports = {
   grade,
   publicExercise,
   localizeExercise,
+  viewIdForRight,
+  realRightId,
   answerReveal,
   validateExercise,
   validateLessonSubmission,

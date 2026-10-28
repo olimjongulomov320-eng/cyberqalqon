@@ -25,6 +25,8 @@
  *                                                   IS the answer)
  */
 
+const { viewIdForRight } = require('./grade');
+
 const TYPES = ['mc', 'tf', 'multi', 'match', 'order', 'input'];
 
 function lengthBucket(chars) {
@@ -72,7 +74,9 @@ function hintLevel2(ex) {
       const first = pairs[0];
       const rightId = first && answer[first.id];
       if (!first || !rightId) return { available: false };
-      return { available: true, kind: 'pair', left_id: first.id, right_id: rightId };
+      // The client sees right-hand texts under remapped ids (see grade.js), so the
+      // hint must name the id the client can actually resolve.
+      return { available: true, kind: 'pair', left_id: first.id, right_id: viewIdForRight(ex, String(rightId)) };
     }
 
     case 'input': {
