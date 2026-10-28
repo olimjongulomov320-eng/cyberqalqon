@@ -37,8 +37,12 @@ core loop, design language, architecture) see **[CONCEPT.md](CONCEPT.md)**.
 
 ## Verification
 
-- Backend: `npm test` → **17 pass / 0 fail** (1 DB-gated test skipped without
-  `TEST_DATABASE_URL`).
+- Backend: `npm test` → **34 pass / 0 fail** (1 DB-gated test skipped without
+  `TEST_DATABASE_URL`). CI (`.github/workflows/ci.yml`) now runs backend tests,
+  curriculum validation, frontend `tsc` and frontend tests on every push/PR.
+- Frontend: `tsc --noEmit` clean, 19 tests pass. `npm audit`: backend 0
+  vulnerabilities; frontend retains `next` (needs a major upgrade) and
+  build-time `next-pwa`/workbox advisories.
 - Curriculum: `node scripts/validate-curriculum.js` → **OK (80 modules)**.
 - Frontend: static export build succeeds; all **80/80** module pages return 200
   on the live site.
