@@ -34,6 +34,7 @@ export async function generateStaticParams() {
   return Array.from(slugs).map((slug) => ({ slug }));
 }
 
-export default function Page({ params }: { params: { slug: string } }) {
-  return <LessonView slug={params.slug} />;
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return <LessonView slug={slug} />;
 }

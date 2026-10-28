@@ -343,7 +343,7 @@ export const LaptopIcon = (p: IconProps) => (
 );
 
 /** slug → glyph. Keys mirror `backend/curriculum/index.js` (paths + domains). */
-const DOMAIN_ICONS: Record<string, (p: IconProps) => JSX.Element> = {
+const DOMAIN_ICONS: Record<string, (p: IconProps) => React.JSX.Element> = {
   // learning paths
   cybersecurity: ShieldIcon,
   'it-fundamentals': LaptopIcon,
