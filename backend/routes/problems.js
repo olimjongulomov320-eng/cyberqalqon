@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const pool = require('../db');
 const { optionalAuth } = require('../middleware/auth');
-const { publicExercise, TYPES } = require('../lib/grade');
+const { localizeExercise, TYPES } = require('../lib/grade');
 const { DIFFICULTIES, difficultyForModule } = require('../lib/difficulty');
 
 const router = Router();
@@ -19,16 +19,7 @@ const clampInt = (v, min, max, fallback) => {
   return Math.min(max, Math.max(min, n));
 };
 
-/** Localise an exercise and strip answer keys. `explain` stays withheld until
- *  the learner grades the exercise through /modules/:slug/check. */
-function publicLocalized(ex, lang) {
-  const pub = publicExercise(ex);
-  pub.q = ex.q[lang];
-  if (pub.options) pub.options = pub.options.map(o => ({ id: o.id, text: o[lang] }));
-  if (pub.pairs) pub.pairs = pub.pairs.map(p => ({ id: p.id, left: p.left[lang], right: p.right[lang] }));
-  if (pub.items) pub.items = pub.items.map(i => ({ id: i.id, text: i[lang] }));
-  return pub;
-}
+const publicLocalized = localizeExercise;
 
 /**
  * Load every published module with its domain, ordered the same way the

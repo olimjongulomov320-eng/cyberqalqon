@@ -29,7 +29,11 @@ function requireAuth(req, res, next) {
 
 // Verify Telegram Web App initData signature
 // https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
+const INIT_DATA_MAX_AGE_S = 24 * 60 * 60;
+
 function verifyTelegramInitData(initDataString) {
+  // Telegram login is optional: without a bot token nothing can be verified.
+  if (!BOT_TOKEN) return null;
   const params = new URLSearchParams(initDataString);
   const hash = params.get('hash');
   if (!hash) return null;
@@ -43,10 +47,19 @@ function verifyTelegramInitData(initDataString) {
   const secretKey = crypto.createHmac('sha256', 'WebAppData').update(BOT_TOKEN).digest();
   const expectedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
 
-  if (expectedHash !== hash) return null;
+  const a = Buffer.from(expectedHash, 'hex');
+  const b = Buffer.from(String(hash), 'hex');
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
 
-  const user = JSON.parse(params.get('user') ?? 'null');
-  return user; // { id, first_name, username, ... }
+  // Reject stale payloads so captured initData cannot be replayed forever.
+  const authDate = Number(params.get('auth_date'));
+  if (!Number.isFinite(authDate) || Date.now() / 1000 - authDate > INIT_DATA_MAX_AGE_S) return null;
+
+  try {
+    return JSON.parse(params.get('user') ?? 'null'); // { id, first_name, username, ... }
+  } catch {
+    return null;
+  }
 }
 
 module.exports = { optionalAuth, requireAuth, verifyTelegramInitData };

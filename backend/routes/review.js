@@ -3,7 +3,7 @@ const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const {
   grade,
-  publicExercise,
+  localizeExercise,
   answerReveal,
   recordXp,
   recordAttempt,
@@ -17,17 +17,13 @@ const {
   IdempotencyConflictError,
 } = require('../lib/idempotency');
 
+const rateLimit = require('express-rate-limit');
+
 const router = Router();
+const reviewLimiter = rateLimit({ windowMs: 60_000, max: 20, standardHeaders: true });
 const pickLang = q => (['uz', 'ru'].includes(q.lang) ? q.lang : 'uz');
 
-function localize(ex, lang) {
-  const pub = publicExercise(ex);
-  pub.q = ex.q[lang];
-  if (pub.options) pub.options = pub.options.map(o => ({ id: o.id, text: o[lang] }));
-  if (pub.pairs) pub.pairs = pub.pairs.map(p => ({ id: p.id, left: p.left[lang], right: p.right[lang] }));
-  if (pub.items) pub.items = pub.items.map(i => ({ id: i.id, text: i[lang] }));
-  return pub;
-}
+const localize = localizeExercise;
 
 /**
  * GET /review — weak-topic report + a ready-made 5-minute session.
@@ -127,11 +123,11 @@ router.get('/', requireAuth, async (req, res, next) => {
  */
 const REVIEW_SCOPE = 'review.submit';
 
-router.post('/submit', requireAuth, async (req, res, next) => {
+router.post('/submit', reviewLimiter, requireAuth, async (req, res, next) => {
   try {
     const lang = pickLang(req.query);
-    const { module_slug, answers, idempotency_key } = req.body ?? {};
-    if (!module_slug || !Array.isArray(answers)) {
+    const { module_slug, answers: rawAnswers, idempotency_key } = req.body ?? {};
+    if (typeof module_slug !== 'string' || !module_slug || !Array.isArray(rawAnswers) || rawAnswers.length > 50) {
       return res.status(400).json({
         error: { code: 'VALIDATION_ERROR', message: 'module_slug and answers[] are required.' },
       });
@@ -144,6 +140,15 @@ router.post('/submit', requireAuth, async (req, res, next) => {
         },
       });
     }
+
+    // One graded answer per exercise: drops malformed entries and repeats so a
+    // payload cannot farm review XP by listing the same question many times.
+    const seenIds = new Set();
+    const answers = rawAnswers.filter(a => {
+      if (!a || typeof a !== 'object' || typeof a.id !== 'string' || seenIds.has(a.id)) return false;
+      seenIds.add(a.id);
+      return true;
+    });
 
     const { rows } = await pool.query(
       `SELECT id, exercises FROM modules WHERE slug = $1 AND is_published`,

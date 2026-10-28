@@ -4,7 +4,7 @@ const pool = require('../db');
 const { requireAuth, optionalAuth } = require('../middleware/auth');
 const {
   grade,
-  publicExercise,
+  localizeExercise,
   answerReveal,
   recordXp,
   recordAttempt,
@@ -24,16 +24,7 @@ const lessonLimiter = rateLimit({ windowMs: 60_000, max: 30, standardHeaders: tr
 
 const pickLang = q => (['uz', 'ru'].includes(q.lang) ? q.lang : 'uz');
 
-/** Localise an exercise and strip every answer-leaking field.
- *  `explain` is withheld too — it arrives only with the graded /check result. */
-function publicLocalized(ex, lang) {
-  const pub = publicExercise(ex);
-  pub.q = ex.q[lang];
-  if (pub.options) pub.options = pub.options.map(o => ({ id: o.id, text: o[lang] }));
-  if (pub.pairs) pub.pairs = pub.pairs.map(p => ({ id: p.id, left: p.left[lang], right: p.right[lang] }));
-  if (pub.items) pub.items = pub.items.map(i => ({ id: i.id, text: i[lang] }));
-  return pub;
-}
+const publicLocalized = localizeExercise;
 
 async function loadModule(slug) {
   const { rows } = await pool.query(
@@ -194,6 +185,18 @@ router.post('/:slug/practice', lessonLimiter, requireAuth, async (req, res, next
       return res.status(404).json({ error: { code: 'EXERCISE_NOT_FOUND', message: 'Exercise not found.' } });
     }
 
+    // Practice only re-asks questions the learner has already met in /check, so
+    // it can never be used to read answers for exercises they have not seen.
+    const { rows: seen } = await pool.query(
+      `SELECT 1 FROM mistakes WHERE user_id = $1 AND module_id = $2 AND exercise_id = $3`,
+      [req.user.id, m.id, ex.id]
+    );
+    if (!seen.length) {
+      return res.status(403).json({
+        error: { code: 'NOT_ATTEMPTED', message: 'Answer this question in the lesson first.' },
+      });
+    }
+
     const correct = grade(ex, value);
     res.json({
       correct,
@@ -238,62 +241,82 @@ router.post('/:slug/complete', lessonLimiter, requireAuth, async (req, res, next
       });
     }
 
+    // Every exercise must have been graded through /check first. Otherwise a
+    // script could read answers elsewhere and post a "perfect" lesson directly.
+    const { rows: checkedRows } = await pool.query(
+      `SELECT exercise_id FROM mistakes WHERE user_id = $1 AND module_id = $2`,
+      [req.user.id, m.id]
+    );
+    const checkedIds = new Set(checkedRows.map(r => r.exercise_id));
+    if ((m.exercises ?? []).some(e => !checkedIds.has(e.id))) {
+      return res.status(422).json({
+        error: { code: 'NOT_CHECKED', message: 'Every exercise must be answered in the lesson first.' },
+      });
+    }
+
     // Server re-grades everything — the client's opinion never decides XP.
     const results = [];
     for (const a of answers) {
       const ex = (m.exercises ?? []).find(e => e.id === a.id);
       if (!ex) continue; // defensive: validation guarantees this never triggers
-      const correct = grade(ex, a.value);
-      results.push({ id: ex.id, correct, explain: ex.explain[lang], ...answerReveal(ex) });
-      // Backfill ONLY if /check never recorded this exercise (flaky network).
-      // Rows created by /check are left untouched so counts never double.
-      await pool.query(
-        correct
-          ? `INSERT INTO mistakes (user_id, module_id, exercise_id, correct_count, last_attempt_at)
-             VALUES ($1, $2, $3, 1, now()) ON CONFLICT DO NOTHING`
-          : `INSERT INTO mistakes (user_id, module_id, exercise_id, wrong_count, last_attempt_at)
-             VALUES ($1, $2, $3, 1, now()) ON CONFLICT DO NOTHING`,
-        [req.user.id, m.id, ex.id]
-      );
+      results.push({ id: ex.id, correct: grade(ex, a.value), explain: ex.explain[lang], ...answerReveal(ex) });
     }
-
     const answered = results.length;
     const correctCount = results.filter(r => r.correct).length;
     const accuracy = answered ? Math.round((correctCount / answered) * 100) : 0;
 
-    // Lesson XP: once per module, enforced by the xp_events insert itself.
-    const { rows: xpRow } = await pool.query(
-      `INSERT INTO xp_events (user_id, module_id, amount, kind, created_at)
-       SELECT $1, $2, $3, 'lesson', now()
-        WHERE NOT EXISTS (
-          SELECT 1 FROM xp_events
-           WHERE user_id = $1 AND module_id = $2 AND kind = 'lesson')
-       RETURNING id`,
-      [req.user.id, m.id, m.xp_reward]
-    );
-    const xp_earned = xpRow.length ? m.xp_reward : 0;
-    const first_time = xpRow.length > 0;
+    // One transaction: XP, progress, streak and achievements commit together or
+    // not at all. Lesson XP is once per (user, module), enforced by a partial
+    // unique index, so two parallel completions cannot both award it.
+    const client = await pool.connect();
+    let xp_earned = 0;
+    let first_time = false;
+    let perfect = false;
+    let snap;
+    let new_achievements;
+    try {
+      await client.query('BEGIN');
+      const { rows: xpRow } = await client.query(
+        `INSERT INTO xp_events (user_id, module_id, amount, kind, created_at)
+         VALUES ($1, $2, $3, 'lesson', now())
+         ON CONFLICT (user_id, module_id) WHERE kind = 'lesson' DO NOTHING
+         RETURNING id`,
+        [req.user.id, m.id, m.xp_reward]
+      );
+      first_time = xpRow.length > 0;
+      xp_earned = first_time ? m.xp_reward : 0;
 
-    await pool.query(
-      `INSERT INTO user_progress (user_id, module_id, is_completed, completed_at, xp_earned, attempts)
-       VALUES ($1, $2, true, now(), $3, 1)
-       ON CONFLICT (user_id, module_id) DO UPDATE SET
-         attempts = user_progress.attempts + 1,
-         last_attempt_at = now(),
-         is_completed = true,
-         completed_at = COALESCE(user_progress.completed_at, now()),
-         xp_earned = GREATEST(user_progress.xp_earned, EXCLUDED.xp_earned)`,
-      [req.user.id, m.id, m.xp_reward]
-    );
+      await client.query(
+        `INSERT INTO user_progress (user_id, module_id, is_completed, completed_at, xp_earned, attempts)
+         VALUES ($1, $2, true, now(), $3, 1)
+         ON CONFLICT (user_id, module_id) DO UPDATE SET
+           attempts = user_progress.attempts + 1,
+           last_attempt_at = now(),
+           is_completed = true,
+           completed_at = COALESCE(user_progress.completed_at, now()),
+           xp_earned = GREATEST(user_progress.xp_earned, EXCLUDED.xp_earned)`,
+        [req.user.id, m.id, m.xp_reward]
+      );
 
-    await bumpStreak(req.user.id);
-    const perfect = (await perfectRun(req.user.id, m.id)) && correctCount === answered;
-    const { new_achievements, ...snap } = await recordXp(req.user.id, {
-      amount: 0, // XP already inserted above; this evaluates achievements + snapshot
-      kind: 'lesson',
-      moduleId: m.id,
-      ctx: { perfect, checkpoint: m.kind === 'checkpoint' },
-    });
+      await bumpStreak(req.user.id, client);
+      perfect = (await perfectRun(req.user.id, m.id, client)) && correctCount === answered;
+      ({ new_achievements, ...snap } = await recordXp(
+        req.user.id,
+        {
+          amount: 0, // XP already inserted above; this evaluates achievements + snapshot
+          kind: 'lesson',
+          moduleId: m.id,
+          ctx: { perfect, checkpoint: m.kind === 'checkpoint' },
+        },
+        client
+      ));
+      await client.query('COMMIT');
+    } catch (err) {
+      await client.query('ROLLBACK').catch(() => {});
+      throw err;
+    } finally {
+      client.release();
+    }
 
     const { rows: nextRows } = await pool.query(
       `SELECT slug, title_${lang} AS title FROM modules

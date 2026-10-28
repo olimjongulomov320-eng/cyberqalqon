@@ -32,7 +32,52 @@
  *   }
  */
 
+const crypto = require('crypto');
+
 const TYPES = ['mc', 'tf', 'multi', 'match', 'order', 'input'];
+
+/** Stable pseudo-random key for (exercise, item): a deterministic shuffle that
+ *  survives reloads and needs no per-request state. */
+const sortKey = (exId, itemId) =>
+  crypto.createHash('sha1').update(`${exId}:${itemId}`).digest('hex');
+
+function shuffledBy(exId, list) {
+  return [...list].sort((a, b) => {
+    const ka = sortKey(exId, a.id);
+    const kb = sortKey(exId, b.id);
+    return ka < kb ? -1 : ka > kb ? 1 : 0;
+  });
+}
+
+/**
+ * Match exercises: the authored data pairs every left with its own right, so
+ * shipping `{left, right}` objects would hand the answer to anyone reading the
+ * response. The client instead receives each right text under a *different*
+ * pair's id, rotated by a fixed per-exercise offset. Grading and reveal map
+ * client ids back through the same offset, so the UI needs no changes.
+ */
+function matchShift(ex) {
+  const n = Array.isArray(ex.pairs) ? ex.pairs.length : 0;
+  if (n < 2) return 0;
+  const h = parseInt(sortKey(ex.id, 'shift').slice(0, 8), 16);
+  return 1 + (h % (n - 1));
+}
+
+/** Pair id the client sees for the right text that really belongs to `pairId`. */
+function viewIdForRight(ex, pairId) {
+  const n = ex.pairs.length;
+  const m = ex.pairs.findIndex(p => p.id === pairId);
+  if (m < 0 || n < 2) return pairId;
+  return ex.pairs[(((m - matchShift(ex)) % n) + n) % n].id;
+}
+
+/** The real right-side id behind a client-visible pair id (null if unknown). */
+function realRightId(ex, viewId) {
+  const n = ex.pairs.length;
+  const j = ex.pairs.findIndex(p => p.id === viewId);
+  if (j < 0) return null;
+  return ex.pairs[(j + matchShift(ex)) % n].id;
+}
 
 /** Trim, lowercase, collapse whitespace, drop trailing punctuation. */
 function normalize(value) {
@@ -63,7 +108,10 @@ function grade(ex, value) {
       const want = ex.match_answer || {};
       const keys = Object.keys(want);
       if (keys.length === 0) return false;
-      return keys.every(k => normalize(value[k]) === normalize(want[k]));
+      return keys.every(k => {
+        const real = realRightId(ex, String(value[k] ?? ''));
+        return real !== null && real === String(want[k]);
+      });
     }
 
     case 'order': {
@@ -87,6 +135,7 @@ function grade(ex, value) {
 /**
  * Strip everything that would leak the answer before the payload reaches the
  * client. Explanation is revealed only by check/complete.
+ * Optional `hint` is passed through (guidance, not the answer).
  */
 function publicExercise(ex) {
   const {
@@ -94,6 +143,35 @@ function publicExercise(ex) {
     ...rest
   } = ex;
   return rest;
+}
+
+/**
+ * Localise an exercise for the client: strip answer keys, pick the language and
+ * remove every positional hint to the answer (option order, pair adjacency,
+ * authored item order).
+ */
+function localizeExercise(ex, lang) {
+  const pub = publicExercise(ex);
+  pub.q = ex.q[lang];
+  if (ex.options) {
+    pub.options = shuffledBy(ex.id, ex.options).map(o => ({ id: o.id, text: o[lang] }));
+  }
+  if (ex.pairs) {
+    const shift = matchShift(ex);
+    const n = ex.pairs.length;
+    pub.pairs = ex.pairs.map((p, j) => ({
+      id: p.id,
+      left: p.left[lang],
+      right: ex.pairs[(j + shift) % n].right[lang],
+    }));
+  }
+  if (ex.items) {
+    let items = shuffledBy(ex.id, ex.items);
+    const same = Array.isArray(ex.order) && items.every((it, i) => it.id === ex.order[i]);
+    if (same && items.length > 1) items = [...items.slice(1), items[0]];
+    pub.items = items.map(i => ({ id: i.id, text: i[lang] }));
+  }
+  return pub;
 }
 
 /**
@@ -108,7 +186,11 @@ function answerReveal(ex) {
     case 'multi':
       return { answers: ex.answers };
     case 'match':
-      return { match_answer: ex.match_answer };
+      return {
+        match_answer: Object.fromEntries(
+          Object.entries(ex.match_answer || {}).map(([k, v]) => [k, viewIdForRight(ex, String(v))])
+        ),
+      };
     case 'order':
       return { order: ex.order };
     case 'input':
@@ -147,6 +229,9 @@ function validateExercise(ex, where) {
         push('match_answer must map every pair');
       else if (!ex.pairs.every(p => p && p.left && p.right && p.left.uz && p.left.ru && p.right.uz && p.right.ru))
         push('match pairs need left/right with uz+ru');
+      else if (!Object.entries(ex.match_answer).every(([k, v]) =>
+        ex.pairs.some(p => p.id === k) && ex.pairs.some(p => p.id === v)))
+        push('match_answer must map pair ids to pair ids');
       break;
     case 'order':
       if (!Array.isArray(ex.items) || ex.items.length < 3) push('order needs >=3 items');
@@ -219,6 +304,7 @@ function validateLessonSubmission(exercises, answers) {
 module.exports = {
   grade,
   publicExercise,
+  localizeExercise,
   answerReveal,
   validateExercise,
   validateLessonSubmission,

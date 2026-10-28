@@ -37,6 +37,14 @@ const registerLimiter = rateLimit({
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const isStr = v => typeof v === 'string';
+const bad = (res, message) =>
+  res.status(422).json({ error: { code: 'VALIDATION_ERROR', message } });
+
+// Compared against when the account does not exist, so response time does not
+// reveal whether an identifier is registered.
+const DUMMY_HASH = bcrypt.hashSync('cyberqalqon-timing-pad', BCRYPT_ROUNDS);
+
 function signToken(user) {
   return jwt.sign({ id: user.id, display_name: user.display_name }, JWT_SECRET, { expiresIn: JWT_TTL });
 }
@@ -44,8 +52,8 @@ function signToken(user) {
 // POST /auth/telegram
 router.post('/telegram', async (req, res, next) => {
   try {
-    const { initData, lang = 'uz' } = req.body;
-    if (!initData) return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'initData required' } });
+    const { initData, lang = 'uz' } = req.body ?? {};
+    if (!isStr(initData) || !initData) return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'initData required' } });
 
     const tgUser = verifyTelegramInitData(initData);
     if (!tgUser) return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Invalid Telegram initData' } });
@@ -73,7 +81,14 @@ router.post('/telegram', async (req, res, next) => {
 // POST /auth/register — email + username
 router.post('/register', registerLimiter, async (req, res, next) => {
   try {
-    const { username, email, password, display_name, lang = 'uz' } = req.body;
+    const { username, email, password, display_name, lang = 'uz' } = req.body ?? {};
+
+    if (![username, email, password, display_name].every(isStr)) {
+      return bad(res, 'username, email, password, display_name must be strings');
+    }
+    if (password.length > 128) return bad(res, 'password must be at most 128 characters');
+    if (!display_name.trim() || display_name.length > 40) return bad(res, 'display_name: 1-40 characters');
+    if (email.length > 254) return bad(res, 'Invalid email format');
 
     if (!username || !email || !password || !display_name) {
       return res.status(422).json({ error: { code: 'VALIDATION_ERROR', message: 'username, email, password, display_name required' } });
@@ -100,7 +115,7 @@ router.post('/register', registerLimiter, async (req, res, next) => {
         `INSERT INTO users (username, email, password_hash, display_name, lang)
          VALUES ($1, $2, $3, $4, $5)
          RETURNING id, display_name, total_xp, lang, email`,
-        [username.toLowerCase(), email.toLowerCase(), password_hash, display_name, safeLang]
+        [username.toLowerCase(), email.toLowerCase(), password_hash, display_name.trim(), safeLang]
       );
       res.status(201).json({ token: signToken(rows[0]), user: rows[0] });
     } catch (err) {
@@ -124,8 +139,8 @@ router.post('/register', registerLimiter, async (req, res, next) => {
 // POST /auth/login — accepts email or username
 router.post('/login', loginLimiter, async (req, res, next) => {
   try {
-    const { identifier, password } = req.body; // identifier can be email or username
-    if (!identifier || !password) {
+    const { identifier, password } = req.body ?? {}; // identifier can be email or username
+    if (!isStr(identifier) || !isStr(password) || !identifier || !password || password.length > 128) {
       return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'identifier and password required' } });
     }
 
@@ -138,7 +153,8 @@ router.post('/login', loginLimiter, async (req, res, next) => {
       [value]
     );
 
-    if (!rows.length || !(await bcrypt.compare(password, rows[0].password_hash))) {
+    const ok = await bcrypt.compare(password, rows[0]?.password_hash ?? DUMMY_HASH);
+    if (!rows.length || !rows[0].password_hash || !ok) {
       return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Invalid credentials.' } });
     }
 

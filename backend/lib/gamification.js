@@ -9,7 +9,7 @@
  */
 
 const pool = require('../db');
-const { grade, publicExercise, answerReveal } = require('./grade');
+const { grade, publicExercise, localizeExercise, answerReveal } = require('./grade');
 const { DAY_START, TODAY } = require('./time');
 
 const LESSON_XP = null; // resolved from modules.xp_reward
@@ -185,7 +185,7 @@ async function recordAttempt(userId, moduleId, exerciseId, correct, db = pool, s
          VALUES ($1, $2, $3, 1, now())
          ON CONFLICT (user_id, module_id, exercise_id)
          DO UPDATE SET correct_count = mistakes.correct_count + 1, last_attempt_at = now()
-         RETURNING (mistakes.correct_count = 1 AND mistakes.wrong_count = 0) AS first_correct,
+         RETURNING (mistakes.correct_count = 1) AS first_correct,
                    mistakes.wrong_count`
       : `INSERT INTO mistakes (user_id, module_id, exercise_id, wrong_count, last_attempt_at)
          VALUES ($1, $2, $3, 1, now())
@@ -240,5 +240,6 @@ module.exports = {
   REVIEW_XP,
   grade, // re-export so routes grade through one module
   publicExercise,
+  localizeExercise,
   answerReveal,
 };

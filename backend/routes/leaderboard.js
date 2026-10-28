@@ -7,10 +7,11 @@ const router = Router();
 
 const WEEK_CTE = `
   WITH weekly AS (
-    SELECT user_id, SUM(amount)::int AS total_xp
-      FROM xp_events
-     WHERE created_at >= ${WEEK_START}
-     GROUP BY user_id
+    SELECT x.user_id, SUM(x.amount)::int AS total_xp
+      FROM xp_events x
+      JOIN users hu ON hu.id = x.user_id AND hu.show_on_leaderboard
+     WHERE x.created_at >= ${WEEK_START}
+     GROUP BY x.user_id
   )`;
 
 /**
@@ -32,10 +33,11 @@ router.get('/', optionalAuth, async (req, res, next) => {
            SELECT u.id AS user_id, u.display_name, u.avatar_emoji, w.total_xp,
                   (SELECT COUNT(*) FROM user_progress up
                     WHERE up.user_id = u.id AND up.is_completed)::int AS modules_completed,
-                  ROW_NUMBER() OVER (ORDER BY w.total_xp DESC)::int AS rank
+                  RANK() OVER (ORDER BY w.total_xp DESC)::int AS rank
              FROM weekly w
              JOIN users u ON u.id = w.user_id
-            ORDER BY rank
+            WHERE u.show_on_leaderboard
+            ORDER BY rank, u.id
             LIMIT $1 OFFSET $2`,
           [limit, offset]
         )).rows
@@ -43,9 +45,10 @@ router.get('/', optionalAuth, async (req, res, next) => {
           `SELECT u.id AS user_id, u.display_name, u.avatar_emoji, u.total_xp,
                   (SELECT COUNT(*) FROM user_progress up
                     WHERE up.user_id = u.id AND up.is_completed)::int AS modules_completed,
-                  ROW_NUMBER() OVER (ORDER BY u.total_xp DESC)::int AS rank
+                  RANK() OVER (ORDER BY u.total_xp DESC)::int AS rank
              FROM users u
-            ORDER BY rank
+            WHERE u.total_xp > 0 AND u.show_on_leaderboard
+            ORDER BY rank, u.id
             LIMIT $1 OFFSET $2`,
           [limit, offset]
         )).rows;
@@ -59,7 +62,8 @@ router.get('/', optionalAuth, async (req, res, next) => {
             WHERE w.total_xp > (SELECT COALESCE(total_xp, 0) FROM weekly WHERE user_id = $1)`
         : `SELECT COUNT(*)::int + 1 AS rank
              FROM users u
-            WHERE u.total_xp > (SELECT COALESCE(total_xp, 0) FROM users WHERE id = $1)`;
+            WHERE u.show_on_leaderboard
+              AND u.total_xp > (SELECT COALESCE(total_xp, 0) FROM users WHERE id = $1)`;
       const { rows: me } = await pool.query(sql, [req.user.id]);
       // A user with zero XP this week is not in the league yet.
       if (period === 'all') {

@@ -184,6 +184,7 @@ async function setup() {
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS longest_streak  INTEGER NOT NULL DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS last_streak_date DATE`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS daily_goal_xp   INTEGER NOT NULL DEFAULT 20`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS show_on_leaderboard BOOLEAN NOT NULL DEFAULT true`,
     `ALTER TABLE modules ADD COLUMN IF NOT EXISTS exercises JSONB`,
     `ALTER TABLE modules ALTER COLUMN challenge SET DEFAULT '{}'::jsonb`,
     `ALTER TABLE modules ADD COLUMN IF NOT EXISTS kind TEXT NOT NULL DEFAULT 'lesson'`,
@@ -316,6 +317,18 @@ async function setup() {
     AFTER INSERT ON xp_events
     FOR EACH ROW EXECUTE FUNCTION sync_user_xp()`);
 
+  // Lesson XP is awarded once per (user, module). Collapse any duplicates a
+  // past race produced (keep the earliest), then let the index enforce it.
+  await pool.query(`
+    DELETE FROM xp_events x
+     USING xp_events y
+     WHERE x.kind = 'lesson' AND y.kind = 'lesson'
+       AND x.user_id = y.user_id AND x.module_id = y.module_id
+       AND (x.created_at, x.id) > (y.created_at, y.id)`);
+  await pool.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS uq_xp_lesson_once
+        ON xp_events (user_id, module_id) WHERE kind = 'lesson'`);
+
   // One-time: import XP already earned under v1 rules, then recompute totals.
   await pool.query(`
     INSERT INTO xp_events (user_id, module_id, amount, kind, created_at)
@@ -328,7 +341,9 @@ async function setup() {
     ON CONFLICT DO NOTHING`);
   await pool.query(`
     UPDATE users u
-       SET total_xp = COALESCE((SELECT SUM(x.amount) FROM xp_events x WHERE x.user_id = u.id), 0)`);
+       SET total_xp = COALESCE((SELECT SUM(x.amount) FROM xp_events x WHERE x.user_id = u.id), 0)
+     WHERE u.total_xp IS DISTINCT FROM
+           COALESCE((SELECT SUM(x.amount) FROM xp_events x WHERE x.user_id = u.id), 0)`);
 
   console.log(`Database ready. Curriculum: ${seeded} modules, ${domains.length} domains, ${paths.length} paths.`);
 }

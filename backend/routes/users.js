@@ -1,4 +1,6 @@
 const { Router } = require('express');
+const bcrypt = require('bcrypt');
+const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const { DAY_START, WEEK_START } = require('../lib/time');
@@ -14,7 +16,7 @@ router.use(requireAuth);
 
 const PROFILE_COLUMNS =
   'id, display_name, avatar_emoji, total_xp, lang, low_bandwidth_mode, created_at, ' +
-  'current_streak, longest_streak, daily_goal_xp, email';
+  'current_streak, longest_streak, daily_goal_xp, email, show_on_leaderboard';
 
 async function loadProfile(userId) {
   const { rows } = await pool.query(
@@ -63,6 +65,14 @@ router.patch('/me', async (req, res, next) => {
       }
       params.push(lowBandwidth);
       sets.push(`low_bandwidth_mode = $${params.length}`);
+    }
+
+    if (req.body?.show_on_leaderboard !== undefined) {
+      if (typeof req.body.show_on_leaderboard !== 'boolean') {
+        return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'show_on_leaderboard must be a boolean' } });
+      }
+      params.push(req.body.show_on_leaderboard);
+      sets.push(`show_on_leaderboard = $${params.length}`);
     }
 
     if (displayName !== undefined) {
@@ -348,6 +358,33 @@ router.get('/me/attempts', async (req, res, next) => {
       offset,
       has_more: offset + rows.rowCount < total,
     });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE /users/me — permanently erase the account and all learning history.
+// Every dependent table references users(id) ON DELETE CASCADE. Password
+// accounts must re-enter their password; Telegram-only accounts have none and
+// confirm with the literal word DELETE instead.
+const deleteLimiter = rateLimit({ windowMs: 15 * 60_000, max: 5, standardHeaders: true });
+
+router.delete('/me', deleteLimiter, async (req, res, next) => {
+  try {
+    const { password, confirm } = req.body ?? {};
+    const { rows } = await pool.query(`SELECT password_hash FROM users WHERE id = $1`, [req.user.id]);
+    if (!rows.length) {
+      return res.status(404).json({ error: { code: 'USER_NOT_FOUND', message: 'User no longer exists.' } });
+    }
+    const hash = rows[0].password_hash;
+    const confirmed = hash
+      ? typeof password === 'string' && (await bcrypt.compare(password, hash))
+      : confirm === 'DELETE';
+    if (!confirmed) {
+      return res.status(403).json({ error: { code: 'CONFIRMATION_FAILED', message: 'Confirmation failed.' } });
+    }
+    await pool.query(`DELETE FROM users WHERE id = $1`, [req.user.id]);
+    res.status(204).end();
   } catch (err) {
     next(err);
   }
