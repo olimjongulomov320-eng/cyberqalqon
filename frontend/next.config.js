@@ -9,6 +9,18 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   // (cacheOnFrontEndNav) but drop the aggressive asset grabbing.
   aggressiveFrontEndNavCaching: false,
   reloadOnOnline: true,
+  // The default cross-origin rule caches every GET to the API by URL alone, so
+  // a slow response (a sleeping host) could be answered from another user's
+  // cached data. API traffic must always hit the network.
+  extendDefaultRuntimeCaching: true,
+  workboxOptions: {
+    runtimeCaching: [
+      {
+        urlPattern: ({ url }) => url.pathname.startsWith('/v1/') || url.hostname.endsWith('onrender.com'),
+        handler: 'NetworkOnly',
+      },
+    ],
+  },
   disable: process.env.NODE_ENV === 'development',
 });
 

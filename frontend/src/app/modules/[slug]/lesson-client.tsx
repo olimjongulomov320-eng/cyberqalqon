@@ -270,6 +270,21 @@ export default function LessonView({ slug }: { slug: string }) {
 
   const [seq, setSeq] = useState<SequenceInfo | null>(null);
 
+  const userIdRef = useRef<string | null>(null);
+  userIdRef.current = user?.id ?? null;
+
+  // Persist progress so a reload or closed tab does not discard answered questions.
+  useEffect(() => {
+    if (!user || (phase !== 'active' && phase !== 'intro')) return;
+    try {
+      if (answers.length) localStorage.setItem(`cq_lesson:${slug}`, JSON.stringify({ uid: user.id, idx, answers }));
+    } catch { /* storage full or blocked */ }
+  }, [phase, slug, idx, answers, user]);
+  useEffect(() => {
+    if (phase !== 'celebrate') return;
+    try { localStorage.removeItem(`cq_lesson:${slug}`); } catch { /* ignore */ }
+  }, [phase, slug]);
+
   const hearts = useHearts();
   const heartsLostOnWrong = useRef(false);
   const topRef = useRef<HTMLDivElement>(null);
@@ -293,6 +308,19 @@ export default function LessonView({ slug }: { slug: string }) {
         if (!alive) return;
         setModule(data.module);
         setExercises(data.exercises);
+        // Resume an interrupted lesson (same user, same exercises) after a reload.
+        try {
+          const saved = JSON.parse(localStorage.getItem(`cq_lesson:${slug}`) ?? 'null');
+          const ids = new Set(data.exercises.map(e => e.id));
+          if (
+            saved && saved.uid === userIdRef.current && Array.isArray(saved.answers) &&
+            Number.isInteger(saved.idx) && saved.idx >= 0 && saved.idx < data.exercises.length &&
+            saved.answers.every((a: AnswerRec) => a && ids.has(a.id))
+          ) {
+            setAnswers(saved.answers);
+            setIdx(saved.idx);
+          }
+        } catch { /* storage unavailable or corrupt: start fresh */ }
         setChecked(null);
         setPractice(null);
         setPhase(p => (p === 'loading' ? 'intro' : p));
@@ -415,14 +443,16 @@ export default function LessonView({ slug }: { slug: string }) {
 
   /** Start a practice question to earn a heart back (never recorded). */
   const startPractice = useCallback(() => {
-    if (!exercises.length) return;
+    // Only questions already answered in this lesson: the server refuses to
+    // grade practice on exercises the learner has not met.
+    const answeredIds = new Set(answers.map(a => a.id));
+    const met = exercises.filter(e => answeredIds.has(e.id) && e.type !== 'match' && e.type !== 'order');
+    if (!met.length) return;
     const currentId = current?.id;
-    const pool = exercises.filter(e => e.type !== 'match' && e.type !== 'order' && e.id !== currentId);
-    const from = pool.length ? pool : exercises.filter(e => e.type !== 'match' && e.type !== 'order');
-    const list = from.length ? from : exercises;
-    const pick = list[Math.floor(Math.random() * list.length)];
+    const list = met.filter(e => e.id !== currentId);
+    const pick = (list.length ? list : met)[Math.floor(Math.random() * (list.length || met.length))];
     setPractice({ ex: pick, value: undefined, result: null, checking: false });
-  }, [exercises, current]);
+  }, [exercises, current, answers]);
 
   /** Grade the practice answer; on success give the heart back. */
   const gradePractice = useCallback(async () => {

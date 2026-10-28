@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useCallback, useContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, fetchMe, updateMe } from '@/lib/api';
+import { ApiError, UNAUTHORIZED_EVENT, User, fetchMe, updateMe } from '@/lib/api';
 import { Lang, LANGS } from '@/lib/i18n';
 
 interface AppState {
@@ -41,7 +41,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
     fetchMe()
       .then(setUserState)
-      .catch(() => localStorage.removeItem('cq_token'))
+      .catch(err => {
+        // Only a server-side rejection invalidates the session. A timeout or a
+        // dropped connection (e.g. the free API waking up) must keep the login.
+        if (err instanceof ApiError && err.status === 401) localStorage.removeItem('cq_token');
+      })
       .finally(() => setReady(true));
   }, []);
 
@@ -78,8 +82,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // A 401 mid-session (expired token) signs out instead of leaving a broken UI.
+  useEffect(() => {
+    const onUnauthorized = () => {
+      localStorage.removeItem('cq_token');
+      setUserState(null);
+    };
+    window.addEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
+    return () => window.removeEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem('cq_token');
+    // Drop any cached API responses so the next person on this device never
+    // sees the previous user's data.
+    if (typeof caches !== 'undefined') {
+      caches.keys().then(keys => keys.forEach(k => void caches.delete(k))).catch(() => {});
+    }
     setUserState(null);
     router.replace('/auth');
   }, [router]);

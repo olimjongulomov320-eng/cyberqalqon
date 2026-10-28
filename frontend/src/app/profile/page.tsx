@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { Lang, makeT } from '@/lib/i18n';
-import { ApiError, AttemptRow, StatsPayload, fetchAttempts, fetchStats, updateMe } from '@/lib/api';
+import { ApiError, AttemptRow, StatsPayload, deleteAccount, fetchAttempts, fetchStats, updateMe } from '@/lib/api';
 import { accuracyOf, proficiency, sortForMatrix, type Proficiency } from '@/lib/skills';
 import { achievementMeta, tierIndex, tierKey, levelFromXp } from '@/lib/gamification';
 import { RingProgress } from '@/components/game';
@@ -293,6 +293,62 @@ function HistoryCard({ lang }: { lang: Lang }) {
   );
 }
 
+/* ── Permanent account deletion ─────────────────────────────────────────────── */
+function DeleteAccount({ lang }: { lang: Lang }) {
+  const tr = makeT(lang);
+  const { logout } = useApp();
+  const [open, setOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  const confirm = async () => {
+    setBusy(true);
+    setFailed(false);
+    try {
+      await deleteAccount(password);
+      logout();
+    } catch {
+      setFailed(true);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (!open) {
+    return (
+      <button type="button" onClick={() => setOpen(true)} className="mt-4 w-full text-center text-xs font-semibold text-text-muted underline-offset-2 hover:text-danger hover:underline">
+        {tr('deleteAccount')}
+      </button>
+    );
+  }
+  return (
+    <Card className="mt-4 border-danger/40 p-4">
+      <p className="text-sm text-text-secondary">{tr('deleteAccountWarn')}</p>
+      <label className="mt-3 block text-xs font-semibold text-text-secondary" htmlFor="delete-password">
+        {tr('deleteConfirmPassword')}
+      </label>
+      <input
+        id="delete-password"
+        type="password"
+        autoComplete="current-password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        className="input-base mt-1.5"
+      />
+      {failed && <p role="alert" className="mt-2 text-xs font-semibold text-danger">{tr('deleteAccountFailed')}</p>}
+      <div className="mt-3 flex gap-2">
+        <Button variant="secondary" onClick={() => { setOpen(false); setPassword(''); setFailed(false); }}>
+          {tr('cancelAction')}
+        </Button>
+        <Button onClick={confirm} disabled={busy || !password}>
+          {tr('deleteAccountConfirm')}
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
 export default function ProfilePage() {
   const { lang, user, setUser, logout, ready } = useApp();
   const tr = makeT(lang);
@@ -315,7 +371,7 @@ export default function ProfilePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang, user?.id]);
 
-  const patch = async (p: { display_name?: string; avatar_emoji?: string; daily_goal_xp?: number }) => {
+  const patch = async (p: { display_name?: string; avatar_emoji?: string; daily_goal_xp?: number; show_on_leaderboard?: boolean }) => {
     try {
       setSaving(p.avatar_emoji ? p.avatar_emoji : p.daily_goal_xp ? String(p.daily_goal_xp) : 'name');
       const updated = await updateMe(p);
@@ -594,6 +650,16 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
+                <label className="flex items-center gap-2.5 text-sm text-text-secondary">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 accent-cyan-500"
+                    checked={user.show_on_leaderboard !== false}
+                    onChange={e => patch({ show_on_leaderboard: e.target.checked })}
+                  />
+                  {tr('showOnLeaderboard')}
+                </label>
+
                 {savedAt && (
                   <p role="status" aria-live="polite" className="inline-flex items-center gap-1.5 text-xs font-semibold text-success">
                     <CheckIcon size={14} /> {tr('nameSaved')}
@@ -605,6 +671,7 @@ export default function ProfilePage() {
             <Button variant="secondary" className="mt-6 w-full justify-center" onClick={logout}>
               {tr('logout')}
             </Button>
+            <DeleteAccount lang={lang} />
           </>
         )}
       </div>

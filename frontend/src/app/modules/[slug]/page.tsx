@@ -1,5 +1,6 @@
 import { fetchModules } from '@/lib/api';
 import LessonView from './lesson-client';
+import knownSlugs from '@/lib/module-slugs.json';
 
 // Static export (GitHub Pages) requires every dynamic route to be enumerated at
 // build time — there is no server to render `/modules/[slug]` on demand. We pull
@@ -21,13 +22,15 @@ export async function generateStaticParams() {
         break;
       } catch (err) {
         // The API is a free tier that sleeps; a cold start can exceed a single
-        // attempt. Retry with backoff, then fail the build loudly rather than
-        // publish a site with no lesson pages.
-        if (attempt === 3) throw err;
+        // attempt. Retry with backoff; if the API stays unreachable, fall back
+        // to the committed slug list (kept in sync by a backend test) so a
+        // sleeping free-tier host can no longer block a deploy.
+        if (attempt === 3) break;
         await new Promise((r) => setTimeout(r, 5000 * attempt));
       }
     }
   }
+  for (const slug of knownSlugs) slugs.add(slug);
   return Array.from(slugs).map((slug) => ({ slug }));
 }
 

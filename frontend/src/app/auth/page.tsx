@@ -91,6 +91,8 @@ function PasswordInput({
   error?: string;
   hint?: string;
 }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
   return (
     <Field label={label} error={error} hint={hint} required>
       <div className="relative">
@@ -107,7 +109,7 @@ function PasswordInput({
         <button
           type="button"
           onClick={toggle}
-          aria-label={show ? 'Hide password' : 'Show password'}
+          aria-label={tr(show ? 'hidePassword' : 'showPassword')}
           aria-pressed={show}
           className="absolute right-1 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-text-muted transition-colors hover:text-text-primary"
         >

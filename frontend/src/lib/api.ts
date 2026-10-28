@@ -4,6 +4,9 @@ import type { DomainSkillStat, SkillTrend } from './skills';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL + '/v1';
 
+/** Fired on `window` when an authenticated request is answered with 401. */
+export const UNAUTHORIZED_EVENT = 'cq:unauthorized';
+
 export class ApiError extends Error {
   code: string;
   status: number;
@@ -61,6 +64,11 @@ async function rawRequest<T>(path: string, options: RequestInit = {}): Promise<T
   const data = text ? safeParse(text) : {};
 
   if (!res.ok) {
+    // The server rejected our token (expired or invalid). Tell the app shell so
+    // it can sign the user out cleanly; a network failure never reaches here.
+    if (res.status === 401 && token && typeof window !== 'undefined') {
+      window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+    }
     throw new ApiError(
       (data as ErrorBody)?.error?.message ?? `Request failed (${res.status})`,
       (data as ErrorBody)?.error?.code ?? 'UNKNOWN',
@@ -249,9 +257,14 @@ export function fetchMe() {
 }
 
 export function updateMe(
-  patch: Partial<Pick<User, 'lang' | 'low_bandwidth_mode' | 'display_name' | 'avatar_emoji' | 'daily_goal_xp'>>
+  patch: Partial<Pick<User, 'lang' | 'low_bandwidth_mode' | 'display_name' | 'avatar_emoji' | 'daily_goal_xp' | 'show_on_leaderboard'>>
 ) {
   return req<User>('/users/me', { method: 'PATCH', body: JSON.stringify(patch) });
+}
+
+/** Permanently delete the signed-in account (password accounts must confirm). */
+export function deleteAccount(password: string) {
+  return req<Record<string, never>>('/users/me', { method: 'DELETE', body: JSON.stringify({ password }) });
 }
 
 export function fetchStats(lang: string) {
@@ -289,6 +302,7 @@ export interface User {
   current_streak?: number;
   longest_streak?: number;
   daily_goal_xp?: number;
+  show_on_leaderboard?: boolean;
 }
 
 /** What the server reveals AFTER grading — never on fetch. */
@@ -324,13 +338,14 @@ export interface OrderItem {
 }
 
 /** An exercise as delivered to the client — answers stripped, text localised.
- *  `explain` is absent on fetch; it arrives with the graded /check result. */
+ *  `explain` is absent on fetch; it arrives with the graded /check result.
+ *  `hint` is optional, bilingual guidance that does not reveal the answer. */
 export type Exercise =
-  | { id: string; type: 'mc' | 'multi'; q: string; explain?: string; code?: string; options: ChoiceOption[] }
-  | { id: string; type: 'tf'; q: string; explain?: string; code?: string }
-  | { id: string; type: 'match'; q: string; explain?: string; code?: string; pairs: MatchPair[] }
-  | { id: string; type: 'order'; q: string; explain?: string; code?: string; items: OrderItem[] }
-  | { id: string; type: 'input'; q: string; explain?: string; code?: string };
+  | { id: string; type: 'mc' | 'multi'; q: string; explain?: string; hint?: string; code?: string; options: ChoiceOption[] }
+  | { id: string; type: 'tf'; q: string; explain?: string; hint?: string; code?: string }
+  | { id: string; type: 'match'; q: string; explain?: string; hint?: string; code?: string; pairs: MatchPair[] }
+  | { id: string; type: 'order'; q: string; explain?: string; hint?: string; code?: string; items: OrderItem[] }
+  | { id: string; type: 'input'; q: string; explain?: string; hint?: string; code?: string };
 
 export interface ModuleSummary {
   id: string;

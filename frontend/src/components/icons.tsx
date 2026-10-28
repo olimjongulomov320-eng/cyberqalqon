@@ -114,6 +114,13 @@ export const CheckIcon = (p: IconProps) => (
   </Base>
 );
 
+export const LightbulbIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 18h6M10 21h4" />
+    <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3Z" />
+  </Base>
+);
+
 export const CloseIcon = (p: IconProps) => (
   <Base {...p}>
     <path d="M6.2 6.2 17.8 17.8M17.8 6.2 6.2 17.8" />
