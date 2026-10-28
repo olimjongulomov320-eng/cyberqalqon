@@ -357,6 +357,14 @@ export default function AuthPage() {
             hint={isRegister ? tr('passwordHint') : undefined}
           />
 
+          {!isRegister && (
+            <p className="-mt-1 text-right text-xs">
+              <Link href="/auth/reset" className="font-semibold text-cyan-300 hover:underline">
+                {tr('forgotPassword')}
+              </Link>
+            </p>
+          )}
+
           {isRegister && (
             <>
               <PasswordStrength password={form.password} tr={tr} />

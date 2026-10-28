@@ -177,6 +177,18 @@ async function setup() {
   // Records only need to outlive realistic retry windows; bound growth.
   await pool.query(`DELETE FROM idempotency_keys WHERE created_at < now() - interval '7 days'`);
 
+  // Single-use password reset tokens. Only a hash of the token is stored.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS password_resets (
+      token_hash TEXT PRIMARY KEY,
+      user_id    UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      expires_at TIMESTAMPTZ NOT NULL,
+      used_at    TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_password_resets_user ON password_resets (user_id)`);
+  await pool.query(`DELETE FROM password_resets WHERE expires_at < now() - interval '1 day'`);
+
   /* ── 3. v2 columns ───────────────────────────────────────────────────── */
   for (const sql of [
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS email              TEXT UNIQUE`,

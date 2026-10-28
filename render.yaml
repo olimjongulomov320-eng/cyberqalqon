@@ -39,5 +39,12 @@ services:
         value: production
       - key: CORS_ORIGIN
         value: https://olimjongulomov320-eng.github.io
+      - key: APP_URL
+        value: https://olimjongulomov320-eng.github.io/cyberqalqon
+      # Password-reset email (Resend). Set both in the Render dashboard to enable it.
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        sync: false
       - key: NODE_VERSION
         value: "22"

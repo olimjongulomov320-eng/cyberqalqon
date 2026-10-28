@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { verifyTelegramInitData } = require('../middleware/auth');
+const { sendMail, canSendMail } = require('../lib/mailer');
+const { RESET_TTL_MINUTES, generateToken, hashToken, passwordProblem } = require('../lib/passwordReset');
 
 const router = Router();
 const BCRYPT_ROUNDS = 12;
@@ -163,6 +165,105 @@ router.post('/login', loginLimiter, async (req, res, next) => {
     res.json({ token: signToken(user), user });
   } catch (err) {
     next(err);
+  }
+});
+
+// Reset requests are cheap for an attacker and cost us an email each, so cap them hard.
+const forgotLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: rateLimited,
+});
+
+// Guessing a 256-bit token is hopeless, but typos in the new password are not:
+// allow a few attempts without sharing the (much stricter) email budget.
+const resetLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: rateLimited,
+});
+
+const APP_URL = () =>
+  (process.env.APP_URL || (process.env.CORS_ORIGIN || '').split(',')[0] || 'http://localhost:3000').replace(/\/$/, '');
+
+// POST /auth/forgot — always answers the same way, whether or not the address is
+// registered, so it cannot be used to discover accounts.
+router.post('/forgot', forgotLimiter, async (req, res, next) => {
+  try {
+    const { email } = req.body ?? {};
+    if (!isStr(email) || !EMAIL_RE.test(email) || email.length > 254) {
+      return bad(res, 'Invalid email format');
+    }
+    if (!canSendMail()) {
+      return res.status(503).json({ error: { code: 'MAIL_NOT_CONFIGURED', message: 'Password reset by email is not available right now.' } });
+    }
+
+    const { rows } = await pool.query(
+      `SELECT id FROM users WHERE email = $1 AND password_hash IS NOT NULL`,
+      [email.toLowerCase()]
+    );
+    if (rows.length) {
+      const token = generateToken();
+      await pool.query(`DELETE FROM password_resets WHERE user_id = $1`, [rows[0].id]);
+      await pool.query(
+        `INSERT INTO password_resets (token_hash, user_id, expires_at)
+         VALUES ($1, $2, now() + ($3 || ' minutes')::interval)`,
+        [hashToken(token), rows[0].id, String(RESET_TTL_MINUTES)]
+      );
+      const link = `${APP_URL()}/auth/reset/?token=${encodeURIComponent(token)}`;
+      try {
+        await sendMail({
+          to: email,
+          subject: 'CyberQalqon — parolni tiklash / Сброс пароля',
+          text:
+            `Parolni tiklash uchun havola (${RESET_TTL_MINUTES} daqiqa amal qiladi):\n${link}\n\n` +
+            `Ссылка для сброса пароля (действует ${RESET_TTL_MINUTES} минут):\n${link}\n\n` +
+            `Agar siz so'ramagan bo'lsangiz, bu xatni e'tiborsiz qoldiring. / Если вы не запрашивали — проигнорируйте письмо.`,
+        });
+      } catch (err) {
+        console.error('password reset mail failed:', err.message);
+      }
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /auth/reset — consume a token and set a new password.
+router.post('/reset', resetLimiter, async (req, res, next) => {
+  const client = await pool.connect();
+  try {
+    const { token, password } = req.body ?? {};
+    if (!isStr(token) || !token || token.length > 128) return bad(res, 'Invalid or expired link.');
+    const problem = passwordProblem(password);
+    if (problem) return bad(res, problem);
+
+    const hash = await bcrypt.hash(password, BCRYPT_ROUNDS);
+    await client.query('BEGIN');
+    const { rows } = await client.query(
+      `UPDATE password_resets SET used_at = now()
+        WHERE token_hash = $1 AND used_at IS NULL AND expires_at > now()
+        RETURNING user_id`,
+      [hashToken(token)]
+    );
+    if (!rows.length) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: { code: 'INVALID_TOKEN', message: 'Invalid or expired link.' } });
+    }
+    await client.query(`UPDATE users SET password_hash = $2 WHERE id = $1`, [rows[0].user_id, hash]);
+    await client.query(`DELETE FROM password_resets WHERE user_id = $1`, [rows[0].user_id]);
+    await client.query('COMMIT');
+    res.json({ ok: true });
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    next(err);
+  } finally {
+    client.release();
   }
 });
 

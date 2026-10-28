@@ -124,6 +124,15 @@ export function authLogin(body: { identifier: string; password: string }) {
   });
 }
 
+/** Ask for a password-reset email. Always succeeds for well-formed input. */
+export function authForgot(email: string) {
+  return req<{ ok: true }>('/auth/forgot', { method: 'POST', body: JSON.stringify({ email }) });
+}
+
+export function authReset(token: string, password: string) {
+  return req<{ ok: true }>('/auth/reset', { method: 'POST', body: JSON.stringify({ token, password }) });
+}
+
 // ── Learning map ──────────────────────────────────────────────────────────────
 export function fetchPaths(lang: string) {
   return req<{ paths: LearningPath[]; continue: ContinueTarget | null }>(
