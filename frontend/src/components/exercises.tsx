@@ -65,28 +65,28 @@ function Question({ ex, children }: { ex: Exercise; children: React.ReactNode })
     <div className="flex flex-col gap-4">
       <h2 className="text-[1.0625rem] font-bold leading-snug text-white text-pretty sm:text-lg">{ex.q}</h2>
       {ex.code && (
-        <pre className="overflow-x-auto rounded-md border border-border bg-surface-950 px-3 py-2.5 font-mono text-[0.8125rem] leading-relaxed text-cyan-200">
+        <pre className="overflow-x-auto rounded-sm border border-border border-l-2 border-l-cyan-400 bg-surface-950 px-3 py-2.5 font-mono text-[0.8125rem] leading-relaxed text-text-primary">
           <code>{ex.code}</code>
         </pre>
       )}
       {ex.hint && (
-        <div className="rounded-lg border border-amber-500/40 bg-amber-500/[0.08]">
+        <div className="rounded-lg border border-warning/40 bg-warning/[0.08]">
           {!hintOpen ? (
             <button
               type="button"
               onClick={() => setHintOpen(true)}
-              className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-amber-200 transition-colors hover:bg-amber-500/10"
+              className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-warning transition-colors hover:bg-warning/10"
             >
               <LightbulbIcon size={14} />
               {tr('showHint')}
             </button>
           ) : (
             <div className="px-3 py-2.5">
-              <p className="flex items-center gap-2 text-xs font-semibold text-amber-200">
+              <p className="flex items-center gap-2 text-xs font-semibold text-warning">
                 <LightbulbIcon size={14} />
                 {tr('hint')}
               </p>
-              <p className="mt-1.5 text-sm leading-relaxed text-amber-100/90">{ex.hint}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">{ex.hint}</p>
             </div>
           )}
         </div>

@@ -242,7 +242,8 @@
 /* ── Lesson prose ─────────────────────────────────────────────────────────── */
 .lesson {
   max-width: 65ch;
-  color: theme('colors.slate.300');
+  /* surface-200 is bright in dark and dark in light: always readable prose. */
+  color: rgb(var(--surface-200));
 }
 .lesson > * + * { margin-top: 0.875rem; }
 .lesson h2 {

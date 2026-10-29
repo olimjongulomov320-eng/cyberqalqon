@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { Card } from '@/components/ui';
-import { CheckIcon, CloseIcon, PlayIcon } from '@/components/icons';
+import { CheckIcon, CloseIcon } from '@/components/icons';
 
 /**
- * Self-contained, non-functional product preview shown on the signed-out
+ * Self-contained product preview shown on the signed-out
  * landing page. It demonstrates the exercise interaction (pick → instant
  * correct/wrong feedback + XP chip) with purely local state - it never calls
  * the API and makes no claims about real usage.
@@ -23,30 +23,22 @@ export default function LandingPreview() {
   const solved = picked === CORRECT;
 
   return (
-    <Card className="p-5">
-      {/* Session header - mirrors the real lesson chrome */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <span aria-hidden="true" className="grid h-9 w-9 place-items-center rounded-lg bg-cyan-400 text-text-inverse">
-            <PlayIcon size={16} />
-          </span>
-          <div className="flex items-center gap-2">
-            <p className="text-[0.6875rem] font-semibold uppercase tracking-wider text-text-muted">{tr('lesson')}</p>
-            <span className="num text-[0.6875rem] font-bold text-text-secondary">1 / 3</span>
-          </div>
-        </div>
-        <span className="num rounded-md border border-warning/25 bg-warning/10 px-2 py-0.5 text-[0.6875rem] font-bold text-warning">
-          +3 XP
+    <Card className="overflow-hidden p-0">
+      {/* Task bar: the same facts as the real lesson header, in console type. */}
+      <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-950/60 px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">
+        <span>
+          {tr('lesson')} <span className="num font-bold text-text-secondary">1/3</span>
         </span>
+        <span className="num font-bold text-warning">+3 XP</span>
       </div>
 
-      {/* Progress bar */}
-      <div aria-hidden="true" className="mt-3 h-1 w-full overflow-hidden rounded-full bg-surface-700">
-        <div className="fill-x h-full rounded-full bg-cyan-400" style={{ transform: 'scaleX(0.34)', transformOrigin: 'left' }} />
+      <div className="p-5">
+      <div aria-hidden="true" className="h-1 w-full overflow-hidden rounded-sm bg-surface-700">
+        <div className="fill-x h-full rounded-sm bg-cyan-400" style={{ transform: 'scaleX(0.34)', transformOrigin: 'left' }} />
       </div>
 
       {/* Question */}
-      <h3 className="mt-4 text-[1.0625rem] font-bold leading-snug text-white text-pretty">{tr('previewQ')}</h3>
+      <h3 className="mt-4 text-[1.0625rem] font-bold leading-snug text-text-primary text-pretty before:mr-2 before:font-mono before:text-cyan-400 before:content-['$']">{tr('previewQ')}</h3>
 
       {/* Options */}
       <div className="mt-3 flex flex-col gap-2" role="group" aria-label={tr('previewQ')}>
@@ -68,8 +60,9 @@ export default function LandingPreview() {
               type="button"
               disabled={picked !== null}
               onClick={() => setPicked(key)}
-              className={`flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-left text-sm font-semibold transition-colors ${stateClass}`}
+              className={`flex items-center gap-2.5 rounded-md border px-3.5 py-2.5 text-left text-sm font-semibold transition-colors ${stateClass}`}
             >
+              <span aria-hidden="true" className="font-mono text-xs font-bold text-text-muted">[{OPTIONS.indexOf(key) + 1}]</span>
               <span className="flex-1">{tr(key)}</span>
               {picked && isCorrect && <CheckIcon size={16} className="shrink-0" />}
               {picked && isPicked && !isCorrect && <CloseIcon size={16} className="shrink-0" />}
@@ -80,11 +73,12 @@ export default function LandingPreview() {
 
       {/* Result line */}
       <p
-        className={`mt-3 text-xs font-semibold transition-colors ${solved ? 'text-success' : 'text-text-muted'}`}
+        className={`mt-3 font-mono text-xs font-semibold transition-colors ${solved ? 'text-success' : 'text-text-muted'}`}
         aria-live="polite"
       >
         {solved ? tr('previewCorrect') : tr('previewPick')}
       </p>
+      </div>
     </Card>
   );
 }

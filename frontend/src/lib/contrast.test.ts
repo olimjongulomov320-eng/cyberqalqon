@@ -67,3 +67,30 @@ for (const [themeName, tokens] of [['dark', dark], ['light', light]] as const) {
 test('danger button label (white) is legible on the danger fill in both themes', () => {
   for (const tokens of [dark, light]) assert.ok(ratio([255, 255, 255], tokens['danger-dark']) >= 4.5);
 });
+
+/**
+ * Regression guard: a fixed palette shade (cyan-100/200, amber-*, slate-* ...)
+ * looks fine in dark mode and vanishes in light mode. Colours must come from the
+ * themed tokens, so none of the fixed shades may appear in the UI source.
+ */
+test('no fixed palette shades that would be unreadable in the light theme', async () => {
+  const { readdirSync, readFileSync, statSync } = await import('node:fs');
+  const { join } = await import('node:path');
+  const root = new URL('..', import.meta.url).pathname;
+  const files: string[] = [];
+  const walk = (dir: string) => {
+    for (const name of readdirSync(dir)) {
+      const p = join(dir, name);
+      if (statSync(p).isDirectory()) walk(p);
+      else if (/\.(tsx|css)$/.test(name)) files.push(p);
+    }
+  };
+  walk(root);
+  const bad: string[] = [];
+  const re = /(?:text|bg|border|ring|fill|stroke)-(?:cyan-(?:50|100|200)|amber|emerald|slate|sky|rose|zinc|gray|neutral|stone|lime|teal|violet|purple|indigo|blue|red|orange|yellow|green)-\d+|colors\.(?:slate|gray|zinc)\./g;
+  for (const f of files) {
+    const text = readFileSync(f, 'utf8');
+    for (const m of Array.from(text.matchAll(re))) bad.push(`${f.replace(root, '')}: ${m[0]}`);
+  }
+  assert.deepEqual(bad, []);
+});

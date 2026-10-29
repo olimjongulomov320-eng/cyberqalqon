@@ -142,6 +142,31 @@ export function Badge({
   );
 }
 
+/* ── Difficulty (severity meter) ─────────────────────────────────────────────── */
+const LEVEL_OF = { easy: 1, beginner: 1, medium: 2, intermediate: 2, hard: 3, advanced: 3 } as const;
+export type DifficultyLevel = keyof typeof LEVEL_OF;
+
+/**
+ * Difficulty as a three-bar severity meter (like a signal or risk gauge): one
+ * bar and green for the easiest, three bars and red for the hardest. The label
+ * stays as text, so colour is never the only cue.
+ */
+export function DifficultyTag({ level, label, className = '' }: { level: DifficultyLevel; label: string; className?: string }) {
+  const n = LEVEL_OF[level];
+  const fill = n === 1 ? 'bg-success' : n === 2 ? 'bg-warning' : 'bg-danger';
+  const text = n === 1 ? 'text-success' : n === 2 ? 'text-warning' : 'text-danger';
+  return (
+    <span className={`inline-flex items-center gap-1.5 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider ${text} ${className}`}>
+      <span aria-hidden="true" className="flex items-end gap-px">
+        {[1, 2, 3].map(i => (
+          <span key={i} className={`w-[3px] rounded-[1px] ${i <= n ? fill : 'bg-border-light'}`} style={{ height: 4 + i * 3 }} />
+        ))}
+      </span>
+      {label}
+    </span>
+  );
+}
+
 /* ── Progress Bar ────────────────────────────────────────────────────────────── */
 type ProgressTone = 'primary' | 'success' | 'warning' | 'xp';
 

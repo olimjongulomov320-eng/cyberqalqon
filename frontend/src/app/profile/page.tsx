@@ -230,7 +230,7 @@ function HistoryCard({ lang }: { lang: Lang }) {
             onClick={() => setFilter(f)}
             className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
               filter === f
-                ? 'border-cyan-500/60 bg-cyan-500/10 text-cyan-200'
+                ? 'border-cyan-500/60 bg-cyan-500/10 text-cyan-300'
                 : 'border-border bg-surface-950/60 text-text-secondary hover:border-cyan-500/40 hover:text-text-primary'
             }`}
           >

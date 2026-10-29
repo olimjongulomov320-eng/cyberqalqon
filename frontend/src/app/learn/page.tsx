@@ -52,12 +52,6 @@ import {
  */
 
 
-const DIFF_TONE: Record<Difficulty, 'success' | 'primary' | 'warning'> = {
-  beginner: 'success',
-  intermediate: 'primary',
-  advanced: 'warning',
-};
-
 const FILTERS: { key: DirectoryFilter; labelKey: string }[] = [
   { key: 'all', labelKey: 'filterAll' },
   { key: 'todo', labelKey: 'filterNext' },

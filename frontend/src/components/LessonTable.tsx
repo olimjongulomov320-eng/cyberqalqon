@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import type { Difficulty, PathModule } from '@/lib/api';
-import { Badge } from '@/components/ui';
+import { Badge, DifficultyTag } from '@/components/ui';
 import { CheckIcon, LockIcon } from '@/components/icons';
 
 const DIFF_KEY: Record<Difficulty, string> = {
@@ -10,12 +10,6 @@ const DIFF_KEY: Record<Difficulty, string> = {
   intermediate: 'difficultyIntermediate',
   advanced: 'difficultyAdvanced',
 };
-const DIFF_COLOR: Record<Difficulty, string> = {
-  beginner: 'text-success',
-  intermediate: 'text-warning',
-  advanced: 'text-danger',
-};
-
 const COLS = 'md:grid-cols-[1.5rem_minmax(0,1fr)_7.5rem_4.5rem_6.5rem]';
 
 /** Status marker: a filled check when done, a ring when it is the next item, a lock when closed. */
@@ -73,7 +67,7 @@ export default function LessonTable({ modules, all }: { modules: PathModule[]; a
                   {m.exercise_count} {tr('challenge').toLowerCase()}
                   <span className="md:hidden">
                     {' | '}
-                    <span className={DIFF_COLOR[m.difficulty]}>{tr(DIFF_KEY[m.difficulty])}</span>
+                    <DifficultyTag level={m.difficulty} label={tr(DIFF_KEY[m.difficulty])} />
                     {' | '}
                     {m.xp_reward} XP
                   </span>
@@ -85,7 +79,7 @@ export default function LessonTable({ modules, all }: { modules: PathModule[]; a
                 )}
               </div>
 
-              <span className={`hidden text-sm font-medium md:block ${DIFF_COLOR[m.difficulty]}`}>{tr(DIFF_KEY[m.difficulty])}</span>
+              <span className="hidden md:block"><DifficultyTag level={m.difficulty} label={tr(DIFF_KEY[m.difficulty])} /></span>
               <span className="num hidden text-sm text-text-secondary md:block">{m.xp_reward} XP</span>
 
               <div className="justify-self-end">

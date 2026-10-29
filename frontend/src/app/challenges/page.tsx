@@ -5,10 +5,9 @@ import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ChallengeDifficulty, ChallengeList, ChallengeStatus, fetchChallenges } from '@/lib/api';
 import PracticeTabs from '@/components/PracticeTabs';
-import { Badge, Card, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
+import { Badge, Card, DifficultyTag, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
 import { CodeIcon } from '@/components/icons';
 
-const DIFF_TONE = { easy: 'success', medium: 'warning', hard: 'danger' } as const;
 const DIFF_KEY = { easy: 'chEasy', medium: 'chMedium', hard: 'chHard' } as const;
 const STATUS_KEY = { new: 'statusNew', attempted: 'statusAttempted', solved: 'statusSolved' } as const;
 
@@ -130,7 +129,7 @@ export default function ChallengesPage() {
                       {c.status === 'attempted' && <Badge tone="neutral">{tr('statusAttempted')}</Badge>}
                     </div>
                     <div className="mt-auto flex flex-wrap items-center gap-2 text-xs">
-                      <Badge tone={DIFF_TONE[c.difficulty]}>{tr(DIFF_KEY[c.difficulty])}</Badge>
+                      <DifficultyTag level={c.difficulty} label={tr(DIFF_KEY[c.difficulty])} />
                       <span className="num font-semibold text-warning">{c.points} {tr('chPoints')}</span>
                       {c.tags.map(t => (
                         <span key={t} className="rounded-md bg-surface-800 px-2 py-0.5 text-text-secondary">#{t}</span>

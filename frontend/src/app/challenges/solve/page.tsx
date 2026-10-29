@@ -8,7 +8,7 @@ import { makeT } from '@/lib/i18n';
 import { ApiError, ChallengeDetail, fetchChallenge, submitChallenge } from '@/lib/api';
 import { PyRunner } from '@/lib/pyRunner';
 import { Evaluation, evaluate, formatCall, sampleIndexes } from '@/lib/runner';
-import { Badge, Button, Card, ErrorNote, Skeleton } from '@/components/ui';
+import { Badge, Button, Card, DifficultyTag, ErrorNote, Skeleton } from '@/components/ui';
 import { ArrowLeftIcon, CheckIcon, CloseIcon } from '@/components/icons';
 
 // Editor + its language/theme packages load only when this page opens.
@@ -17,7 +17,6 @@ const CodeEditor = dynamic(() => import('@/components/CodeEditor'), {
   loading: () => <Skeleton className="h-64 w-full" />,
 });
 
-const DIFF_TONE = { easy: 'success', medium: 'warning', hard: 'danger' } as const;
 const DIFF_KEY = { easy: 'chEasy', medium: 'chMedium', hard: 'chHard' } as const;
 
 const show = (v: unknown) => JSON.stringify(v);
@@ -127,7 +126,7 @@ export default function SolveChallengePage() {
             <h1 className="text-xl font-extrabold tracking-tight text-text-primary sm:text-2xl">{ch.title}</h1>
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-            <Badge tone={DIFF_TONE[ch.difficulty]}>{tr(DIFF_KEY[ch.difficulty])}</Badge>
+            <DifficultyTag level={ch.difficulty} label={tr(DIFF_KEY[ch.difficulty])} />
             <span className="num font-semibold text-warning">{ch.points} {tr('chPoints')}</span>
             {ch.tags.map(t => (
               <span key={t} className="rounded-md bg-surface-800 px-2 py-0.5 text-text-secondary">#{t}</span>

@@ -30,6 +30,7 @@ import {
   Card,
   EmptyState,
   ErrorNote,
+  DifficultyTag,
   Progress,
   Skeleton,
 } from '@/components/ui';
@@ -47,11 +48,6 @@ import {
 
 const PAGE_SIZE = 24;
 
-const DIFF_TONE: Record<Difficulty, 'success' | 'primary' | 'warning'> = {
-  beginner: 'success',
-  intermediate: 'primary',
-  advanced: 'warning',
-};
 
 const DIFF_KEY: Record<Difficulty, string> = {
   beginner: 'difficultyBeginner',
@@ -586,7 +582,7 @@ export default function ProblemsPage() {
             <button
               type="button"
               onClick={clearFilters}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-300 transition-colors hover:text-cyan-200"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-300 transition-colors hover:text-cyan-400"
             >
               <RefreshIcon size={14} />
               {tr('clearFilters')}
@@ -655,7 +651,7 @@ export default function ProblemsPage() {
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
-                              <Badge tone={DIFF_TONE[p.difficulty]}>{tr(DIFF_KEY[p.difficulty])}</Badge>
+                              <DifficultyTag level={p.difficulty} label={tr(DIFF_KEY[p.difficulty])} />
                               <Badge>{tr(TYPE_KEY[p.type])}</Badge>
                               {/* Status is icon + text, never colour alone. */}
                               {p.solved && (
@@ -746,9 +742,7 @@ export default function ProblemsPage() {
                     <ArrowLeftIcon size={16} />
                     {tr('backToList')}
                   </button>
-                  <Badge tone={DIFF_TONE[detail.difficulty]}>
-                    {tr(DIFF_KEY[detail.difficulty])}
-                  </Badge>
+                  <DifficultyTag level={detail.difficulty} label={tr(DIFF_KEY[detail.difficulty])} />
                 </div>
 
                 {/* Mission brief. Every line is a real field: the module is the
