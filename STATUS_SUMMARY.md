@@ -54,3 +54,19 @@ core loop, design language, architecture) see **[CONCEPT.md](CONCEPT.md)**.
 - `netlify.toml` is a leftover from the earlier Netlify host and is now unused.
 - `backend/routes/auth.js` still accepts a stray `en` in its `lang` whitelist,
   which the UI never sends (unknown values fall back to `uz`).
+
+## Learning tracks (Stage 1)
+
+- `backend/curriculum/tracks.js` groups existing modules into 8 tracks without
+  moving any module, domain or slug. `GET /v1/tracks` returns each track with
+  **completion** (lessons finished) and **mastery** (computed server-side from
+  the first attempt on each distinct exercise: >= 5 exercises and >= 80%
+  correct; see `backend/lib/mastery.js`). Retries never change mastery.
+- Two new draft domains (`phishing-awareness`, `privacy-data`, 8 modules) fill
+  the thin tracks. Their uz/ru text is **unreviewed** — see `CONTENT_REVIEW.md`.
+- Navigation: Home, Learn, Practice (`/problems`, now with a track filter),
+  Assessments, Progress. Mistake review moved to `/review` (`/practice`
+  redirects there); the leaderboard is linked from Progress.
+- Assessments today are the existing end-of-topic checkpoints; separate scored
+  attempts, pass marks and retake history are not built yet.
+
