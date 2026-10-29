@@ -32,42 +32,49 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
       title: 'Maxfiylik siyosati',
       updated: 'Oxirgi tahrir: 2026',
       intro: [
-        'CyberQalqon oʻquvchilarni kiber xavfsizlik boʻyicha qisqa darslar orqali oʻqitish uchun moʻljallangan taʼlim platformasi. Quyida platforma qanday maʼlumot toʻplashi haqida bildiriladi.',
+        'CyberQalqon oʻquvchilarni kiber xavfsizlik boʻyicha dars va topshiriqlar orqali oʻqitish uchun moʻljallangan taʼlim platformasi. Quyida platforma qanday maʼlumot toʻplashi va u qayerga yuborilishi bayon qilingan.',
       ],
       sections: [
         {
           heading: 'Qanday maʼlumot saqlanadi',
           paragraphs: [],
           bullets: [
-            'Telegram orqali kirishda - Telegram identifikatori, username va ism',
-            'Oddiy roʻyxatdan oʻtishda - username, parolning xesh koʻrinishi va ism',
+            'Roʻyxatdan oʻtishda: username, elektron pochta manzili, ism va parolning xesh koʻrinishi (bcrypt)',
             'Parol hech qachon ochiq koʻrinishda saqlanmaydi',
-            'Avatar rasm emas, emoji belgi sifatida saqlanadi',
-            'Elektron pochta va telefon raqami talab qilinmaydi va yigʻilmaydi',
+            'Oʻquv faoliyati: javoblar, bajarilgan darslar, nazorat natijalari, XP, seriya va yutuqlar',
+            'Kod masalalarini topshirganingizda: kodingiz va natija hisobingiz bilan birga saqlanadi',
+            'Brauzeringizda: kirish tokeni, til va mavzu sozlamalari, tugallanmagan kod qoralamasi',
+            'Telefon raqami talab qilinmaydi va yigʻilmaydi',
           ],
         },
         {
           heading: 'Nima uchun ishlatiladi',
           paragraphs: [
-            'Maʼlumotlar faqat platformaning ishlashi uchun ishlatiladi: hisobga kirish, darslar koʻrsatish, javoblar baholanishi va reytingni shakllantirish.',
+            'Maʼlumotlar faqat platformaning ishlashi uchun ishlatiladi: hisobga kirish, darslar koʻrsatish, javoblar baholanishi, taraqqiyotni saqlash va reytingni shakllantirish. Elektron pochta faqat parolni tiklash xatini yuborish uchun ishlatiladi.',
           ],
         },
         {
           heading: 'Reyting',
           paragraphs: [
-            'Reyting ochiq. Ismingiz, avatar emojingiz va XP miqdoringiz boshqa foydalanuvchilar koʻradi. Xohlasangiz, oʻz maʼlumotlaringizni koʻrsatmasdan reytingda qolishingiz mumkin - bunda faqat ism oʻrniga avatar belgisi koʻrsatiladi.',
+            'Reyting ochiq. Ismingiz va XP miqdoringiz boshqa foydalanuvchilarga koʻrinadi. Profil sozlamalarida reytingda koʻrinmaslikni tanlashingiz mumkin.',
           ],
         },
         {
-          heading: 'Xotira va uzatish',
+          heading: 'Uchinchi tomon xizmatlari',
           paragraphs: [
-            'Maʼlumotlar uchinchi tomonlarga sotilmaydi. Hech qanday reklama yoki uchinchi tomon kuzatuv skriptlari yuklanmaydi.',
+            'Quyidagi xizmatlar bilan aloqa qilinadi. Hech qanday reklama yoki kuzatuv skriptlari yuklanmaydi va maʼlumotlar sotilmaydi.',
+          ],
+          bullets: [
+            'Parol tekshiruvi: roʻyxatdan oʻtishda Have I Been Pwned xizmati parol oshkor boʻlgan-boʻlmaganini aytadi. Parolning oʻzi yuborilmaydi: faqat SHA-1 xeshining dastlabki 5 belgisi yuboriladi',
+            'Kod masalalari: Python ishga tushirish fayllari (Pyodide) jsDelivr tarmogʻidan yuklanadi. Kodingiz qurilmangizda bajariladi',
+            'Joylashtirish: sayt GitHub Pages da, server va maʼlumotlar bazasi Render da joylashgan',
+            'Parolni tiklash xati Resend xizmati orqali yuboriladi (sozlangan boʻlsa)',
           ],
         },
         {
           heading: 'Oʻchirish',
           paragraphs: [
-            'Hisobingizni butunlay oʻchirishni soʻrashingiz mumkin. Barcha oʻquv maʼlumotlari va reytingdagi yozuvlar oʻchiriladi.',
+            'Hisobingizni profil sozlamalaridan istalgan vaqtda butunlay oʻchirishingiz mumkin. Barcha oʻquv maʼlumotlari, topshirilgan kodlar va reytingdagi yozuvlar oʻchiriladi.',
           ],
         },
       ],
@@ -77,42 +84,49 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
       title: 'Политика конфиденциальности',
       updated: 'Последнее изменение: 2026',
       intro: [
-        'CyberQalqon - образовательная платформа для обучения кибербезопасности с помощью коротких уроков. Ниже описано, какие данные собирает платформа.',
+        'CyberQalqon - образовательная платформа для обучения кибербезопасности с помощью уроков и заданий. Ниже описано, какие данные собирает платформа и куда они передаются.',
       ],
       sections: [
         {
           heading: 'Какие данные хранятся',
           paragraphs: [],
           bullets: [
-            'При входе через Telegram - идентификатор Telegram, username и имя',
-            'При обычной регистрации - username, хеш пароля и имя',
+            'При регистрации: username, адрес электронной почты, имя и хеш пароля (bcrypt)',
             'Пароль никогда не хранится в открытом виде',
-            'Аватар хранится не как изображение, а как emoji-символ',
-            'Электронная почта и номер телефона не требуются и не собираются',
+            'Учебная активность: ответы, пройденные уроки, результаты проверок, XP, серия и достижения',
+            'При отправке решений задач на код: ваш код и результат сохраняются в аккаунте',
+            'В вашем браузере: токен входа, настройки языка и темы, черновик незавершённого кода',
+            'Номер телефона не требуется и не собирается',
           ],
         },
         {
           heading: 'Для чего используется',
           paragraphs: [
-            'Данные используются только для работы платформы: вход в аккаунт, показ уроков, проверка ответов и формирование рейтинга.',
+            'Данные используются только для работы платформы: вход в аккаунт, показ уроков, проверка ответов, сохранение прогресса и формирование рейтинга. Электронная почта используется только для отправки письма со ссылкой на сброс пароля.',
           ],
         },
         {
           heading: 'Рейтинг',
           paragraphs: [
-            'Рейтинг открыт. Ваше имя, emoji-аватар и количество XP видят другие пользователи. При желании вы можете оставаться в рейтинге, не показывая свои данные - тогда вместо имени отображается только символ аватара.',
+            'Рейтинг открыт. Ваше имя и количество XP видят другие пользователи. В настройках профиля можно отключить показ в рейтинге.',
           ],
         },
         {
-          heading: 'Хранение и передача',
+          heading: 'Сторонние сервисы',
           paragraphs: [
-            'Данные не продаются третьим лицам. Никакая реклама и сторонние скрипты отслеживания не загружаются.',
+            'Платформа обращается к перечисленным ниже сервисам. Реклама и скрипты отслеживания не загружаются, данные не продаются.',
+          ],
+          bullets: [
+            'Проверка пароля: при регистрации сервис Have I Been Pwned сообщает, встречался ли пароль в утечках. Сам пароль не отправляется: передаются только первые 5 символов SHA-1 хеша',
+            'Задачи на код: файлы для запуска Python (Pyodide) загружаются из сети jsDelivr. Ваш код выполняется на вашем устройстве',
+            'Размещение: сайт находится на GitHub Pages, сервер и база данных на Render',
+            'Письмо для сброса пароля отправляется через сервис Resend (если он настроен)',
           ],
         },
         {
           heading: 'Удаление',
           paragraphs: [
-            'Вы можете запросить полное удаление аккаунта. Все учебные данные и записи в рейтинге будут удалены.',
+            'Вы можете в любой момент полностью удалить аккаунт в настройках профиля. Все учебные данные, отправленный код и записи в рейтинге будут удалены.',
           ],
         },
       ],
