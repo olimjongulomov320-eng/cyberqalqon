@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import ReactMarkdown from 'react-markdown';
+import Markdown from '@/components/Markdown';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, ChallengeDetail, fetchChallenge, submitChallenge } from '@/lib/api';
@@ -135,7 +135,7 @@ export default function SolveChallengePage() {
           </div>
 
           <div className="lesson mt-4 text-[0.9375rem] leading-relaxed lg:text-base">
-            <ReactMarkdown>{ch.statement}</ReactMarkdown>
+            <Markdown>{ch.statement}</Markdown>
           </div>
 
           <h2 className="mt-5 text-sm font-bold uppercase tracking-wide text-text-muted">{tr('chExamples')}</h2>
@@ -149,7 +149,7 @@ export default function SolveChallengePage() {
           </ul>
 
           <h2 className="mt-5 text-sm font-bold uppercase tracking-wide text-text-muted">{tr('chConstraints')}</h2>
-          <div className="lesson mt-2 text-sm"><ReactMarkdown>{ch.constraints}</ReactMarkdown></div>
+          <div className="lesson mt-2 text-sm"><Markdown>{ch.constraints}</Markdown></div>
         </section>
 
         {/* Editor (right) */}

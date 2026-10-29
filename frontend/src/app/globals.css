@@ -296,6 +296,7 @@
   color: rgb(var(--surface-200));
 }
 .lesson > * + * { margin-top: 0.875rem; }
+.lesson > :first-child { margin-top: 0; }
 .lesson h2 {
   @apply text-lg font-bold text-text-primary tracking-tight;
   margin-top: 1.75rem;
@@ -308,7 +309,6 @@
 .lesson li::marker { @apply text-cyan-500/60; }
 .lesson strong { @apply font-semibold text-text-primary; }
 .lesson em { @apply text-text-secondary; }
-.lesson a { @apply text-cyan-400 underline decoration-cyan-400/40 underline-offset-2 hover:decoration-cyan-400; }
 .lesson code {
   @apply rounded-sm bg-surface-800 px-1.5 py-0.5 font-mono text-[0.8125em] text-cyan-300;
 }
@@ -319,8 +319,9 @@
 .lesson blockquote {
   @apply my-4 rounded-r-lg border-l-4 border-warning/70 bg-warning/[0.07] py-2.5 pl-4 pr-3 text-[0.9375rem] text-text-primary;
 }
-.lesson table { @apply my-4 w-full border-collapse text-sm; }
-.lesson th { @apply border-b border-border bg-surface-800 px-3 py-2 text-left font-semibold text-text-primary; }
+.lesson-table { @apply my-4 overflow-x-auto rounded-md border border-border; }
+.lesson table { @apply w-full border-collapse text-sm; }
+.lesson th { @apply whitespace-nowrap border-b border-border bg-surface-800 px-3 py-2 text-left font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-text-secondary; }
 .lesson td { @apply border-b border-border px-3 py-2 align-top text-text-secondary; }
 .lesson tr:last-child td { @apply border-b-0; }
 .lesson hr { @apply my-6 border-border; }
