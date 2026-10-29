@@ -55,6 +55,7 @@ const nextConfig = {
   },
   env: {
     NEXT_PUBLIC_API_URL: API_URL,
+    NEXT_PUBLIC_HEARTS_ENABLED: process.env.NEXT_PUBLIC_HEARTS_ENABLED || 'true',
     // Exposed so hand-written URLs (public assets, the web manifest) can be
     // prefixed the same way Next prefixes its own routes and `_next` assets.
     NEXT_PUBLIC_BASE_PATH: BASE_PATH,

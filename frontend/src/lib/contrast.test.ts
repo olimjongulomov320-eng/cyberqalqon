@@ -15,7 +15,7 @@ function block(selector: string): Record<string, [number, number, number]> {
   const close = css.indexOf('\n  }', open);
   const body = css.slice(open + 1, close);
   const out: Record<string, [number, number, number]> = {};
-  for (const m of body.matchAll(/--([a-z0-9-]+):\s*(\d+)\s+(\d+)\s+(\d+)\s*;/g)) {
+  for (const m of Array.from(body.matchAll(/--([a-z0-9-]+):\s*(\d+)\s+(\d+)\s+(\d+)\s*;/g))) {
     out[m[1]] = [Number(m[2]), Number(m[3]), Number(m[4])];
   }
   return out;

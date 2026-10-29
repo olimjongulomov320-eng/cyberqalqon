@@ -24,6 +24,7 @@ import { Hearts, Confetti, NewAchievementChip, XPChip } from '@/components/game'
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { AnswerFeedback, answerText, revealText } from '@/components/feedback';
 import { loseHeart, restoreHeart, useHearts } from '@/lib/hearts';
+import { HEARTS_ENABLED } from '@/lib/config';
 import { levelFromXp } from '@/lib/gamification';
 import { Badge, Button, ButtonLink, Card, ErrorNote, Progress, Skeleton } from '@/components/ui';
 import {
@@ -639,7 +640,7 @@ export default function LessonView({ slug }: { slug: string }) {
             </div>
 
             <div className="flex items-center gap-2">
-              <Hearts count={hearts} label={tr('heartsLabel')} />
+              {HEARTS_ENABLED && <Hearts count={hearts} label={tr('heartsLabel')} />}
               <span className="text-xs text-text-muted">{tr('heartsLabel')}</span>
             </div>
 
@@ -834,7 +835,7 @@ export default function LessonView({ slug }: { slug: string }) {
           <span className="num text-xs font-bold text-text-muted">
             {idx + 1}/{exercises.length}
           </span>
-          <Hearts count={hearts} label={tr('heartsLabel')} />
+          {HEARTS_ENABLED && <Hearts count={hearts} label={tr('heartsLabel')} />}
         </div>
       </div>
 

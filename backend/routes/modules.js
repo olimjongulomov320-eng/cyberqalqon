@@ -40,6 +40,34 @@ async function loadModule(slug) {
   return rows[0] ?? null;
 }
 
+/**
+ * Sequential unlock, enforced server-side (the learning map only displayed it).
+ * A module is open when it is first in its domain, already completed by this
+ * learner, or its immediate predecessor in the domain is completed.
+ * Returns null when open, or the predecessor's slug when locked.
+ */
+async function lockedBy(userId, m) {
+  const { rows } = await pool.query(
+    `SELECT prev.slug,
+            EXISTS (SELECT 1 FROM user_progress up
+                     WHERE up.user_id = $1 AND up.module_id = prev.id AND up.is_completed) AS prev_done,
+            EXISTS (SELECT 1 FROM user_progress up
+                     WHERE up.user_id = $1 AND up.module_id = $2 AND up.is_completed) AS self_done
+       FROM modules prev
+      WHERE prev.domain_id = $3 AND prev.is_published AND prev.order_index < $4
+      ORDER BY prev.order_index DESC
+      LIMIT 1`,
+    [userId, m.id, m.domain_id, m.order_index]
+  );
+  if (!rows.length) return null; // first in its domain
+  const r = rows[0];
+  return r.prev_done || r.self_done ? null : r.slug;
+}
+
+const LOCKED = slug => ({
+  error: { code: 'MODULE_LOCKED', message: 'Finish the previous lesson first.', prerequisite: slug },
+});
+
 /* ── GET /modules — published module list (legacy ?category= + ?domain=) ── */
 router.get('/', optionalAuth, async (req, res, next) => {
   try {
@@ -130,6 +158,10 @@ router.post('/:slug/check', lessonLimiter, requireAuth, async (req, res, next) =
     if (!m) {
       return res.status(404).json({ error: { code: 'MODULE_NOT_FOUND', message: 'Module not found.' } });
     }
+    {
+      const blocker = await lockedBy(req.user.id, m);
+      if (blocker) return res.status(403).json(LOCKED(blocker));
+    }
     const ex = (m.exercises ?? []).find(e => e.id === exercise_id);
     if (!ex) {
       return res.status(404).json({ error: { code: 'EXERCISE_NOT_FOUND', message: 'Exercise not found.' } });
@@ -183,6 +215,10 @@ router.post('/:slug/practice', lessonLimiter, requireAuth, async (req, res, next
     if (!m) {
       return res.status(404).json({ error: { code: 'MODULE_NOT_FOUND', message: 'Module not found.' } });
     }
+    {
+      const blocker = await lockedBy(req.user.id, m);
+      if (blocker) return res.status(403).json(LOCKED(blocker));
+    }
     const ex = (m.exercises ?? []).find(e => e.id === exercise_id);
     if (!ex) {
       return res.status(404).json({ error: { code: 'EXERCISE_NOT_FOUND', message: 'Exercise not found.' } });
@@ -228,6 +264,10 @@ router.post('/:slug/complete', lessonLimiter, requireAuth, async (req, res, next
     const m = await loadModule(req.params.slug);
     if (!m) {
       return res.status(404).json({ error: { code: 'MODULE_NOT_FOUND', message: 'Module not found.' } });
+    }
+    {
+      const blocker = await lockedBy(req.user.id, m);
+      if (blocker) return res.status(403).json(LOCKED(blocker));
     }
 
     // The expected exercise set is derived from the authoritative curriculum,

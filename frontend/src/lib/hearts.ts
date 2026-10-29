@@ -8,6 +8,8 @@ import { appDayKey } from './appday';
  * practice card instead of a hard wall — so this is purely localStorage.
  */
 
+import { HEARTS_ENABLED } from './config';
+
 export const MAX_HEARTS = 5;
 
 const KEY = 'cq_hearts';
@@ -58,11 +60,12 @@ function subscribe(cb: () => void) {
 }
 
 function heartCount() {
-  return read().n;
+  return HEARTS_ENABLED ? read().n : MAX_HEARTS;
 }
 
 /** Deduct one heart (wrong answer). Never goes below zero. */
 export function loseHeart() {
+  if (!HEARTS_ENABLED) return;
   const cur = read();
   if (cur.n <= 0) return;
   persist({ day: cur.day, n: cur.n - 1 });
