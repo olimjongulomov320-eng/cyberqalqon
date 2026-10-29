@@ -469,7 +469,7 @@ export default function ProfilePage() {
     let alive = true;
     fetchStats(lang).then(s => alive && setStats(s)).catch(e => alive && setError(e as ApiError));
     fetchTracks(lang).then(d => alive && setTracks(d.tracks)).catch(() => alive && setTracks([]));
-    fetchActivity(84).then(d => alive && setActivity(d.activity)).catch(() => alive && setActivity([]));
+    fetchActivity(182).then(d => alive && setActivity(d.activity)).catch(() => alive && setActivity([]));
     return () => {
       alive = false;
     };
