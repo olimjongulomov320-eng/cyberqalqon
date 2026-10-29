@@ -448,7 +448,7 @@ export default function PracticePage() {
         <div className="pt-6">
           <div className="flex items-center gap-3">
             <Link
-              href="/practice"
+              href="/review"
               aria-label={tr('exitBtn')}
               className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-text-muted transition-colors hover:bg-surface-800 hover:text-white"
             >
@@ -574,7 +574,7 @@ export default function PracticePage() {
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <ButtonLink href="/practice" className="justify-center">{tr('reviewSession')}</ButtonLink>
+            <ButtonLink href="/review" className="justify-center">{tr('reviewSession')}</ButtonLink>
             <ButtonLink href="/learn" variant="secondary" className="justify-center">{tr('goLearn')}</ButtonLink>
           </div>
         </Card>

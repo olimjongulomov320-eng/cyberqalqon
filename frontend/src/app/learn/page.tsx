@@ -386,7 +386,7 @@ function Rail({
                 </li>
               ))}
             </ul>
-            <ButtonLink href="/practice" variant="secondary" size="sm" className="mt-1.5 w-full lg:mt-2.5">
+            <ButtonLink href="/review" variant="secondary" size="sm" className="mt-1.5 w-full lg:mt-2.5">
               {tr('pathReviewAction')}
               <ArrowRightIcon size={15} />
             </ButtonLink>

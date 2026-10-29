@@ -115,6 +115,7 @@ export default function ProblemsPage() {
   const tr = makeT(lang);
 
   const [domain, setDomain] = useState('');
+  const [track, setTrack] = useState('');
   const [difficulty, setDifficulty] = useState<'' | Difficulty>('');
   const [type, setType] = useState<'' | ExerciseType>('');
   const [status, setStatus] = useState<'' | ProblemStatus>('');
@@ -151,6 +152,7 @@ export default function ProblemsPage() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     const d = q.get('domain');
+    const tk = q.get('track');
     const diff = q.get('difficulty');
     const t = q.get('type');
     const st = q.get('status');
@@ -159,6 +161,7 @@ export default function ProblemsPage() {
     const e = q.get('exercise');
 
     if (d) setDomain(d);
+    if (tk) setTrack(tk);
     if (diff && (DIFFICULTIES as string[]).includes(diff)) setDifficulty(diff as Difficulty);
     if (t && (TYPES as string[]).includes(t)) setType(t as ExerciseType);
     if (st && (['new', 'attempted', 'solved'] as string[]).includes(st)) {
@@ -191,12 +194,13 @@ export default function ProblemsPage() {
     () => ({
       lang,
       domain: domain || undefined,
+      track: track || undefined,
       difficulty: difficulty || undefined,
       type: type || undefined,
       status: status || undefined,
       q: debouncedSearch || undefined,
     }),
-    [lang, domain, difficulty, type, status, debouncedSearch]
+    [lang, domain, track, difficulty, type, status, debouncedSearch]
   );
 
   useEffect(() => {
@@ -363,6 +367,7 @@ export default function ProblemsPage() {
 
   const activeFilters =
     (domain ? 1 : 0) +
+    (track ? 1 : 0) +
     (difficulty ? 1 : 0) +
     (type ? 1 : 0) +
     (status ? 1 : 0) +
@@ -370,6 +375,7 @@ export default function ProblemsPage() {
 
   const clearFilters = () => {
     setDomain('');
+    setTrack('');
     setDifficulty('');
     setType('');
     setStatus('');
@@ -392,7 +398,7 @@ export default function ProblemsPage() {
       <div className="mb-6">
         <div className="mb-3 flex items-center justify-between gap-3">
           <Link
-            href="/practice"
+            href="/review"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-text-muted transition-colors hover:text-text-primary"
           >
             <ArrowLeftIcon size={16} />
@@ -459,6 +465,18 @@ export default function ProblemsPage() {
                 aria-label={tr('problemSearch')}
               />
             </span>
+          </label>
+
+          <label className="block">
+            <span className="form-label">{tr('filterTrack')}</span>
+            <select className="input-base" value={track} onChange={e => setTrack(e.target.value)}>
+              <option value="">{tr('filterAll')}</option>
+              {data?.facets.tracks.map(t => (
+                <option key={t.slug} value={t.slug}>
+                  {t.title} ({t.count})
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="block">
@@ -812,7 +830,7 @@ export default function ProblemsPage() {
                           <div className="flex flex-wrap items-center gap-2">
                             <p className="text-xs text-text-muted">{tr('missionReviewBody')}</p>
                             <ButtonLink
-                              href={`/practice`}
+                              href="/review"
                               variant="secondary"
                               size="sm"
                             >

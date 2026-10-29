@@ -8,20 +8,17 @@ import {
   CodeIcon,
   HomeIcon,
   TargetIcon,
-  TrophyIcon,
   UserIcon,
 } from '@/components/icons';
 
-// Six tabs: the arena (03 · Practice) is a first-class stage of the learning
-// journey, so it is reachable directly on mobile instead of only through the
-// desktop-only header link.
+// Five tabs. Practice is the challenge catalogue; mistake review and the
+// leaderboard are reached from Progress (`also` keeps it highlighted there).
 const TABS = [
-  { href: '/', label: 'navHome', Icon: HomeIcon },
-  { href: '/learn', label: 'navLearn', Icon: BookIcon },
-  { href: '/problems', label: 'navProblems', Icon: CodeIcon },
-  { href: '/practice', label: 'navPractice', Icon: TargetIcon },
-  { href: '/leaderboard', label: 'leaderboard', Icon: TrophyIcon },
-  { href: '/profile', label: 'navProfile', Icon: UserIcon },
+  { href: '/', label: 'navHome', Icon: HomeIcon, also: [] as string[] },
+  { href: '/learn', label: 'navLearn', Icon: BookIcon, also: [] as string[] },
+  { href: '/problems', label: 'navPractice', Icon: CodeIcon, also: [] as string[] },
+  { href: '/assessments', label: 'navAssessments', Icon: TargetIcon, also: [] as string[] },
+  { href: '/profile', label: 'navProgress', Icon: UserIcon, also: ['/review', '/leaderboard', '/practice'] },
 ] as const;
 
 export default function BottomNav() {
@@ -37,7 +34,8 @@ export default function BottomNav() {
     >
       <ul className="mx-auto flex max-w-3xl items-stretch">
         {TABS.map(tab => {
-          const active = tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href);
+          const active =
+            tab.href === '/' ? pathname === '/' : [tab.href, ...tab.also].some(h => pathname.startsWith(h));
           const Icon = tab.Icon;
           return (
             <li key={tab.href} className="relative flex-1">
@@ -47,7 +45,7 @@ export default function BottomNav() {
               <Link
                 href={tab.href}
                 aria-current={active ? 'page' : undefined}
-                className={`flex h-14 flex-col items-center justify-center gap-1 px-0.5 text-[0.5625rem] font-semibold transition-colors ${
+                className={`flex h-14 flex-col items-center justify-center gap-1 px-0.5 text-[0.625rem] font-semibold transition-colors ${
                   active ? 'text-cyan-300' : 'text-text-muted'
                 }`}
               >

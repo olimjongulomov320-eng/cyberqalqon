@@ -46,7 +46,7 @@ export function journeyStages({ continueSlug, checkpointSlug }: JourneySources =
       labelKey: 'stageApply',
       href: checkpointSlug ? `/modules/${checkpointSlug}` : '/problems?difficulty=advanced',
     },
-    { key: 'review', index: 5, labelKey: 'stageReview', href: '/practice' },
+    { key: 'review', index: 5, labelKey: 'stageReview', href: '/review' },
     { key: 'master', index: 6, labelKey: 'stageMaster', href: '/profile' },
   ];
 }
@@ -60,7 +60,7 @@ export function journeyStages({ continueSlug, checkpointSlug }: JourneySources =
 export function stageForPath(pathname: string, isCheckpoint = false): StageKey | null {
   if (pathname.startsWith('/modules')) return isCheckpoint ? 'apply' : 'learn';
   if (pathname.startsWith('/problems')) return 'practice';
-  if (pathname.startsWith('/practice')) return 'review';
+  if (pathname.startsWith('/review') || pathname.startsWith('/practice')) return 'review';
   if (pathname.startsWith('/profile')) return 'master';
   if (pathname.startsWith('/learn')) return 'discover';
   return null;

@@ -6,6 +6,7 @@ import { makeT } from '@/lib/i18n';
 import { fetchPaths, fetchStats, StatsPayload, LeaderboardEntry, fetchLeaderboard, LearningPath } from '@/lib/api';
 import { AchievementBadge, DailyGoal, Flame, RingProgress, XPChip } from '@/components/game';
 import LandingPreview from '@/components/LandingPreview';
+import TracksSection from '@/components/TracksSection';
 import { achievementMeta, levelFromXp, tierIndex, tierKey } from '@/lib/gamification';
 import { Avatar, Badge, ButtonLink, Card, EmptyState, SectionHeading, Skeleton } from '@/components/ui';
 import {
@@ -309,6 +310,8 @@ export default function HomePage() {
         </section>
       )}
 
+      <TracksSection />
+
       {statsFailed ? (
         <Card className="mt-8">
           <EmptyState
@@ -331,7 +334,7 @@ export default function HomePage() {
             <section aria-labelledby="weak-h">
               <SectionHeading
                 action={
-                  <Link href="/practice" className="text-xs font-medium text-cyan-400 hover:underline">
+                  <Link href="/review" className="text-xs font-medium text-cyan-400 hover:underline">
                     {tr('sharpSkills')}
                   </Link>
                 }

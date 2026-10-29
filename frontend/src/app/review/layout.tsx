@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Mashq',
+  title: 'Takrorlash',
   description: 'Xato qilgan mavzularingizni takrorlab, bilimingizni mustahkamlang.',
 };
 
-export default function PracticeLayout({ children }: { children: React.ReactNode }) {
+export default function ReviewLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

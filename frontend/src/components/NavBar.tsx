@@ -6,19 +6,17 @@ import { useApp } from '@/context/AppContext';
 import { Lang, LANGS, makeT } from '@/lib/i18n';
 import { BoltIcon, SignalOffIcon, SignalOnIcon } from '@/components/icons';
 
-type NavItem = { href: string; label: string; wide?: boolean };
+type NavItem = { href: string; label: string; also?: string[] };
 
-// `wide` items only appear from lg up: at 640–1023px the header already fits
-// logo + five links + language/traffic/profile controls, and a sixth link
-// pushed the row past the viewport. Mobile reaches the arena from Practice and
-// Learn, which both carry a dedicated entry card.
+// Five destinations. "Practice" is the challenge catalogue; mistake review
+// (/review) and the leaderboard live under Progress, and `also` keeps Progress
+// highlighted on those pages. The legacy /practice URL redirects to /review.
 const NAV: NavItem[] = [
   { href: '/', label: 'navHome' },
   { href: '/learn', label: 'navLearn' },
-  { href: '/practice', label: 'navPractice' },
-  { href: '/problems', label: 'navProblems', wide: true },
-  { href: '/leaderboard', label: 'leaderboard' },
-  { href: '/profile', label: 'navProfile' },
+  { href: '/problems', label: 'navPractice' },
+  { href: '/assessments', label: 'navAssessments' },
+  { href: '/profile', label: 'navProgress', also: ['/review', '/leaderboard', '/practice'] },
 ];
 
 export default function NavBar() {
@@ -26,8 +24,10 @@ export default function NavBar() {
   const tr = makeT(lang);
   const pathname = usePathname();
 
-  const isActive = (href: string) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href);
+  const isActive = (item: NavItem) =>
+    item.href === '/'
+      ? pathname === '/'
+      : [item.href, ...(item.also ?? [])].some(h => pathname.startsWith(h));
 
   return (
     <header className="sticky top-0 z-nav border-b border-border bg-surface-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-surface-950/70">
@@ -47,15 +47,13 @@ export default function NavBar() {
 
         <nav aria-label={tr('tracks')} className="hidden items-center gap-1 sm:flex">
           {NAV.map(item => {
-            const active = isActive(item.href);
+            const active = isActive(item);
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
                 className={`rounded-md px-2.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${
-                  item.wide ? 'hidden lg:inline-block' : ''
-                } ${
                   active
                     ? 'bg-surface-800 text-white'
                     : 'text-text-secondary hover:bg-surface-900 hover:text-text-primary'

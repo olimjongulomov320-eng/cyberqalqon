@@ -27,7 +27,8 @@ test('stageForPath maps every learning route and refuses to guess elsewhere', ()
   assert.equal(stageForPath('/modules/some-slug'), 'learn');
   assert.equal(stageForPath('/modules/some-slug', true), 'apply');
   assert.equal(stageForPath('/problems'), 'practice');
-  assert.equal(stageForPath('/practice'), 'review');
+  assert.equal(stageForPath('/review'), 'review');
+  assert.equal(stageForPath('/practice'), 'review'); // legacy URL still maps
   assert.equal(stageForPath('/profile'), 'master');
   assert.equal(stageForPath('/'), null);
   assert.equal(stageForPath('/leaderboard'), null);

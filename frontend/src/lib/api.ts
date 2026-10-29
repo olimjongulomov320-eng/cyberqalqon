@@ -208,6 +208,7 @@ export function completeModule(
 export function fetchProblems(params: {
   lang: string;
   domain?: string;
+  track?: string;
   difficulty?: Difficulty;
   type?: ExerciseType;
   status?: ProblemStatus;
@@ -217,6 +218,7 @@ export function fetchProblems(params: {
 }) {
   const q = new URLSearchParams({ lang: params.lang });
   if (params.domain) q.set('domain', params.domain);
+  if (params.track) q.set('track', params.track);
   if (params.difficulty) q.set('difficulty', params.difficulty);
   if (params.type) q.set('type', params.type);
   if (params.status) q.set('status', params.status);
@@ -559,6 +561,7 @@ export interface ProblemSummary {
   domain_slug: string;
   domain_title: string;
   domain_icon: string;
+  track_slug: string | null;
   path_slug: string;
   path_title: string;
   module_title: string;
@@ -597,9 +600,51 @@ export interface ProblemsPayload {
   solved_total: number;
   facets: {
     domains: { slug: string; title: string; icon: string; count: number }[];
+    tracks: { slug: string; title: string; icon: string; count: number }[];
     difficulties: { key: Difficulty; count: number }[];
     types: { key: ExerciseType; count: number }[];
     /** Empty when signed out — status is per-learner, never global. */
     statuses: { key: ProblemStatus; count: number }[];
   };
+}
+
+// ── Learning tracks ───────────────────────────────────────────────────────────
+export type MasteryState = 'not_started' | 'practising' | 'mastered';
+
+export interface TrackModule {
+  slug: string;
+  title: string;
+  kind: 'lesson' | 'checkpoint';
+  xp_reward: number;
+  exercise_count: number;
+  completed: boolean;
+  needs_review: boolean;
+}
+
+export interface Track {
+  slug: string;
+  icon: string;
+  order: number;
+  level: 'beginner' | 'intermediate' | 'advanced' | null;
+  title: string;
+  description: string;
+  objectives: string[];
+  prerequisites: string[];
+  prerequisites_type: 'recommended';
+  needs_review: boolean;
+  completion: { rule: 'all_modules'; completed: number; total: number; done: boolean };
+  exercise_total: number;
+  /** null when signed out. Computed on the server from first attempts. */
+  mastery: { state: MasteryState; distinct: number; correct: number; accuracy: number | null; needed: number } | null;
+  next: { slug: string; title: string; kind: 'lesson' | 'checkpoint' } | null;
+  modules: TrackModule[];
+}
+
+export interface TracksPayload {
+  tracks: Track[];
+  mastery_rule: { min_exercises: number; min_accuracy: number; basis: 'first_attempt_per_exercise' };
+}
+
+export function fetchTracks(lang: string) {
+  return req<TracksPayload>(`/tracks?lang=${lang}`);
 }

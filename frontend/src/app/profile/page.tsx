@@ -540,7 +540,7 @@ export default function ProfilePage() {
                     {/* Weak topics are only useful if they lead somewhere: the
                         review session already builds a drill from real mistakes. */}
                     <div className="px-4 pb-4 pt-1">
-                      <ButtonLink href="/practice" variant="secondary" size="sm" className="w-full justify-center">
+                      <ButtonLink href="/review" variant="secondary" size="sm" className="w-full justify-center">
                         <RefreshIcon size={14} />
                         {tr('pathReviewAction')}
                       </ButtonLink>
@@ -668,7 +668,16 @@ export default function ProfilePage() {
               </div>
             </Card>
 
-            <Button variant="secondary" className="mt-6 w-full justify-center" onClick={logout}>
+            <div className="mt-6 grid grid-cols-2 gap-2">
+              <ButtonLink href="/leaderboard" variant="secondary" size="sm" className="justify-center">
+                {tr('leaderboard')}
+              </ButtonLink>
+              <ButtonLink href="/review" variant="secondary" size="sm" className="justify-center">
+                {tr('reviewSession')}
+              </ButtonLink>
+            </div>
+
+            <Button variant="secondary" className="mt-3 w-full justify-center" onClick={logout}>
               {tr('logout')}
             </Button>
             <DeleteAccount lang={lang} />
