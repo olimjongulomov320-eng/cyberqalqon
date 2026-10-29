@@ -1,12 +1,12 @@
 /**
- * Curriculum registry — single source of truth for paths, domains, modules.
+ * Curriculum registry - single source of truth for paths, domains, modules.
  *
  *   PATH (learning path) → DOMAIN (e.g. Networking) → MODULE (a lesson node)
  *   A module's `exercises` array holds the interactive steps.
  *
  * Adding a course = drop a new file into ./ , register it in FILES below,
  * add its domain to DOMAINS and (optionally) a new path to PATHS. No page
- * code changes required — the UI renders whatever this registry returns.
+ * code changes required - the UI renders whatever this registry returns.
  */
 
 const FILES = [
@@ -18,7 +18,7 @@ const FILES = [
   { file: 'defensive-security', domain: 'defensive-security' },
   { file: 'cloud-security', domain: 'cloud-security' },
   { file: 'ethical-testing', domain: 'ethical-testing' },
-  // Draft awareness content (needs native-speaker review — see CONTENT_REVIEW.md)
+  // Draft awareness content (needs native-speaker review - see CONTENT_REVIEW.md)
   { file: 'phishing', domain: 'phishing-awareness' },
   { file: 'privacy', domain: 'privacy-data' },
   // it-and-crypto.js carries modules for several domains (see `domain` field)
@@ -32,8 +32,8 @@ const PATHS = [
     order_index: 1,
     title: { uz: 'Kiber xavfsizlik', ru: 'Кибербезопасность' },
     description: {
-      uz: 'Himoyalanish, aniqlash va xavfsiz ishlash san\'ati — noldan boshlang.',
-      ru: 'Защита, обнаружение и безопасная работа — с нуля.',
+      uz: 'Himoyalanish, aniqlash va xavfsiz ishlash san\'ati - noldan boshlang.',
+      ru: 'Защита, обнаружение и безопасная работа - с нуля.',
     },
   },
   {
@@ -42,8 +42,8 @@ const PATHS = [
     order_index: 2,
     title: { uz: 'IT asoslari', ru: 'IT основы' },
     description: {
-      uz: 'Kompyuter, ma\'lumotlar bazasi va versiya nazorati — IT fundamenti.',
-      ru: 'Компьютеры, базы данных и контроль версий — фундамент IT.',
+      uz: 'Kompyuter, ma\'lumotlar bazasi va versiya nazorati - IT fundamenti.',
+      ru: 'Компьютеры, базы данных и контроль версий - фундамент IT.',
     },
   },
 ];

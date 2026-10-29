@@ -1,20 +1,20 @@
 /**
- * Curriculum — IT fundamentals path › Domain: Programming (Python for security)
+ * Curriculum - IT fundamentals path › Domain: Programming (Python for security)
  *
  * Shape (validated by scripts/validate-curriculum.js via lib/grade.validateExercise):
  *   module: { slug, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
  *   kind: 'lesson' | 'checkpoint'   (checkpoint = end-of-domain trophy node)
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language. This is a
- *     warm-up, not a textbook — the exercises do the teaching.
+ *   - Lesson prose: short. 6-14 markdown lines per language. This is a
+ *     warm-up, not a textbook - the exercises do the teaching.
  *   - Every exercise: bilingual q + explain, technically accurate, beginner
  *     level, no trick questions, explanations teach the WHY.
  *   - Python samples appear only to ILLUSTRATE correct, defensive code.
  *   - Exercise ids: e1..eN in delivery order.
  *   - Uzbek: simple, modern Uzbek Latin. Russian: natural, not machine-translated.
  *   - Any string containing an apostrophe MUST be double-quoted (or a template
- *     literal) — a straight ' inside a single-quoted string breaks the file.
+ *     literal) - a straight ' inside a single-quoted string breaks the file.
  */
 
 module.exports = [
@@ -29,13 +29,13 @@ module.exports = [
 Xavfsizlik ishi ko'p takrorlanadi: minglab log qatori, yuzlab fayl, bir xil tekshiruv.
 
 **Qo'lda qilish muammosi:**
-- Sekin va zerikarli — odam charchaydi va xato qiladi.
+- Sekin va zerikarli - odam charchaydi va xato qiladi.
 - Katta hajmda imkonsiz: million qator logni qo'lda o'qib bo'lmaydi.
 
 **Dastur nima beradi:**
-- **Tezlik** — kompyuter sekundiga minglab yozuvni ko'radi.
-- **Takrorlanuvchanlik** — bir marta yozilgan skript har doim bir xil ishlaydi.
-- **Aniqlik** — na charchoq, na e'tiborsizlik.
+- **Tezlik** - kompyuter sekundiga minglab yozuvni ko'radi.
+- **Takrorlanuvchanlik** - bir marta yozilgan skript har doim bir xil ishlaydi.
+- **Aniqlik** - na charchoq, na e'tiborsizlik.
 
 > **Xavfsizlik:** "avtomatlashtirilmagan" ish katta hajmda bajarilmaydi. Shuning uchun xavfsizlik mutaxassisi ozgina bo'lsa ham dasturlashni bilishi kerak.`,
       ru: `## Зачем программирование в безопасности
@@ -43,13 +43,13 @@ Xavfsizlik ishi ko'p takrorlanadi: minglab log qatori, yuzlab fayl, bir xil teks
 Работа в безопасности часто повторяется: тысячи строк логов, сотни файлов, одни и те же проверки.
 
 **Проблема ручной работы:**
-- Медленно и скучно — человек устаёт и ошибается.
+- Медленно и скучно - человек устаёт и ошибается.
 - В большом объёме невозможно: миллион строк логов вручную не прочитать.
 
 **Что даёт программа:**
-- **Скорость** — компьютер просматривает тысячи записей в секунду.
-- **Повторяемость** — написанный скрипт всегда работает одинаково.
-- **Точность** — нет усталости и невнимательности.
+- **Скорость** - компьютер просматривает тысячи записей в секунду.
+- **Повторяемость** - написанный скрипт всегда работает одинаково.
+- **Точность** - нет усталости и невнимательности.
 
 > **Безопасность:** «неавтоматизированную» работу в большом объёме не выполнить. Поэтому специалист по безопасности должен хотя бы немного знать программирование.`,
     },
@@ -82,8 +82,8 @@ Xavfsizlik ishi ko'p takrorlanadi: minglab log qatori, yuzlab fayl, bir xil teks
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — odam tez charchaydi va muhim yozuvni o'tkazib yuboradi. Dastur minglab yozuvni sekund ichida bir xil aniqlik bilan ko'radi.",
-          ru: 'Нет — человек быстро устаёт и пропускает важную запись. Программа просматривает тысячи записей за секунду с одинаковой точностью.',
+          uz: "Yo'q - odam tez charchaydi va muhim yozuvni o'tkazib yuboradi. Dastur minglab yozuvni sekund ichida bir xil aniqlik bilan ko'radi.",
+          ru: 'Нет - человек быстро устаёт и пропускает важную запись. Программа просматривает тысячи записей за секунду с одинаковой точностью.',
         },
       },
       {
@@ -101,8 +101,8 @@ Xavfsizlik ishi ko'p takrorlanadi: minglab log qatori, yuzlab fayl, bir xil teks
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Tezlik, takrorlanuvchanlik va aniqlik — dasturning asosiy afzalliklari. Dastur odamdan farqli charchamaydi va bir xil ishlaydi.",
-          ru: 'Скорость, повторяемость и точность — главные преимущества программы. В отличие от человека она не устаёт и работает одинаково.',
+          uz: "Tezlik, takrorlanuvchanlik va aniqlik - dasturning asosiy afzalliklari. Dastur odamdan farqli charchamaydi va bir xil ishlaydi.",
+          ru: 'Скорость, повторяемость и точность - главные преимущества программы. В отличие от человека она не устаёт и работает одинаково.',
         },
       },
       {
@@ -135,9 +135,9 @@ Xavfsizlik ishi ko'p takrorlanadi: minglab log qatori, yuzlab fayl, bir xil teks
     content: {
       uz: `## Python asoslari
 
-**Python** — o'qishga oson va xavfsizlik skriptlarida keng ishlatiladigan til.
+**Python** - o'qishga oson va xavfsizlik skriptlarida keng ishlatiladigan til.
 
-**O'zgaruvchi (variable)** — qiymat saqlanadigan nom:
+**O'zgaruvchi (variable)** - qiymat saqlanadigan nom:
 
 \`\`\`python
 port = 22
@@ -146,18 +146,18 @@ is_open = True
 \`\`\`
 
 **Asosiy turlar:**
-- **int** — butun son (\`22\`)
-- **str** — matn (\`"10.0.0.1"\`)
-- **bool** — mantiqiy (\`True\` / \`False\`)
+- **int** - butun son (\`22\`)
+- **str** - matn (\`"10.0.0.1"\`)
+- **bool** - mantiqiy (\`True\` / \`False\`)
 
 **Chiqarish:** \`print(host)\` ekranga qiymat chiqaradi. Matn va sonni birlashtirish uchun f-string: \`print(f"{host}:{port}")\`.
 
-> **Xavfsizlik:** Python xatoni yashirmaydi — u \`NameError\`, \`TypeError\` kabi aniq xabar beradi. Xatoni o'qish — dasturlashning muhim qismi.`,
+> **Xavfsizlik:** Python xatoni yashirmaydi - u \`NameError\`, \`TypeError\` kabi aniq xabar beradi. Xatoni o'qish - dasturlashning muhim qismi.`,
       ru: `## Основы Python
 
-**Python** — простой для чтения язык, широко используемый в скриптах безопасности.
+**Python** - простой для чтения язык, широко используемый в скриптах безопасности.
 
-**Переменная (variable)** — имя, под которым хранится значение:
+**Переменная (variable)** - имя, под которым хранится значение:
 
 \`\`\`python
 port = 22
@@ -166,13 +166,13 @@ is_open = True
 \`\`\`
 
 **Основные типы:**
-- **int** — целое число (\`22\`)
-- **str** — строка (\`"10.0.0.1"\`)
-- **bool** — логический (\`True\` / \`False\`)
+- **int** - целое число (\`22\`)
+- **str** - строка (\`"10.0.0.1"\`)
+- **bool** - логический (\`True\` / \`False\`)
 
 **Вывод:** \`print(host)\` печатает значение. Чтобы соединить текст и число, используют f-строку: \`print(f"{host}:{port}")\`.
 
-> **Безопасность:** Python не прячет ошибки — он сообщает о них точно (\`NameError\`, \`TypeError\` и т. д.). Чтение ошибок — важная часть программирования.`,
+> **Безопасность:** Python не прячет ошибки - он сообщает о них точно (\`NameError\`, \`TypeError\` и т. д.). Чтение ошибок - важная часть программирования.`,
     },
     exercises: [
       {
@@ -191,8 +191,8 @@ is_open = True
         ],
         answer: 'a',
         explain: {
-          uz: "`port` — o'zgaruvchi: unga 22 qiymati saqlandi. Keyin `port` deb yozsak, Python 22 ni oladi.",
-          ru: '`port` — переменная: в неё сохранили значение 22. Дальше, написав `port`, Python берёт 22.',
+          uz: "`port` - o'zgaruvchi: unga 22 qiymati saqlandi. Keyin `port` deb yozsak, Python 22 ni oladi.",
+          ru: '`port` - переменная: в неё сохранили значение 22. Дальше, написав `port`, Python берёт 22.',
         },
       },
       {
@@ -201,12 +201,12 @@ is_open = True
         code: 'type(22)      # int\ntype("22")    # str',
         q: {
           uz: 'Yuqoridagi ikki qiymat Python uchun bir xil turmi?',
-          ru: 'Эти два значения для Python — один и тот же тип?',
+          ru: 'Эти два значения для Python - один и тот же тип?',
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — `22` bu int (son), `\"22\"` bu str (matn). Tur har xil bo'lsa, amallar ham boshqacha ishlaydi.",
-          ru: 'Нет — `22` это int (число), а `"22"` это str (строка). Если тип разный, операции работают иначе.',
+          uz: "Yo'q - `22` bu int (son), `\"22\"` bu str (matn). Tur har xil bo'lsa, amallar ham boshqacha ishlaydi.",
+          ru: 'Нет - `22` это int (число), а `"22"` это str (строка). Если тип разный, операции работают иначе.',
         },
       },
       {
@@ -214,7 +214,7 @@ is_open = True
         type: 'multi',
         q: {
           uz: "Quyidagilardan qaysilari Python'dagi matn (str) turiga misol? (bir nechtasini tanlang)",
-          ru: 'Что из перечисленного — пример строки (str) в Python? (выберите несколько)',
+          ru: 'Что из перечисленного - пример строки (str) в Python? (выберите несколько)',
         },
         options: [
           { id: 'a', uz: '"10.0.0.1"', ru: '"10.0.0.1"' },
@@ -224,8 +224,8 @@ is_open = True
         ],
         answers: ['a', 'b', 'd'],
         explain: {
-          uz: "Qo'shtirnoq ichidagi qiymat — str (matn). `22` esa qo'shtirnoqsiz, ya'ni int (son).",
-          ru: 'Значение в кавычках — это str (строка). А `22` без кавычек — уже int (число).',
+          uz: "Qo'shtirnoq ichidagi qiymat - str (matn). `22` esa qo'shtirnoqsiz, ya'ni int (son).",
+          ru: 'Значение в кавычках - это str (строка). А `22` без кавычек - уже int (число).',
         },
       },
       {
@@ -243,8 +243,8 @@ is_open = True
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "int — son, str — matn, bool — mantiqiy qiymat, print() esa natijani ekranga chiqaradi.",
-          ru: 'int — число, str — строка, bool — логическое значение, а print() выводит результат на экран.',
+          uz: "int - son, str - matn, bool - mantiqiy qiymat, print() esa natijani ekranga chiqaradi.",
+          ru: 'int - число, str - строка, bool - логическое значение, а print() выводит результат на экран.',
         },
       },
     ],
@@ -258,7 +258,7 @@ is_open = True
     content: {
       uz: `## Shartlar va takrorlash
 
-**Shart (if)** — holatga qarab qaror qabul qiladi:
+**Shart (if)** - holatga qarab qaror qabul qiladi:
 
 \`\`\`python
 if port == 22:
@@ -269,19 +269,19 @@ else:
     print("boshqa")
 \`\`\`
 
-**Takrorlash (for)** — ro'yxatdagi har bir element ustida ishlaydi:
+**Takrorlash (for)** - ro'yxatdagi har bir element ustida ishlaydi:
 
 \`\`\`python
 for port in [22, 80, 443]:
     print(port)
 \`\`\`
 
-**Eslatma:** Python'da **indentatsiya** (bo'sh joy) shart — blok aynan shu bilan belgilanadi. Noto'g'ri jadval xato beradi.
+**Eslatma:** Python'da **indentatsiya** (bo'sh joy) shart - blok aynan shu bilan belgilanadi. Noto'g'ri jadval xato beradi.
 
-> **Xavfsizlik:** "har bir qatorni tekshir" turidagi ish aynan \`for\` bilan bajariladi — 1000 log qatorini bitta siklda ko'rish mumkin.`,
+> **Xavfsizlik:** "har bir qatorni tekshir" turidagi ish aynan \`for\` bilan bajariladi - 1000 log qatorini bitta siklda ko'rish mumkin.`,
       ru: `## Условия и циклы
 
-**Условие (if)** — принимает решение в зависимости от ситуации:
+**Условие (if)** - принимает решение в зависимости от ситуации:
 
 \`\`\`python
 if port == 22:
@@ -292,16 +292,16 @@ else:
     print("другой")
 \`\`\`
 
-**Цикл (for)** — проходит по каждому элементу списка:
+**Цикл (for)** - проходит по каждому элементу списка:
 
 \`\`\`python
 for port in [22, 80, 443]:
     print(port)
 \`\`\`
 
-**Важно:** в Python **отступы** обязательны — именно они задают блок. Неверный отступ даёт ошибку.
+**Важно:** в Python **отступы** обязательны - именно они задают блок. Неверный отступ даёт ошибку.
 
-> **Безопасность:** работа вида «проверить каждую строку» выполняется именно через \`for\` — тысячи строк логов можно обработать одним циклом.`,
+> **Безопасность:** работа вида «проверить каждую строку» выполняется именно через \`for\` - тысячи строк логов можно обработать одним циклом.`,
     },
     exercises: [
       {
@@ -320,27 +320,27 @@ for port in [22, 80, 443]:
         ],
         answer: 'a',
         explain: {
-          uz: "`==` — solishtirish (tengmi?), `=` esa qiymat berish. `if` shart rost bo'lsagina keyingi blokni bajaradi.",
-          ru: '`==` — сравнение (равно ли?), а `=` — присваивание значения. `if` выполняет следующий блок, только если условие истинно.',
+          uz: "`==` - solishtirish (tengmi?), `=` esa qiymat berish. `if` shart rost bo'lsagina keyingi blokni bajaradi.",
+          ru: '`==` - сравнение (равно ли?), а `=` - присваивание значения. `if` выполняет следующий блок, только если условие истинно.',
         },
       },
       {
         id: 'e2',
         type: 'order',
         q: {
-          uz: "Port tekshiruvi mantig'ini to'g'ri tartibda joylang (birinchisi — birinchi qadam)",
-          ru: 'Расставьте логику проверки порта по порядку (первый — самый первый)',
+          uz: "Port tekshiruvi mantig'ini to'g'ri tartibda joylang (birinchisi - birinchi qadam)",
+          ru: 'Расставьте логику проверки порта по порядку (первый - самый первый)',
         },
         items: [
           { id: 'i1', uz: 'Tekshiriladigan port olinadi', ru: 'Берётся проверяемый порт' },
-          { id: 'i2', uz: 'Port ochiqmi — tekshiriladi', ru: 'Проверяется, открыт ли порт' },
+          { id: 'i2', uz: 'Port ochiqmi - tekshiriladi', ru: 'Проверяется, открыт ли порт' },
           { id: 'i3', uz: 'Natija yozib boriladi', ru: 'Результат записывается' },
           { id: 'i4', uz: "Keyingi portga o'tiladi", ru: 'Переход к следующему порту' },
         ],
         order: ['i1', 'i2', 'i3', 'i4'],
         explain: {
-          uz: "Avval port olinadi, keyin tekshiriladi, natija yoziladi va keyingi portga o'tiladi — bu `for` sikl mantig'i.",
-          ru: 'Сначала порт берётся, затем проверяется, результат записывается и происходит переход к следующему порту — это логика цикла `for`.',
+          uz: "Avval port olinadi, keyin tekshiriladi, natija yoziladi va keyingi portga o'tiladi - bu `for` sikl mantig'i.",
+          ru: 'Сначала порт берётся, затем проверяется, результат записывается и происходит переход к следующему порту - это логика цикла `for`.',
         },
       },
       {
@@ -348,12 +348,12 @@ for port in [22, 80, 443]:
         type: 'tf',
         q: {
           uz: "Python'da indentatsiya (bo'sh joy) shunchaki chiroy uchun, kodga ta'sir qilmaydi.",
-          ru: 'В Python отступы (пробелы) — только для красоты, на код не влияют.',
+          ru: 'В Python отступы (пробелы) - только для красоты, на код не влияют.',
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — Python'da indentatsiya blokni belgilaydi. Noto'g'ri jadval xatoga yoki noto'g'ri mantiqqa olib keladi; u boshqa tillardagi `{ }` o'rnini egallaydi.",
-          ru: 'Нет — в Python отступы задают блок. Неверный отступ ведёт к ошибке или неверной логике; он заменяет `{ }` из других языков.',
+          uz: "Yo'q - Python'da indentatsiya blokni belgilaydi. Noto'g'ri jadval xatoga yoki noto'g'ri mantiqqa olib keladi; u boshqa tillardagi `{ }` o'rnini egallaydi.",
+          ru: 'Нет - в Python отступы задают блок. Неверный отступ ведёт к ошибке или неверной логике; он заменяет `{ }` из других языков.',
         },
       },
       {
@@ -371,8 +371,8 @@ for port in [22, 80, 443]:
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "if/else shart bo'yicha qaror qiladi, for ro'yxatni aylanadi, == solishtiradi, = esa qiymat saqlaydi. == va = ni aralashtirish — keng tarqalgan xato.",
-          ru: 'if/else принимает решение по условию, for перебирает список, == сравнивает, а = сохраняет значение. Путать == и = — частая ошибка.',
+          uz: "if/else shart bo'yicha qaror qiladi, for ro'yxatni aylanadi, == solishtiradi, = esa qiymat saqlaydi. == va = ni aralashtirish - keng tarqalgan xato.",
+          ru: 'if/else принимает решение по условию, for перебирает список, == сравнивает, а = сохраняет значение. Путать == и = - частая ошибка.',
         },
       },
     ],
@@ -386,19 +386,19 @@ for port in [22, 80, 443]:
     content: {
       uz: `## Ro'yxat va lug'at
 
-**Ro'yxat (list)** — tartiblangan qiymatlar to'plami:
+**Ro'yxat (list)** - tartiblangan qiymatlar to'plami:
 
 \`\`\`python
 ports = [22, 80, 443]
 print(ports[0])   # 22  (indeks 0 dan boshlanadi)
 \`\`\`
 
-**Lug'at (dict)** — kalit → qiymat juftliklari:
+**Lug'at (dict)** - kalit → qiymat juftliklari:
 
 \`\`\`python
 host = {"ip": "10.0.0.1", "port": 22}
 print(host["ip"])           # 10.0.0.1
-print(host.get("os", "?"))  # kalit yo'q bo'lsa — "?"
+print(host.get("os", "?"))  # kalit yo'q bo'lsa - "?"
 \`\`\`
 
 **Nega muhim:** dict bilan IP → ma'lumot kabi yozuvlar qulay saqlanadi; list bilan bir xil turdagi ko'p qiymat.
@@ -406,22 +406,22 @@ print(host.get("os", "?"))  # kalit yo'q bo'lsa — "?"
 > **Xavfsizlik:** log tahlilida har bir yozuvni dict sifatida saqlash (\`{"user": "admin", "result": "fail"}\`) keyin sanash va filtrlashni juda osonlashtiradi.`,
       ru: `## Списки и словари
 
-**Список (list)** — упорядоченный набор значений:
+**Список (list)** - упорядоченный набор значений:
 
 \`\`\`python
 ports = [22, 80, 443]
 print(ports[0])   # 22  (индекс начинается с 0)
 \`\`\`
 
-**Словарь (dict)** — пары «ключ → значение»:
+**Словарь (dict)** - пары «ключ → значение»:
 
 \`\`\`python
 host = {"ip": "10.0.0.1", "port": 22}
 print(host["ip"])           # 10.0.0.1
-print(host.get("os", "?"))  # если ключа нет — "?"
+print(host.get("os", "?"))  # если ключа нет - "?"
 \`\`\`
 
-**Почему важно:** словарь удобен для записей вида «IP → данные», а список — для множества однотипных значений.
+**Почему важно:** словарь удобен для записей вида «IP → данные», а список - для множества однотипных значений.
 
 > **Безопасность:** при анализе логов хранить каждую запись как словарь (\`{"user": "admin", "result": "fail"}\`) сильно упрощает подсчёт и фильтрацию.`,
     },
@@ -442,8 +442,8 @@ print(host.get("os", "?"))  # если ключа нет — "?"
         ],
         answer: 'a',
         explain: {
-          uz: "Indeks 0 dan boshlanadi: `ports[0]` = 22, `ports[1]` = 80, `ports[2]` = 443. Noldan boshlanish — ko'p uchraydigan chalkashlik.",
-          ru: 'Индекс начинается с 0: `ports[0]` = 22, `ports[1]` = 80, `ports[2]` = 443. Начало с нуля — частая путаница.',
+          uz: "Indeks 0 dan boshlanadi: `ports[0]` = 22, `ports[1]` = 80, `ports[2]` = 443. Noldan boshlanish - ko'p uchraydigan chalkashlik.",
+          ru: 'Индекс начинается с 0: `ports[0]` = 22, `ports[1]` = 80, `ports[2]` = 443. Начало с нуля - частая путаница.',
         },
       },
       {
@@ -462,8 +462,8 @@ print(host.get("os", "?"))  # если ключа нет — "?"
         ],
         answer: 'a',
         explain: {
-          uz: "Lug'atda `\"ip\"` — kalit, `\"10.0.0.1\"` — qiymat. Kalit orqali qiymatga murojaat qilinadi.",
-          ru: 'В словаре `"ip"` — ключ, а `"10.0.0.1"` — значение. К значению обращаются по ключу.',
+          uz: "Lug'atda `\"ip\"` - kalit, `\"10.0.0.1\"` - qiymat. Kalit orqali qiymatga murojaat qilinadi.",
+          ru: 'В словаре `"ip"` - ключ, а `"10.0.0.1"` - значение. К значению обращаются по ключу.',
         },
       },
       {
@@ -475,8 +475,8 @@ print(host.get("os", "?"))  # если ключа нет — "?"
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — Python'da indeks 0 dan boshlanadi. Birinchi element `list[0]`. Bu — eng ko'p uchraydigan xatolardan biri.",
-          ru: 'Нет — в Python индекс начинается с 0. Первый элемент — `list[0]`. Это одна из самых частых ошибок.',
+          uz: "Yo'q - Python'da indeks 0 dan boshlanadi. Birinchi element `list[0]`. Bu - eng ko'p uchraydigan xatolardan biri.",
+          ru: 'Нет - в Python индекс начинается с 0. Первый элемент - `list[0]`. Это одна из самых частых ошибок.',
         },
       },
       {
@@ -490,12 +490,12 @@ print(host.get("os", "?"))  # если ключа нет — "?"
           { id: 'p1', left: { uz: 'list', ru: 'list' }, right: { uz: "Tartiblangan qiymatlar to'plami", ru: 'Упорядоченный набор значений' } },
           { id: 'p2', left: { uz: 'dict', ru: 'dict' }, right: { uz: 'Kalit → qiymat juftliklari', ru: 'Пары «ключ → значение»' } },
           { id: 'p3', left: { uz: 'indeks', ru: 'индекс' }, right: { uz: "Elementning o'rni (0 dan boshlanadi)", ru: 'Позиция элемента (начинается с 0)' } },
-          { id: 'p4', left: { uz: '.get(kalit, standart)', ru: '.get(ключ, по умолчанию)' }, right: { uz: "Kalit yo'q bo'lsa standart qiymat", ru: 'Если ключа нет — значение по умолчанию' } },
+          { id: 'p4', left: { uz: '.get(kalit, standart)', ru: '.get(ключ, по умолчанию)' }, right: { uz: "Kalit yo'q bo'lsa standart qiymat", ru: 'Если ключа нет - значение по умолчанию' } },
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "list tartiblangan to'plam, dict kalit-qiymat jadvali, indeks element o'rnini bildiradi, .get() esa kalit yo'q bo'lsa xato bermaydi.",
-          ru: 'list — упорядоченный набор, dict — таблица ключ-значение, индекс задаёт позицию, а .get() не даёт ошибки, если ключа нет.',
+          ru: 'list - упорядоченный набор, dict - таблица ключ-значение, индекс задаёт позицию, а .get() не даёт ошибки, если ключа нет.',
         },
       },
     ],
@@ -509,7 +509,7 @@ print(host.get("os", "?"))  # если ключа нет — "?"
     content: {
       uz: `## Funksiyalar
 
-**Funksiya** — nom berilgan, qayta ishlatiladigan kod bo'lagi:
+**Funksiya** - nom berilgan, qayta ishlatiladigan kod bo'lagi:
 
 \`\`\`python
 def is_ssh_port(port):
@@ -519,16 +519,16 @@ print(is_ssh_port(22))   # True
 print(is_ssh_port(80))   # False
 \`\`\`
 
-- **def** — funksiyani e'lon qiladi.
-- **parametr** (\`port\`) — funksiyaga beriladigan kirish.
-- **return** — natijani qaytaradi.
+- **def** - funksiyani e'lon qiladi.
+- **parametr** (\`port\`) - funksiyaga beriladigan kirish.
+- **return** - natijani qaytaradi.
 
-**Nega kerak:** bir xil kodni takrorlamaslik uchun. Bir joyda tuzatsangiz — hamma joyda tuzaladi.
+**Nega kerak:** bir xil kodni takrorlamaslik uchun. Bir joyda tuzatsangiz - hamma joyda tuzaladi.
 
 > **Xavfsizlik:** "bu port xavflimi?" kabi tekshiruvni funksiyaga olsangiz, uni butun skriptda bir xil mantiq bilan ishlatasiz.`,
       ru: `## Функции
 
-**Функция** — именованный, многократно используемый кусок кода:
+**Функция** - именованный, многократно используемый кусок кода:
 
 \`\`\`python
 def is_ssh_port(port):
@@ -538,11 +538,11 @@ print(is_ssh_port(22))   # True
 print(is_ssh_port(80))   # False
 \`\`\`
 
-- **def** — объявляет функцию.
-- **параметр** (\`port\`) — вход, передаваемый функции.
-- **return** — возвращает результат.
+- **def** - объявляет функцию.
+- **параметр** (\`port\`) - вход, передаваемый функции.
+- **return** - возвращает результат.
 
-**Зачем нужны:** чтобы не повторять один и тот же код. Исправите в одном месте — исправится везде.
+**Зачем нужны:** чтобы не повторять один и тот же код. Исправите в одном месте - исправится везде.
 
 > **Безопасность:** если вынести проверку вида «опасен ли этот порт?» в функцию, её можно одинаково применять по всему скрипту.`,
     },
@@ -563,16 +563,16 @@ print(is_ssh_port(80))   # False
         ],
         answer: 'a',
         explain: {
-          uz: "`return` funksiyaning natijasini qaytaradi — shu natijani o'zgaruvchiga olib, keyin ishlatish mumkin. `print` esa faqat ekranga chiqaradi.",
-          ru: '`return` возвращает результат функции — его можно сохранить в переменную и использовать дальше. А `print` лишь выводит на экран.',
+          uz: "`return` funksiyaning natijasini qaytaradi - shu natijani o'zgaruvchiga olib, keyin ishlatish mumkin. `print` esa faqat ekranga chiqaradi.",
+          ru: '`return` возвращает результат функции - его можно сохранить в переменную и использовать дальше. А `print` лишь выводит на экран.',
         },
       },
       {
         id: 'e2',
         type: 'order',
         q: {
-          uz: 'Funksiyani ishlatish tartibini joylang (birinchisi — birinchi qadam)',
-          ru: 'Расставьте порядок использования функции (первый — самый первый)',
+          uz: 'Funksiyani ishlatish tartibini joylang (birinchisi - birinchi qadam)',
+          ru: 'Расставьте порядок использования функции (первый - самый первый)',
         },
         items: [
           { id: 'i1', uz: "Funksiya `def` bilan e'lon qilinadi", ru: 'Функция объявляется через `def`' },
@@ -595,8 +595,8 @@ print(is_ssh_port(80))   # False
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — funksiya bir marta yoziladi va qayta ishlatiladi. Xato bo'lsa, bir joyda tuzatasiz — nusxalarni qidirish shart emas.",
-          ru: 'Верно — функция пишется один раз и используется многократно. При ошибке исправляете в одном месте — искать копии не нужно.',
+          uz: "To'g'ri - funksiya bir marta yoziladi va qayta ishlatiladi. Xato bo'lsa, bir joyda tuzatasiz - nusxalarni qidirish shart emas.",
+          ru: 'Верно - функция пишется один раз и используется многократно. При ошибке исправляете в одном месте - искать копии не нужно.',
         },
       },
       {
@@ -629,7 +629,7 @@ print(is_ssh_port(80))   # False
     content: {
       uz: `## Fayllar va xatolar
 
-**Fayl o'qish** — log tahlilining asosi:
+**Fayl o'qish** - log tahlilining asosi:
 
 \`\`\`python
 with open("access.log") as f:
@@ -637,8 +637,8 @@ with open("access.log") as f:
         print(line.strip())
 \`\`\`
 
-- **with** — faylni ochadi va oxirida avtomatik yopadi.
-- **for line in f** — har bir qatorni bittalab beradi (butun faylni xotiraga yuklamaydi).
+- **with** - faylni ochadi va oxirida avtomatik yopadi.
+- **for line in f** - har bir qatorni bittalab beradi (butun faylni xotiraga yuklamaydi).
 
 **Xatolarni ushlash (try/except):**
 
@@ -654,7 +654,7 @@ except ValueError:
 > **Xavfsizlik:** log faylni qatorma-qator o'qish millionlab yozuvni ham muammosiz tahlil qilish imkonini beradi.`,
       ru: `## Файлы и ошибки
 
-**Чтение файла** — основа анализа логов:
+**Чтение файла** - основа анализа логов:
 
 \`\`\`python
 with open("access.log") as f:
@@ -662,8 +662,8 @@ with open("access.log") as f:
         print(line.strip())
 \`\`\`
 
-- **with** — открывает файл и автоматически закрывает его в конце.
-- **for line in f** — отдаёт по одной строке (не загружает весь файл в память).
+- **with** - открывает файл и автоматически закрывает его в конце.
+- **for line in f** - отдаёт по одной строке (не загружает весь файл в память).
 
 **Обработка ошибок (try/except):**
 
@@ -695,8 +695,8 @@ except ValueError:
         ],
         answer: 'a',
         explain: {
-          uz: "`with open` faylni avtomatik yopadi, `for line in f` esa qatorma-qator o'qiydi — shu sababli katta fayl ham xotirani to'ldirmaydi.",
-          ru: '`with open` закрывает файл автоматически, а `for line in f` читает построчно — поэтому даже большой файл не заполняет память.',
+          uz: "`with open` faylni avtomatik yopadi, `for line in f` esa qatorma-qator o'qiydi - shu sababli katta fayl ham xotirani to'ldirmaydi.",
+          ru: '`with open` закрывает файл автоматически, а `for line in f` читает построчно - поэтому даже большой файл не заполняет память.',
         },
       },
       {
@@ -709,8 +709,8 @@ except ValueError:
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — `try` ichida xato yuz bersa, `except` uni ushlaydi va dastur to'xtamaydi. Bu ayniqsa noto'g'ri kiritmada muhim.",
-          ru: 'Верно — если внутри `try` возникает ошибка, `except` её перехватывает, и программа не останавливается. Особенно важно при неверном вводе.',
+          uz: "To'g'ri - `try` ichida xato yuz bersa, `except` uni ushlaydi va dastur to'xtamaydi. Bu ayniqsa noto'g'ri kiritmada muhim.",
+          ru: 'Верно - если внутри `try` возникает ошибка, `except` её перехватывает, и программа не останавливается. Особенно важно при неверном вводе.',
         },
       },
       {
@@ -762,7 +762,7 @@ except ValueError:
     content: {
       uz: `## Amaliyot: muvaffaqiyatsiz kirishlarni sanash
 
-Tasavvur qiling, log faylda yozuvlar bor. Maqsad — "FAIL" bo'lgan qatorlarni sanash:
+Tasavvur qiling, log faylda yozuvlar bor. Maqsad - "FAIL" bo'lgan qatorlarni sanash:
 
 \`\`\`python
 fails = 0
@@ -773,16 +773,16 @@ with open("access.log") as f:
 print(f"Failed logins: {fails}")
 \`\`\`
 
-- **\`"FAIL" in line\`** — matn qatorda bormi, deb tekshiradi.
-- **\`fails += 1\`** — hisoblagichni bittaga oshiradi.
-- **f-string** — natijani chiroyli chiqaradi.
+- **\`"FAIL" in line\`** - matn qatorda bormi, deb tekshiradi.
+- **\`fails += 1\`** - hisoblagichni bittaga oshiradi.
+- **f-string** - natijani chiroyli chiqaradi.
 
 Shu usul bilan: eng ko'p urinish qilgan IP ni topish, tunda bo'lgan hodisalarni filtrlash va hokazo mumkin.
 
-> **Xavfsizlik:** ko'p muvaffaqiyatsiz kirish — brute force belgisi bo'lishi mumkin. Skript buni tez ko'rsatadi, inson esa sekin payqaydi.`,
+> **Xavfsizlik:** ko'p muvaffaqiyatsiz kirish - brute force belgisi bo'lishi mumkin. Skript buni tez ko'rsatadi, inson esa sekin payqaydi.`,
       ru: `## Практика: подсчёт неудачных входов
 
-Представьте, что в лог-файле есть записи. Цель — посчитать строки со словом "FAIL":
+Представьте, что в лог-файле есть записи. Цель - посчитать строки со словом "FAIL":
 
 \`\`\`python
 fails = 0
@@ -793,9 +793,9 @@ with open("access.log") as f:
 print(f"Failed logins: {fails}")
 \`\`\`
 
-- **\`"FAIL" in line\`** — проверяет, есть ли текст в строке.
-- **\`fails += 1\`** — увеличивает счётчик на единицу.
-- **f-строка** — аккуратно выводит результат.
+- **\`"FAIL" in line\`** - проверяет, есть ли текст в строке.
+- **\`fails += 1\`** - увеличивает счётчик на единицу.
+- **f-строка** - аккуратно выводит результат.
 
 Тем же способом можно найти IP с наибольшим числом попыток, отфильтровать ночные события и т. д.
 
@@ -818,8 +818,8 @@ print(f"Failed logins: {fails}")
         ],
         answer: 'a',
         explain: {
-          uz: "`in` operatori matn yoki element mavjudligini tekshiradi. Rost bo'lsa, `if` bloki bajariladi — shu yerda hisoblagich oshiriladi.",
-          ru: 'Оператор `in` проверяет наличие текста или элемента. Если истина, выполняется блок `if` — там и увеличивается счётчик.',
+          uz: "`in` operatori matn yoki element mavjudligini tekshiradi. Rost bo'lsa, `if` bloki bajariladi - shu yerda hisoblagich oshiriladi.",
+          ru: 'Оператор `in` проверяет наличие текста или элемента. Если истина, выполняется блок `if` - там и увеличивается счётчик.',
         },
       },
       {
@@ -833,7 +833,7 @@ print(f"Failed logins: {fails}")
           { id: 'i1', uz: 'Hisoblagich nolga tenglanadi (`fails = 0`)', ru: 'Счётчик обнуляется (`fails = 0`)' },
           { id: 'i2', uz: 'Log fayl ochiladi', ru: 'Открывается лог-файл' },
           { id: 'i3', uz: 'Har bir qator FAIL uchun tekshiriladi', ru: 'Каждая строка проверяется на FAIL' },
-          { id: 'i4', uz: "FAIL bo'lsa hisoblagich oshiriladi", ru: 'Если есть FAIL — счётчик увеличивается' },
+          { id: 'i4', uz: "FAIL bo'lsa hisoblagich oshiriladi", ru: 'Если есть FAIL - счётчик увеличивается' },
           { id: 'i5', uz: 'Natija chiqariladi', ru: 'Результат выводится' },
         ],
         order: ['i1', 'i2', 'i3', 'i4', 'i5'],
@@ -851,8 +851,8 @@ print(f"Failed logins: {fails}")
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — bu brute force (yoki parol terish) belgisidir. Shuning uchun bunday signallarni avtomatik sanash va kuzatish muhim.",
-          ru: 'Верно — это признак brute force (или подбора пароля). Поэтому важно автоматически считать и отслеживать такие сигналы.',
+          uz: "To'g'ri - bu brute force (yoki parol terish) belgisidir. Shuning uchun bunday signallarni avtomatik sanash va kuzatish muhim.",
+          ru: 'Верно - это признак brute force (или подбора пароля). Поэтому важно автоматически считать и отслеживать такие сигналы.',
         },
       },
       {
@@ -907,7 +907,7 @@ Dasturlash bo'yicha bilimingizni tekshiring: o'zgaruvchi va turlar, shart va sik
         ],
         answer: 'a',
         explain: {
-          uz: "Kod har bir qatorni tekshiradi va FAIL bo'lganlarini sanaydi (`fails += 1`). Bu — log tahlilidagi eng keng tarqalgan qolip.",
+          uz: "Kod har bir qatorni tekshiradi va FAIL bo'lganlarini sanaydi (`fails += 1`). Bu - log tahlilidagi eng keng tarqalgan qolip.",
           ru: 'Код проверяет каждую строку и считает строки с FAIL (`fails += 1`). Это самый распространённый приём анализа логов.',
         },
       },
@@ -939,8 +939,8 @@ Dasturlash bo'yicha bilimingizni tekshiring: o'zgaruvchi va turlar, shart va sik
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — indeks 0 dan boshlanadi. Birinchi element `list[0]`, ikkinchisi `list[1]`.",
-          ru: 'Нет — индекс начинается с 0. Первый элемент `list[0]`, второй — `list[1]`.',
+          uz: "Yo'q - indeks 0 dan boshlanadi. Birinchi element `list[0]`, ikkinchisi `list[1]`.",
+          ru: 'Нет - индекс начинается с 0. Первый элемент `list[0]`, второй - `list[1]`.',
         },
       },
       {
@@ -953,8 +953,8 @@ Dasturlash bo'yicha bilimingizni tekshiring: o'zgaruvchi va turlar, shart va sik
         answer: 'with',
         accepted: ['with'],
         explain: {
-          uz: "`with open(...) as f:` — faylni boshqaradi va oxirida avtomatik yopadi. Bu resursni xavfsiz boshqarishning standart usuli.",
-          ru: '`with open(...) as f:` — управляет файлом и закрывает его автоматически. Это стандартный способ безопасной работы с ресурсами.',
+          uz: "`with open(...) as f:` - faylni boshqaradi va oxirida avtomatik yopadi. Bu resursni xavfsiz boshqarishning standart usuli.",
+          ru: '`with open(...) as f:` - управляет файлом и закрывает его автоматически. Это стандартный способ безопасной работы с ресурсами.',
         },
       },
       {
@@ -972,8 +972,8 @@ Dasturlash bo'yicha bilimingizni tekshiring: o'zgaruvchi va turlar, shart va sik
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Qatorma-qator o'qish, xatoni ushlash va sanab chiqarish — to'g'ri skript belgilari. Parolni chiqarish esa xavfsizlikka zid.",
-          ru: 'Построчное чтение, перехват ошибок и подсчёт с выводом — признаки правильного скрипта. А вывод пароля противоречит безопасности.',
+          uz: "Qatorma-qator o'qish, xatoni ushlash va sanab chiqarish - to'g'ri skript belgilari. Parolni chiqarish esa xavfsizlikka zid.",
+          ru: 'Построчное чтение, перехват ошибок и подсчёт с выводом - признаки правильного скрипта. А вывод пароля противоречит безопасности.',
         },
       },
     ],

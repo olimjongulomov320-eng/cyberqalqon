@@ -12,10 +12,12 @@ const {
   bumpStreak,
   CORRECT_XP,
 } = require('../lib/gamification');
-const { validateLessonSubmission } = require('../lib/grade');
 const { lockedByAssessment, LOCK_RESPONSE } = require('../lib/assessmentLock');
 
 const router = Router();
+
+/** Failed attempts on one task before "Show solution" is offered. */
+const SOLUTION_AFTER_WRONG = 2;
 
 // Lesson flow fires many small requests (one per exercise), so the old
 // 10/min submit cap would strangle a normal lesson. 30/min still stops abuse.
@@ -122,6 +124,12 @@ router.get('/:slug', optionalAuth, async (req, res, next) => {
         [req.user.id, m.id]
       );
       progress = p[0] ?? { is_completed: false, attempts: 0 };
+      const { rows: solved } = await pool.query(
+        `SELECT exercise_id FROM mistakes
+          WHERE user_id = $1 AND module_id = $2 AND correct_count > 0`,
+        [req.user.id, m.id]
+      );
+      progress = { ...progress, solved: solved.map(r => r.exercise_id) };
     }
 
     res.json({
@@ -184,14 +192,54 @@ router.post('/:slug/check', lessonLimiter, requireAuth, async (req, res, next) =
       ctx: {},
     });
 
+    // The answer and the explanation are part of the reward for solving the
+    // task. A wrong attempt gets a verdict only; after SOLUTION_AFTER_WRONG
+    // failed attempts the learner may ask for the solution explicitly.
     res.json({
       correct,
       xp_earned,
-      explain: ex.explain[lang],
-      reveal: answerReveal(ex),
+      wrong_attempts: attempt.wrongCount,
+      can_reveal: correct || attempt.wrongCount >= SOLUTION_AFTER_WRONG,
+      ...(correct ? { explain: ex.explain[lang], reveal: answerReveal(ex) } : {}),
       ...snap,
       new_achievements,
     });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/* ── POST /modules/:slug/solution — reveal a task's solution ─────────────
+   Allowed once the learner has solved the task, or failed it twice. Records
+   nothing and awards nothing: viewing a solution is not solving. */
+router.post('/:slug/solution', lessonLimiter, requireAuth, async (req, res, next) => {
+  try {
+    const lang = pickLang(req.query);
+    const { exercise_id } = req.body ?? {};
+    if (typeof exercise_id !== 'string' || !exercise_id) {
+      return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'exercise_id is required.' } });
+    }
+    const m = await loadModule(req.params.slug);
+    if (!m) return res.status(404).json({ error: { code: 'MODULE_NOT_FOUND', message: 'Module not found.' } });
+    const ex = (m.exercises ?? []).find(e => e.id === exercise_id);
+    if (!ex) return res.status(404).json({ error: { code: 'EXERCISE_NOT_FOUND', message: 'Exercise not found.' } });
+    if (await lockedByAssessment(req.user.id, m.slug, ex.id)) return res.status(423).json(LOCK_RESPONSE);
+
+    const { rows } = await pool.query(
+      `SELECT correct_count, wrong_count FROM mistakes WHERE user_id = $1 AND module_id = $2 AND exercise_id = $3`,
+      [req.user.id, m.id, ex.id]
+    );
+    const r = rows[0];
+    if (!r || (r.correct_count === 0 && r.wrong_count < SOLUTION_AFTER_WRONG)) {
+      return res.status(403).json({
+        error: {
+          code: 'SOLUTION_LOCKED',
+          message: 'Try the task first.',
+          remaining: Math.max(0, SOLUTION_AFTER_WRONG - (r?.wrong_count ?? 0)),
+        },
+      });
+    }
+    res.json({ explain: ex.explain[lang], reveal: answerReveal(ex) });
   } catch (err) {
     next(err);
   }
@@ -253,14 +301,6 @@ router.post('/:slug/practice', lessonLimiter, requireAuth, async (req, res, next
 router.post('/:slug/complete', lessonLimiter, requireAuth, async (req, res, next) => {
   try {
     const lang = pickLang(req.query);
-    const body = req.body ?? {};
-    const answers = Array.isArray(body.answers) ? body.answers : [];
-    if (answers.length === 0) {
-      return res.status(400).json({
-        error: { code: 'VALIDATION_ERROR', message: 'answers[] must not be empty.' },
-      });
-    }
-
     const m = await loadModule(req.params.slug);
     if (!m) {
       return res.status(404).json({ error: { code: 'MODULE_NOT_FOUND', message: 'Module not found.' } });
@@ -270,44 +310,37 @@ router.post('/:slug/complete', lessonLimiter, requireAuth, async (req, res, next
       if (blocker) return res.status(403).json(LOCKED(blocker));
     }
 
-    // The expected exercise set is derived from the authoritative curriculum,
-    // never from the request. A submission must cover every exercise exactly
-    // once — no missing, duplicate or unknown ids — before any completion, XP
-    // or perfect-lesson achievement is granted. A full retry of the same set is
-    // still valid, so idempotent completion retries keep working.
-    const submission = validateLessonSubmission(m.exercises ?? [], answers);
-    if (!submission.ok) {
-      const status =
-        submission.code === 'INCOMPLETE_SUBMISSION' || submission.code === 'UNKNOWN_EXERCISE'
-          ? 422
-          : 400;
-      return res.status(status).json({
-        error: { code: submission.code, message: submission.message },
-      });
-    }
-
-    // Every exercise must have been graded through /check first. Otherwise a
-    // script could read answers elsewhere and post a "perfect" lesson directly.
-    const { rows: checkedRows } = await pool.query(
-      `SELECT exercise_id FROM mistakes WHERE user_id = $1 AND module_id = $2`,
+    // A lesson is complete when every task in it has been SOLVED (answered
+    // correctly at least once), not merely attempted. Solved state is read from
+    // the server's own attempt records; the request carries no answers, so there
+    // is nothing for a client to fake.
+    const { rows: attemptRows } = await pool.query(
+      `SELECT exercise_id, correct_count, wrong_count FROM mistakes WHERE user_id = $1 AND module_id = $2`,
       [req.user.id, m.id]
     );
-    const checkedIds = new Set(checkedRows.map(r => r.exercise_id));
-    if ((m.exercises ?? []).some(e => !checkedIds.has(e.id))) {
+    const byId = new Map(attemptRows.map(r => [r.exercise_id, r]));
+    const exercises = m.exercises ?? [];
+    const unsolved = exercises.filter(e => !(byId.get(e.id)?.correct_count > 0));
+    if (unsolved.length > 0) {
       return res.status(422).json({
-        error: { code: 'NOT_CHECKED', message: 'Every exercise must be answered in the lesson first.' },
+        error: {
+          code: 'NOT_SOLVED',
+          message: 'Solve every task in the lesson first.',
+          remaining: unsolved.length,
+          total: exercises.length,
+        },
       });
     }
 
-    // Server re-grades everything — the client's opinion never decides XP.
-    const results = [];
-    for (const a of answers) {
-      const ex = (m.exercises ?? []).find(e => e.id === a.id);
-      if (!ex) continue; // defensive: validation guarantees this never triggers
-      results.push({ id: ex.id, correct: grade(ex, a.value), explain: ex.explain[lang], ...answerReveal(ex) });
-    }
+    const results = exercises.map(ex => ({
+      id: ex.id,
+      correct: true,
+      explain: ex.explain[lang],
+      ...answerReveal(ex),
+    }));
     const answered = results.length;
-    const correctCount = results.filter(r => r.correct).length;
+    // Clean = solved without a single failed attempt, ever.
+    const correctCount = exercises.filter(e => (byId.get(e.id)?.wrong_count ?? 0) === 0).length;
     const accuracy = answered ? Math.round((correctCount / answered) * 100) : 0;
 
     // One transaction: XP, progress, streak and achievements commit together or

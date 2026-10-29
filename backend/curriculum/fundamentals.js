@@ -1,13 +1,13 @@
 /**
- * Curriculum — Cybersecurity path › Domain 1: Fundamentals
+ * Curriculum - Cybersecurity path › Domain 1: Fundamentals
  *
  * Shape (validated by setup.js via lib/grade.validateExercise):
  *   module: { slug, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
  *   kind: 'lesson' | 'checkpoint'   (checkpoint = end-of-domain trophy node)
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language. This is a
- *     warm-up, not a textbook — the exercises do the teaching.
+ *   - Lesson prose: short. 6-14 markdown lines per language. This is a
+ *     warm-up, not a textbook - the exercises do the teaching.
  *   - Every exercise: bilingual q + explain, technically accurate, beginner
  *     level, no trick questions, explanations teach the WHY.
  *   - Exercise ids: e1..eN in delivery order.
@@ -23,26 +23,26 @@ module.exports = [
     content: {
       uz: `## Kiber xavfsizlik nima?
 
-Kiber xavfsizlik — ma'lumotlarni ruxsatsiz kirishdan, o'g'irlashdan va buzib ketishdan himoya qilish san'ati.
+Kiber xavfsizlik - ma'lumotlarni ruxsatsiz kirishdan, o'g'irlashdan va buzib ketishdan himoya qilish san'ati.
 
-U faqat "hakerlarga qarshi" emas. Kiber xavfsizlik — bu:
+U faqat "hakerlarga qarshi" emas. Kiber xavfsizlik - bu:
 
-- **Himoya** — ma'lumotni o'g'irlashning oldini olish
-- **Aniqlash** — huzur bo'layotgan hujumni tez ko'rish
-- **Tiklash** — hujumdan keyin ishlarni qayta boshlash
+- **Himoya** - ma'lumotni o'g'irlashning oldini olish
+- **Aniqlash** - huzur bo'layotgan hujumni tez ko'rish
+- **Tiklash** - hujumdan keyin ishlarni qayta boshlash
 
-> **Eslatma:** Xavfsizlik — bu mahsulot, lekin hech qachon 100% emas. Vazifa — xavfni qabul qilib bo'ladigan darajaga tushirish.`,
+> **Eslatma:** Xavfsizlik - bu mahsulot, lekin hech qachon 100% emas. Vazifa - xavfni qabul qilib bo'ladigan darajaga tushirish.`,
       ru: `## Что такое кибербезопасность?
 
-Кибербезопасность — искусство защиты данных от несанкционированного доступа, кражи и повреждений.
+Кибербезопасность - искусство защиты данных от несанкционированного доступа, кражи и повреждений.
 
-Это не только «борьба с хакерами». Кибербезопасность — это:
+Это не только «борьба с хакерами». Кибербезопасность - это:
 
-- **Защита** — предотвращение кражи данных
-- **Обнаружение** — быстрая фиксация идущей атаки
-- **Восстановление** — возврат к работе после атаки
+- **Защита** - предотвращение кражи данных
+- **Обнаружение** - быстрая фиксация идущей атаки
+- **Восстановление** - возврат к работе после атаки
 
-> **Важно:** безопасность — это продукт, но никогда не 100%. Задача — снизить риск до приемлемого уровня.`,
+> **Важно:** безопасность - это продукт, но никогда не 100%. Задача - снизить риск до приемлемого уровня.`,
     },
     exercises: [
       {
@@ -60,8 +60,8 @@ U faqat "hakerlarga qarshi" emas. Kiber xavfsizlik — bu:
         ],
         answer: 'b',
         explain: {
-          uz: "Kiber xavfsizlik ma'lumotlarni himoya qilishga yo'naltirilgan. Tezlashtirish — bu tizim administratorining, ilova yozish — dasturchining vazifasi.",
-          ru: 'Кибербезопасность направлена на защиту данных. Ускорение — задача администратора, разработка — задача программиста.',
+          uz: "Kiber xavfsizlik ma'lumotlarni himoya qilishga yo'naltirilgan. Tezlashtirish - bu tizim administratorining, ilova yozish - dasturchining vazifasi.",
+          ru: 'Кибербезопасность направлена на защиту данных. Ускорение - задача администратора, разработка - задача программиста.',
         },
       },
       {
@@ -73,8 +73,8 @@ U faqat "hakerlarga qarshi" emas. Kiber xavfsizlik — bu:
         },
         answer: 'false',
         explain: {
-          uz: "Har qanday odamning hisobi, telefoni va ma'lumotlari mavjud. O'g'irlik kattalikni tanlamaydi — shaxsiy hisoblar ham nishondir.",
-          ru: 'У любого человека есть аккаунты, телефон и данные. Вор не выбирает по размеру — личные аккаунты тоже цель.',
+          uz: "Har qanday odamning hisobi, telefoni va ma'lumotlari mavjud. O'g'irlik kattalikni tanlamaydi - shaxsiy hisoblar ham nishondir.",
+          ru: 'У любого человека есть аккаунты, телефон и данные. Вор не выбирает по размеру - личные аккаунты тоже цель.',
         },
       },
       {
@@ -92,8 +92,8 @@ U faqat "hakerlarga qarshi" emas. Kiber xavfsizlik — bu:
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: 'Aniqlash, himoya va odamlarni o\'qitish — uchalasi ham xavfsizlikning qismi. WiFi parolini oson qilish esa aksincha — zaiflik yaratadi.',
-          ru: 'Обнаружение, защита и обучение людей — всё это часть безопасности. Простой пароль WiFi создаёт слабость.',
+          uz: 'Aniqlash, himoya va odamlarni o\'qitish - uchalasi ham xavfsizlikning qismi. WiFi parolini oson qilish esa aksincha - zaiflik yaratadi.',
+          ru: 'Обнаружение, защита и обучение людей - всё это часть безопасности. Простой пароль WiFi создаёт слабость.',
         },
       },
       {
@@ -106,8 +106,8 @@ U faqat "hakerlarga qarshi" emas. Kiber xavfsizlik — bu:
         answer: 'attack',
         accepted: ['hujum', ' cyber attack', 'cyberattack', 'cyber attack'],
         explain: {
-          uz: 'Inglizchada buning nomi **attack** (hujum). Xavfsizlikda hujum — bu maqsadli, ruxsatsiz harakat.',
-          ru: 'По-английски это **attack** (атака). В безопасности атака — это целенаправленное, несанкционированное действие.',
+          uz: 'Inglizchada buning nomi **attack** (hujum). Xavfsizlikda hujum - bu maqsadli, ruxsatsiz harakat.',
+          ru: 'По-английски это **attack** (атака). В безопасности атака - это целенаправленное, несанкционированное действие.',
         },
       },
     ],
@@ -121,26 +121,26 @@ U faqat "hakerlarga qarshi" emas. Kiber xavfsizlik — bu:
     content: {
       uz: `## CIA uchburchagi
 
-Kiber xavfsizlikning uchta ustuni bor. Ularning boshi harflari **CIA** bo'lib chiqadi — bu tasodif emas:
+Kiber xavfsizlikning uchta ustuni bor. Ularning boshi harflari **CIA** bo'lib chiqadi - bu tasodif emas:
 
 | Harf | Tushuncha | Savol |
 |---|---|---|
-| **C** — Confidentiality | Maxfiylik | Kim ko'ra olishi kerak? |
-| **I** — Integrity | Butunlik | Ma'lumot o'zgartirilmaganmi? |
-| **A** — Availability | Mavjudlik | Tizim hozir ishlashda? |
+| **C** - Confidentiality | Maxfiylik | Kim ko'ra olishi kerak? |
+| **I** - Integrity | Butunlik | Ma'lumot o'zgartirilmaganmi? |
+| **A** - Availability | Mavjudlik | Tizim hozir ishlashda? |
 
-Birini ham buzsa — xavfsizlik buziladi. Chorrahada to'xtab turgan tizim ham, o'g'irlangan parol ham, buzilgan fayl ham bir xil muammo.`,
+Birini ham buzsa - xavfsizlik buziladi. Chorrahada to'xtab turgan tizim ham, o'g'irlangan parol ham, buzilgan fayl ham bir xil muammo.`,
       ru: `## Триада CIA
 
-У кибербезопасности есть три столпа. Их первые буквы складываются в **CIA** — и это не случайность:
+У кибербезопасности есть три столпа. Их первые буквы складываются в **CIA** - и это не случайность:
 
 | Буква | Понятие | Вопрос |
 |---|---|---|
-| **C** — Confidentiality | Конфиденциальность | Кто имеет право видеть? |
-| **I** — Integrity | Целостность | Данные не изменены? |
-| **A** — Availability | Доступность | Система работает прямо сейчас? |
+| **C** - Confidentiality | Конфиденциальность | Кто имеет право видеть? |
+| **I** - Integrity | Целостность | Данные не изменены? |
+| **A** - Availability | Доступность | Система работает прямо сейчас? |
 
-Нарушение любого из трёх — это нарушение безопасности. И недоступная система, и украденный пароль, и испорченный файл — одна и та же проблема.`,
+Нарушение любого из трёх - это нарушение безопасности. И недоступная система, и украденный пароль, и испорченный файл - одна и та же проблема.`,
     },
     exercises: [
       {
@@ -158,8 +158,8 @@ Birini ham buzsa — xavfsizlik buziladi. Chorrahada to'xtab turgan tizim ham, o
         ],
         answer: 'a',
         explain: {
-          uz: 'Maxfiylik — "faqat ruxsat etilganlar ko\'ra oladi". Boshqa odam kirsa, aynan shu buzildi.',
-          ru: 'Конфиденциальность — «только авторизованные видят». Чужой вошёл — нарушено именно это.',
+          uz: 'Maxfiylik - "faqat ruxsat etilganlar ko\'ra oladi". Boshqa odam kirsa, aynan shu buzildi.',
+          ru: 'Конфиденциальность - «только авторизованные видят». Чужой вошёл - нарушено именно это.',
         },
       },
       {
@@ -177,8 +177,8 @@ Birini ham buzsa — xavfsizlik buziladi. Chorrahada to'xtab turgan tizim ham, o
         ],
         answer: 'c',
         explain: {
-          uz: 'Availability (mavjudlik) — tizim hozir ishlashi kerak. Sayt ochilmayapti demak, shu buzildi.',
-          ru: 'Availability — система должна работать сейчас. Сайт недоступен — нарушена именно она.',
+          uz: 'Availability (mavjudlik) - tizim hozir ishlashi kerak. Sayt ochilmayapti demak, shu buzildi.',
+          ru: 'Availability - система должна работать сейчас. Сайт недоступен - нарушена именно она.',
         },
       },
       {
@@ -195,8 +195,8 @@ Birini ham buzsa — xavfsizlik buziladi. Chorrahada to'xtab turgan tizim ham, o
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Uch savol — uch ustun: kim ko\'radi (C), o\'zgarganmi (I), ishlayaptimi (A).',
-          ru: 'Три вопроса — три столпа: кто видит (C), не изменено ли (I), работает ли (A).',
+          uz: 'Uch savol - uch ustun: kim ko\'radi (C), o\'zgarganmi (I), ishlayaptimi (A).',
+          ru: 'Три вопроса - три столпа: кто видит (C), не изменено ли (I), работает ли (A).',
         },
       },
       {
@@ -208,7 +208,7 @@ Birini ham buzsa — xavfsizlik buziladi. Chorrahada to'xtab turgan tizim ham, o
         },
         answer: 'true',
         explain: {
-          uz: "Butunlik — ma'lumot aynan shunday saqlanishi kerakligini anglatadi. Biroz o'zgarsa ham buziladi.",
+          uz: "Butunlik - ma'lumot aynan shunday saqlanishi kerakligini anglatadi. Biroz o'zgarsa ham buziladi.",
           ru: 'Целостность означает, что данные должны храниться без изменений. Даже небольшая правка её нарушает.',
         },
       },
@@ -221,32 +221,32 @@ Birini ham buzsa — xavfsizlik buziladi. Chorrahada to'xtab turgan tizim ham, o
     xp_reward: 20,
     title: { uz: 'Tahdid, zaiflik va risk', ru: 'Угроза, уязвимость и риск' },
     content: {
-      uz: `## Uchta atama — adashtirmang
+      uz: `## Uchta atama - adashtirmang
 
 Bu uchtasi bir-biriga o'xshaydi, lekin turli narsa:
 
-- **Tahdid (threat)** — zarar yetkazishi mumkin bo'lgan narsa. Masalan, haker yoki ransomware.
-- **Zaiflik (vulnerability)** — tahdid foydalanadigan zaif tomon. Masalan, eski dastur yoki "123456" parol.
-- **Risk** — tahdid zaiflikdan foydalanib, zarar keltirish ehtimoli.
+- **Tahdid (threat)** - zarar yetkazishi mumkin bo'lgan narsa. Masalan, haker yoki ransomware.
+- **Zaiflik (vulnerability)** - tahdid foydalanadigan zaif tomon. Masalan, eski dastur yoki "123456" parol.
+- **Risk** - tahdid zaiflikdan foydalanib, zarar keltirish ehtimoli.
 
 \`\`\`
 Tahdid + Zaiflik = Risk
 \`\`\`
 
-Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) shunchaki "bezovta" emas.`,
-      ru: `## Три термина — не путайте их
+Zaiflikni yopganingizda - risk tugaydi. Shuning uchun yangilanishlar (update) shunchaki "bezovta" emas.`,
+      ru: `## Три термина - не путайте их
 
 Они похожи, но это разные вещи:
 
-- **Угроза (threat)** — то, что может навредить. Например, хакер или ransomware.
-- **Уязвимость (vulnerability)** — слабое место, которым угроза пользуется. Например, старая программа или пароль «123456».
-- **Риск** — вероятность того, что угроза воспользуется уязвимостью и нанесёт ущерб.
+- **Угроза (threat)** - то, что может навредить. Например, хакер или ransomware.
+- **Уязвимость (vulnerability)** - слабое место, которым угроза пользуется. Например, старая программа или пароль «123456».
+- **Риск** - вероятность того, что угроза воспользуется уязвимостью и нанесёт ущерб.
 
 \`\`\`
 Угроза + Уязвимость = Риск
 \`\`\`
 
-Закрыли уязвимость — риск исчезает. Поэтому обновления — это не «назойливость», а защита.`,
+Закрыли уязвимость - риск исчезает. Поэтому обновления - это не «назойливость», а защита.`,
     },
     exercises: [
       {
@@ -260,8 +260,8 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Tahdid — kuch, zaiflik — teshik, risk — ikkalasining kombinatsiyasi.',
-          ru: 'Угроза — сила, уязвимость — дыра, риск — их комбинация.',
+          uz: 'Tahdid - kuch, zaiflik - teshik, risk - ikkalasining kombinatsiyasi.',
+          ru: 'Угроза - сила, уязвимость - дыра, риск - их комбинация.',
         },
       },
       {
@@ -279,8 +279,8 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
         ],
         answer: 'b',
         explain: {
-          uz: 'Eski server — bu zaif tomon. Tahdid (masalan, haker) shu zaiflikdan foydalanishi mumkin.',
-          ru: 'Старый сервер — это слабое место. Угроза (например, хакер) сможет им воспользоваться.',
+          uz: 'Eski server - bu zaif tomon. Tahdid (masalan, haker) shu zaiflikdan foydalanishi mumkin.',
+          ru: 'Старый сервер - это слабое место. Угроза (например, хакер) сможет им воспользоваться.',
         },
       },
       {
@@ -292,8 +292,8 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
         },
         answer: 'true',
         explain: {
-          uz: 'To\'g\'ri: yangi zaifliklar paydo bo\'ladi, odash omili ham qoladi. Xavfsizlik — doimiy jarayon.',
-          ru: 'Верно: появляются новые уязвимости, остаётся человеческий фактор. Безопасность — это процесс.',
+          uz: 'To\'g\'ri: yangi zaifliklar paydo bo\'ladi, odash omili ham qoladi. Xavfsizlik - doimiy jarayon.',
+          ru: 'Верно: появляются новые уязвимости, остаётся человеческий фактор. Безопасность - это процесс.',
         },
       },
       {
@@ -324,9 +324,9 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
     xp_reward: 25,
     title: { uz: 'Zararli dasturlar asoslari', ru: 'Основы вредоносного ПО' },
     content: {
-      uz: `## Malware — zararli dasturlar
+      uz: `## Malware - zararli dasturlar
 
-**Malware** (malicious software) — kompyuterga zarar berish uchun yozilgan dastur. Asosiy turlari:
+**Malware** (malicious software) - kompyuterga zarar berish uchun yozilgan dastur. Asosiy turlari:
 
 | Tur | Xususiyat |
 |---|---|
@@ -335,10 +335,10 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
 | **Trojan** | Foydali dastur ko'rinishida keladi |
 | **Ransomware** | Fayllarni shifrlab, pul so'raydi |
 
-> **Eng muhim qoida:** Ransomware'dan himoyaning eng ishonchli usuli — zaxira nusxa (backup).`,
-      ru: `## Malware — вредоносное ПО
+> **Eng muhim qoida:** Ransomware'dan himoyaning eng ishonchli usuli - zaxira nusxa (backup).`,
+      ru: `## Malware - вредоносное ПО
 
-**Malware** (malicious software) — программа, созданная для вреда. Основные типы:
+**Malware** (malicious software) - программа, созданная для вреда. Основные типы:
 
 | Тип | Особенность |
 |---|---|
@@ -365,8 +365,8 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
         ],
         answer: 'b',
         explain: {
-          uz: 'Ransomware (ransom = pul tikish) fayllarni shifrlab, ochish uchun to\'lov talab qiladi. Firewall — himoya vositasi, cookie — brauzer ma\'lumoti.',
-          ru: 'Рансомшифровальщик шифрует файлы и требует выкуп. Файрвол — средство защиты, cookie — данные браузера.',
+          uz: 'Ransomware (ransom = pul tikish) fayllarni shifrlab, ochish uchun to\'lov talab qiladi. Firewall - himoya vositasi, cookie - brauzer ma\'lumoti.',
+          ru: 'Рансомшифровальщик шифрует файлы и требует выкуп. Файрвол - средство защиты, cookie - данные браузера.',
         },
       },
       {
@@ -380,8 +380,8 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Virus — yopishqoq, worm — mustaqil sayohatchi, trojan — ikki yuzli.',
-          ru: 'Вирус — прилипает, червь — путешествует сам, троянец — маскируется.',
+          uz: 'Virus - yopishqoq, worm - mustaqil sayohatchi, trojan - ikki yuzli.',
+          ru: 'Вирус - прилипает, червь - путешествует сам, троянец - маскируется.',
         },
       },
       {
@@ -393,8 +393,8 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
         },
         answer: 'true',
         explain: {
-          uz: "Ha — worm o'zi tarmoqdagi zaifliklarni topib, odam ishtirokisiz tarqaladi. Shuning uchun u virusdan xavfliroq.",
-          ru: 'Да — червь сам находит слабости в сети и распространяется без человека. Поэтому он опаснее вируса.',
+          uz: "Ha - worm o'zi tarmoqdagi zaifliklarni topib, odam ishtirokisiz tarqaladi. Shuning uchun u virusdan xavfliroq.",
+          ru: 'Да - червь сам находит слабости в сети и распространяется без человека. Поэтому он опаснее вируса.',
         },
       },
       {
@@ -412,8 +412,8 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
         ],
         answer: 'c',
         explain: {
-          uz: 'Pul to\'lash kafolat bermaydi (ko\'p hollarda fayllar qaytarilmaydi). Zaxira nusxa — yagona ishonchli yo\'l. Shuning uchun backup muntazam qilinadi.',
-          ru: 'Выкуп не гарантирует возврат (часто файлы не возвращают). Надёжный путь — резервная копия. Поэтому бэкап делают регулярно.',
+          uz: 'Pul to\'lash kafolat bermaydi (ko\'p hollarda fayllar qaytarilmaydi). Zaxira nusxa - yagona ishonchli yo\'l. Shuning uchun backup muntazam qilinadi.',
+          ru: 'Выкуп не гарантирует возврат (часто файлы не возвращают). Надёжный путь - резервная копия. Поэтому бэкап делают регулярно.',
         },
       },
     ],
@@ -427,26 +427,26 @@ Zaiflikni yopganingizda — risk tugaydi. Shuning uchun yangilanishlar (update) 
     content: {
       uz: `## Parollar va MFA
 
-Parol — eng keng tarqalgan himoya, shu sababli eng ko'p nishonga olinadi.
+Parol - eng keng tarqalgan himoya, shu sababli eng ko'p nishonga olinadi.
 
 - **Uzunlik murakkablikdan muhimroq:** "men-kiyikni-sevaman-2026" "P@ss1" dan ancha kuchli.
 - **Har bir saytga alohida parol:** bir joyda sizsa, boshqalariga ham o'tadi (credential stuffing).
-- **Parol menejeri:** barcha parollarni eslab qolish shart emas — faqat bitta asosiy parol.
+- **Parol menejeri:** barcha parollarni eslab qolish shart emas - faqat bitta asosiy parol.
 
-**MFA (ko'p faktorli autentifikatsiya)** — parol yetmaydi: qo'shimcha ikkinchi qadam kerak (SMS kod, ilova kodi, apparat kalit). Parol o'g'irlansa ham, ikkinchi qadam hujumni to'xtatadi.
+**MFA (ko'p faktorli autentifikatsiya)** - parol yetmaydi: qo'shimcha ikkinchi qadam kerak (SMS kod, ilova kodi, apparat kalit). Parol o'g'irlansa ham, ikkinchi qadam hujumni to'xtatadi.
 
-> **Xavfsizlik:** parol + MFA — eng katta farq qiladigan himoya. Hatto eng yaxshi parol ham bir marta sizib chiqsa, yetarli bo'ladi.`,
+> **Xavfsizlik:** parol + MFA - eng katta farq qiladigan himoya. Hatto eng yaxshi parol ham bir marta sizib chiqsa, yetarli bo'ladi.`,
       ru: `## Пароли и MFA
 
-Пароль — самая распространённая защита, поэтому и самая частая цель.
+Пароль - самая распространённая защита, поэтому и самая частая цель.
 
 - **Длина важнее сложности:** «люблю-свою-кошку-2026» надёжнее, чем «P@ss1».
 - **Свой пароль для каждого сайта:** утечка на одном ресурсе открывает доступ и к другим (credential stuffing).
-- **Менеджер паролей:** не нужно запоминать всё — достаточно одного главного пароля.
+- **Менеджер паролей:** не нужно запоминать всё - достаточно одного главного пароля.
 
-**MFA (многофакторная аутентификация)** — одного пароля мало: нужен второй шаг (код в SMS, код в приложении, аппаратный ключ). Даже если пароль украли, второй шаг остановит злоумышленника.
+**MFA (многофакторная аутентификация)** - одного пароля мало: нужен второй шаг (код в SMS, код в приложении, аппаратный ключ). Даже если пароль украли, второй шаг остановит злоумышленника.
 
-> **Безопасность:** пароль + MFA — самая эффективная защита. Даже идеальный пароль бесполезен, если он хоть раз утечёт.`,
+> **Безопасность:** пароль + MFA - самая эффективная защита. Даже идеальный пароль бесполезен, если он хоть раз утечёт.`,
     },
     exercises: [
       {
@@ -515,8 +515,8 @@ Parol — eng keng tarqalgan himoya, shu sababli eng ko'p nishonga olinadi.
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "MFA — himoya qatlami, menejer — xotira yordamchisi, credential stuffing va brute force esa hujum usullari. Har biri o'z o'rnida.",
-          ru: 'MFA — слой защиты, менеджер — помощник памяти, credential stuffing и brute force — способы атаки. У каждого своё место.',
+          uz: "MFA - himoya qatlami, menejer - xotira yordamchisi, credential stuffing va brute force esa hujum usullari. Har biri o'z o'rnida.",
+          ru: 'MFA - слой защиты, менеджер - помощник памяти, credential stuffing и brute force - способы атаки. У каждого своё место.',
         },
       },
     ],
@@ -530,32 +530,32 @@ Parol — eng keng tarqalgan himoya, shu sababli eng ko'p nishonga olinadi.
     content: {
       uz: `## Zaxira nusxa va ma'lumotni himoya
 
-**Backup (zaxira nusxa)** — ma'lumotning nusxasi, asosiysi yo'qolsa ham qoladigan.
+**Backup (zaxira nusxa)** - ma'lumotning nusxasi, asosiysi yo'qolsa ham qoladigan.
 
 **3-2-1 qoidasi:**
-- **3** — kamida uchta nusxa (asl + ikki backup)
-- **2** — ikki xil muhitda (masalan, kompyuter va tashqi disk)
-- **1** — bittasi boshqa joyda (bulut yoki ofisdan tashqarida)
+- **3** - kamida uchta nusxa (asl + ikki backup)
+- **2** - ikki xil muhitda (masalan, kompyuter va tashqi disk)
+- **1** - bittasi boshqa joyda (bulut yoki ofisdan tashqarida)
 
 **Shifrlash qachon kerak:**
-- **Yo'lda (in transit)** — tarmoqda uzatilganda (HTTPS, VPN).
-- **Saqlashda (at rest)** — diskda yotganda (shifrlangan disk, himoyalangan fayl).
+- **Yo'lda (in transit)** - tarmoqda uzatilganda (HTTPS, VPN).
+- **Saqlashda (at rest)** - diskda yotganda (shifrlangan disk, himoyalangan fayl).
 
-> **Xavfsizlik:** ransomware'ga qarshi eng ishonchli himoya — **sinab ko'rilgan** backup. Nusxa borligiga ishonch hosil qilish uchun tiklashni ham oldindan sinab ko'ring.`,
+> **Xavfsizlik:** ransomware'ga qarshi eng ishonchli himoya - **sinab ko'rilgan** backup. Nusxa borligiga ishonch hosil qilish uchun tiklashni ham oldindan sinab ko'ring.`,
       ru: `## Резервные копии и защита данных
 
-**Бэкап (резервная копия)** — копия данных, которая останется, даже если оригинал потеряется.
+**Бэкап (резервная копия)** - копия данных, которая останется, даже если оригинал потеряется.
 
 **Правило 3-2-1:**
-- **3** — минимум три копии (оригинал + два бэкапа)
-- **2** — на двух разных носителях (например, компьютер и внешний диск)
-- **1** — одна копия в другом месте (облако или вне офиса)
+- **3** - минимум три копии (оригинал + два бэкапа)
+- **2** - на двух разных носителях (например, компьютер и внешний диск)
+- **1** - одна копия в другом месте (облако или вне офиса)
 
 **Когда нужно шифрование:**
-- **В пути (in transit)** — при передаче по сети (HTTPS, VPN).
-- **При хранении (at rest)** — когда данные лежат на диске (зашифрованный диск, защищённый файл).
+- **В пути (in transit)** - при передаче по сети (HTTPS, VPN).
+- **При хранении (at rest)** - когда данные лежат на диске (зашифрованный диск, защищённый файл).
 
-> **Безопасность:** самая надёжная защита от ransomware — **проверенный** бэкап. Чтобы убедиться, что копия есть, попробуйте заранее восстановить из неё.`,
+> **Безопасность:** самая надёжная защита от ransomware - **проверенный** бэкап. Чтобы убедиться, что копия есть, попробуйте заранее восстановить из неё.`,
     },
     exercises: [
       {
@@ -573,16 +573,16 @@ Parol — eng keng tarqalgan himoya, shu sababli eng ko'p nishonga olinadi.
         ],
         answer: 'a',
         explain: {
-          uz: "1 — kamida bitta nusxa boshqa joyda (bulut yoki boshqa bino) bo'lishi kerak. Shunda yong'in yoki o'g'irlik bir vaqtda barcha nusxani yo'q qilmaydi.",
-          ru: '1 — минимум одна копия должна быть в другом месте (облако или другое здание). Тогда пожар или кража не уничтожат все копии сразу.',
+          uz: "1 - kamida bitta nusxa boshqa joyda (bulut yoki boshqa bino) bo'lishi kerak. Shunda yong'in yoki o'g'irlik bir vaqtda barcha nusxani yo'q qilmaydi.",
+          ru: '1 - минимум одна копия должна быть в другом месте (облако или другое здание). Тогда пожар или кража не уничтожат все копии сразу.',
         },
       },
       {
         id: 'e2',
         type: 'order',
         q: {
-          uz: "Ma'lumotni tiklash jarayonini to'g'ri tartibda joylang (birinchisi — birinchi qadam)",
-          ru: 'Расставьте шаги восстановления данных по порядку (первый — самый первый)',
+          uz: "Ma'lumotni tiklash jarayonini to'g'ri tartibda joylang (birinchisi - birinchi qadam)",
+          ru: 'Расставьте шаги восстановления данных по порядку (первый - самый первый)',
         },
         items: [
           { id: 'i1', uz: "Zarar aniqlanadi", ru: 'Определяется ущерб' },
@@ -592,21 +592,21 @@ Parol — eng keng tarqalgan himoya, shu sababli eng ko'p nishonga olinadi.
         ],
         order: ['i1', 'i2', 'i3', 'i4'],
         explain: {
-          uz: "Avval zarar ko'lami aniqlanadi, keyin toza nusxa tanlanadi, fayllar tiklanadi va oxirida tizim sog'lom ekani tekshiriladi — shunda zarar qayta tarqalmaydi.",
-          ru: 'Сначала оценивают масштаб ущерба, затем выбирают чистую копию, восстанавливают файлы и в конце проверяют, что система в порядке, — чтобы заражение не вернулось.',
+          uz: "Avval zarar ko'lami aniqlanadi, keyin toza nusxa tanlanadi, fayllar tiklanadi va oxirida tizim sog'lom ekani tekshiriladi - shunda zarar qayta tarqalmaydi.",
+          ru: 'Сначала оценивают масштаб ущерба, затем выбирают чистую копию, восстанавливают файлы и в конце проверяют, что система в порядке, - чтобы заражение не вернулось.',
         },
       },
       {
         id: 'e3',
         type: 'tf',
         q: {
-          uz: "Backup borligi yetarli — uni qayta tiklashni sinab ko'rish shart emas.",
-          ru: 'Достаточно того, что бэкап есть — проверять восстановление не нужно.',
+          uz: "Backup borligi yetarli - uni qayta tiklashni sinab ko'rish shart emas.",
+          ru: 'Достаточно того, что бэкап есть - проверять восстановление не нужно.',
         },
         answer: 'false',
         explain: {
-          uz: "Sinab ko'rilmagan backup — ishonchsiz backup. Buzilgan yoki chala nusxa ko'p uchraydi, shuning uchun tiklashni oldindan mashq qilib ko'rish kerak.",
-          ru: 'Непроверенный бэкап — ненадёжный бэкап. Повреждённые или неполные копии встречаются часто, поэтому восстановление стоит заранее опробовать.',
+          uz: "Sinab ko'rilmagan backup - ishonchsiz backup. Buzilgan yoki chala nusxa ko'p uchraydi, shuning uchun tiklashni oldindan mashq qilib ko'rish kerak.",
+          ru: 'Непроверенный бэкап - ненадёжный бэкап. Повреждённые или неполные копии встречаются часто, поэтому восстановление стоит заранее опробовать.',
         },
       },
       {
@@ -624,8 +624,8 @@ Parol — eng keng tarqalgan himoya, shu sababli eng ko'p nishonga olinadi.
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Shifrlash yo'lda va diskda maxfiylikni saqlaydi, backup esa yo'qotishdan himoya qiladi. Ochiq umumiy papka esa aksincha — xavf tug'diradi.",
-          ru: 'Шифрование в пути и на диске сохраняет конфиденциальность, а бэкап защищает от потери. Открытая общая папка — наоборот, создаёт риск.',
+          uz: "Shifrlash yo'lda va diskda maxfiylikni saqlaydi, backup esa yo'qotishdan himoya qiladi. Ochiq umumiy papka esa aksincha - xavf tug'diradi.",
+          ru: 'Шифрование в пути и на диске сохраняет конфиденциальность, а бэкап защищает от потери. Открытая общая папка - наоборот, создаёт риск.',
         },
       },
     ],
@@ -649,7 +649,7 @@ Hujumlar turli yo'l bilan keladi. Eng ko'p uchraydiganlari:
 | **MITM** | Aloqani o'rtada ushlab, kuzatish |
 | **Zero-day** | Hali yamalmagan zaiflikdan foydalanish |
 
-Ko'p hujum **inson** orqali boshlanadi — eng zaif bo'g'in. Texnika kuchli bo'lsa ham, noto'g'ri bosilgan havola hammasini buzadi.
+Ko'p hujum **inson** orqali boshlanadi - eng zaif bo'g'in. Texnika kuchli bo'lsa ham, noto'g'ri bosilgan havola hammasini buzadi.
 
 > **Xavfsizlik:** DDoS mavjudlikni (A), MITM va phishing esa maxfiylikni (C) nishonga oladi. Har xil hujumga qarshi har xil himoya kerak.`,
       ru: `## Основные семейства атак
@@ -664,9 +664,9 @@ Ko'p hujum **inson** orqali boshlanadi — eng zaif bo'g'in. Texnika kuchli bo'l
 | **MITM** | Встать в середину канала и подслушивать |
 | **Zero-day** | Использовать ещё не закрытую уязвимость |
 
-Многие атаки начинаются через **человека** — самое слабое звено. Даже сильная техника рушится из-за нажатия неверной ссылки.
+Многие атаки начинаются через **человека** - самое слабое звено. Даже сильная техника рушится из-за нажатия неверной ссылки.
 
-> **Безопасность:** DDoS бьёт по доступности (A), а MITM и фишинг — по конфиденциальности (C). Против разных атак нужны разные защиты.`,
+> **Безопасность:** DDoS бьёт по доступности (A), а MITM и фишинг - по конфиденциальности (C). Против разных атак нужны разные защиты.`,
     },
     exercises: [
       {
@@ -684,8 +684,8 @@ Ko'p hujum **inson** orqali boshlanadi — eng zaif bo'g'in. Texnika kuchli bo'l
         ],
         answer: 'a',
         explain: {
-          uz: "DoS/DDoS xizmatni haddan tashqari ko'p so'rov bilan to'xtatadi — bu mavjudlikka (Availability) qilingan hujum. Phishing va brute force boshqa maqsadni ko'zlaydi.",
-          ru: 'DoS/DDoS заваливает сервис запросами и останавливает его — это атака на доступность (Availability). Фишинг и brute force преследуют иные цели.',
+          uz: "DoS/DDoS xizmatni haddan tashqari ko'p so'rov bilan to'xtatadi - bu mavjudlikka (Availability) qilingan hujum. Phishing va brute force boshqa maqsadni ko'zlaydi.",
+          ru: 'DoS/DDoS заваливает сервис запросами и останавливает его - это атака на доступность (Availability). Фишинг и brute force преследуют иные цели.',
         },
       },
       {
@@ -722,7 +722,7 @@ Ko'p hujum **inson** orqali boshlanadi — eng zaif bo'g'in. Texnika kuchli bo'l
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "TLS aloqani shifrlaydi, ochiq WiFi'da ehtiyot bo'lish va VPN trafikni yashiradi. Bitta umumiy parol esa aksincha — o'g'irlangan parolni hamma joyda foydali qiladi.",
+          uz: "TLS aloqani shifrlaydi, ochiq WiFi'da ehtiyot bo'lish va VPN trafikni yashiradi. Bitta umumiy parol esa aksincha - o'g'irlangan parolni hamma joyda foydali qiladi.",
           ru: 'TLS шифрует канал, осторожность в открытом Wi-Fi и VPN прячут трафик. А один общий пароль, наоборот, делает украденный пароль полезным везде.',
         },
       },
@@ -735,8 +735,8 @@ Ko'p hujum **inson** orqali boshlanadi — eng zaif bo'g'in. Texnika kuchli bo'l
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — phishing va ijtimoiy injiniring aynan odamga qaratilgan. Shu sababli xodimlarni o'qitish eng samarali himoyalardan biri hisoblanadi.",
-          ru: 'Верно — фишинг и социальная инженерия нацелены именно на человека. Поэтому обучение сотрудников — одна из самых эффективных защит.',
+          uz: "To'g'ri - phishing va ijtimoiy injiniring aynan odamga qaratilgan. Shu sababli xodimlarni o'qitish eng samarali himoyalardan biri hisoblanadi.",
+          ru: 'Верно - фишинг и социальная инженерия нацелены именно на человека. Поэтому обучение сотрудников - одна из самых эффективных защит.',
         },
       },
     ],
@@ -750,10 +750,10 @@ Ko'p hujum **inson** orqali boshlanadi — eng zaif bo'g'in. Texnika kuchli bo'l
     content: {
       uz: `## 🏆 Nazorat
 
-Asosiylar bo'yicha bilimingizni tekshiring: CIA, tahdidlar, zararli dasturlar, parollar, backup va hujum turlari — o'ylab javob bering.`,
+Asosiylar bo'yicha bilimingizni tekshiring: CIA, tahdidlar, zararli dasturlar, parollar, backup va hujum turlari - o'ylab javob bering.`,
       ru: `## 🏆 Проверка
 
-Проверьте знания по основам: CIA, угрозы, вредоносное ПО, пароли, бэкапы и типы атак — отвечайте обдуманно.`,
+Проверьте знания по основам: CIA, угрозы, вредоносное ПО, пароли, бэкапы и типы атак - отвечайте обдуманно.`,
     },
     exercises: [
       {
@@ -790,8 +790,8 @@ Asosiylar bo'yicha bilimingizni tekshiring: CIA, tahdidlar, zararli dasturlar, p
         ],
         answers: ['a', 'b', 'd'],
         explain: {
-          uz: 'Uzun, aralash va taxmin qilib bo\'lmaydigan parol yaxshi. Lekin eng muhimi — har bir sayt uchun alohida parol.',
-          ru: 'Длинный, сложный и неугадываемый пароль — хороший. Но главное — отдельный пароль для каждого сайта.',
+          uz: 'Uzun, aralash va taxmin qilib bo\'lmaydigan parol yaxshi. Lekin eng muhimi - har bir sayt uchun alohida parol.',
+          ru: 'Длинный, сложный и неугадываемый пароль - хороший. Но главное - отдельный пароль для каждого сайта.',
         },
       },
       {
@@ -803,8 +803,8 @@ Asosiylar bo'yicha bilimingizni tekshiring: CIA, tahdidlar, zararli dasturlar, p
         },
         answer: 'false',
         explain: {
-          uz: 'Xavfsizlik — doimiy jarayon. Yangi tahdid va zaifliklar har kuni paydo bo\'ladi.',
-          ru: 'Безопасность — процесс. Новые угрозы и уязвимости появляются каждый день.',
+          uz: 'Xavfsizlik - doimiy jarayon. Yangi tahdid va zaifliklar har kuni paydo bo\'ladi.',
+          ru: 'Безопасность - процесс. Новые угрозы и уязвимости появляются каждый день.',
         },
       },
       {
@@ -817,16 +817,16 @@ Asosiylar bo'yicha bilimingizni tekshiring: CIA, tahdidlar, zararli dasturlar, p
         answer: 'a',
         accepted: ['availability', 'mavjudlik', 'доступность', 'доступ'],
         explain: {
-          uz: 'A — Availability (mavjudlik). Uchovlari birgalikda CIA triadasini tashkil qiladi.',
-          ru: 'A — Availability (доступность). Вместе они образуют триаду CIA.',
+          uz: 'A - Availability (mavjudlik). Uchovlari birgalikda CIA triadasini tashkil qiladi.',
+          ru: 'A - Availability (доступность). Вместе они образуют триаду CIA.',
         },
       },
       {
         id: 'e5',
         type: 'order',
         q: {
-          uz: 'Ransomware xavfsizligi uchun to\'g\'ri tartibda joylang (birinchisi — eng muhim)',
-          ru: 'Расставьте шаги защиты от ransomware (первый — самый важный)',
+          uz: 'Ransomware xavfsizligi uchun to\'g\'ri tartibda joylang (birinchisi - eng muhim)',
+          ru: 'Расставьте шаги защиты от ransomware (первый - самый важный)',
         },
         items: [
           { id: 'i1', uz: 'Muntazam zaxira nusxa olish', ru: 'Регулярно делать резервные копии' },

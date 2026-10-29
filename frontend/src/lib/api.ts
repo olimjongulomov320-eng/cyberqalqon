@@ -192,15 +192,19 @@ export function practiceAnswer(
   );
 }
 
-/** Finish the lesson. Server re-grades everything; response drives the celebration. */
-export function completeModule(
-  slug: string,
-  body: { answers: { id: string; value: AnswerValue }[] },
-  lang: string
-) {
+/** Reveal a task's solution: allowed once solved, or after two failed attempts. */
+export function fetchSolution(slug: string, exerciseId: string, lang: string) {
+  return req<{ explain: string; reveal: Reveal }>(`/modules/${encodeURIComponent(slug)}/solution?lang=${lang}`, {
+    method: 'POST',
+    body: JSON.stringify({ exercise_id: exerciseId }),
+  });
+}
+
+/** Finish the lesson. The server checks that every task is solved; nothing is sent. */
+export function completeModule(slug: string, lang: string) {
   return req<CompleteResult>(`/modules/${encodeURIComponent(slug)}/complete?lang=${lang}`, {
     method: 'POST',
-    body: JSON.stringify(body),
+    body: '{}',
   });
 }
 
@@ -382,6 +386,8 @@ export interface ModuleDetail {
 export interface ModuleProgress {
   is_completed: boolean;
   attempts: number;
+  /** Ids of tasks this learner has already solved (answered correctly at least once). */
+  solved?: string[];
 }
 
 export type ModuleState = 'done' | 'current' | 'open' | 'locked';
@@ -440,8 +446,13 @@ export interface LiveTotals {
 export interface CheckResult extends LiveTotals {
   correct: boolean;
   xp_earned: number;
-  explain: string;
-  reveal: Reveal;
+  /** Failed attempts on this task so far (all sessions). */
+  wrong_attempts: number;
+  /** True once solved, or after enough failed attempts to ask for the solution. */
+  can_reveal: boolean;
+  /** Present only when the answer was correct; a wrong attempt gets a verdict only. */
+  explain?: string;
+  reveal?: Reveal;
   new_achievements: string[];
 }
 

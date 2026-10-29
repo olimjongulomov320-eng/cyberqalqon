@@ -15,6 +15,7 @@ import {
   ProblemSummary,
   ProblemsPayload,
   checkAnswer,
+  fetchSolution,
   fetchProblem,
   fetchProblems,
 } from '@/lib/api';
@@ -334,6 +335,18 @@ export default function ProblemsPage() {
       setCheckError(errText(e));
     } finally {
       setChecking(false);
+    }
+  };
+
+  // A wrong answer shows a verdict only. After two failed attempts the learner
+  // may ask for the solution; it never marks the problem solved.
+  const onShowSolution = async () => {
+    if (!detail || !result) return;
+    try {
+      const s = await fetchSolution(detail.module_slug, detail.exercise_id, lang);
+      setResult({ ...result, reveal: s.reveal, explain: s.explain });
+    } catch (e: unknown) {
+      setCheckError(errText(e));
     }
   };
 
@@ -831,6 +844,11 @@ export default function ProblemsPage() {
                           // learner practises the skill they just missed.
                           <div className="flex flex-wrap items-center gap-2">
                             <p className="text-xs text-text-muted">{tr('missionReviewBody')}</p>
+                            {result.can_reveal && !result.reveal && (
+                              <Button size="sm" variant="secondary" onClick={onShowSolution}>
+                                {tr('taskShowSolution')}
+                              </Button>
+                            )}
                             <ButtonLink
                               href="/review"
                               variant="secondary"

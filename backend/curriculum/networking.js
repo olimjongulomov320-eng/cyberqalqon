@@ -1,13 +1,13 @@
 /**
- * Curriculum — Cybersecurity path › Domain 2: Networking
+ * Curriculum - Cybersecurity path › Domain 2: Networking
  *
  * Shape (validated by setup.js via lib/grade.validateExercise):
  *   module: { slug, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
  *   kind: 'lesson' | 'checkpoint'   (checkpoint = end-of-domain trophy node)
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language. This is a
- *     warm-up, not a textbook — the exercises do the teaching.
+ *   - Lesson prose: short. 6-14 markdown lines per language. This is a
+ *     warm-up, not a textbook - the exercises do the teaching.
  *   - Every exercise: bilingual q + explain, technically accurate, beginner
  *     level, no trick questions, explanations teach the WHY.
  *   - Exercise ids: e1..eN in delivery order.
@@ -23,26 +23,26 @@ module.exports = [
     content: {
       uz: `## Tarmoqlarga kirish
 
-**Tarmoq** — bir-biriga ulangan va ma'lumot almashadigan qurilmalar to'plami. Kompyuter, telefon, printer — hammasi tarmoqda bo'lishi mumkin.
+**Tarmoq** - bir-biriga ulangan va ma'lumot almashadigan qurilmalar to'plami. Kompyuter, telefon, printer - hammasi tarmoqda bo'lishi mumkin.
 
-- **LAN** — kichik hudud: uy, ofis, maktab. Tez va arzon.
-- **WAN** — katta masofa: shaharlar, mamlakatlar. Butun internet ham WAN sanaladi.
+- **LAN** - kichik hudud: uy, ofis, maktab. Tez va arzon.
+- **WAN** - katta masofa: shaharlar, mamlakatlar. Butun internet ham WAN sanaladi.
 
 Ulashning ikki shakli:
-- **Client-Server** — barcha so'rovlar markaziy serverga boradi.
-- **P2P (peer-to-peer)** — har bir qurilma ham server, ham klient bo'ladi.
+- **Client-Server** - barcha so'rovlar markaziy serverga boradi.
+- **P2P (peer-to-peer)** - har bir qurilma ham server, ham klient bo'ladi.
 
 > **Nega xavfsizlikka aloqadori?** Qurilmalar qancha ko'p ulansa, hujum yo'llari ham shuncha ko'p ochiladi. Bir zaif qurilma butun tarmoqni xavf ostida qoldirishi mumkin.`,
       ru: `## Введение в сети
 
-**Сеть** — это набор устройств, соединённых между собой и обменивающихся данными. Компьютер, телефон, принтер — всё может быть частью сети.
+**Сеть** - это набор устройств, соединённых между собой и обменивающихся данными. Компьютер, телефон, принтер - всё может быть частью сети.
 
-- **LAN** — маленькая зона: дом, офис, школа. Быстро и недорого.
-- **WAN** — большие расстояния: города, страны. Весь интернет тоже считается WAN.
+- **LAN** - маленькая зона: дом, офис, школа. Быстро и недорого.
+- **WAN** - большие расстояния: города, страны. Весь интернет тоже считается WAN.
 
 Два способа организации:
-- **Клиент-сервер** — все запросы идут к центральному серверу.
-- **P2P (одноранговый)** — каждое устройство одновременно и сервер, и клиент.
+- **Клиент-сервер** - все запросы идут к центральному серверу.
+- **P2P (одноранговый)** - каждое устройство одновременно и сервер, и клиент.
 
 > **Почему это важно для безопасности:** чем больше устройств соединено, тем больше путей для атаки. Одно слабое устройство может поставить под угрозу всю сеть.`,
     },
@@ -62,8 +62,8 @@ Ulashning ikki shakli:
         ],
         answer: 'a',
         explain: {
-          uz: "LAN — kichik hudud (uy, ofis, maktab) ichidagi tarmoq. WAN shaharlar va mamlakatlar bo'ylab uzaydi, P2P esa ulanish usuli, VPN — shifrlash yo'li: ular hajm turi emas.",
-          ru: 'LAN — сеть в пределах малой зоны (дом, офис, школа). WAN охватывает города и страны, P2P — способ объединения, VPN — способ шифрования: это не размер сети.',
+          uz: "LAN - kichik hudud (uy, ofis, maktab) ichidagi tarmoq. WAN shaharlar va mamlakatlar bo'ylab uzaydi, P2P esa ulanish usuli, VPN - shifrlash yo'li: ular hajm turi emas.",
+          ru: 'LAN - сеть в пределах малой зоны (дом, офис, школа). WAN охватывает города и страны, P2P - способ объединения, VPN - способ шифрования: это не размер сети.',
         },
       },
       {
@@ -75,8 +75,8 @@ Ulashning ikki shakli:
         },
         answer: 'true',
         explain: {
-          uz: "Ha — P2P da markaziy server yo'q: har bir ishtirokchi (peer) o'zi ham server, ham klient bo'ladi. Shuning uchun torrentlarda fayllar boshqa foydalanuvchilardan yuklab olinadi.",
-          ru: 'Верно — в P2P центрального сервера нет: каждый участник (peer) одновременно сервер и клиент. Поэтому в торрентах файлы скачиваются с других пользователей.',
+          uz: "Ha - P2P da markaziy server yo'q: har bir ishtirokchi (peer) o'zi ham server, ham klient bo'ladi. Shuning uchun torrentlarda fayllar boshqa foydalanuvchilardan yuklab olinadi.",
+          ru: 'Верно - в P2P центрального сервера нет: каждый участник (peer) одновременно сервер и клиент. Поэтому в торрентах файлы скачиваются с других пользователей.',
         },
       },
       {
@@ -93,8 +93,8 @@ Ulashning ikki shakli:
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: "LAN — kichik hudud, WAN — katta masofa, P2P esa server'siz tengdoshlar ulanishi. Har birining roli boshqacha.",
-          ru: 'LAN — маленькая зона, WAN — большие расстояния, P2P — прямое соединение пиров без сервера.',
+          uz: "LAN - kichik hudud, WAN - katta masofa, P2P esa server'siz tengdoshlar ulanishi. Har birining roli boshqacha.",
+          ru: 'LAN - маленькая зона, WAN - большие расстояния, P2P - прямое соединение пиров без сервера.',
         },
       },
       {
@@ -107,8 +107,8 @@ Ulashning ikki shakli:
         answer: 'wan',
         accepted: ['wan'],
         explain: {
-          uz: 'WAN — Wide Area Network. Internet aynan shunday tarmoq: u shaharlar va mamlakatlarni bo\'ylab uzaydi.',
-          ru: 'WAN — Wide Area Network (сеть большой дальности). Интернет — как раз такая сеть: она охватывает города и страны.',
+          uz: 'WAN - Wide Area Network. Internet aynan shunday tarmoq: u shaharlar va mamlakatlarni bo\'ylab uzaydi.',
+          ru: 'WAN - Wide Area Network (сеть большой дальности). Интернет - как раз такая сеть: она охватывает города и страны.',
         },
       },
     ],
@@ -122,28 +122,28 @@ Ulashning ikki shakli:
     content: {
       uz: `## IP manzillar
 
-**IP manzil** — tarmoqdagi har bir qurilmaning noyob raqamli manzili. U pochta kodidek ishlaydi: paket faqat to'g'ri qurilmaga yetib boradi.
+**IP manzil** - tarmoqdagi har bir qurilmaning noyob raqamli manzili. U pochta kodidek ishlaydi: paket faqat to'g'ri qurilmaga yetib boradi.
 
-IPv4 — 4 ta son, nuqta bilan ajratilgan (har biri 0–255): **192.168.1.10**
+IPv4 - 4 ta son, nuqta bilan ajratilgan (har biri 0-255): **192.168.1.10**
 
 | Tur | Misol | Qayerda ishlaydi |
 |---|---|---|
-| **Ichki (private)** | **10.x.x.x**, **172.16–31.x.x**, **192.168.x.x** | Faqat lokal tarmoqda |
+| **Ichki (private)** | **10.x.x.x**, **172.16-31.x.x**, **192.168.x.x** | Faqat lokal tarmoqda |
 | **Ochiq (public)** | **8.8.8.8** | Butun internet orqali |
 
-> **Xavfsizlik:** ichki manzillar tashqaridan ko'rinmaydi — bu tabiiy himoya. Umumiy WiFi'da esa barcha qurilmalar bir xil ichki makondan foydalanadi.`,
+> **Xavfsizlik:** ichki manzillar tashqaridan ko'rinmaydi - bu tabiiy himoya. Umumiy WiFi'da esa barcha qurilmalar bir xil ichki makondan foydalanadi.`,
       ru: `## IP-адреса
 
-**IP-адрес** — уникальный цифровой адрес каждого устройства в сети. Он работает как почтовый индекс: пакет должен дойти именно к нужному устройству.
+**IP-адрес** - уникальный цифровой адрес каждого устройства в сети. Он работает как почтовый индекс: пакет должен дойти именно к нужному устройству.
 
-IPv4 — четыре числа через точку (каждое от 0 до 255): **192.168.1.10**
+IPv4 - четыре числа через точку (каждое от 0 до 255): **192.168.1.10**
 
 | Тип | Пример | Где работает |
 |---|---|---|
-| **Внутренний (private)** | **10.x.x.x**, **172.16–31.x.x**, **192.168.x.x** | Только в локальной сети |
+| **Внутренний (private)** | **10.x.x.x**, **172.16-31.x.x**, **192.168.x.x** | Только в локальной сети |
 | **Открытый (public)** | **8.8.8.8** | По всему интернету |
 
-> **Безопасность:** внутренние адреса не видны снаружи — это естественная защита. В общем Wi-Fi все устройства используют одну внутреннюю подсеть, поэтому такой сети не доверяют.`,
+> **Безопасность:** внутренние адреса не видны снаружи - это естественная защита. В общем Wi-Fi все устройства используют одну внутреннюю подсеть, поэтому такой сети не доверяют.`,
     },
     exercises: [
       {
@@ -161,15 +161,15 @@ IPv4 — четыре числа через точку (каждое от 0 до
         ],
         answer: 'a',
         explain: {
-          uz: "192.168.x.x ichki blokka kiradi (10.x.x.x va 172.16–31.x.x bilan birga). Qolgan uchtasi ochiq (public) manzillar: ular internet orqali ko'rinadi va global yo'naltiriladi.",
-          ru: '192.168.x.x входит во внутренний блок (как и 10.x.x.x и 172.16–31.x.x). Остальные три — публичные адреса: они видны в интернете и маршрутизируются глобально.',
+          uz: "192.168.x.x ichki blokka kiradi (10.x.x.x va 172.16-31.x.x bilan birga). Qolgan uchtasi ochiq (public) manzillar: ular internet orqali ko'rinadi va global yo'naltiriladi.",
+          ru: '192.168.x.x входит во внутренний блок (как и 10.x.x.x и 172.16-31.x.x). Остальные три - публичные адреса: они видны в интернете и маршрутизируются глобально.',
         },
       },
       {
         id: 'e2',
         type: 'tf',
         q: {
-          uz: "Tarmoqda ikkita qurilma bir xil IP manzilni egallab turishi — bu normal holat.",
+          uz: "Tarmoqda ikkita qurilma bir xil IP manzilni egallab turishi - bu normal holat.",
           ru: 'Два устройства в сети могут спокойно использовать один и тот же IP-адрес.',
         },
         answer: 'false',
@@ -193,8 +193,8 @@ IPv4 — четыре числа через точку (каждое от 0 до
         ],
         answers: ['a', 'b', 'd'],
         explain: {
-          uz: 'Ichki bloklar: 10.x.x.x, 172.16.x.x – 172.31.x.x va 192.168.x.x. 172.32.0.1 esa 172.31 dan tashqarida — bu ochiq (public) manzil.',
-          ru: 'Внутренние блоки: 10.x.x.x, 172.16.x.x – 172.31.x.x и 192.168.x.x. Адрес 172.32.0.1 выходит за пределы 172.31 — это публичный адрес.',
+          uz: 'Ichki bloklar: 10.x.x.x, 172.16.x.x - 172.31.x.x va 192.168.x.x. 172.32.0.1 esa 172.31 dan tashqarida - bu ochiq (public) manzil.',
+          ru: 'Внутренние блоки: 10.x.x.x, 172.16.x.x - 172.31.x.x и 192.168.x.x. Адрес 172.32.0.1 выходит за пределы 172.31 - это публичный адрес.',
         },
       },
       {
@@ -207,8 +207,8 @@ IPv4 — четыре числа через точку (каждое от 0 до
         answer: 'internet protocol',
         accepted: ['internet protocol'],
         explain: {
-          uz: 'IP — Internet Protocol. Aynan shu protokol har bir qurilmaga noyob manzil beradi va paketlarni to\'g\'ri yo\'naltiradi.',
-          ru: 'IP — Internet Protocol. Именно этот протокол даёт каждому устройству уникальный адрес и направляет пакеты по назначению.',
+          uz: 'IP - Internet Protocol. Aynan shu protokol har bir qurilmaga noyob manzil beradi va paketlarni to\'g\'ri yo\'naltiradi.',
+          ru: 'IP - Internet Protocol. Именно этот протокол даёт каждому устройству уникальный адрес и направляет пакеты по назначению.',
         },
       },
     ],
@@ -218,13 +218,13 @@ IPv4 — четыре числа через точку (каждое от 0 до
     slug: 'subnetting-basics',
     kind: 'lesson',
     xp_reward: 20,
-    title: { uz: "Subnet — tarmoqlarni bo'lish", ru: 'Подсети — деление сети' },
+    title: { uz: "Subnet - tarmoqlarni bo'lish", ru: 'Подсети - деление сети' },
     content: {
-      uz: `## Subnet — tarmoqlarni bo'lish
+      uz: `## Subnet - tarmoqlarni bo'lish
 
 Bitta katta IP tarmog'ini **subnet**larga (kichik tarmoqlarga) bo'lish mumkin. Buni **subnet mask** belgilaydi.
 
-Misol: **192.168.1.0/24**. Bu yerdagi /24 — manzilning birinchi 24 biti tarmoq uchun, qolgan 8 biti qurilmalar uchun.
+Misol: **192.168.1.0/24**. Bu yerdagi /24 - manzilning birinchi 24 biti tarmoq uchun, qolgan 8 biti qurilmalar uchun.
 
 - /24 → jami 256 manzil (254 tasi qurilma uchun)
 - /25 → 128 manzil (126 tasi qurilma uchun)
@@ -233,11 +233,11 @@ Misol: **192.168.1.0/24**. Bu yerdagi /24 — manzilning birinchi 24 biti tarmoq
 Prefiks soni qanchalik **katta** bo'lsa, subnetga shuncha **kam** qurilma sig'adi.
 
 > **Xavfsizlik:** subnetlar tarmoqni bo'laklarga bo'ladi. Buzg'unchi bir bo'lakka kirsa ham, segmentatsiya unga boshqa bo'laklarga o'tishni qiyinlashtiradi.`,
-      ru: `## Подсети — деление сети
+      ru: `## Подсети - деление сети
 
 Большую IP-сеть можно разделить на **подсети**. Это определяет **маска подсети** (subnet mask).
 
-Пример: **192.168.1.0/24**. Число /24 означает: первые 24 бита адреса — для сети, оставшиеся 8 бит — для устройств.
+Пример: **192.168.1.0/24**. Число /24 означает: первые 24 бита адреса - для сети, оставшиеся 8 бит - для устройств.
 
 - /24 → всего 256 адресов (254 для устройств)
 - /25 → 128 адресов (126 для устройств)
@@ -263,8 +263,8 @@ Prefiks soni qanchalik **katta** bo'lsa, subnetga shuncha **kam** qurilma sig'ad
         ],
         answer: 'a',
         explain: {
-          uz: "/26 — jami 64 manzil. Bittasi tarmoq, bittasi broadcast uchun ketadi, qolgan 62 tasi qurilmaga beriladi. Shu sababli har doim 2 tani ayiramiz.",
-          ru: '/26 — всего 64 адреса. Один из них адрес сети, один — широковещательный, остаётся 62 для устройств. Поэтому всегда вычитаем 2.',
+          uz: "/26 - jami 64 manzil. Bittasi tarmoq, bittasi broadcast uchun ketadi, qolgan 62 tasi qurilmaga beriladi. Shu sababli har doim 2 tani ayiramiz.",
+          ru: '/26 - всего 64 адреса. Один из них адрес сети, один - широковещательный, остаётся 62 для устройств. Поэтому всегда вычитаем 2.',
         },
       },
       {
@@ -277,7 +277,7 @@ Prefiks soni qanchalik **katta** bo'lsa, subnetga shuncha **kam** qurilma sig'ad
         answer: 'false',
         explain: {
           uz: "Aksincha: prefiks katta bo'lsa, subnet kichik bo'ladi. /24 da 254 qurilma, /26 da esa atigi 62 ta.",
-          ru: 'Наоборот: чем больше префикс, тем меньше подсеть. В /24 — 254 устройства, а в /26 — всего 62.',
+          ru: 'Наоборот: чем больше префикс, тем меньше подсеть. В /24 - 254 устройства, а в /26 - всего 62.',
         },
       },
       {
@@ -291,7 +291,7 @@ Prefiks soni qanchalik **katta** bo'lsa, subnetga shuncha **kam** qurilma sig'ad
         accepted: ['256'],
         explain: {
           uz: "/24 da oxirgi 8 bit qurilmalar uchun, ya'ni 2^8 = 256 manzil. Ulardan 254 tasi amalda ishlatiladi.",
-          ru: '/24 — последние 8 бит для устройств, то есть 2^8 = 256 адресов. Из них на практике используется 254.',
+          ru: '/24 - последние 8 бит для устройств, то есть 2^8 = 256 адресов. Из них на практике используется 254.',
         },
       },
       {
@@ -326,20 +326,20 @@ Prefiks soni qanchalik **katta** bo'lsa, subnetga shuncha **kam** qurilma sig'ad
 
 Har bir tarmoq kartasi (NIC) zavodda berilgan **MAC manzil**ga ega: masalan **00:1A:2B:3C:4D:5E**. Bu qurilmaning "jismoniy" manzili.
 
-- **Switch** — MAC manzillar jadvali bo'yicha paketni faqat kerakli portga yuboradi.
-- **Hub** — paketni barcha portlarga yuboradi (eski va xavfli usul).
-- **ARP** — IP manzilni MAC manzilga bog'laydi: "192.168.1.5 kimning MAC manzili?"
+- **Switch** - MAC manzillar jadvali bo'yicha paketni faqat kerakli portga yuboradi.
+- **Hub** - paketni barcha portlarga yuboradi (eski va xavfli usul).
+- **ARP** - IP manzilni MAC manzilga bog'laydi: "192.168.1.5 kimning MAC manzili?"
 
-> **Xavfsizlik:** ARP spoofing — buzg'unchi o'zini boshqa qurilma kabi ko'rsatib, trafikni o'g'irlashi mumkin. Shu sababli katta tarmoqlarda dinamik ARP nazorati qo'llanadi.`,
+> **Xavfsizlik:** ARP spoofing - buzg'unchi o'zini boshqa qurilma kabi ko'rsatib, trafikni o'g'irlashi mumkin. Shu sababli katta tarmoqlarda dinamik ARP nazorati qo'llanadi.`,
       ru: `## MAC-адрес, ARP и коммутатор
 
 У каждой сетевой карты (NIC) есть **MAC-адрес** с завода: например **00:1A:2B:3C:4D:5E**. Это «физический» адрес устройства.
 
-- **Коммутатор (switch)** — по таблице MAC-адресов отправляет пакет только в нужный порт.
-- **Концентратор (hub)** — отправляет пакет во все порты (старый и небезопасный способ).
-- **ARP** — сопоставляет IP-адрес и MAC-адрес: «192.168.1.5 — это чей MAC-адрес?»
+- **Коммутатор (switch)** - по таблице MAC-адресов отправляет пакет только в нужный порт.
+- **Концентратор (hub)** - отправляет пакет во все порты (старый и небезопасный способ).
+- **ARP** - сопоставляет IP-адрес и MAC-адрес: «192.168.1.5 - это чей MAC-адрес?»
 
-> **Безопасность:** ARP-спуфинг — злоумышленник выдаёт себя за другое устройство и может перехватывать трафик. Поэтому в больших сетях применяют защиту динамического ARP.`,
+> **Безопасность:** ARP-спуфинг - злоумышленник выдаёт себя за другое устройство и может перехватывать трафик. Поэтому в больших сетях применяют защиту динамического ARP.`,
     },
     exercises: [
       {
@@ -384,8 +384,8 @@ Har bir tarmoq kartasi (NIC) zavodda berilgan **MAC manzil**ga ega: masalan **00
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — hub paketni barcha portlarga yuboradi, shu sababli trafik ko'payadi va uni tutib olish osonlashadi. Buni switch hal qiladi.",
-          ru: 'Нет — концентратор рассылает пакет во все порты: трафик растёт, и перехватить его проще. Эту проблему решает коммутатор.',
+          uz: "Yo'q - hub paketni barcha portlarga yuboradi, shu sababli trafik ko'payadi va uni tutib olish osonlashadi. Buni switch hal qiladi.",
+          ru: 'Нет - концентратор рассылает пакет во все порты: трафик растёт, и перехватить его проще. Эту проблему решает коммутатор.',
         },
       },
       {
@@ -402,8 +402,8 @@ Har bir tarmoq kartasi (NIC) zavodda berilgan **MAC manzil**ga ega: masalan **00
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: "MAC — qurilmaning doimiy manzili, switch uni jadval orqali ishlatadi, ARP esa IP va MAC o'rtasidagi ko'prik.",
-          ru: 'MAC — постоянный адрес устройства, коммутатор использует его через таблицу, а ARP — мост между IP и MAC.',
+          uz: "MAC - qurilmaning doimiy manzili, switch uni jadval orqali ishlatadi, ARP esa IP va MAC o'rtasidagi ko'prik.",
+          ru: 'MAC - постоянный адрес устройства, коммутатор использует его через таблицу, а ARP - мост между IP и MAC.',
         },
       },
     ],
@@ -415,9 +415,9 @@ Har bir tarmoq kartasi (NIC) zavodda berilgan **MAC manzil**ga ega: masalan **00
     xp_reward: 20,
     title: { uz: 'DNS asoslari', ru: 'Основы DNS' },
     content: {
-      uz: `## DNS — internet telefon kitobi
+      uz: `## DNS - internet telefon kitobi
 
-google.com deb yozganimizda, aslida biz serverning IP manzilini talab qilamiz. Nomni raqamga aylantiruvchi tizim — **DNS** (Domain Name System).
+google.com deb yozganimizda, aslida biz serverning IP manzilini talab qilamiz. Nomni raqamga aylantiruvchi tizim - **DNS** (Domain Name System).
 
 Soddalashtirilgan jarayon:
 
@@ -428,8 +428,8 @@ Soddalashtirilgan jarayon:
 
 DNS asosan **53-port**da ishlaydi.
 
-> **Nega muhim:** agar bu javob almashtirilsa (DNS spoofing), foydalanuvchi haqiqiy sayt o'rniga haker serveriga kiradi — manzil satrini tekshirish ham yordam bermaydi.`,
-      ru: `## DNS — телефонная книга интернета
+> **Nega muhim:** agar bu javob almashtirilsa (DNS spoofing), foydalanuvchi haqiqiy sayt o'rniga haker serveriga kiradi - manzil satrini tekshirish ham yordam bermaydi.`,
+      ru: `## DNS - телефонная книга интернета
 
 Когда мы пишем google.com, на самом деле мы запрашиваем IP-адрес сервера. Систему, преобразующую имена в цифры, называют **DNS** (Domain Name System).
 
@@ -442,7 +442,7 @@ DNS asosan **53-port**da ishlaydi.
 
 DNS в основном работает через **порт 53**.
 
-> **Почему это важно:** если подменить ответ (DNS spoofing), пользователь попадёт не на настоящий сайт, а на сервер злоумышленника — строку адреса проверить тоже не поможет.`,
+> **Почему это важно:** если подменить ответ (DNS spoofing), пользователь попадёт не на настоящий сайт, а на сервер злоумышленника - строку адреса проверить тоже не поможет.`,
     },
     exercises: [
       {
@@ -460,8 +460,8 @@ DNS в основном работает через **порт 53**.
         ],
         answer: 'a',
         explain: {
-          uz: "DNS — internet manzillari daftari: u inson o'qiydigan nomni (google.com) mashina uchun kerak bo'lgan IP manzilga aylantiradi. Shifrlash va parollar boshqa vazifalar.",
-          ru: 'DNS — телефонная книга интернета: он превращает читаемое человеком имя (google.com) в нужный машине IP-адрес. Шифрование и пароли — другие задачи.',
+          uz: "DNS - internet manzillari daftari: u inson o'qiydigan nomni (google.com) mashina uchun kerak bo'lgan IP manzilga aylantiradi. Shifrlash va parollar boshqa vazifalar.",
+          ru: 'DNS - телефонная книга интернета: он превращает читаемое человеком имя (google.com) в нужный машине IP-адрес. Шифрование и пароли - другие задачи.',
         },
       },
       {
@@ -479,8 +479,8 @@ DNS в основном работает через **порт 53**.
         ],
         order: ['i1', 'i2', 'i3', 'i4'],
         explain: {
-          uz: "Avval so'rov (resolverga), keyin izlash, so'ng javob qaytish va nihoyat ulanish — DNS shu ketma-ketlikda ishlaydi.",
-          ru: 'Сначала запрос к резолверу, затем поиск, потом возврат ответа и в конце подключение — DNS работает именно так.',
+          uz: "Avval so'rov (resolverga), keyin izlash, so'ng javob qaytish va nihoyat ulanish - DNS shu ketma-ketlikda ishlaydi.",
+          ru: 'Сначала запрос к резолверу, затем поиск, потом возврат ответа и в конце подключение - DNS работает именно так.',
         },
       },
       {
@@ -492,8 +492,8 @@ DNS в основном работает через **порт 53**.
         },
         answer: 'true',
         explain: {
-          uz: "Ha — agar javob aldashtirilsa, foydalanuvchi haqiqiy sayt o'rniga haker serveriga kiradi. Shuning uchun muhim saytlar DNS javobini ham tekshiradi (DNSSEC).",
-          ru: 'Да — если подменить ответ, пользователь попадёт на сервер злоумышленника вместо настоящего сайта. Поэтому важные сайты проверяют и ответы DNS (DNSSEC).',
+          uz: "Ha - agar javob aldashtirilsa, foydalanuvchi haqiqiy sayt o'rniga haker serveriga kiradi. Shuning uchun muhim saytlar DNS javobini ham tekshiradi (DNSSEC).",
+          ru: 'Да - если подменить ответ, пользователь попадёт на сервер злоумышленника вместо настоящего сайта. Поэтому важные сайты проверяют и ответы DNS (DNSSEC).',
         },
       },
       {
@@ -510,8 +510,8 @@ DNS в основном работает через **порт 53**.
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: "DNS — tizim, resolver — uning ishchi serveri, IP manzil esa yakuniy natija: qurilmaning o'z manzili.",
-          ru: 'DNS — система, резолвер — её рабочий сервер, а IP-адрес — результат: собственный адрес устройства.',
+          uz: "DNS - tizim, resolver - uning ishchi serveri, IP manzil esa yakuniy natija: qurilmaning o'z manzili.",
+          ru: 'DNS - система, резолвер - её рабочий сервер, а IP-адрес - результат: собственный адрес устройства.',
         },
       },
     ],
@@ -525,7 +525,7 @@ DNS в основном работает через **порт 53**.
     content: {
       uz: `## TCP va UDP
 
-Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligini bildiradi (80 — veb, 22 — SSH).
+Ma'lumot tarmoqda **portlar** orqali yetkaziladi - port qaysi dastur uchunligini bildiradi (80 - veb, 22 - SSH).
 
 | | **TCP** | **UDP** |
 |---|---|---|
@@ -533,10 +533,10 @@ Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligi
 | Kafolat | Yetkazilganini tekshiradi | Kafolat yo'q, lekin tez |
 | Ishlatadi | Veb, email, fayl uzatish | Video, ovoz, o'yin, DNS |
 
-> **Eslatma:** TCP sekinroq, lekin har bir paketni hisobga oladi. UDP'da manzil soxtalashtirish (spoofing) osonroq — shuning uchun xavfsiz tizimlar ko'pincha TCP ni tanlaydi.`,
+> **Eslatma:** TCP sekinroq, lekin har bir paketni hisobga oladi. UDP'da manzil soxtalashtirish (spoofing) osonroq - shuning uchun xavfsiz tizimlar ko'pincha TCP ni tanlaydi.`,
       ru: `## TCP и UDP
 
-Данные в сети доставляются через **порты** — они показывают, для какой программы предназначен пакет (80 — веб, 22 — SSH).
+Данные в сети доставляются через **порты** - они показывают, для какой программы предназначен пакет (80 - веб, 22 - SSH).
 
 | | **TCP** | **UDP** |
 |---|---|---|
@@ -544,7 +544,7 @@ Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligi
 | Гарантия | Проверяет доставку | Гарантий нет, зато быстро |
 | Применение | Веб, почта, передача файлов | Видео, звук, игры, DNS |
 
-> **Важно:** TCP медленнее, но контролирует каждый пакет. В UDP подменить адрес (spoofing) проще — поэтому защищённые системы чаще выбирают TCP.`,
+> **Важно:** TCP медленнее, но контролирует каждый пакет. В UDP подменить адрес (spoofing) проще - поэтому защищённые системы чаще выбирают TCP.`,
     },
     exercises: [
       {
@@ -562,8 +562,8 @@ Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligi
         ],
         answer: 'a',
         explain: {
-          uz: "TCP — ulanishga asoslangan (connection-oriented): avval aloqa quriladi, keyin har bir paket kelgani tekshiriladi. UDP buni qilmaydi, HTTP va DNS esa TCP yoki UDP ustidagi yuqori darajadagi protokollar.",
-          ru: 'TCP — протокол с установлением соединения: сначала создаётся канал, затем проверяется доставка каждого пакета. UDP этого не делает, а HTTP и DNS работают поверх TCP или UDP.',
+          uz: "TCP - ulanishga asoslangan (connection-oriented): avval aloqa quriladi, keyin har bir paket kelgani tekshiriladi. UDP buni qilmaydi, HTTP va DNS esa TCP yoki UDP ustidagi yuqori darajadagi protokollar.",
+          ru: 'TCP - протокол с установлением соединения: сначала создаётся канал, затем проверяется доставка каждого пакета. UDP этого не делает, а HTTP и DNS работают поверх TCP или UDP.',
         },
       },
       {
@@ -580,8 +580,8 @@ Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligi
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: "TCP — ishonch va tartib, UDP — tezlik, port esa paketning qaysi dasturga tegishligini ko'rsatadi.",
-          ru: 'TCP — надёжность и порядок, UDP — скорость, а порт указывает, для какой программы предназначен пакет.',
+          uz: "TCP - ishonch va tartib, UDP - tezlik, port esa paketning qaysi dasturga tegishligini ko'rsatadi.",
+          ru: 'TCP - надёжность и порядок, UDP - скорость, а порт указывает, для какой программы предназначен пакет.',
         },
       },
       {
@@ -599,8 +599,8 @@ Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligi
         ],
         answers: ['a', 'b', 'd'],
         explain: {
-          uz: "Veb, email va fayl uzatishda har bir bayt yetib borishi shart — bu TCP vazifasi. Jonli videoda kechikish muhimroq: bir necha kadrs yo'qolsa ham ko'rinmaydi, shuning uchun u yerda UDP ishlatiladi.",
-          ru: 'Для веба, почты и передачи файлов важна доставка каждого байта — это задача TCP. В живом видео важнее задержка: потерянный кадр незаметен, поэтому берут UDP.',
+          uz: "Veb, email va fayl uzatishda har bir bayt yetib borishi shart - bu TCP vazifasi. Jonli videoda kechikish muhimroq: bir necha kadrs yo'qolsa ham ko'rinmaydi, shuning uchun u yerda UDP ishlatiladi.",
+          ru: 'Для веба, почты и передачи файлов важна доставка каждого байта - это задача TCP. В живом видео важнее задержка: потерянный кадр незаметен, поэтому берут UDP.',
         },
       },
       {
@@ -608,13 +608,13 @@ Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligi
         type: 'input',
         q: {
           uz: "TCP qisqartmasidagi 'C' harfi qaysi so'zni bildiradi? (bitta inglizcha so'z)",
-          ru: 'Буква «C» в сокращении TCP — это какое английское слово? (одно слово)',
+          ru: 'Буква «C» в сокращении TCP - это какое английское слово? (одно слово)',
         },
         answer: 'connection',
         accepted: ['connection'],
         explain: {
-          uz: 'C — connection (ulanish). TCP avval connection quradi, shuning uchun uni connection-oriented deyiladi.',
-          ru: 'C — connection (соединение). TCP сначала устанавливает соединение, поэтому его называют connection-oriented.',
+          uz: 'C - connection (ulanish). TCP avval connection quradi, shuning uchun uni connection-oriented deyiladi.',
+          ru: 'C - connection (соединение). TCP сначала устанавливает соединение, поэтому его называют connection-oriented.',
         },
       },
     ],
@@ -630,34 +630,34 @@ Ma'lumot tarmoqda **portlar** orqali yetkaziladi — port qaysi dastur uchunligi
 
 Tarmoq orqali ma'lumot yuborilganda u **qatlamlar** (layers) bo'ylab bosqichma-bosqich o'tadi. Ikki mashhur model bor.
 
-**OSI modeli** — nazariy asos, 7 qatlam:
-1. **Physical** — kabel, signal
-2. **Data Link** — MAC manzil, switch
-3. **Network** — IP manzil, router
-4. **Transport** — TCP/UDP, portlar
-5. **Session** — sessiyani boshqarish
-6. **Presentation** — shifrlash, kodlash
-7. **Application** — HTTP, DNS, brauzer
+**OSI modeli** - nazariy asos, 7 qatlam:
+1. **Physical** - kabel, signal
+2. **Data Link** - MAC manzil, switch
+3. **Network** - IP manzil, router
+4. **Transport** - TCP/UDP, portlar
+5. **Session** - sessiyani boshqarish
+6. **Presentation** - shifrlash, kodlash
+7. **Application** - HTTP, DNS, brauzer
 
-**TCP/IP modeli** — amalda ishlatiladi, 4 qatlam: Link → Internet → Transport → Application.
+**TCP/IP modeli** - amalda ishlatiladi, 4 qatlam: Link → Internet → Transport → Application.
 
-> **Xavfsizlik:** har bir qatlam o'z himoyasiga muhtoj. Fizik himoyadan (kabel) shifrlashgacha — bir qatlamdagi zaiflik butun tizimga ta'sir qiladi.`,
+> **Xavfsizlik:** har bir qatlam o'z himoyasiga muhtoj. Fizik himoyadan (kabel) shifrlashgacha - bir qatlamdagi zaiflik butun tizimga ta'sir qiladi.`,
       ru: `## Модели OSI и TCP/IP
 
 Когда данные идут по сети, они проходят **уровни** (layers) шаг за шагом. Есть две известные модели.
 
-**Модель OSI** — теоретическая основа, 7 уровней:
-1. **Физический** — кабель, сигнал
-2. **Канальный** — MAC-адрес, коммутатор
-3. **Сетевой** — IP-адрес, маршрутизатор
-4. **Транспортный** — TCP/UDP, порты
-5. **Сеансовый** — управление сессией
-6. **Представления** — шифрование, кодирование
-7. **Прикладной** — HTTP, DNS, браузер
+**Модель OSI** - теоретическая основа, 7 уровней:
+1. **Физический** - кабель, сигнал
+2. **Канальный** - MAC-адрес, коммутатор
+3. **Сетевой** - IP-адрес, маршрутизатор
+4. **Транспортный** - TCP/UDP, порты
+5. **Сеансовый** - управление сессией
+6. **Представления** - шифрование, кодирование
+7. **Прикладной** - HTTP, DNS, браузер
 
-**Модель TCP/IP** — применяется на практике, 4 уровня: канальный → интернет → транспортный → прикладной.
+**Модель TCP/IP** - применяется на практике, 4 уровня: канальный → интернет → транспортный → прикладной.
 
-> **Безопасность:** каждому уровню нужна своя защита. От защиты кабеля до шифрования — слабость на одном уровне влияет на всю систему.`,
+> **Безопасность:** каждому уровню нужна своя защита. От защиты кабеля до шифрования - слабость на одном уровне влияет на всю систему.`,
     },
     exercises: [
       {
@@ -675,8 +675,8 @@ Tarmoq orqali ma'lumot yuborilganda u **qatlamlar** (layers) bo'ylab bosqichma-b
         ],
         answer: 'a',
         explain: {
-          uz: "Router IP manzillar bilan ishlaydi va turli tarmoqlarni bog'laydi — bu Network qatlami. Switch Data Link, kabel esa Physical qatlamda ishlaydi.",
-          ru: 'Маршрутизатор работает с IP-адресами и соединяет разные сети — это сетевой уровень. Коммутатор — канальный, кабель — физический.',
+          uz: "Router IP manzillar bilan ishlaydi va turli tarmoqlarni bog'laydi - bu Network qatlami. Switch Data Link, kabel esa Physical qatlamda ishlaydi.",
+          ru: 'Маршрутизатор работает с IP-адресами и соединяет разные сети - это сетевой уровень. Коммутатор - канальный, кабель - физический.',
         },
       },
       {
@@ -689,12 +689,12 @@ Tarmoq orqali ma'lumot yuborilganda u **qatlamlar** (layers) bo'ylab bosqichma-b
         pairs: [
           { id: 'p1', left: { uz: 'Network', ru: 'Сетевой' }, right: { uz: "IP manzillash va yo'naltirish", ru: 'IP-адресация и маршрутизация' } },
           { id: 'p2', left: { uz: 'Transport', ru: 'Транспортный' }, right: { uz: 'Portlar, TCP/UDP', ru: 'Порты, TCP/UDP' } },
-          { id: 'p3', left: { uz: 'Application', ru: 'Прикладной' }, right: { uz: 'HTTP, DNS — dastur protokollari', ru: 'HTTP, DNS — протоколы приложений' } },
+          { id: 'p3', left: { uz: 'Application', ru: 'Прикладной' }, right: { uz: 'HTTP, DNS - dastur protokollari', ru: 'HTTP, DNS - протоколы приложений' } },
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
           uz: 'Har bir qatlamning aniq vazifasi bor: Network IP bilan, Transport portlar bilan, Application esa HTTP va DNS kabi protokollar bilan ishlaydi.',
-          ru: 'У каждого уровня своя задача: сетевой работает с IP, транспортный — с портами, прикладной — с протоколами вроде HTTP и DNS.',
+          ru: 'У каждого уровня своя задача: сетевой работает с IP, транспортный - с портами, прикладной - с протоколами вроде HTTP и DNS.',
         },
       },
       {
@@ -727,8 +727,8 @@ Tarmoq orqali ma'lumot yuborilganda u **qatlamlar** (layers) bo'ylab bosqichma-b
         answer: '7',
         accepted: ['7', 'yetti'],
         explain: {
-          uz: "OSI — 7 qatlam. TCP/IP esa soddalashtirilgan 4 qatlamli model bo'lib, amalda asosan shu ishlatiladi.",
-          ru: 'В OSI 7 уровней. TCP/IP — упрощённая модель из 4 уровней, именно она применяется на практике.',
+          uz: "OSI - 7 qatlam. TCP/IP esa soddalashtirilgan 4 qatlamli model bo'lib, amalda asosan shu ishlatiladi.",
+          ru: 'В OSI 7 уровней. TCP/IP - упрощённая модель из 4 уровней, именно она применяется на практике.',
         },
       },
     ],
@@ -742,7 +742,7 @@ Tarmoq orqali ma'lumot yuborilganda u **qatlamlar** (layers) bo'ylab bosqichma-b
     content: {
       uz: `## HTTP va HTTPS
 
-Brauzer va server **HTTP** protokoli orqali gaplashadi. **HTTPS** — shu protokolning shifrlangan ko'rinishi.
+Brauzer va server **HTTP** protokoli orqali gaplashadi. **HTTPS** - shu protokolning shifrlangan ko'rinishi.
 
 | | HTTP | HTTPS |
 |---|---|---|
@@ -750,13 +750,13 @@ Brauzer va server **HTTP** protokoli orqali gaplashadi. **HTTPS** — shu protok
 | **Shifrlash** | Yo'q | TLS orqali |
 | **Himoya** | Matn ochiq yuradi | Parol ham himoyalangan |
 
-**TLS** — ma'lumotni o'g'irlar ko'ra olmasligi uchun shifrlaydigan protokol (sahifadagi qulf belgisi).
+**TLS** - ma'lumotni o'g'irlar ko'ra olmasligi uchun shifrlaydigan protokol (sahifadagi qulf belgisi).
 
-Methodlar: **GET** — serverdan ma'lumot SO'RAYDI, **POST** — serverga ma'lumot YUBORADI.
-Kodlar: **200** — joyida, **404** — topilmadi, **500** — serverda xato.`,
+Methodlar: **GET** - serverdan ma'lumot SO'RAYDI, **POST** - serverga ma'lumot YUBORADI.
+Kodlar: **200** - joyida, **404** - topilmadi, **500** - serverda xato.`,
       ru: `## HTTP и HTTPS
 
-Браузер и сервер общаются по протоколу **HTTP**. **HTTPS** — это тот же протокол, но в зашифрованном виде.
+Браузер и сервер общаются по протоколу **HTTP**. **HTTPS** - это тот же протокол, но в зашифрованном виде.
 
 | | HTTP | HTTPS |
 |---|---|---|
@@ -764,10 +764,10 @@ Kodlar: **200** — joyida, **404** — topilmadi, **500** — serverda xato.`,
 | **Шифрование** | Нет | Через **TLS** |
 | **Защита** | Текст идёт открыто | Защищены даже пароли |
 
-**TLS** — протокол, который шифрует данные, чтобы посторонние их не прочитали (значок замка в адресной строке).
+**TLS** - протокол, который шифрует данные, чтобы посторонние их не прочитали (значок замка в адресной строке).
 
-Методы: **GET** — ЗАПРАШИВАЕТ данные у сервера, **POST** — ОТПРАВЛЯЕТ данные на сервер.
-Коды: **200** — всё хорошо, **404** — страница не найдена, **500** — ошибка на сервере.`,
+Методы: **GET** - ЗАПРАШИВАЕТ данные у сервера, **POST** - ОТПРАВЛЯЕТ данные на сервер.
+Коды: **200** - всё хорошо, **404** - страница не найдена, **500** - ошибка на сервере.`,
     },
     exercises: [
       {
@@ -785,8 +785,8 @@ Kodlar: **200** — joyida, **404** — topilmadi, **500** — serverda xato.`,
         ],
         answer: 'b',
         explain: {
-          uz: 'HTTPS 443-portda, oddiy HTTP esa 80-portda ishlaydi. 53 — DNS, 22 — SSH. Portni bilish firewall qoidasi yozishda ham kerak bo\'ladi.',
-          ru: 'HTTPS работает на 443, обычный HTTP — на 80. 53 — DNS, 22 — SSH. Порт нужен и при написании правил файрвола.',
+          uz: 'HTTPS 443-portda, oddiy HTTP esa 80-portda ishlaydi. 53 - DNS, 22 - SSH. Portni bilish firewall qoidasi yozishda ham kerak bo\'ladi.',
+          ru: 'HTTPS работает на 443, обычный HTTP - на 80. 53 - DNS, 22 - SSH. Порт нужен и при написании правил файрвола.',
         },
       },
       {
@@ -798,8 +798,8 @@ Kodlar: **200** — joyida, **404** — topilmadi, **500** — serverda xato.`,
         },
         answer: 'true',
         explain: {
-          uz: "Ha — HTTP shifrlamaydi: har qanday oraliq tarmoqda turgan odam (masalan, ochiq WiFi'da) trafikni o'qishi mumkin. Shuning uchun parolni faqat HTTPS orqali yuborish kerak.",
-          ru: 'Да — HTTP не шифрует: любой посредник (например, в открытом Wi-Fi) сможет прочитать трафик. Поэтому пароли отправляют только по HTTPS.',
+          uz: "Ha - HTTP shifrlamaydi: har qanday oraliq tarmoqda turgan odam (masalan, ochiq WiFi'da) trafikni o'qishi mumkin. Shuning uchun parolni faqat HTTPS orqali yuborish kerak.",
+          ru: 'Да - HTTP не шифрует: любой посредник (например, в открытом Wi-Fi) сможет прочитать трафик. Поэтому пароли отправляют только по HTTPS.',
         },
       },
       {
@@ -816,8 +816,8 @@ Kodlar: **200** — joyida, **404** — topilmadi, **500** — serverda xato.`,
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: "2xx — muvaffaqiyat, 4xx — xato foydalanuvchi tomonida (masalan, yo'q sahifa), 5xx — xato server tomonida. Bu raqamlarni loglarda ko'p ko'rasiz.",
-          ru: '2xx — успех, 4xx — ошибка на стороне пользователя (например, несуществующая страница), 5xx — ошибка на стороне сервера. Эти коды часто видно в логах.',
+          uz: "2xx - muvaffaqiyat, 4xx - xato foydalanuvchi tomonida (masalan, yo'q sahifa), 5xx - xato server tomonida. Bu raqamlarni loglarda ko'p ko'rasiz.",
+          ru: '2xx - успех, 4xx - ошибка на стороне пользователя (например, несуществующая страница), 5xx - ошибка на стороне сервера. Эти коды часто видно в логах.',
         },
       },
       {
@@ -830,7 +830,7 @@ Kodlar: **200** — joyida, **404** — topilmadi, **500** — serverda xato.`,
         answer: 'post',
         accepted: ['post', 'post request'],
         explain: {
-          uz: "POST — serverga ma'lumot yuboradi (parol, ro'yxatdan o'tish formasi). GET esa serverdan ma'lumot SO'RAYDI va faqat o'qish uchun ishlatiladi.",
+          uz: "POST - serverga ma'lumot yuboradi (parol, ro'yxatdan o'tish formasi). GET esa serverdan ma'lumot SO'RAYDI va faqat o'qish uchun ishlatiladi.",
           ru: 'POST отправляет данные на сервер (пароль, форма регистрации). GET запрашивает данные у сервера и используется только для чтения.',
         },
       },
@@ -845,24 +845,24 @@ Kodlar: **200** — joyida, **404** — topilmadi, **500** — serverda xato.`,
     content: {
       uz: `## HTTPS, TLS va sertifikatlar
 
-**HTTPS** — bu HTTP protokoli **TLS** shifrlash ustida ishlaydigan varianti. Brauzerdagi qulf belgisi (🔒) shuni bildiradi.
+**HTTPS** - bu HTTP protokoli **TLS** shifrlash ustida ishlaydigan varianti. Brauzerdagi qulf belgisi (🔒) shuni bildiradi.
 
 TLS ikki asosiy ishni bajaradi:
-1. **Shifrlash** — ma'lumot yo'lda o'qilmasligi.
-2. **Autentifikatsiya** — sayt haqiqatan o'sha sayt ekanini isbotlash.
+1. **Shifrlash** - ma'lumot yo'lda o'qilmasligi.
+2. **Autentifikatsiya** - sayt haqiqatan o'sha sayt ekanini isbotlash.
 
-**Sertifikat** — bu saytning "pasporti". Uni **sertifikat markazi (CA)** beradi. Brauzer sertifikatga ishonadi va shundan keyin aloqani boshlaydi.
+**Sertifikat** - bu saytning "pasporti". Uni **sertifikat markazi (CA)** beradi. Brauzer sertifikatga ishonadi va shundan keyin aloqani boshlaydi.
 
 > **Xavfsizlik:** qulfsiz HTTP saytga parol kiritsangiz, u ochiq matnda ketishi mumkin. Har doim HTTPS ishlatilganini tekshiring.`,
       ru: `## HTTPS, TLS и сертификаты
 
-**HTTPS** — это протокол HTTP поверх шифрования **TLS**. Значок замка (🔒) в браузере говорит именно об этом.
+**HTTPS** - это протокол HTTP поверх шифрования **TLS**. Значок замка (🔒) в браузере говорит именно об этом.
 
 TLS делает две основные вещи:
-1. **Шифрование** — данные невозможно прочитать в пути.
-2. **Аутентификация** — подтверждение, что сайт действительно тот, за кого себя выдаёт.
+1. **Шифрование** - данные невозможно прочитать в пути.
+2. **Аутентификация** - подтверждение, что сайт действительно тот, за кого себя выдаёт.
 
-**Сертификат** — это «паспорт» сайта. Его выдаёт **центр сертификации (CA)**. Браузер доверяет сертификату и только потом начинает обмен.
+**Сертификат** - это «паспорт» сайта. Его выдаёт **центр сертификации (CA)**. Браузер доверяет сертификату и только потом начинает обмен.
 
 > **Безопасность:** если ввести пароль на HTTP-сайте без замка, он может уйти открытым текстом. Всегда проверяйте, что используется HTTPS.`,
     },
@@ -928,8 +928,8 @@ TLS делает две основные вещи:
         answer: 'secure',
         accepted: ['secure', 'security'],
         explain: {
-          uz: "HTTPS — HyperText Transfer Protocol Secure. S — Secure, ya'ni TLS bilan shifrlangan degani.",
-          ru: 'HTTPS — HyperText Transfer Protocol Secure. S означает «Secure», то есть шифрование через TLS.',
+          uz: "HTTPS - HyperText Transfer Protocol Secure. S - Secure, ya'ni TLS bilan shifrlangan degani.",
+          ru: 'HTTPS - HyperText Transfer Protocol Secure. S означает «Secure», то есть шифрование через TLS.',
         },
       },
     ],
@@ -943,18 +943,18 @@ TLS делает две основные вещи:
     content: {
       uz: `## Routing va NAT
 
-**Router** turli tarmoqlarni bog'laydi va paketni manzilga qarab yo'naltiradi. Uning **routing table** (yo'naltirish jadvali) qaysi paket qayerga ketishini aytadi. Uy tarmog'ingizdagi router — **default gateway**.
+**Router** turli tarmoqlarni bog'laydi va paketni manzilga qarab yo'naltiradi. Uning **routing table** (yo'naltirish jadvali) qaysi paket qayerga ketishini aytadi. Uy tarmog'ingizdagi router - **default gateway**.
 
-**NAT (Network Address Translation)** — ichki (private) manzillarni bitta tashqi (public) manzilga almashtiradi. Shu sababli butun uy tarmog'i internetga bitta IP bilan chiqadi.
+**NAT (Network Address Translation)** - ichki (private) manzillarni bitta tashqi (public) manzilga almashtiradi. Shu sababli butun uy tarmog'i internetga bitta IP bilan chiqadi.
 
-> **Xavfsizlik:** NAT tashqaridan ichki qurilmalarni to'g'ridan-to'g'ri ko'rinmas qiladi — bu tabiiy himoya qatlami. Lekin NAT to'liq firewall o'rnini bosmaydi.`,
+> **Xavfsizlik:** NAT tashqaridan ichki qurilmalarni to'g'ridan-to'g'ri ko'rinmas qiladi - bu tabiiy himoya qatlami. Lekin NAT to'liq firewall o'rnini bosmaydi.`,
       ru: `## Маршрутизация и NAT
 
-**Маршрутизатор (router)** соединяет разные сети и направляет пакет по адресу. Его **таблица маршрутизации** (routing table) говорит, куда идёт какой пакет. Маршрутизатор в домашней сети — это **default gateway**.
+**Маршрутизатор (router)** соединяет разные сети и направляет пакет по адресу. Его **таблица маршрутизации** (routing table) говорит, куда идёт какой пакет. Маршрутизатор в домашней сети - это **default gateway**.
 
-**NAT (Network Address Translation)** — заменяет внутренние (private) адреса на один внешний (public). Поэтому вся домашняя сеть выходит в интернет под одним IP.
+**NAT (Network Address Translation)** - заменяет внутренние (private) адреса на один внешний (public). Поэтому вся домашняя сеть выходит в интернет под одним IP.
 
-> **Безопасность:** NAT скрывает внутренние устройства от прямого доступа снаружи — это естественный слой защиты. Но NAT не заменяет полноценный файрвол.`,
+> **Безопасность:** NAT скрывает внутренние устройства от прямого доступа снаружи - это естественный слой защиты. Но NAT не заменяет полноценный файрвол.`,
     },
     exercises: [
       {
@@ -985,16 +985,16 @@ TLS делает две основные вещи:
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — router NAT orqali barcha ichki qurilmalar trafigini bitta tashqi IP dan chiqaradi. Bu IP manzillarni tejaydi.",
-          ru: 'Верно — через NAT маршрутизатор выпускает трафик всех внутренних устройств под одним внешним IP. Это экономит адреса.',
+          uz: "To'g'ri - router NAT orqali barcha ichki qurilmalar trafigini bitta tashqi IP dan chiqaradi. Bu IP manzillarni tejaydi.",
+          ru: 'Верно - через NAT маршрутизатор выпускает трафик всех внутренних устройств под одним внешним IP. Это экономит адреса.',
         },
       },
       {
         id: 'e3',
         type: 'order',
         q: {
-          uz: "Paketning router orqali o'tish bosqichlarini tartiblang (birinchisi — birinchi qadam)",
-          ru: 'Расставьте этапы прохождения пакета через маршрутизатор по порядку (первый — самый первый)',
+          uz: "Paketning router orqali o'tish bosqichlarini tartiblang (birinchisi - birinchi qadam)",
+          ru: 'Расставьте этапы прохождения пакета через маршрутизатор по порядку (первый - самый первый)',
         },
         items: [
           { id: 'i1', uz: 'Paket routerga keladi', ru: 'Пакет приходит на маршрутизатор' },
@@ -1023,7 +1023,7 @@ TLS делает две основные вещи:
         answer: 'a',
         explain: {
           uz: "Qaror routing table asosida qabul qilinadi. MAC jadvali switch'da, DNS va TLS esa boshqa vazifalarni bajaradi.",
-          ru: 'Решение принимается по таблице маршрутизации. Таблица MAC — у коммутатора, DNS и TLS выполняют другие задачи.',
+          ru: 'Решение принимается по таблице маршрутизации. Таблица MAC - у коммутатора, DNS и TLS выполняют другие задачи.',
         },
       },
     ],
@@ -1035,32 +1035,32 @@ TLS делает две основные вещи:
     xp_reward: 25,
     title: { uz: 'Firewall nima?', ru: 'Что такое файрвол?' },
     content: {
-      uz: `## Firewall — tarmoq darvozasi
+      uz: `## Firewall - tarmoq darvozasi
 
-**Firewall** — tarmoq trafigini qoidalar bo'yicha filtrlaydigan vosita: ruxsat etilganini o'tkazadi, qolganini bloklaydi.
+**Firewall** - tarmoq trafigini qoidalar bo'yicha filtrlaydigan vosita: ruxsat etilganini o'tkazadi, qolganini bloklaydi.
 
 | Tur | Nima tekshiradi |
 |---|---|
 | **Packet filtering** | Har bir paketning manzil va portini (yakka-yakka) |
-| **Stateful** | Ulanish holatini eslab qoladi — butun suhbatni kuzatadi |
+| **Stateful** | Ulanish holatini eslab qoladi - butun suhbatni kuzatadi |
 | **WAF** | Veb-so'rovlarni: SQL injection, XSS kabi hujumlar |
 
-Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** — chiqishga faqat 443 ochiq.
+Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** - chiqishga faqat 443 ochiq.
 
-> **Eslatma:** firewall — himoyaning faqat bitta qatlami. Uni ham muntazam yangilab turish kerak.`,
-      ru: `## Файрвол — шлюз сети
+> **Eslatma:** firewall - himoyaning faqat bitta qatlami. Uni ham muntazam yangilab turish kerak.`,
+      ru: `## Файрвол - шлюз сети
 
-**Файрвол** — средство, фильтрующее сетевой трафик по правилам: разрешённое пропускает, остальное блокирует.
+**Файрвол** - средство, фильтрующее сетевой трафик по правилам: разрешённое пропускает, остальное блокирует.
 
 | Тип | Что проверяет |
 |---|---|
 | **Packet filtering** | адрес и порт каждого пакета по отдельности |
-| **Stateful** | помнит состояние соединения — следит за всем разговором |
+| **Stateful** | помнит состояние соединения - следит за всем разговором |
 | **WAF** | запросы к сайту: SQL-инъекции, XSS и похожие атаки |
 
-Правила пишутся простым языком. Например: **ALLOW tcp out to port 443** — наружу открыт только 443.
+Правила пишутся простым языком. Например: **ALLOW tcp out to port 443** - наружу открыт только 443.
 
-> **Важно:** файрвол — лишь один слой защиты. Его тоже нужно регулярно обновлять и не выключать.`,
+> **Важно:** файрвол - лишь один слой защиты. Его тоже нужно регулярно обновлять и не выключать.`,
     },
     exercises: [
       {
@@ -1078,8 +1078,8 @@ Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** — chiq
         ],
         answer: 'a',
         explain: {
-          uz: "Firewall — darvozabon: u paketlarni qoida bo'yicha tekshirib, ruxsat etilganini o'tkazadi, qolganini to'xtatadi. Tezlashtirish, backup va parollar boshqa vositalarning ishi.",
-          ru: 'Файрвол — «сторож»: он проверяет пакеты по правилам, пропускает разрешённые и останавливает остальные. Ускорение, бэкапы и пароли — задачи других средств.',
+          uz: "Firewall - darvozabon: u paketlarni qoida bo'yicha tekshirib, ruxsat etilganini o'tkazadi, qolganini to'xtatadi. Tezlashtirish, backup va parollar boshqa vositalarning ishi.",
+          ru: 'Файрвол - «сторож»: он проверяет пакеты по правилам, пропускает разрешённые и останавливает остальные. Ускорение, бэкапы и пароли - задачи других средств.',
         },
       },
       {
@@ -1091,7 +1091,7 @@ Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** — chiq
         },
         pairs: [
           { id: 'p1', left: { uz: 'Packet filtering', ru: 'Packet filtering' }, right: { uz: 'Yakka paketning manzil va portini', ru: 'Адрес и порт каждого пакета по отдельности' } },
-          { id: 'p2', left: { uz: 'Stateful', ru: 'Stateful' }, right: { uz: 'Ulanish holatini — butun suhbatni eslab qoladi', ru: 'Состояние соединения — помнит весь разговор' } },
+          { id: 'p2', left: { uz: 'Stateful', ru: 'Stateful' }, right: { uz: 'Ulanish holatini - butun suhbatni eslab qoladi', ru: 'Состояние соединения - помнит весь разговор' } },
           { id: 'p3', left: { uz: 'WAF', ru: 'WAF' }, right: { uz: "Veb-so'rovlarni: SQL injection, XSS kabi hujumlar", ru: 'Веб-запросы: SQL-инъекции, XSS и похожие атаки' } },
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
@@ -1116,8 +1116,8 @@ Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** — chiq
         ],
         answer: 'a',
         explain: {
-          uz: "'in' — kirish (inbound) trafik, 'to port 23' — 23-port (eski va xavfsiz bo'lmagan telnet), 'from any' — istalgan manzildan. Demak, qoida tashqaridan kelgan telnet kirishini yopadi — bu to'g'ri himoya qoidasi.",
-          ru: "«in» — входящий трафик, «to port 23» — порт 23 (устаревший небезопасный telnet), «from any» — с любого адреса. Значит, правило закрывает входящий telnet извне — это правильная защита.",
+          uz: "'in' - kirish (inbound) trafik, 'to port 23' - 23-port (eski va xavfsiz bo'lmagan telnet), 'from any' - istalgan manzildan. Demak, qoida tashqaridan kelgan telnet kirishini yopadi - bu to'g'ri himoya qoidasi.",
+          ru: "«in» - входящий трафик, «to port 23» - порт 23 (устаревший небезопасный telnet), «from any» - с любого адреса. Значит, правило закрывает входящий telnet извне - это правильная защита.",
         },
       },
       {
@@ -1135,8 +1135,8 @@ Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** — chiq
         ],
         answers: ['a', 'b'],
         explain: {
-          uz: "WAF veb-sahifaga kelgan so'rovlarni tekshiradi: SQL injection va XSS ni shu yerda ushlaydi. Phishing'da foydalanuvchi o'zi noto'g'ri saytga kiradi — buni o'z saytingizdagi WAF to'xtata olmaydi. WiFi himoyasi esa boshqa qatlam — firewall va access point vazifasi.",
-          ru: 'WAF проверяет запросы, приходящие на сайт, — именно он ловит SQL-инъекции и XSS. При фишинге пользователь сам заходит на чужой сайт — это не остановить его же сервером. А защита Wi-Fi — другой уровень: задача файрвола и точки доступа.',
+          uz: "WAF veb-sahifaga kelgan so'rovlarni tekshiradi: SQL injection va XSS ni shu yerda ushlaydi. Phishing'da foydalanuvchi o'zi noto'g'ri saytga kiradi - buni o'z saytingizdagi WAF to'xtata olmaydi. WiFi himoyasi esa boshqa qatlam - firewall va access point vazifasi.",
+          ru: 'WAF проверяет запросы, приходящие на сайт, - именно он ловит SQL-инъекции и XSS. При фишинге пользователь сам заходит на чужой сайт - это не остановить его же сервером. А защита Wi-Fi - другой уровень: задача файрвола и точки доступа.',
         },
       },
     ],
@@ -1150,24 +1150,24 @@ Qoidalar oddiy jumlada yoziladi. Masalan: **ALLOW tcp out to port 443** — chiq
     content: {
       uz: `## VPN va proksi
 
-**VPN (Virtual Private Network)** — qurilmangizdan serverga shifrlangan tunnel ochadi. Shu tunnel ichida trafik shifrlanadi.
+**VPN (Virtual Private Network)** - qurilmangizdan serverga shifrlangan tunnel ochadi. Shu tunnel ichida trafik shifrlanadi.
 
-- **VPN** — butun trafikni shifrlaydi; umumiy WiFi yoki provayder sizning trafigingizni o'qiy olmaydi.
-- **Proksi** — alohida dastur uchun vositachi server; ko'pincha shifrlamaydi, faqat so'rovni boshqasiga uzatadi.
+- **VPN** - butun trafikni shifrlaydi; umumiy WiFi yoki provayder sizning trafigingizni o'qiy olmaydi.
+- **Proksi** - alohida dastur uchun vositachi server; ko'pincha shifrlamaydi, faqat so'rovni boshqasiga uzatadi.
 
 Muhim farq: VPN deyarli butun qurilma trafigini himoyalaydi, proksi esa odatda faqat bitta dasturni.
 
-> **Xavfsizlik:** umumiy (ochiq) WiFi'da VPN trafikni yashirin saqlaydi. Lekin VPN sizni butunlay "ko'rinmas" qilmaydi — u faqat tunnelni shifrlaydi.`,
+> **Xavfsizlik:** umumiy (ochiq) WiFi'da VPN trafikni yashirin saqlaydi. Lekin VPN sizni butunlay "ko'rinmas" qilmaydi - u faqat tunnelni shifrlaydi.`,
       ru: `## VPN и прокси
 
-**VPN (Virtual Private Network)** — создаёт зашифрованный туннель от устройства к серверу. Внутри этого туннеля трафик шифруется.
+**VPN (Virtual Private Network)** - создаёт зашифрованный туннель от устройства к серверу. Внутри этого туннеля трафик шифруется.
 
-- **VPN** — шифрует весь трафик; публичный Wi-Fi или провайдер не видят содержимое.
-- **Прокси** — сервер-посредник для отдельной программы; обычно не шифрует, а лишь пересылает запрос дальше.
+- **VPN** - шифрует весь трафик; публичный Wi-Fi или провайдер не видят содержимое.
+- **Прокси** - сервер-посредник для отдельной программы; обычно не шифрует, а лишь пересылает запрос дальше.
 
-Важное отличие: VPN защищает почти весь трафик устройства, а прокси — обычно только одну программу.
+Важное отличие: VPN защищает почти весь трафик устройства, а прокси - обычно только одну программу.
 
-> **Безопасность:** в открытом Wi-Fi VPN скрывает трафик. Но VPN не делает вас полностью «невидимым» — он шифрует только туннель.`,
+> **Безопасность:** в открытом Wi-Fi VPN скрывает трафик. Но VPN не делает вас полностью «невидимым» - он шифрует только туннель.`,
     },
     exercises: [
       {
@@ -1198,8 +1198,8 @@ Muhim farq: VPN deyarli butun qurilma trafigini himoyalaydi, proksi esa odatda f
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — proksi odatda bitta dastur so'rovlarini uzatadi va shifrlamaydi. Butun qurilma trafigini VPN shifrlaydi.",
-          ru: 'Нет — прокси обычно пересылает запросы одной программы и не шифрует. Весь трафик устройства шифрует VPN.',
+          uz: "Yo'q - proksi odatda bitta dastur so'rovlarini uzatadi va shifrlamaydi. Butun qurilma trafigini VPN shifrlaydi.",
+          ru: 'Нет - прокси обычно пересылает запросы одной программы и не шифрует. Весь трафик устройства шифрует VPN.',
         },
       },
       {
@@ -1216,8 +1216,8 @@ Muhim farq: VPN deyarli butun qurilma trafigini himoyalaydi, proksi esa odatda f
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: "VPN shifrlangan tunnel quradi, proksi esa vositachi bo'lib so'rovni uzatadi. Tunnel — bu shifrlangan kanalning nomi.",
-          ru: 'VPN строит зашифрованный туннель, а прокси выступает посредником и пересылает запрос. Туннель — это название зашифрованного канала.',
+          uz: "VPN shifrlangan tunnel quradi, proksi esa vositachi bo'lib so'rovni uzatadi. Tunnel - bu shifrlangan kanalning nomi.",
+          ru: 'VPN строит зашифрованный туннель, а прокси выступает посредником и пересылает запрос. Туннель - это название зашифрованного канала.',
         },
       },
       {
@@ -1230,8 +1230,8 @@ Muhim farq: VPN deyarli butun qurilma trafigini himoyalaydi, proksi esa odatda f
         answer: 'tunnel',
         accepted: ['tunnel'],
         explain: {
-          uz: "VPN shifrlangan tunnel ochadi — uning ichini ko'rib bo'lmaydi, faqat ikki uchi ma'lum.",
-          ru: 'VPN открывает зашифрованный туннель — его содержимое не видно, известны только две конечные точки.',
+          uz: "VPN shifrlangan tunnel ochadi - uning ichini ko'rib bo'lmaydi, faqat ikki uchi ma'lum.",
+          ru: 'VPN открывает зашифрованный туннель - его содержимое не видно, известны только две конечные точки.',
         },
       },
     ],
@@ -1245,14 +1245,14 @@ Muhim farq: VPN deyarli butun qurilma trafigini himoyalaydi, proksi esa odatda f
     content: {
       uz: `## 🏆 Nazorat
 
-Tarmoqlar bo'yicha bilimingizni tekshiring: IP manzillar, subnetlar, routing, DNS, TCP/UDP, HTTP/HTTPS, TLS va firewall — hammasi birlashtirilgan.
+Tarmoqlar bo'yicha bilimingizni tekshiring: IP manzillar, subnetlar, routing, DNS, TCP/UDP, HTTP/HTTPS, TLS va firewall - hammasi birlashtirilgan.
 
 Savollar o'tgan darslardan, biroz murakkabroq. Har birida eng to'g'ri javobni tanlang.
 
 Omad!`,
       ru: `## 🏆 Проверка
 
-Проверьте знания по сетям: IP-адреса, подсети, маршрутизация, DNS, TCP/UDP, HTTP/HTTPS, TLS и файрвол — всё в одном месте.
+Проверьте знания по сетям: IP-адреса, подсети, маршрутизация, DNS, TCP/UDP, HTTP/HTTPS, TLS и файрвол - всё в одном месте.
 
 Вопросы чуть сложнее предыдущих уроков. В каждом выберите самый верный ответ.
 
@@ -1274,8 +1274,8 @@ Omad!`,
         ],
         answer: 'a',
         explain: {
-          uz: "Ichki qurilmaga ichki (private) manzil beriladi — 192.168.1.50 shunga to'g'ri keladi. Qolgan uchtasi ochiq (public) manzillar: ular internetda yo'naltiriladi va lokal printer uchun noto'g'ri.",
-          ru: 'Внутреннему устройству дают внутренний (private) адрес — 192.168.1.50 подходит. Остальные три публичные: они маршрутизируются в интернете и для локального принтера не годятся.',
+          uz: "Ichki qurilmaga ichki (private) manzil beriladi - 192.168.1.50 shunga to'g'ri keladi. Qolgan uchtasi ochiq (public) manzillar: ular internetda yo'naltiriladi va lokal printer uchun noto'g'ri.",
+          ru: 'Внутреннему устройству дают внутренний (private) адрес - 192.168.1.50 подходит. Остальные три публичные: они маршрутизируются в интернете и для локального принтера не годятся.',
         },
       },
       {
@@ -1293,8 +1293,8 @@ Omad!`,
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "80 — oddiy veb, 443 — shifrlangan veb, 53 — DNS so'rovlari, 22 — masofadan boshqaruv (SSH). Bu raqamlarni firewall qoidalarida ko'p ishlatasiz.",
-          ru: '80 — обычный веб, 443 — зашифрованный веб, 53 — DNS-запросы, 22 — удалённое управление (SSH). Эти номера часто встречаются в правилах файрвола.',
+          uz: "80 - oddiy veb, 443 - shifrlangan veb, 53 - DNS so'rovlari, 22 - masofadan boshqaruv (SSH). Bu raqamlarni firewall qoidalarida ko'p ishlatasiz.",
+          ru: '80 - обычный веб, 443 - зашифрованный веб, 53 - DNS-запросы, 22 - удалённое управление (SSH). Эти номера часто встречаются в правилах файрвола.',
         },
       },
       {
@@ -1312,8 +1312,8 @@ Omad!`,
         ],
         answers: ['a', 'b'],
         explain: {
-          uz: "TLS trafikni shifrlaydi, firewall esa keraksiz eshiklarni yopadi — ikkalasi ham himoyani kuchaytiradi. DNS javobiga so'zsiz ishonish spoofing ga ochiq eshik, barcha portni ochiq qoldirish esa hujum maydoni yaratadi.",
-          ru: 'TLS шифрует трафик, а файрвол закрывает лишние «двери» — обе меры усиливают защиту. Слепое доверие к ответу DNS открывает дорогу к подмене, а открытые все порты — готовое поле для атаки.',
+          uz: "TLS trafikni shifrlaydi, firewall esa keraksiz eshiklarni yopadi - ikkalasi ham himoyani kuchaytiradi. DNS javobiga so'zsiz ishonish spoofing ga ochiq eshik, barcha portni ochiq qoldirish esa hujum maydoni yaratadi.",
+          ru: 'TLS шифрует трафик, а файрвол закрывает лишние «двери» - обе меры усиливают защиту. Слепое доверие к ответу DNS открывает дорогу к подмене, а открытые все порты - готовое поле для атаки.',
         },
       },
       {
@@ -1326,16 +1326,16 @@ Omad!`,
         answer: 'tls',
         accepted: ['tls'],
         explain: {
-          uz: 'TLS (Transport Layer Security) — HTTPS ishlagan shifrlash protokoli. Aynan u parol va karta raqamlarini o\'g\'irlardan himoya qiladi.',
-          ru: 'TLS (Transport Layer Security) — протокол шифрования, на котором работает HTTPS. Именно он защищает пароли и номера карт.',
+          uz: 'TLS (Transport Layer Security) - HTTPS ishlagan shifrlash protokoli. Aynan u parol va karta raqamlarini o\'g\'irlardan himoya qiladi.',
+          ru: 'TLS (Transport Layer Security) - протокол шифрования, на котором работает HTTPS. Именно он защищает пароли и номера карт.',
         },
       },
       {
         id: 'e5',
         type: 'order',
         q: {
-          uz: "Sayt ochilishining to'g'ri tartibini joylang (birinchisi — birinchi qadam)",
-          ru: 'Расставьте этапы открытия сайта по порядку (первый — самый первый шаг)',
+          uz: "Sayt ochilishining to'g'ri tartibini joylang (birinchisi - birinchi qadam)",
+          ru: 'Расставьте этапы открытия сайта по порядку (первый - самый первый шаг)',
         },
         items: [
           { id: 'i1', uz: "DNS dan saytning IP manzilini so'rash", ru: 'Запросить IP-адрес сайта через DNS' },

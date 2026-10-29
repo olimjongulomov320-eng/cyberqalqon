@@ -1,13 +1,13 @@
 /**
- * Curriculum — Cybersecurity path › Domain: Web security
+ * Curriculum - Cybersecurity path › Domain: Web security
  *
  * Shape (validated by scripts/validate-curriculum.js via lib/grade.validateExercise):
  *   module: { slug, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
  *   kind: 'lesson' | 'checkpoint'   (checkpoint = end-of-domain trophy node)
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language. This is a
- *     warm-up, not a textbook — the exercises do the teaching.
+ *   - Lesson prose: short. 6-14 markdown lines per language. This is a
+ *     warm-up, not a textbook - the exercises do the teaching.
  *   - Every exercise: bilingual q + explain, technically accurate, beginner
  *     level, no trick questions, explanations teach the WHY.
  *   - SQLi is taught strictly as a defense topic; the classic sample appears
@@ -25,9 +25,9 @@ module.exports = [
     content: {
       uz: `## SQL injection (SQLi)
 
-**SQL injection** — sayt foydalanuvchi kiritgan matnni to'g'ridan-to'g'ri SQL so'roviga qo'shib yuboradi va shu matn so'rov mantiqini "buzib yuboradi".
+**SQL injection** - sayt foydalanuvchi kiritgan matnni to'g'ridan-to'g'ri SQL so'roviga qo'shib yuboradi va shu matn so'rov mantiqini "buzib yuboradi".
 
-Klassik namuna — kirish formasiga shunday matn tushadi:
+Klassik namuna - kirish formasiga shunday matn tushadi:
 
 \`\`\`
 ' OR '1'='1
@@ -35,12 +35,12 @@ Klassik namuna — kirish formasiga shunday matn tushadi:
 
 Mantiqiy shart doimiy ravishda to'g'ri chiqadi va kirish tekshiruvi chetlab o'tiladi.
 
-**To'g'ri himoya — parametrlangan so'rovlar (prepared statements):** foydalanuvchi matni hech qachon koda aylanmaydi, u faqat qiymat bo'lib qoladi. Qo'shimcha qatlam — kirishni tekshirish (validation).`,
+**To'g'ri himoya - parametrlangan so'rovlar (prepared statements):** foydalanuvchi matni hech qachon koda aylanmaydi, u faqat qiymat bo'lib qoladi. Qo'shimcha qatlam - kirishni tekshirish (validation).`,
       ru: `## SQL injection (SQLi)
 
-**SQL injection** — сайт подставляет введённый пользователем текст прямо в SQL-запрос, и пользователь может «сломать» логику запроса.
+**SQL injection** - сайт подставляет введённый пользователем текст прямо в SQL-запрос, и пользователь может «сломать» логику запроса.
 
-Классический пример — в поле логина появляется такой текст:
+Классический пример - в поле логина появляется такой текст:
 
 \`\`\`
 ' OR '1'='1
@@ -48,14 +48,14 @@ Mantiqiy shart doimiy ravishda to'g'ri chiqadi va kirish tekshiruvi chetlab o'ti
 
 Логическое условие всегда истинно, и проверка входа обходится.
 
-**Правильная защита — параметризованные запросы (prepared statements):** текст пользователя никогда не становится кодом, он остаётся значением. Дополнительный слой — проверка ввода (validation).`,
+**Правильная защита - параметризованные запросы (prepared statements):** текст пользователя никогда не становится кодом, он остаётся значением. Дополнительный слой - проверка ввода (validation).`,
     },
     exercises: [
       {
         id: 'e1',
         type: 'mc',
         q: {
-          uz: 'SQL injection — bu nima?',
+          uz: 'SQL injection - bu nima?',
           ru: 'Что такое SQL injection?',
         },
         options: [
@@ -66,8 +66,8 @@ Mantiqiy shart doimiy ravishda to'g'ri chiqadi va kirish tekshiruvi chetlab o'ti
         ],
         answer: 'a',
         explain: {
-          uz: 'SQLi muammosi shundaki, ma\'lumot (foydalanuvchi matni) kod ichiga kirib ketadi. Parolni taxmin qilish — brute force, ko\'p so\'rov — DoS: ular boshqa muammolar.',
-          ru: 'Проблема SQLi в том, что данные (текст пользователя) попадают внутрь кода. Перебор паролей — это brute force, поток запросов — DoS: это другие проблемы.',
+          uz: 'SQLi muammosi shundaki, ma\'lumot (foydalanuvchi matni) kod ichiga kirib ketadi. Parolni taxmin qilish - brute force, ko\'p so\'rov - DoS: ular boshqa muammolar.',
+          ru: 'Проблема SQLi в том, что данные (текст пользователя) попадают внутрь кода. Перебор паролей - это brute force, поток запросов - DoS: это другие проблемы.',
         },
       },
       {
@@ -82,11 +82,11 @@ Mantiqiy shart doimiy ravishda to'g'ri chiqadi va kirish tekshiruvi chetlab o'ti
           { id: 'a', uz: 'So\'rov sharti doim to\'g\'ri bo\'lib qoladi va kirish tekshiruvi chetlab o\'tadi', ru: 'Условие запроса становится всегда истинным, и проверка входа обходится' },
           { id: 'b', uz: 'Hisob paroli yangilanadi', ru: 'Пароль аккаунта обновляется' },
           { id: 'c', uz: 'Saytning dizayni o\'zgaradi', ru: 'Изменяется дизайн сайта' },
-          { id: 'd', uz: 'Hech narsa — bu oddiy matn', ru: 'Ничего — это обычный текст' },
+          { id: 'd', uz: 'Hech narsa - bu oddiy matn', ru: 'Ничего - это обычный текст' },
         ],
         answer: 'a',
         explain: {
-          uz: 'Bu — SQLi ning klassik ko\'rinishi: \'1\'=\'1\' doim to\'g\'ri, shuning uchun "login = parol" tekshiruvi aylanib o\'tadi. Himoya esa boshqa joyda — parametrlangan so\'rovlar.',
+          uz: 'Bu - SQLi ning klassik ko\'rinishi: \'1\'=\'1\' doim to\'g\'ri, shuning uchun "login = parol" tekshiruvi aylanib o\'tadi. Himoya esa boshqa joyda - parametrlangan so\'rovlar.',
           ru: 'Это классический вид SQLi: \'1\'=\'1\' всегда истинно, поэтому проверка «логин = пароль» объезжается. Лечится это не хитростями, а параметризованными запросами.',
         },
       },
@@ -95,7 +95,7 @@ Mantiqiy shart doimiy ravishda to'g'ri chiqadi va kirish tekshiruvi chetlab o'ti
         type: 'mc',
         q: {
           uz: 'SQL injection dan eng ishonchli himoya qaysi?',
-          ru: 'Самая надёжная защита от SQL injection — какая?',
+          ru: 'Самая надёжная защита от SQL injection - какая?',
         },
         options: [
           { id: 'a', uz: 'Parametrlangan so\'rovlar (prepared statements)', ru: 'Параметризованные запросы (prepared statements)' },
@@ -105,8 +105,8 @@ Mantiqiy shart doimiy ravishda to'g'ri chiqadi va kirish tekshiruvi chetlab o'ti
         ],
         answer: 'a',
         explain: {
-          uz: 'HTTPS trafikni kanalda himoyalaydi, lekin so\'rov serverda baribir xavfli yozilsa — SQLi joyida qoladi. Parol esa bu muammoqa umuman aloqador emas. Muammo server tomonida, shuning uchun tuzatish ham server tomonida.',
-          ru: 'HTTPS защищает канал, но если запрос на сервере собирается небезопасно — SQLi остаётся. Пароль к этой проблеме вообще не относится. Проблема на сервере, значит и решение на сервере.',
+          uz: 'HTTPS trafikni kanalda himoyalaydi, lekin so\'rov serverda baribir xavfli yozilsa - SQLi joyida qoladi. Parol esa bu muammoqa umuman aloqador emas. Muammo server tomonida, shuning uchun tuzatish ham server tomonida.',
+          ru: 'HTTPS защищает канал, но если запрос на сервере собирается небезопасно - SQLi остаётся. Пароль к этой проблеме вообще не относится. Проблема на сервере, значит и решение на сервере.',
         },
       },
       {
@@ -118,13 +118,13 @@ Mantiqiy shart doimiy ravishda to'g'ri chiqadi va kirish tekshiruvi chetlab o'ti
         },
         pairs: [
           { id: 'p1', left: { uz: 'SQL injection', ru: 'SQL injection' }, right: { uz: 'Foydalanuvchi matni so\'rov kodiga aylanadi', ru: 'Текст пользователя становится частью запроса' } },
-          { id: 'p2', left: { uz: 'Parametrlangan so\'rov', ru: 'Параметризованный запрос' }, right: { uz: 'Ma\'lumot kod emas, faqat qiymat bo\'ladi', ru: 'Данные — значение, а не код' } },
+          { id: 'p2', left: { uz: 'Parametrlangan so\'rov', ru: 'Параметризованный запрос' }, right: { uz: 'Ma\'lumot kod emas, faqat qiymat bo\'ladi', ru: 'Данные - значение, а не код' } },
           { id: 'p3', left: { uz: 'Kirishni tekshirish (validation)', ru: 'Проверка ввода (validation)' }, right: { uz: 'Faqat ruxsat etilgan belgilar qabul qilinadi', ru: 'Принимаются только разрешённые символы' } },
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'SQLi — muammo (ma\'lumot koddan o\'tadi), parametrlangan so\'rov — asosiy tuzatish, validation esa uni mustahkamlovchi qo\'shimcha qatlam.',
-          ru: 'SQLi — проблема (данные попадают в код), параметризованный запрос — основное решение, validation — дополнительный, укрепляющий слой.',
+          uz: 'SQLi - muammo (ma\'lumot koddan o\'tadi), parametrlangan so\'rov - asosiy tuzatish, validation esa uni mustahkamlovchi qo\'shimcha qatlam.',
+          ru: 'SQLi - проблема (данные попадают в код), параметризованный запрос - основное решение, validation - дополнительный, укрепляющий слой.',
         },
       },
     ],
@@ -136,35 +136,35 @@ Mantiqiy shart doimiy ravishda to'g'ri chiqadi va kirish tekshiruvi chetlab o'ti
     xp_reward: 25,
     title: { uz: 'XSS asoslari', ru: 'Основы XSS' },
     content: {
-      uz: `## XSS — Cross-Site Scripting
+      uz: `## XSS - Cross-Site Scripting
 
-**XSS** — foydalanuvchi kiritgan JavaScript boshqa foydalanuvchilar brauzerida, saytning o'z nomidan ishga tushadi.
+**XSS** - foydalanuvchi kiritgan JavaScript boshqa foydalanuvchilar brauzerida, saytning o'z nomidan ishga tushadi.
 
 Turlari (qisqacha):
-- **Stored XSS** — xavfli matn bazada saqlanadi (masalan, izoh) va barchaga ko'rinadi.
-- **Reflected XSS** — xavfli matn havolada keladi va darhol sahifaga qaytariladi.
+- **Stored XSS** - xavfli matn bazada saqlanadi (masalan, izoh) va barchaga ko'rinadi.
+- **Reflected XSS** - xavfli matn havolada keladi va darhol sahifaga qaytariladi.
 
-Nega xavfli? Izohga yozilgan \`<script>\` tegi boshqa odamning brauzerida aynan shu sayt nomidan bajariladi — uning cookie va sessiyasi o'g'irlanishi mumkin.
+Nega xavfli? Izohga yozilgan \`<script>\` tegi boshqa odamning brauzerida aynan shu sayt nomidan bajariladi - uning cookie va sessiyasi o'g'irlanishi mumkin.
 
-**Himoya:** chiqishdan oldin escape/sanitize — foydalanuvchi matnini kod emas, matn sifatida ko'rsatish.`,
-      ru: `## XSS — Cross-Site Scripting
+**Himoya:** chiqishdan oldin escape/sanitize - foydalanuvchi matnini kod emas, matn sifatida ko'rsatish.`,
+      ru: `## XSS - Cross-Site Scripting
 
-**XSS** — введённый пользователем JavaScript выполняется в браузере других людей от имени самого сайта.
+**XSS** - введённый пользователем JavaScript выполняется в браузере других людей от имени самого сайта.
 
 Типы (кратко):
-- **Stored XSS** — опасный текст хранится в базе (например, комментарий) и виден всем.
-- **Reflected XSS** — опасный текст приходит в ссылке и сразу отражается на странице.
+- **Stored XSS** - опасный текст хранится в базе (например, комментарий) и виден всем.
+- **Reflected XSS** - опасный текст приходит в ссылке и сразу отражается на странице.
 
-Почему опасно? Тег \`<script>\` в комментарии выполняется в браузере другого человека уже от имени сайта — его cookie и сессию можно украсть.
+Почему опасно? Тег \`<script>\` в комментарии выполняется в браузере другого человека уже от имени сайта - его cookie и сессию можно украсть.
 
-**Защита:** экранирование и санитизация — показывать текст пользователя как текст, а не как код.`,
+**Защита:** экранирование и санитизация - показывать текст пользователя как текст, а не как код.`,
     },
     exercises: [
       {
         id: 'e1',
         type: 'mc',
         q: {
-          uz: 'XSS — bu nima?',
+          uz: 'XSS - bu nima?',
           ru: 'Что такое XSS?',
         },
         options: [
@@ -175,8 +175,8 @@ Nega xavfli? Izohga yozilgan \`<script>\` tegi boshqa odamning brauzerida aynan 
         ],
         answer: 'a',
         explain: {
-          uz: 'XSS ning kaliti — "sayt nomidan ishlash". Skript boshqa odam brauzerida bajarilgani uchun uning cookie va sessiyasiga yetib boradi. SQLi esa server tomonida — ular turli muammolar.',
-          ru: 'Ключ XSS — «выполнение от имени сайта». Скрипт работает в чужом браузере, поэтому получает доступ к его cookie и сессии. SQLi живёт на сервере — это разные проблемы.',
+          uz: 'XSS ning kaliti - "sayt nomidan ishlash". Skript boshqa odam brauzerida bajarilgani uchun uning cookie va sessiyasiga yetib boradi. SQLi esa server tomonida - ular turli muammolar.',
+          ru: 'Ключ XSS - «выполнение от имени сайта». Скрипт работает в чужом браузере, поэтому получает доступ к его cookie и сессии. SQLi живёт на сервере - это разные проблемы.',
         },
       },
       {
@@ -194,8 +194,8 @@ Nega xavfli? Izohga yozilgan \`<script>\` tegi boshqa odamning brauzerida aynan 
         ],
         answer: 'a',
         explain: {
-          uz: 'Kalit so\'z — "bazada saqlanadi". Reflected XSS esa saqlanmaydi: xavfli matn havolada keladi, sahifada ko\'rinadi va keyin yo\'qoladi.',
-          ru: 'Ключевое слово — «хранится в базе». Reflected XSS ничего не хранит: текст приходит в ссылке, отображается и исчезает.',
+          uz: 'Kalit so\'z - "bazada saqlanadi". Reflected XSS esa saqlanmaydi: xavfli matn havolada keladi, sahifada ko\'rinadi va keyin yo\'qoladi.',
+          ru: 'Ключевое слово - «хранится в базе». Reflected XSS ничего не хранит: текст приходит в ссылке, отображается и исчезает.',
         },
       },
       {
@@ -213,8 +213,8 @@ Nega xavfli? Izohga yozilgan \`<script>\` tegi boshqa odamning brauzerida aynan 
         ],
         answers: ['a', 'b'],
         explain: {
-          uz: 'Escape/sanitization matnni koddan tozalaydi, allowlist esa faqat kerakli teglarni o\'tkazadi. To\'g\'ridan-to\'g\'ri chiqarish — XSS ning o\'ziga eshik ochish, parol esa bu yerga aloqador emas.',
-          ru: 'Экранирование очищает текст от кода, allowlist пропускает только нужные теги. Прямой вывод — это открыть дверь для XSS, а пароль тут ни при чём.',
+          uz: 'Escape/sanitization matnni koddan tozalaydi, allowlist esa faqat kerakli teglarni o\'tkazadi. To\'g\'ridan-to\'g\'ri chiqarish - XSS ning o\'ziga eshik ochish, parol esa bu yerga aloqador emas.',
+          ru: 'Экранирование очищает текст от кода, allowlist пропускает только нужные теги. Прямой вывод - это открыть дверь для XSS, а пароль тут ни при чём.',
         },
       },
       {
@@ -226,7 +226,7 @@ Nega xavfli? Izohga yozilgan \`<script>\` tegi boshqa odamning brauzerida aynan 
         },
         answer: 'xss',
         explain: {
-          uz: 'Bu — **XSS**. Uchta harf, lekin xavfi katta: skript saytning o\'z hududida bajarilgani uchun brauzer buni o\'sha saytning qonuniy kodidek ko\'radi.',
+          uz: 'Bu - **XSS**. Uchta harf, lekin xavfi katta: skript saytning o\'z hududida bajarilgani uchun brauzer buni o\'sha saytning qonuniy kodidek ko\'radi.',
           ru: 'Это **XSS**. Три буквы, но риск большой: скрипт выполняется на самом сайте, и браузер считает его законным кодом этого сайта.',
         },
       },
@@ -239,9 +239,9 @@ Nega xavfli? Izohga yozilgan \`<script>\` tegi boshqa odamning brauzerida aynan 
     xp_reward: 30,
     title: { uz: 'Phishing va ijtimoiy injiqlik', ru: 'Фишинг и социальная инженерия' },
     content: {
-      uz: `## Phishing — odamni aldash
+      uz: `## Phishing - odamni aldash
 
-**Phishing** — soxta xat, SMS yoki sayt orqali parol, karta raqami yoki faylni yig'ish. Bu texnik zaiflik emas — qurbonni ishontirish san'ati.
+**Phishing** - soxta xat, SMS yoki sayt orqali parol, karta raqami yoki faylni yig'ish. Bu texnik zaiflik emas - qurbonni ishontirish san'ati.
 
 Qizil belgilar:
 - **Shoshilinch:** «24 soatda hisob yopiladi!»
@@ -251,10 +251,10 @@ Qizil belgilar:
 
 **Nima qilish kerak:** havolani bosmasdan, rasmiy saytni o'zingiz oching va manbani tekshiring.
 
-**2FA** — parol o'g'irlansa ham, ikkinchi bosqich (SMS yoki ilova) hujumni to'sib qo'yadi.`,
-      ru: `## Фишинг — искусство обмана
+**2FA** - parol o'g'irlansa ham, ikkinchi bosqich (SMS yoki ilova) hujumni to'sib qo'yadi.`,
+      ru: `## Фишинг - искусство обмана
 
-**Фишинг** — сбор паролей, номеров карт или файлов через поддельное письмо, SMS или сайт. Это не техническая уязвимость — это искусство убедить жертву.
+**Фишинг** - сбор паролей, номеров карт или файлов через поддельное письмо, SMS или сайт. Это не техническая уязвимость - это искусство убедить жертву.
 
 Красные флаги:
 - **Срочность:** «Счёт закроется через 24 часа!»
@@ -264,7 +264,7 @@ Qizil belgilar:
 
 **Что делать:** не нажимая ссылку, открыть официальный сайт самостоятельно и проверить отправителя.
 
-**2FA** — даже украденный пароль не приводит к взлому: второй шаг блокирует атаку.`,
+**2FA** - даже украденный пароль не приводит к взлому: второй шаг блокирует атаку.`,
     },
     exercises: [
       {
@@ -282,8 +282,8 @@ Qizil belgilar:
         ],
         answer: 'a',
         explain: {
-          uz: '"google" so\'zidagi o harflari 0 raqami bilan almashtirilgan va -help.com qo\'shilgan. Haqiqiy Google domeni boshqa — aralashtirib yozilgan manzilning o\'zi ogohlantiradi.',
-          ru: 'В слове «google» буквы «о» заменены нулями, а сверху добавлен -help.com. Настоящий домен Google другой — уже сам подделанный адрес настораживает.',
+          uz: '"google" so\'zidagi o harflari 0 raqami bilan almashtirilgan va -help.com qo\'shilgan. Haqiqiy Google domeni boshqa - aralashtirib yozilgan manzilning o\'zi ogohlantiradi.',
+          ru: 'В слове «google» буквы «о» заменены нулями, а сверху добавлен -help.com. Настоящий домен Google другой - уже сам подделанный адрес настораживает.',
         },
       },
       {
@@ -295,8 +295,8 @@ Qizil belgilar:
         },
         answer: 'true',
         explain: {
-          uz: 'Haqiqiy tashkilot parolni xatda so\'ramaydi — u sizdan faqat kirish oynasida kerak. Xat orqali parol so\'ragan har qanday xabar — phishing.',
-          ru: 'Настоящая организация не спрашивает пароль в письме — он нужен только на странице входа. Любое письмо с просьбой назвать пароль — фишинг.',
+          uz: 'Haqiqiy tashkilot parolni xatda so\'ramaydi - u sizdan faqat kirish oynasida kerak. Xat orqali parol so\'ragan har qanday xabar - phishing.',
+          ru: 'Настоящая организация не спрашивает пароль в письме - он нужен только на странице входа. Любое письмо с просьбой назвать пароль - фишинг.',
         },
       },
       {
@@ -314,16 +314,16 @@ Qizil belgilar:
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: 'Shoshilinch o\'ylash imkonini bermaydi, .exe fayl o\'zi dastur, noto\'g\'ri domen esa kim bilan gapirishingizni ochiq ko\'rsatadi. Logotip esa qo\'lda qo\'yiladi — u ishonch belgisi emas.',
-          ru: 'Срочность не даёт подумать, .exe — это программа, чужой домен прямо показывает, с кем вы говорите. А логотип вставляет кто угодно — это не признак доверия.',
+          uz: 'Shoshilinch o\'ylash imkonini bermaydi, .exe fayl o\'zi dastur, noto\'g\'ri domen esa kim bilan gapirishingizni ochiq ko\'rsatadi. Logotip esa qo\'lda qo\'yiladi - u ishonch belgisi emas.',
+          ru: 'Срочность не даёт подумать, .exe - это программа, чужой домен прямо показывает, с кем вы говорите. А логотип вставляет кто угодно - это не признак доверия.',
         },
       },
       {
         id: 'e4',
         type: 'order',
         q: {
-          uz: 'Shubhali xatni ko\'rganda to\'g\'ri tartib (birinchisi — eng muhim)',
-          ru: 'Расставьте действия при подозрительном письме (первое — самое важное)',
+          uz: 'Shubhali xatni ko\'rganda to\'g\'ri tartib (birinchisi - eng muhim)',
+          ru: 'Расставьте действия при подозрительном письме (первое - самое важное)',
         },
         items: [
           { id: 'i1', uz: 'Havola va ilovani ochmaslik', ru: 'Не открывать ссылку и вложение' },
@@ -333,7 +333,7 @@ Qizil belgilar:
         order: ['i1', 'i2', 'i3'],
         explain: {
           uz: 'Avval zarar manbasini yopamiz (bosish = darhol yo\'qotish), keyin haqiqiy manbadan tekshiramiz va oxirida xatni yo\'qotamiz. Havolani bosib "tekshirish" xavfli.',
-          ru: 'Сначала закрываем источник опасности (нажатие = мгновенная потеря), затем сверяемся с официальным сайтом и в конце удаляем письмо. «Проверить» нажатием — опасно.',
+          ru: 'Сначала закрываем источник опасности (нажатие = мгновенная потеря), затем сверяемся с официальным сайтом и в конце удаляем письмо. «Проверить» нажатием - опасно.',
         },
       },
     ],
@@ -347,32 +347,32 @@ Qizil belgilar:
     content: {
       uz: `## Kiritmani tekshirish
 
-**Qoida:** foydalanuvchi kiritgan har qanday ma'lumot — ishonchsiz.
+**Qoida:** foydalanuvchi kiritgan har qanday ma'lumot - ishonchsiz.
 
 Himoya ikki qadamdan iborat:
 
-- **Tekshirish (validation)** — ma'lumot kutilgan shaklga mos keladimi? Tur, uzunlik, format.
-- **Kodlash / tozalash (encoding / sanitization)** — ma'lumot ishlatiladigan joyga xavfsiz joylashtiriladimi?
+- **Tekshirish (validation)** - ma'lumot kutilgan shaklga mos keladimi? Tur, uzunlik, format.
+- **Kodlash / tozalash (encoding / sanitization)** - ma'lumot ishlatiladigan joyga xavfsiz joylashtiriladimi?
 
 **Ikki yondashuv:**
 - **Oq ro'yxat (allowlist):** faqat ma'lum to'g'ri shaklni qabul qilish. Eng ishonchli.
 - **Qora ro'yxat (denylist):** ma'lum xavfli belgilarni taqiqlash. Yangi hiyla doim topiladi.
 
-> **Xavfsizlik:** tekshirish har doim **serverda** bo'lishi kerak. Brauzerdagi (client) tekshirishni chetlab o'tish oson — u faqat qulaylik uchun.`,
+> **Xavfsizlik:** tekshirish har doim **serverda** bo'lishi kerak. Brauzerdagi (client) tekshirishni chetlab o'tish oson - u faqat qulaylik uchun.`,
       ru: `## Проверка входных данных
 
-**Правило:** любые данные, введённые пользователем, — недоверенные.
+**Правило:** любые данные, введённые пользователем, - недоверенные.
 
 Защита состоит из двух шагов:
 
-- **Проверка (validation)** — соответствует ли ввод ожидаемой форме? Тип, длина, формат.
-- **Кодирование / очистка (encoding / sanitization)** — безопасно ли ввод вставляется туда, где используется?
+- **Проверка (validation)** - соответствует ли ввод ожидаемой форме? Тип, длина, формат.
+- **Кодирование / очистка (encoding / sanitization)** - безопасно ли ввод вставляется туда, где используется?
 
 **Два подхода:**
 - **Белый список (allowlist):** принимать только известную правильную форму. Самый надёжный.
 - **Чёрный список (denylist):** запрещать известные опасные символы. Новую уловку найдут всегда.
 
-> **Безопасность:** проверка всегда должна быть **на сервере**. Проверку в браузере (клиентскую) легко обойти — она только для удобства.`,
+> **Безопасность:** проверка всегда должна быть **на сервере**. Проверку в браузере (клиентскую) легко обойти - она только для удобства.`,
     },
     exercises: [
       {
@@ -390,8 +390,8 @@ Himoya ikki qadamdan iborat:
         ],
         answer: 'a',
         explain: {
-          uz: "Oq ro'yxat eng xavfsiz: u faqat kutilgan shaklni o'tkazadi. Qora ro'yxat esa to'liq bo'la olmaydi — har yangi hiyla uni chetlab o'tadi.",
-          ru: 'Белый список безопаснее: он пропускает только ожидаемую форму. Чёрный список не может быть полным — каждая новая уловка его обходит.',
+          uz: "Oq ro'yxat eng xavfsiz: u faqat kutilgan shaklni o'tkazadi. Qora ro'yxat esa to'liq bo'la olmaydi - har yangi hiyla uni chetlab o'tadi.",
+          ru: 'Белый список безопаснее: он пропускает только ожидаемую форму. Чёрный список не может быть полным - каждая новая уловка его обходит.',
         },
       },
       {
@@ -403,8 +403,8 @@ Himoya ikki qadamdan iborat:
         },
         answer: 'false',
         explain: {
-          uz: "Brauzer tekshiruvini chetlab o'tish oson — so'rovni to'g'ridan-to'g'ri yuborish mumkin. Shuning uchun haqiqiy tekshirish serverda bo'ladi; brauzerdagisi faqat qulaylik uchun.",
-          ru: 'Клиентскую проверку легко обойти — запрос можно отправить напрямую. Настоящая проверка идёт на сервере; браузерная нужна лишь для удобства.',
+          uz: "Brauzer tekshiruvini chetlab o'tish oson - so'rovni to'g'ridan-to'g'ri yuborish mumkin. Shuning uchun haqiqiy tekshirish serverda bo'ladi; brauzerdagisi faqat qulaylik uchun.",
+          ru: 'Клиентскую проверку легко обойти - запрос можно отправить напрямую. Настоящая проверка идёт на сервере; браузерная нужна лишь для удобства.',
         },
       },
       {
@@ -422,8 +422,8 @@ Himoya ikki qadamdan iborat:
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Tur, uzunlik va format — kiritma kutilgan doirada ekanini bildiradi. Yaxshi tekshirilgan kiritma keyingi himoyalar (SQLi, XSS) uchun ham mustahkam asos bo'ladi.",
-          ru: 'Тип, длина и формат показывают, что ввод в ожидаемых границах. Хорошо проверенный ввод — прочная основа и для других защит (SQLi, XSS).',
+          uz: "Tur, uzunlik va format - kiritma kutilgan doirada ekanini bildiradi. Yaxshi tekshirilgan kiritma keyingi himoyalar (SQLi, XSS) uchun ham mustahkam asos bo'ladi.",
+          ru: 'Тип, длина и формат показывают, что ввод в ожидаемых границах. Хорошо проверенный ввод - прочная основа и для других защит (SQLi, XSS).',
         },
       },
       {
@@ -442,7 +442,7 @@ Himoya ikki qadamdan iborat:
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Validation shaklni tekshiradi, encoding joylashtirishni xavfsiz qiladi, allowlist faqat to'g'riini o'tkazadi, client-side tekshirish esa xavfsizlik kafolati emas.",
-          ru: 'Validation проверяет форму, encoding делает вставку безопасной, allowlist пропускает только правильное, а клиентская проверка — не гарантия безопасности.',
+          ru: 'Validation проверяет форму, encoding делает вставку безопасной, allowlist пропускает только правильное, а клиентская проверка - не гарантия безопасности.',
         },
       },
     ],
@@ -452,32 +452,32 @@ Himoya ikki qadamdan iborat:
     slug: 'csrf',
     kind: 'lesson',
     xp_reward: 25,
-    title: { uz: "CSRF — begona saytdan so'rov", ru: 'CSRF — запрос с чужого сайта' },
+    title: { uz: "CSRF - begona saytdan so'rov", ru: 'CSRF - запрос с чужого сайта' },
     content: {
       uz: `## CSRF nima?
 
-**CSRF (Cross-Site Request Forgery)** — tizimga kirgan foydalanuvchi nomidan, u bilmagan holda so'rov yuborish.
+**CSRF (Cross-Site Request Forgery)** - tizimga kirgan foydalanuvchi nomidan, u bilmagan holda so'rov yuborish.
 
-Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tdingiz. O'sha sayt yashirincha bankingizga "pul o'tkaz" so'rovini yubordi — brauzeringiz cookie'ni avtomatik qo'shadi va bank so'rovni sizdan kelgan deb o'ylaydi.
+Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tdingiz. O'sha sayt yashirincha bankingizga "pul o'tkaz" so'rovini yubordi - brauzeringiz cookie'ni avtomatik qo'shadi va bank so'rovni sizdan kelgan deb o'ylaydi.
 
-**Nega ishlaydi:** brauzer cookie'ni har so'rovga o'zi qo'shadi — sayt so'rov kimdan kelganini parol bilan emas, cookie bilan biladi.
+**Nega ishlaydi:** brauzer cookie'ni har so'rovga o'zi qo'shadi - sayt so'rov kimdan kelganini parol bilan emas, cookie bilan biladi.
 
 **Himoya:**
-- **CSRF token** — formaga yashirin, taxmin qilib bo'lmaydigan qiymat; usiz so'rov rad etiladi.
-- **SameSite cookie** — cookie faqat shu saytdan kelgan so'rovga qo'shiladi.
+- **CSRF token** - formaga yashirin, taxmin qilib bo'lmaydigan qiymat; usiz so'rov rad etiladi.
+- **SameSite cookie** - cookie faqat shu saytdan kelgan so'rovga qo'shiladi.
 
 > **Xavfsizlik:** muhim amallar (pul, parol almashtirish) CSRF token talab qilishi kerak.`,
       ru: `## Что такое CSRF
 
-**CSRF (Cross-Site Request Forgery)** — отправка запроса от имени вошедшего пользователя без его ведома.
+**CSRF (Cross-Site Request Forgery)** - отправка запроса от имени вошедшего пользователя без его ведома.
 
-Представьте: вы вошли в банк. Затем перешли на другой (враждебный) сайт. Он тайком отправил в ваш банк запрос «перевести деньги» — браузер автоматически приложит cookie, и банк решит, что запрос от вас.
+Представьте: вы вошли в банк. Затем перешли на другой (враждебный) сайт. Он тайком отправил в ваш банк запрос «перевести деньги» - браузер автоматически приложит cookie, и банк решит, что запрос от вас.
 
-**Почему работает:** браузер сам прикладывает cookie к каждому запросу — сайт понимает, кто отправил запрос, по cookie, а не по паролю.
+**Почему работает:** браузер сам прикладывает cookie к каждому запросу - сайт понимает, кто отправил запрос, по cookie, а не по паролю.
 
 **Защита:**
-- **CSRF-токен** — скрытое, непредсказуемое значение; без него запрос отклоняется.
-- **SameSite cookie** — cookie прикладывается только к запросам с этого же сайта.
+- **CSRF-токен** - скрытое, непредсказуемое значение; без него запрос отклоняется.
+- **SameSite cookie** - cookie прикладывается только к запросам с этого же сайта.
 
 > **Безопасность:** важные действия (деньги, смена пароля) должны требовать CSRF-токен.`,
     },
@@ -497,8 +497,8 @@ Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tding
         ],
         answer: 'a',
         explain: {
-          uz: "CSRF brauzerning cookie'ni avtomatik qo'shish xususiyatidan foydalanadi. Buzg'unchi parolni bilmaydi — sayt so'rovni cookie bo'yicha tanidi.",
-          ru: 'CSRF использует то, что браузер автоматически прикладывает cookie. Пароль злоумышленник не знает — сайт опознал запрос по cookie.',
+          uz: "CSRF brauzerning cookie'ni avtomatik qo'shish xususiyatidan foydalanadi. Buzg'unchi parolni bilmaydi - sayt so'rovni cookie bo'yicha tanidi.",
+          ru: 'CSRF использует то, что браузер автоматически прикладывает cookie. Пароль злоумышленник не знает - сайт опознал запрос по cookie.',
         },
       },
       {
@@ -510,8 +510,8 @@ Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tding
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — HTTPS trafikni shifrlaydi, lekin CSRF boshqa sababdan ishlaydi (cookie avtomatik yuboriladi). CSRF token va SameSite aynan shunga qarshi qaratilgan.",
-          ru: 'Нет — HTTPS шифрует трафик, но CSRF работает по другой причине (cookie отправляется автоматически). Именно против этого направлены CSRF-токен и SameSite.',
+          uz: "Yo'q - HTTPS trafikni shifrlaydi, lekin CSRF boshqa sababdan ishlaydi (cookie avtomatik yuboriladi). CSRF token va SameSite aynan shunga qarshi qaratilgan.",
+          ru: 'Нет - HTTPS шифрует трафик, но CSRF работает по другой причине (cookie отправляется автоматически). Именно против этого направлены CSRF-токен и SameSite.',
         },
       },
       {
@@ -530,7 +530,7 @@ Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tding
         answers: ['a', 'b', 'c'],
         explain: {
           uz: "Token va SameSite cookie so'rov haqiqiy formadan kelganini bildiradi, qayta tasdiq qo'shimcha to'siq. O'zgartirishni GET'ga o'tkazish esa aksincha xavfni oshiradi.",
-          ru: 'Токен и SameSite показывают, что запрос пришёл с настоящей формы, а повторное подтверждение — дополнительный барьер. Перевод изменений на GET, наоборот, повышает риск.',
+          ru: 'Токен и SameSite показывают, что запрос пришёл с настоящей формы, а повторное подтверждение - дополнительный барьер. Перевод изменений на GET, наоборот, повышает риск.',
         },
       },
       {
@@ -549,7 +549,7 @@ Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tding
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Token va SameSite so'rovni himoyalaydi, CSRF ning o'zi hujum usuli, o'zgartirishni GET bilan yuborish esa himoyani buzadi.",
-          ru: 'Токен и SameSite защищают запрос, сам CSRF — способ атаки, а изменение через GET ломает защиту.',
+          ru: 'Токен и SameSite защищают запрос, сам CSRF - способ атаки, а изменение через GET ломает защиту.',
         },
       },
     ],
@@ -563,25 +563,25 @@ Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tding
     content: {
       uz: `## Autentifikatsiya va seanslar
 
-**Autentifikatsiya (authn)** — siz kimsiz? **Avtorizatsiya (authz)** — nima qilishga haqqingiz bor? Bu ikki xil narsa.
+**Autentifikatsiya (authn)** - siz kimsiz? **Avtorizatsiya (authz)** - nima qilishga haqqingiz bor? Bu ikki xil narsa.
 
 **Seans (session):** bir marta parol bilan kirasiz, keyin server sizni **cookie** bilan taniydi. Har so'rovda parol so'ralmaydi.
 
 **Xavflar va himoya:**
-- **Seans ID o'g'irlanishi** — ID taxmin qilib bo'lmaydigan bo'lishi kerak. \`HttpOnly\` cookie uni JavaScript'dan yashiradi.
-- **Session fixation** — hujumchi oldindan ID beradi. Yechim: **kirgandan keyin** ID ni yangilash.
+- **Seans ID o'g'irlanishi** - ID taxmin qilib bo'lmaydigan bo'lishi kerak. \`HttpOnly\` cookie uni JavaScript'dan yashiradi.
+- **Session fixation** - hujumchi oldindan ID beradi. Yechim: **kirgandan keyin** ID ni yangilash.
 - **Chiqishdan keyin** seansni serverda bekor qilish kerak (shunchaki cookie o'chirish yetmaydi).
 
 > **Xavfsizlik:** parol hech qachon URL yoki logda ko'rinmasin; seans cookie'lari \`HttpOnly\` + \`Secure\` bo'lsin.`,
       ru: `## Аутентификация и сессии
 
-**Аутентификация (authn)** — кто вы? **Авторизация (authz)** — что вам разрешено? Это разные вещи.
+**Аутентификация (authn)** - кто вы? **Авторизация (authz)** - что вам разрешено? Это разные вещи.
 
 **Сессия:** вы один раз входите по паролю, дальше сервер узнаёт вас по **cookie**. Пароль не спрашивается при каждом запросе.
 
 **Риски и защита:**
-- **Кража ID сессии** — ID не должен быть предсказуемым. Флаг \`HttpOnly\` прячет cookie от JavaScript.
-- **Фиксация сессии** — злоумышленник заранее навязывает ID. Решение: **сменить ID после входа**.
+- **Кража ID сессии** - ID не должен быть предсказуемым. Флаг \`HttpOnly\` прячет cookie от JavaScript.
+- **Фиксация сессии** - злоумышленник заранее навязывает ID. Решение: **сменить ID после входа**.
 - **После выхода** сессию нужно аннулировать на сервере (просто удалить cookie недостаточно).
 
 > **Безопасность:** пароль не должен появляться в URL или логах; cookie сессии должны иметь \`HttpOnly\` + \`Secure\`.`,
@@ -595,9 +595,9 @@ Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tding
           ru: 'В чём разница между аутентификацией и авторизацией?',
         },
         options: [
-          { id: 'a', uz: 'Authn — siz kimsiz, authz — nimaga haqqingiz bor', ru: 'Authn — кто вы, authz — что вам разрешено' },
+          { id: 'a', uz: 'Authn - siz kimsiz, authz - nimaga haqqingiz bor', ru: 'Authn - кто вы, authz - что вам разрешено' },
           { id: 'b', uz: 'Ikkalasi bir xil narsa', ru: 'Это одно и то же' },
-          { id: 'c', uz: 'Authn — parol, authz — login', ru: 'Authn — пароль, authz — логин' },
+          { id: 'c', uz: 'Authn - parol, authz - login', ru: 'Authn - пароль, authz - логин' },
           { id: 'd', uz: 'Authz faqat adminlar uchun', ru: 'Authz только для администраторов' },
         ],
         answer: 'a',
@@ -648,7 +648,7 @@ Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tding
         answer: 'httponly',
         accepted: ['httponly', 'http only', 'http-only'],
         explain: {
-          uz: "Bu — HttpOnly. U cookie'ni JavaScript o'qiy olmaydigan qiladi, shuning uchun XSS orqali seans ID ni o'g'irlash qiyinlashadi.",
+          uz: "Bu - HttpOnly. U cookie'ni JavaScript o'qiy olmaydigan qiladi, shuning uchun XSS orqali seans ID ni o'g'irlash qiyinlashadi.",
           ru: 'Это HttpOnly. Он делает cookie недоступным для чтения из JavaScript, поэтому украсть ID сессии через XSS сложнее.',
         },
       },
@@ -663,9 +663,9 @@ Tasavvur qiling: siz bank saytiga kirgansiz. Keyin boshqa (yovuz) saytga o'tding
     content: {
       uz: `## Buzilgan ruxsat nazorati (IDOR)
 
-**IDOR (Insecure Direct Object Reference)** — boshqa odamning obyektiga to'g'ridan-to'g'ri murojaat qilish.
+**IDOR (Insecure Direct Object Reference)** - boshqa odamning obyektiga to'g'ridan-to'g'ri murojaat qilish.
 
-Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz — boshqa odamning ma'lumotini ko'rasizmi? Agar ha bo'lsa, server **har so'rovda ruxsatni tekshirmayapti**.
+Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz - boshqa odamning ma'lumotini ko'rasizmi? Agar ha bo'lsa, server **har so'rovda ruxsatni tekshirmayapti**.
 
 **Asosiy xato:** server ID ni to'g'ri deb biladi, lekin "bu ID sizga tegishlimi?" deb so'ramaydi.
 
@@ -674,12 +674,12 @@ Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz — bo
 - Obyekt egasini server tomonda aniqlash, ID ga ko'r-ko'rona ishonmaslik.
 - Eng kam imtiyoz (least privilege) tamoyili.
 
-> **Xavfsizlik:** foydalanuvchi kiritgan ID hech qachon ruxsat tekshiruvi o'rnini bosmaydi. "Tekshirilmagan" so'rov — eng ko'p uchraydigan zaifliklardan biri.`,
+> **Xavfsizlik:** foydalanuvchi kiritgan ID hech qachon ruxsat tekshiruvi o'rnini bosmaydi. "Tekshirilmagan" so'rov - eng ko'p uchraydigan zaifliklardan biri.`,
       ru: `## Нарушенный контроль доступа (IDOR)
 
-**IDOR (Insecure Direct Object Reference)** — прямое обращение к чужому объекту.
+**IDOR (Insecure Direct Object Reference)** - прямое обращение к чужому объекту.
 
-Пример: ваш аккаунт — \`?id=100\`. Если заменить на \`101\`, увидите ли вы чужие данные? Если да, значит сервер **не проверяет права при каждом запросе**.
+Пример: ваш аккаунт - \`?id=100\`. Если заменить на \`101\`, увидите ли вы чужие данные? Если да, значит сервер **не проверяет права при каждом запросе**.
 
 **Главная ошибка:** сервер считает ID корректным, но не спрашивает: «принадлежит ли этот ID вам?»
 
@@ -688,7 +688,7 @@ Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz — bo
 - Определять владельца объекта на сервере, не доверять ID вслепую.
 - Принцип наименьших привилегий (least privilege).
 
-> **Безопасность:** введённый пользователем ID никогда не заменяет проверку прав. «Непроверенный» запрос — одна из самых частых уязвимостей.`,
+> **Безопасность:** введённый пользователем ID никогда не заменяет проверку прав. «Непроверенный» запрос - одна из самых частых уязвимостей.`,
     },
     exercises: [
       {
@@ -719,8 +719,8 @@ Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz — bo
         },
         answer: 'false',
         explain: {
-          uz: "Tasodifiy ID taxminni qiyinlashtiradi, lekin yechim emas — havola ulashilsa yoki ID oshkor bo'lsa, muammo qaytadi. Haqiqiy yechim — har so'rovda ruxsatni tekshirish.",
-          ru: 'Случайный ID усложняет подбор, но это не решение: если ссылку перешлют или ID раскроется, проблема вернётся. Настоящее решение — проверять права при каждом запросе.',
+          uz: "Tasodifiy ID taxminni qiyinlashtiradi, lekin yechim emas - havola ulashilsa yoki ID oshkor bo'lsa, muammo qaytadi. Haqiqiy yechim - har so'rovda ruxsatni tekshirish.",
+          ru: 'Случайный ID усложняет подбор, но это не решение: если ссылку перешлют или ID раскроется, проблема вернётся. Настоящее решение - проверять права при каждом запросе.',
         },
       },
       {
@@ -738,8 +738,8 @@ Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz — bo
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Ruxsat tekshiruvi, egasini serverda aniqlash va eng kam imtiyoz — uchtasi birga himoya beradi. ID'ga ko'r-ko'rona ishonish esa aynan zaiflikning sababi.",
-          ru: 'Проверка прав, определение владельца на сервере и наименьшие привилегии вместе дают защиту. Доверие к ID без проверки — как раз причина уязвимости.',
+          uz: "Ruxsat tekshiruvi, egasini serverda aniqlash va eng kam imtiyoz - uchtasi birga himoya beradi. ID'ga ko'r-ko'rona ishonish esa aynan zaiflikning sababi.",
+          ru: 'Проверка прав, определение владельца на сервере и наименьшие привилегии вместе дают защиту. Доверие к ID без проверки - как раз причина уязвимости.',
         },
       },
       {
@@ -757,8 +757,8 @@ Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz — bo
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "IDOR — hujum turi, ruxsat tekshiruvi va least privilege — himoya, ID'ga ko'r-ko'rona ishonish esa zaiflikning ildizi.",
-          ru: 'IDOR — способ атаки, проверка прав и least privilege — защита, а слепое доверие к ID — корень уязвимости.',
+          uz: "IDOR - hujum turi, ruxsat tekshiruvi va least privilege - himoya, ID'ga ko'r-ko'rona ishonish esa zaiflikning ildizi.",
+          ru: 'IDOR - способ атаки, проверка прав и least privilege - защита, а слепое доверие к ID - корень уязвимости.',
         },
       },
     ],
@@ -774,22 +774,22 @@ Misol: sizning hisobingiz \`?id=100\`. Raqamni \`101\` ga o'zgartirsangiz — bo
 
 Server javobiga qo'shiladigan **HTTP sarlavhalar** brauzerga himoya qoidalarini aytadi.
 
-- **Content-Security-Policy (CSP)** — qaysi manbadan skript va uslub yuklash mumkin. XSS zararini keskin kamaytiradi.
-- **Strict-Transport-Security (HSTS)** — brauzer saytga faqat HTTPS orqali ulanadi.
-- **X-Content-Type-Options: nosniff** — brauzer fayl turini "o'zi taxmin qilmasin".
-- **X-Frame-Options / frame-ancestors** — saytni begona \`<iframe>\` ichida ochib bo'lmaydi (clickjacking himoyasi).
+- **Content-Security-Policy (CSP)** - qaysi manbadan skript va uslub yuklash mumkin. XSS zararini keskin kamaytiradi.
+- **Strict-Transport-Security (HSTS)** - brauzer saytga faqat HTTPS orqali ulanadi.
+- **X-Content-Type-Options: nosniff** - brauzer fayl turini "o'zi taxmin qilmasin".
+- **X-Frame-Options / frame-ancestors** - saytni begona \`<iframe>\` ichida ochib bo'lmaydi (clickjacking himoyasi).
 
-> **Xavfsizlik:** sarlavhalar yagona davo emas, lekin arzon va kuchli qatlam. Ayniqsa CSP — XSS ga qarshi eng samarali himoyalardan biri.`,
+> **Xavfsizlik:** sarlavhalar yagona davo emas, lekin arzon va kuchli qatlam. Ayniqsa CSP - XSS ga qarshi eng samarali himoyalardan biri.`,
       ru: `## Заголовки безопасности
 
 **HTTP-заголовки** в ответе сервера сообщают браузеру правила защиты.
 
-- **Content-Security-Policy (CSP)** — из каких источников можно грузить скрипты и стили. Резко снижает ущерб от XSS.
-- **Strict-Transport-Security (HSTS)** — браузер подключается к сайту только по HTTPS.
-- **X-Content-Type-Options: nosniff** — браузер не должен «угадывать» тип файла.
-- **X-Frame-Options / frame-ancestors** — сайт нельзя открыть внутри чужого \`<iframe>\` (защита от clickjacking).
+- **Content-Security-Policy (CSP)** - из каких источников можно грузить скрипты и стили. Резко снижает ущерб от XSS.
+- **Strict-Transport-Security (HSTS)** - браузер подключается к сайту только по HTTPS.
+- **X-Content-Type-Options: nosniff** - браузер не должен «угадывать» тип файла.
+- **X-Frame-Options / frame-ancestors** - сайт нельзя открыть внутри чужого \`<iframe>\` (защита от clickjacking).
 
-> **Безопасность:** заголовки — не единственное лекарство, но дешёвый и мощный слой. Особенно CSP — одна из самых эффективных защит от XSS.`,
+> **Безопасность:** заголовки - не единственное лекарство, но дешёвый и мощный слой. Особенно CSP - одна из самых эффективных защит от XSS.`,
     },
     exercises: [
       {
@@ -807,8 +807,8 @@ Server javobiga qo'shiladigan **HTTP sarlavhalar** brauzerga himoya qoidalarini 
         ],
         answer: 'a',
         explain: {
-          uz: "CSP qaysi manbalardan skript yuklash mumkinligini cheklaydi — shuning uchun kiritilgan begona skript ko'pincha ishlamaydi. Bu XSS ga qarshi eng kuchli qatlamlardan biri.",
-          ru: 'CSP ограничивает источники, откуда можно грузить скрипты, — поэтому внедрённый чужой скрипт часто не срабатывает. Это один из сильнейших слоёв защиты от XSS.',
+          uz: "CSP qaysi manbalardan skript yuklash mumkinligini cheklaydi - shuning uchun kiritilgan begona skript ko'pincha ishlamaydi. Bu XSS ga qarshi eng kuchli qatlamlardan biri.",
+          ru: 'CSP ограничивает источники, откуда можно грузить скрипты, - поэтому внедрённый чужой скрипт часто не срабатывает. Это один из сильнейших слоёв защиты от XSS.',
         },
       },
       {
@@ -839,8 +839,8 @@ Server javobiga qo'shiladigan **HTTP sarlavhalar** brauzerga himoya qoidalarini 
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — sarlavhalar brauzer tomonidagi himoya (XSS, clickjacking, HTTPS majburlash). SQL injection server tomonida, parametrlangan so'rovlar bilan yechiladi.",
-          ru: 'Нет — заголовки защищают на стороне браузера (XSS, clickjacking, принудительный HTTPS). SQL injection закрывается на сервере, параметризованными запросами.',
+          uz: "Yo'q - sarlavhalar brauzer tomonidagi himoya (XSS, clickjacking, HTTPS majburlash). SQL injection server tomonida, parametrlangan so'rovlar bilan yechiladi.",
+          ru: 'Нет - заголовки защищают на стороне браузера (XSS, clickjacking, принудительный HTTPS). SQL injection закрывается на сервере, параметризованными запросами.',
         },
       },
       {
@@ -858,8 +858,8 @@ Server javobiga qo'shiladigan **HTTP sarlavhalar** brauzerga himoya qoidalarini 
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Sarlavhalar server javobiga qo'shilib, brauzerga qoidalar beradi va bir necha xavfni kamaytiradi. Lekin ular server kodidagi xatoni o'zi tuzatmaydi — kod to'g'ri yozilishi kerak.",
-          ru: 'Заголовки добавляются в ответ, сообщают браузеру правила и снижают ряд рисков. Но они не исправляют ошибку в коде сервера сами — код должен быть написан правильно.',
+          uz: "Sarlavhalar server javobiga qo'shilib, brauzerga qoidalar beradi va bir necha xavfni kamaytiradi. Lekin ular server kodidagi xatoni o'zi tuzatmaydi - kod to'g'ri yozilishi kerak.",
+          ru: 'Заголовки добавляются в ответ, сообщают браузеру правила и снижают ряд рисков. Но они не исправляют ошибку в коде сервера сами - код должен быть написан правильно.',
         },
       },
     ],
@@ -895,8 +895,8 @@ Veb-xavfsizlik bo'yicha bilimingizni tekshiring: SQLi, XSS, kiritma tekshiruvi, 
         ],
         answer: 'a',
         explain: {
-          uz: 'Matn kod ichiga birlashtirilgan (concatenation) — bu SQLi ning sababi. Tuzatish: input ni so\'rovdan ajratib, parametrlangan so\'rov ishlatish. HTTPS esa bu yerdan muammoni yechmaydi.',
-          ru: 'Текст склеивается с кодом (concatenation) — в этом причина SQLi. Решение: отделить ввод от запроса и использовать параметризованный запрос. HTTPS эту проблему не решает.',
+          uz: 'Matn kod ichiga birlashtirilgan (concatenation) - bu SQLi ning sababi. Tuzatish: input ni so\'rovdan ajratib, parametrlangan so\'rov ishlatish. HTTPS esa bu yerdan muammoni yechmaydi.',
+          ru: 'Текст склеивается с кодом (concatenation) - в этом причина SQLi. Решение: отделить ввод от запроса и использовать параметризованный запрос. HTTPS эту проблему не решает.',
         },
       },
       {
@@ -908,13 +908,13 @@ Veb-xavfsizlik bo'yicha bilimingizni tekshiring: SQLi, XSS, kiritma tekshiruvi, 
         },
         pairs: [
           { id: 'p1', left: { uz: 'Parametrlangan so\'rovlar', ru: 'Параметризованные запросы' }, right: { uz: 'SQL injection', ru: 'SQL injection' } },
-          { id: 'p2', left: { uz: 'Escape/sanitization', ru: 'Экранирование/санитизация' }, right: { uz: 'XSS — matn kodga aylanmasin', ru: 'XSS — текст не должен стать кодом' } },
+          { id: 'p2', left: { uz: 'Escape/sanitization', ru: 'Экранирование/санитизация' }, right: { uz: 'XSS - matn kodga aylanmasin', ru: 'XSS - текст не должен стать кодом' } },
           { id: 'p3', left: { uz: '2FA (ikki bosqichli tasdiqlash)', ru: '2FA (двухфакторная аутентификация)' }, right: { uz: 'Parol o\'g\'irlanganda ham himoya', ru: 'Защита при украденном пароле' } },
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Har bir muammo o\'z doriga davo: SQLi ga — parametrlar, XSS ga — ekranlash, o\'g\'irlangan parolga — ikkinchi bosqich. Bittasi boshqasini almashtirmaydi.',
-          ru: 'У каждой проблемы своё лекарство: SQLi — параметры, XSS — экранирование, украденный пароль — второй фактор. Одно не заменяет другое.',
+          uz: 'Har bir muammo o\'z doriga davo: SQLi ga - parametrlar, XSS ga - ekranlash, o\'g\'irlangan parolga - ikkinchi bosqich. Bittasi boshqasini almashtirmaydi.',
+          ru: 'У каждой проблемы своё лекарство: SQLi - параметры, XSS - экранирование, украденный пароль - второй фактор. Одно не заменяет другое.',
         },
       },
       {
@@ -926,7 +926,7 @@ Veb-xavfsizlik bo'yicha bilimingizni tekshiring: SQLi, XSS, kiritma tekshiruvi, 
         },
         answer: 'false',
         explain: {
-          uz: 'Bu — Stored XSS belgisi. Reflected XSS saqlamaydi: xavfli matn havolada keladi, bir marta ko\'rinadi va yo\'qoladi. Ikkalasi ham xavfli, lekin tabiati boshqacha.',
+          uz: 'Bu - Stored XSS belgisi. Reflected XSS saqlamaydi: xavfli matn havolada keladi, bir marta ko\'rinadi va yo\'qoladi. Ikkalasi ham xavfli, lekin tabiati boshqacha.',
           ru: 'Это признак Stored XSS. Reflected ничего не хранит: текст приходит в ссылке, один раз отображается и исчезает. Оба опасны, но механизм разный.',
         },
       },
@@ -940,8 +940,8 @@ Veb-xavfsizlik bo'yicha bilimingizni tekshiring: SQLi, XSS, kiritma tekshiruvi, 
         answer: '2fa',
         accepted: ['two factor', 'two-factor', 'two factor authentication', 'двухфакторная аутентификация'],
         explain: {
-          uz: 'Bu — **2FA** (ikkinchi bosqich: SMS, ilova yoki kalit). Phishing parolni o\'g\'irlashi mumkin, lekin telefonni yoki kalitni emas — shuning uchun 2FA phishing zararini sezilarli kamaytiradi.',
-          ru: 'Это **2FA** (второй шаг: SMS, приложение или ключ). Фишинг может украсть пароль, но не телефон и не ключ — поэтому 2FA снижает эффект фишинга.',
+          uz: 'Bu - **2FA** (ikkinchi bosqich: SMS, ilova yoki kalit). Phishing parolni o\'g\'irlashi mumkin, lekin telefonni yoki kalitni emas - shuning uchun 2FA phishing zararini sezilarli kamaytiradi.',
+          ru: 'Это **2FA** (второй шаг: SMS, приложение или ключ). Фишинг может украсть пароль, но не телефон и не ключ - поэтому 2FA снижает эффект фишинга.',
         },
       },
       {
@@ -959,8 +959,8 @@ Veb-xavfsizlik bo'yicha bilimingizni tekshiring: SQLi, XSS, kiritma tekshiruvi, 
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: 'Parametrlar SQLi ni, ekranlash XSS ni, 2FA esa o\'g\'irlangan kirishni yopadi. To\'g\'ridan-to\'g\'ri chiqarish esa aynan xavfli usul — u hamma himoyani bekor qiladi.',
-          ru: 'Параметры закрывают SQLi, экранирование — XSS, 2FA — украденный вход. Прямой вывод в HTML как раз опасен и обнуляет защиту.',
+          uz: 'Parametrlar SQLi ni, ekranlash XSS ni, 2FA esa o\'g\'irlangan kirishni yopadi. To\'g\'ridan-to\'g\'ri chiqarish esa aynan xavfli usul - u hamma himoyani bekor qiladi.',
+          ru: 'Параметры закрывают SQLi, экранирование - XSS, 2FA - украденный вход. Прямой вывод в HTML как раз опасен и обнуляет защиту.',
         },
       },
     ],

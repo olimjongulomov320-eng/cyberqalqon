@@ -93,3 +93,10 @@ core loop, design language, architecture) see **[CONCEPT.md](CONCEPT.md)**.
   browser-run and self-reported (not XP). See `CONTENT_GUIDE.md`.
 - Server now enforces lesson unlock order (403 `MODULE_LOCKED`).
 
+## Lesson model (practice-problem style)
+
+- Lesson page = concept + task workspace. Wrong answers get a verdict only; the
+  solution is shown once solved or on request after 2 failed attempts
+  (`POST /v1/modules/:slug/solution`). `/complete` takes no answers and requires every
+  task to be solved (422 `NOT_SOLVED`). Hearts are not part of the lesson any more.
+

@@ -1,4 +1,4 @@
-/* AUTO-GENERATED from reference solutions — see backend/test/challenges.test.js.
+/* AUTO-GENERATED from reference solutions - see backend/test/challenges.test.js.
  * Hand edits to `expected` will be caught by that test. All text is a DRAFT
  * (needs_review) awaiting a native-speaker pass: see CONTENT_REVIEW.md. */
 module.exports = [
@@ -19,8 +19,8 @@ module.exports = [
    "ru": "Сумма чётных чисел"
   },
   "statement": {
-   "uz": "`solve(nums)` funksiyasini yozing: `nums` ro‘yxatidagi **juft** sonlar yig‘indisini qaytaring. Juft son bo‘lmasa — `0`.",
-   "ru": "Напишите функцию `solve(nums)`: верните сумму **чётных** чисел списка `nums`. Если чётных нет — `0`."
+   "uz": "`solve(nums)` funksiyasini yozing: `nums` ro‘yxatidagi **juft** sonlar yig‘indisini qaytaring. Juft son bo‘lmasa - `0`.",
+   "ru": "Напишите функцию `solve(nums)`: верните сумму **чётных** чисел списка `nums`. Если чётных нет - `0`."
   },
   "constraints": {
    "uz": "`0 ≤ len(nums) ≤ 1000`; sonlar butun.",
@@ -211,8 +211,8 @@ module.exports = [
    "ru": "Палиндром ли?"
   },
   "statement": {
-   "uz": "`solve(s)` — `s` palindrom bo‘lsa `True`, aks holda `False` qaytarsin. Katta-kichik harf farqi hisobga olinmasin, bo‘shliqlar e’tiborsiz.",
-   "ru": "`solve(s)` возвращает `True`, если `s` — палиндром, иначе `False`. Регистр не важен, пробелы игнорируются."
+   "uz": "`solve(s)` - `s` palindrom bo‘lsa `True`, aks holda `False` qaytarsin. Katta-kichik harf farqi hisobga olinmasin, bo‘shliqlar e’tiborsiz.",
+   "ru": "`solve(s)` возвращает `True`, если `s` - палиндром, иначе `False`. Регистр не важен, пробелы игнорируются."
   },
   "constraints": {
    "uz": "`0 ≤ len(s) ≤ 1000`.",
@@ -655,7 +655,7 @@ module.exports = [
   },
   "statement": {
    "uz": "Log qatorlari: `\"<sana> <STATUS> user=<ism> ip=<ip>\"`, STATUS `OK` yoki `FAIL`. `solve(lines)` har bir foydalanuvchi uchun `FAIL` qatorlari sonini lug‘at ko‘rinishida qaytarsin (faqat kamida bitta `FAIL` bo‘lganlar).",
-   "ru": "Строки журнала: `\"<дата> <STATUS> user=<имя> ip=<ip>\"`, STATUS — `OK` или `FAIL`. `solve(lines)` возвращает словарь: для каждого пользователя число строк `FAIL` (только у кого есть хотя бы один `FAIL`)."
+   "ru": "Строки журнала: `\"<дата> <STATUS> user=<имя> ip=<ip>\"`, STATUS - `OK` или `FAIL`. `solve(lines)` возвращает словарь: для каждого пользователя число строк `FAIL` (только у кого есть хотя бы один `FAIL`)."
   },
   "constraints": {
    "uz": "`0 ≤ len(lines) ≤ 1000`.",
@@ -754,8 +754,8 @@ module.exports = [
    "ru": "Корректный IPv4"
   },
   "statement": {
-   "uz": "`solve(s)` — `s` to‘g‘ri IPv4 manzil bo‘lsa `True`: aynan 4 ta nuqta bilan ajratilgan qism, har biri `0–255` oralig‘idagi butun son, **bosh nol yo‘q** (`\"0\"` mumkin, `\"01\"` mumkin emas).",
-   "ru": "`solve(s)` возвращает `True`, если `s` — корректный IPv4: ровно 4 части через точку, каждая — целое `0–255` **без ведущих нулей** (`\"0\"` можно, `\"01\"` нельзя)."
+   "uz": "`solve(s)` - `s` to‘g‘ri IPv4 manzil bo‘lsa `True`: aynan 4 ta nuqta bilan ajratilgan qism, har biri `0-255` oralig‘idagi butun son, **bosh nol yo‘q** (`\"0\"` mumkin, `\"01\"` mumkin emas).",
+   "ru": "`solve(s)` возвращает `True`, если `s` - корректный IPv4: ровно 4 части через точку, каждая - целое `0-255` **без ведущих нулей** (`\"0\"` можно, `\"01\"` нельзя)."
   },
   "constraints": {
    "uz": "`0 ≤ len(s) ≤ 50`.",
@@ -867,8 +867,8 @@ module.exports = [
    "ru": "Самое частое слово"
   },
   "statement": {
-   "uz": "`solve(text)` matndagi eng ko‘p uchragan so‘zni (kichik harfda) qaytarsin. So‘zlar bo‘shliq bilan ajratilgan. Tenglik bo‘lsa — **alifbo bo‘yicha birinchisi**. Bo‘sh matn uchun `\"\"`.",
-   "ru": "`solve(text)` возвращает самое частое слово текста (в нижнем регистре). Слова разделены пробелами. При равенстве — **первое по алфавиту**. Для пустого текста — `\"\"`."
+   "uz": "`solve(text)` matndagi eng ko‘p uchragan so‘zni (kichik harfda) qaytarsin. So‘zlar bo‘shliq bilan ajratilgan. Tenglik bo‘lsa - **alifbo bo‘yicha birinchisi**. Bo‘sh matn uchun `\"\"`.",
+   "ru": "`solve(text)` возвращает самое частое слово текста (в нижнем регистре). Слова разделены пробелами. При равенстве - **первое по алфавиту**. Для пустого текста - `\"\"`."
   },
   "constraints": {
    "uz": "`0 ≤ len(text) ≤ 2000`.",
@@ -952,7 +952,7 @@ module.exports = [
    "ru": "Сбалансированные скобки"
   },
   "statement": {
-   "uz": "`solve(s)` — `s` dagi `()`, `[]`, `{}` qavslar to‘g‘ri ochilib-yopilgan bo‘lsa `True`. Boshqa belgilar e’tiborsiz.",
+   "uz": "`solve(s)` - `s` dagi `()`, `[]`, `{}` qavslar to‘g‘ri ochilib-yopilgan bo‘lsa `True`. Boshqa belgilar e’tiborsiz.",
    "ru": "`solve(s)` возвращает `True`, если скобки `()`, `[]`, `{}` в `s` правильно открыты и закрыты. Остальные символы игнорируются."
   },
   "constraints": {
@@ -1053,7 +1053,7 @@ module.exports = [
   },
   "statement": {
    "uz": "Log qatorlari `\"<sana> <STATUS> user=<ism> ip=<ip>\"` ko‘rinishida. `solve(lines, limit)` **kamida `limit` marta** `FAIL` bo‘lgan IP manzillarni ro‘yxat qilib, **ko‘p urinishdan kamga** (tenglikda IP bo‘yicha o‘sish tartibida) tartiblab, `(ip, soni)` juftliklari bilan qaytarsin.",
-   "ru": "Строки журнала: `\"<дата> <STATUS> user=<имя> ip=<ip>\"`. `solve(lines, limit)` возвращает список пар `(ip, число)` для IP-адресов с **не менее `limit`** строк `FAIL`, отсортированный **по убыванию числа** (при равенстве — по IP по возрастанию)."
+   "ru": "Строки журнала: `\"<дата> <STATUS> user=<имя> ip=<ip>\"`. `solve(lines, limit)` возвращает список пар `(ip, число)` для IP-адресов с **не менее `limit`** строк `FAIL`, отсортированный **по убыванию числа** (при равенстве - по IP по возрастанию)."
   },
   "constraints": {
    "uz": "`0 ≤ len(lines) ≤ 2000`; `1 ≤ limit ≤ 100`.",
@@ -1199,7 +1199,7 @@ module.exports = [
   },
   "statement": {
    "uz": "`solve(s)` ketma-ket takrorlanuvchi belgilarni `belgi+soni` ko‘rinishida siqsin (`\"aaab\"` → `\"a3b1\"`). Bo‘sh satr uchun `\"\"`.",
-   "ru": "`solve(s)` сжимает подряд идущие одинаковые символы в `символ+число` (`\"aaab\"` → `\"a3b1\"`). Для пустой строки — `\"\"`."
+   "ru": "`solve(s)` сжимает подряд идущие одинаковые символы в `символ+число` (`\"aaab\"` → `\"a3b1\"`). Для пустой строки - `\"\"`."
   },
   "constraints": {
    "uz": "`0 ≤ len(s) ≤ 1000`.",

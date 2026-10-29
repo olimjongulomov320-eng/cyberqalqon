@@ -1,13 +1,13 @@
 /**
- * Curriculum — Cybersecurity path › Domain: Linux
+ * Curriculum - Cybersecurity path › Domain: Linux
  *
  * Shape (validated by scripts/validate-curriculum.js via lib/grade.validateExercise):
  *   module: { slug, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
  *   kind: 'lesson' | 'checkpoint'   (checkpoint = end-of-domain trophy node)
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language. This is a
- *     warm-up, not a textbook — the exercises do the teaching.
+ *   - Lesson prose: short. 6-14 markdown lines per language. This is a
+ *     warm-up, not a textbook - the exercises do the teaching.
  *   - Every exercise: bilingual q + explain, technically accurate, beginner
  *     level, no trick questions, explanations teach the WHY.
  *   - Exercise ids: e1..eN in delivery order.
@@ -23,7 +23,7 @@ module.exports = [
     content: {
       uz: `## Linux asoslari
 
-**Linux** — bu yadro (kernel). Uning ustiga turli jamoalar turli tayyor tizimlar yig'adi — bularga **distribyutiv** deyiladi.
+**Linux** - bu yadro (kernel). Uning ustiga turli jamoalar turli tayyor tizimlar yig'adi - bularga **distribyutiv** deyiladi.
 
 | Distr | Xususiyat |
 |---|---|
@@ -36,7 +36,7 @@ Linuxda ikkita ish usuli bor: **GUI** (sichqoncha bilan) va **terminal** (buyruq
 Serverlar deyarli hammasi Linuxda ishlaydi: ochiq kodli, bepul, barqaror va oylar bo'yi to'xtamaydi.`,
       ru: `## Основы Linux
 
-**Linux** — это ядро (kernel). Поверх него сообщества собирают готовые системы — их называют **дистрибутивами**.
+**Linux** - это ядро (kernel). Поверх него сообщества собирают готовые системы - их называют **дистрибутивами**.
 
 | Дистрибутив | Особенность |
 |---|---|
@@ -64,21 +64,21 @@ Serverlar deyarli hammasi Linuxda ishlaydi: ochiq kodli, bepul, barqaror va oyla
         ],
         answer: 'a',
         explain: {
-          uz: "Linux ochiq kodli va bepul, shuning uchun uni serverga o'rnatish qimmatga tushmaydi. Barqarorligi tizim haftalar bo'yi to'xtamay ishlashini ta'minlaydi — server uchun asosiy shart shu.",
-          ru: 'Linux с открытым кодом и бесплатен, поэтому установка на сервер ничего не стоит. Стабильность позволяет системе работать неделями без остановок — это главное требование к серверу.',
+          uz: "Linux ochiq kodli va bepul, shuning uchun uni serverga o'rnatish qimmatga tushmaydi. Barqarorligi tizim haftalar bo'yi to'xtamay ishlashini ta'minlaydi - server uchun asosiy shart shu.",
+          ru: 'Linux с открытым кодом и бесплатен, поэтому установка на сервер ничего не стоит. Стабильность позволяет системе работать неделями без остановок - это главное требование к серверу.',
         },
       },
       {
         id: 'e2',
         type: 'tf',
         q: {
-          uz: 'Ubuntu — bu Linux yadrosi asosidagi distribyutiv.',
-          ru: 'Ubuntu — это дистрибутив на основе ядра Linux.',
+          uz: 'Ubuntu - bu Linux yadrosi asosidagi distribyutiv.',
+          ru: 'Ubuntu - это дистрибутив на основе ядра Linux.',
         },
         answer: 'true',
         explain: {
-          uz: 'Linux — bu faqat yadro. Ubuntu uning ustiga dasturlar, paketlar va interfeysni qo\'shib, tayyor tizimga aylantiradi. Shuning uchun "Linux" va "Ubuntu" — bir xil narsa emas.',
-          ru: 'Linux — это только ядро. Ubuntu добавляет поверх него программы, пакеты и интерфейс, превращая ядро в готовую систему. Поэтому «Linux» и «Ubuntu» — не одно и то же.',
+          uz: 'Linux - bu faqat yadro. Ubuntu uning ustiga dasturlar, paketlar va interfeysni qo\'shib, tayyor tizimga aylantiradi. Shuning uchun "Linux" va "Ubuntu" - bir xil narsa emas.',
+          ru: 'Linux - это только ядро. Ubuntu добавляет поверх него программы, пакеты и интерфейс, превращая ядро в готовую систему. Поэтому «Linux» и «Ubuntu» - не одно и то же.',
         },
       },
       {
@@ -95,8 +95,8 @@ Serverlar deyarli hammasi Linuxda ishlaydi: ochiq kodli, bepul, barqaror va oyla
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Ubuntu — kirish nuqtasi, Debian — barqarorlik, Fedora — yangiliklarni birinchi sinash. Barchasi Linux yadrosidan foydalanadi.',
-          ru: 'Ubuntu — точка входа, Debian — стабильность, Fedora — первое тестирование нового. Все используют ядро Linux.',
+          uz: 'Ubuntu - kirish nuqtasi, Debian - barqarorlik, Fedora - yangiliklarni birinchi sinash. Barchasi Linux yadrosidan foydalanadi.',
+          ru: 'Ubuntu - точка входа, Debian - стабильность, Fedora - первое тестирование нового. Все используют ядро Linux.',
         },
       },
       {
@@ -109,7 +109,7 @@ Serverlar deyarli hammasi Linuxda ishlaydi: ochiq kodli, bepul, barqaror va oyla
         answer: 'terminal',
         accepted: ['терминал', 'командная строка', 'shell'],
         explain: {
-          uz: 'Bu — **terminal**. Uning ichida shell buyruqlarni qabul qiladi: `cd`, `ls`, `chmod`. Server ishining asosi aynan shu yerda.',
+          uz: 'Bu - **terminal**. Uning ichida shell buyruqlarni qabul qiladi: `cd`, `ls`, `chmod`. Server ishining asosi aynan shu yerda.',
           ru: 'Это **терминал**. Внутри него shell принимает команды: `cd`, `ls`, `chmod`. Основная работа на сервере происходит именно здесь.',
         },
       },
@@ -136,7 +136,7 @@ Terminalda siz doim biron **papka (katalog)** ichida turasiz. Eng kerakli buyruq
 
 Fayl bilan ishlash: **cp** (nusxa), **mv** (ko'chirish yoki qayta nomlash), **rm** (o'chirish), **cat** (matnni chiqarish).
 
-> **Xavfsizlik:** \`rm -rf /\` kabi buyruq butun tizimni o'chirib tashlashi mumkin — root bilan juda ehtiyot bo'ling. O'chirishdan oldin \`ls\` bilan tekshirib oling.`,
+> **Xavfsizlik:** \`rm -rf /\` kabi buyruq butun tizimni o'chirib tashlashi mumkin - root bilan juda ehtiyot bo'ling. O'chirishdan oldin \`ls\` bilan tekshirib oling.`,
       ru: `## Командная строка: навигация
 
 В терминале вы всегда находитесь внутри какой-то **папки (каталога)**. Самые нужные команды:
@@ -151,7 +151,7 @@ Fayl bilan ishlash: **cp** (nusxa), **mv** (ko'chirish yoki qayta nomlash), **rm
 
 Работа с файлами: **cp** (копировать), **mv** (переместить или переименовать), **rm** (удалить), **cat** (показать текст).
 
-> **Безопасность:** команда вроде \`rm -rf /\` может стереть всю систему — с root будьте предельно осторожны. Перед удалением проверяйте \`ls\`.`,
+> **Безопасность:** команда вроде \`rm -rf /\` может стереть всю систему - с root будьте предельно осторожны. Перед удалением проверяйте \`ls\`.`,
     },
     exercises: [
       {
@@ -196,8 +196,8 @@ Fayl bilan ishlash: **cp** (nusxa), **mv** (ko'chirish yoki qayta nomlash), **rm
         id: 'e3',
         type: 'order',
         q: {
-          uz: "Papkaga kirib, faylni ko'rish bosqichlarini tartiblang (birinchisi — birinchi qadam)",
-          ru: 'Расставьте шаги: зайти в папку и посмотреть файл (первый — самый первый)',
+          uz: "Papkaga kirib, faylni ko'rish bosqichlarini tartiblang (birinchisi - birinchi qadam)",
+          ru: 'Расставьте шаги: зайти в папку и посмотреть файл (первый - самый первый)',
         },
         items: [
           { id: 'i1', uz: "Papkaga o'tish: cd /var/log", ru: 'Перейти в папку: cd /var/log' },
@@ -206,7 +206,7 @@ Fayl bilan ishlash: **cp** (nusxa), **mv** (ko'chirish yoki qayta nomlash), **rm
         ],
         order: ['i1', 'i2', 'i3'],
         explain: {
-          uz: "Avval kerakli papkaga o'tamiz, keyin ichidagi fayllarni ko'ramiz va oxirida kerakli faylni o'qiymiz. Bu — terminalda ishlashning eng oddiy ketma-ketligi.",
+          uz: "Avval kerakli papkaga o'tamiz, keyin ichidagi fayllarni ko'ramiz va oxirida kerakli faylni o'qiymiz. Bu - terminalda ishlashning eng oddiy ketma-ketligi.",
           ru: 'Сначала переходим в нужную папку, затем смотрим её файлы и в конце читаем нужный файл. Это простейшая последовательность работы в терминале.',
         },
       },
@@ -214,13 +214,13 @@ Fayl bilan ishlash: **cp** (nusxa), **mv** (ko'chirish yoki qayta nomlash), **rm
         id: 'e4',
         type: 'tf',
         q: {
-          uz: "rm -rf / buyrug'i xavfsiz — u faqat vaqtinchalik fayllarni o'chiradi.",
-          ru: 'Команда rm -rf / безопасна — она удаляет только временные файлы.',
+          uz: "rm -rf / buyrug'i xavfsiz - u faqat vaqtinchalik fayllarni o'chiradi.",
+          ru: 'Команда rm -rf / безопасна - она удаляет только временные файлы.',
         },
         answer: 'false',
         explain: {
-          uz: "Bu buyruq ildizdan (/) hamma narsani majburan o'chirishga urinadi. Root huquqi bilan bajarilsa, tizim butunlay yo'qoladi — shuning uchun root bilan rm dan oldin doim tekshiriladi.",
-          ru: 'Эта команда пытается принудительно удалить всё начиная с корня (/). При правах root система уничтожается полностью — поэтому с root перед rm всегда проверяют.',
+          uz: "Bu buyruq ildizdan (/) hamma narsani majburan o'chirishga urinadi. Root huquqi bilan bajarilsa, tizim butunlay yo'qoladi - shuning uchun root bilan rm dan oldin doim tekshiriladi.",
+          ru: 'Эта команда пытается принудительно удалить всё начиная с корня (/). При правах root система уничтожается полностью - поэтому с root перед rm всегда проверяют.',
         },
       },
     ],
@@ -246,7 +246,7 @@ Linuxda hamma narsa bitta daraxtdan boshlanadi: ildiz **/**.
 
 Yo'l **absolyut** (/ dan boshlanadi) yoki **nisbiy** (joriy papkadan) bo'ladi.
 
-> **Xavfsizlik:** /etc ichida parol va kalitlarga oid sozlamalar bor. /var/log dagi loglar tizimda nima bo'lganini ko'rsatadi — buzg'unchilikni aniqlashda birinchi qaraladigan joy.`,
+> **Xavfsizlik:** /etc ichida parol va kalitlarga oid sozlamalar bor. /var/log dagi loglar tizimda nima bo'lganini ko'rsatadi - buzg'unchilikni aniqlashda birinchi qaraladigan joy.`,
       ru: `## Структура файловой системы
 
 В Linux всё начинается с одного дерева: корень **/**.
@@ -261,7 +261,7 @@ Yo'l **absolyut** (/ dan boshlanadi) yoki **nisbiy** (joriy papkadan) bo'ladi.
 
 Путь бывает **абсолютным** (начинается с /) или **относительным** (от текущей папки).
 
-> **Безопасность:** в /etc лежат настройки паролей и ключей. Логи в /var/log показывают, что происходило в системе — это первое, что проверяют при поиске взлома.`,
+> **Безопасность:** в /etc лежат настройки паролей и ключей. Логи в /var/log показывают, что происходило в системе - это первое, что проверяют при поиске взлома.`,
     },
     exercises: [
       {
@@ -279,8 +279,8 @@ Yo'l **absolyut** (/ dan boshlanadi) yoki **nisbiy** (joriy papkadan) bo'ladi.
         ],
         answer: 'a',
         explain: {
-          uz: "/etc — sozlamalar uchun. /home — foydalanuvchi fayllari, /bin — buyruqlar, /var esa loglar va o'zgaruvchan ma'lumotlar uchun.",
-          ru: '/etc — для настроек. /home — файлы пользователей, /bin — команды, а /var — логи и изменяемые данные.',
+          uz: "/etc - sozlamalar uchun. /home - foydalanuvchi fayllari, /bin - buyruqlar, /var esa loglar va o'zgaruvchan ma'lumotlar uchun.",
+          ru: '/etc - для настроек. /home - файлы пользователей, /bin - команды, а /var - логи и изменяемые данные.',
         },
       },
       {
@@ -312,8 +312,8 @@ Yo'l **absolyut** (/ dan boshlanadi) yoki **nisbiy** (joriy papkadan) bo'ladi.
         answer: '/',
         accepted: ['/', 'slash', '/ (slash)'],
         explain: {
-          uz: "Ildiz — bitta qiya chiziq: /. Har bir absolyut yo'l shundan boshlanadi: /etc, /home/ali, /var/log.",
-          ru: 'Корень — один слэш: /. Любой абсолютный путь начинается с него: /etc, /home/ali, /var/log.',
+          uz: "Ildiz - bitta qiya chiziq: /. Har bir absolyut yo'l shundan boshlanadi: /etc, /home/ali, /var/log.",
+          ru: 'Корень - один слэш: /. Любой абсолютный путь начинается с него: /etc, /home/ali, /var/log.',
         },
       },
       {
@@ -325,8 +325,8 @@ Yo'l **absolyut** (/ dan boshlanadi) yoki **nisbiy** (joriy papkadan) bo'ladi.
         },
         answer: 'true',
         explain: {
-          uz: "Loglar /var/log ichida. Ular tizimda nima sodir bo'lganini, kim qachon kirganini ko'rsatadi — xavfsizlik tekshiruvining boshlanish nuqtasi.",
-          ru: 'Логи лежат в /var/log. Они показывают, что происходило в системе и кто когда входил — это отправная точка проверки безопасности.',
+          uz: "Loglar /var/log ichida. Ular tizimda nima sodir bo'lganini, kim qachon kirganini ko'rsatadi - xavfsizlik tekshiruvining boshlanish nuqtasi.",
+          ru: 'Логи лежат в /var/log. Они показывают, что происходило в системе и кто когда входил - это отправная точка проверки безопасности.',
         },
       },
     ],
@@ -344,11 +344,11 @@ Har bir faylning uchta himoyachisi bor: **egasi (owner)**, **guruh (group)** va 
 
 | Harf | Ma'no | Raqam |
 |---|---|---|
-| **r** — read | o'qish | 4 |
-| **w** — write | yozish | 2 |
-| **x** — execute | bajarish | 1 |
+| **r** - read | o'qish | 4 |
+| **w** - write | yozish | 2 |
+| **x** - execute | bajarish | 1 |
 
-Raqamlar qo'shib yoziladi: **600** — egasi o'qiydi va yozadi (4+2), guruh va boshqalari hech narsa qilmaydi.
+Raqamlar qo'shib yoziladi: **600** - egasi o'qiydi va yozadi (4+2), guruh va boshqalari hech narsa qilmaydi.
 
 Maxfiy fayllar (SSH kaliti, .env) shu raqam bilan saqlanadi: **chmod 600 id_rsa**.`,
       ru: `## Права файлов: rwx
@@ -357,11 +357,11 @@ Maxfiy fayllar (SSH kaliti, .env) shu raqam bilan saqlanadi: **chmod 600 id_rsa*
 
 | Буква | Значение | Число |
 |---|---|---|
-| **r** — read | чтение | 4 |
-| **w** — write | запись | 2 |
-| **x** — execute | запуск | 1 |
+| **r** - read | чтение | 4 |
+| **w** - write | запись | 2 |
+| **x** - execute | запуск | 1 |
 
-Числа складываются: **600** — владелец читает и пишет (4+2), группа и остальные ничего не делают.
+Числа складываются: **600** - владелец читает и пишет (4+2), группа и остальные ничего не делают.
 
 Секретные файлы (SSH-ключ, .env) хранят именно так: **chmod 600 id_rsa**.`,
     },
@@ -382,21 +382,21 @@ Maxfiy fayllar (SSH kaliti, .env) shu raqam bilan saqlanadi: **chmod 600 id_rsa*
         ],
         answer: 'a',
         explain: {
-          uz: '600 = egasi 6 (4+2 = r+w), guruh 0, boshqalar 0. Boshqalarda ruxsat umuman yo\'q — shu sababli SSH kaliti boshqa odam tomonidan o\'qib bo\'lmaydi.',
-          ru: '600 = владелец 6 (4+2 = r+w), группа 0, остальные 0. У остальных прав нет вообще — поэтому SSH-ключ нельзя прочитать со стороны.',
+          uz: '600 = egasi 6 (4+2 = r+w), guruh 0, boshqalar 0. Boshqalarda ruxsat umuman yo\'q - shu sababli SSH kaliti boshqa odam tomonidan o\'qib bo\'lmaydi.',
+          ru: '600 = владелец 6 (4+2 = r+w), группа 0, остальные 0. У остальных прав нет вообще - поэтому SSH-ключ нельзя прочитать со стороны.',
         },
       },
       {
         id: 'e2',
         type: 'input',
         q: {
-          uz: 'Egasi faqat o\'qiydi va bajaradi, guruh va boshqalar hech narsa qilmaydi — raqamli ruxsat: ______',
-          ru: 'Владелец только читает и запускает, группа и остальные ничего не могут — числовые права: ______',
+          uz: 'Egasi faqat o\'qiydi va bajaradi, guruh va boshqalar hech narsa qilmaydi - raqamli ruxsat: ______',
+          ru: 'Владелец только читает и запускает, группа и остальные ничего не могут - числовые права: ______',
         },
         answer: '500',
         accepted: ['0500'],
         explain: {
-          uz: 'Hisob oddiy: r (4) + x (1) = 5 egasi uchun, guruhga 0, boshqalarga 0. Jami — **500**, ya\'ni rwx------.',
+          uz: 'Hisob oddiy: r (4) + x (1) = 5 egasi uchun, guruhga 0, boshqalarga 0. Jami - **500**, ya\'ni rwx------.',
           ru: 'Расчёт простой: r (4) + x (1) = 5 у владельца, группе 0, остальным 0. Итого **500**, то есть rwx------.',
         },
       },
@@ -415,8 +415,8 @@ Maxfiy fayllar (SSH kaliti, .env) shu raqam bilan saqlanadi: **chmod 600 id_rsa*
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: '7 = rwx (4+2+1), 5 = r-x (4+0+1). Yozish huquqi (2) hech kimda yo\'q, shuning uchun faylni faqat egasi o\'zgartira oladi — bu ochiq, lekin xavfsiz kirish.',
-          ru: '7 = rwx (4+2+1), 5 = r-x (4+0+1). Права записи (2) нет ни у кого — файл может менять только владелец. Это открытый, но безопасный доступ.',
+          uz: '7 = rwx (4+2+1), 5 = r-x (4+0+1). Yozish huquqi (2) hech kimda yo\'q, shuning uchun faylni faqat egasi o\'zgartira oladi - bu ochiq, lekin xavfsiz kirish.',
+          ru: '7 = rwx (4+2+1), 5 = r-x (4+0+1). Права записи (2) нет ни у кого - файл может менять только владелец. Это открытый, но безопасный доступ.',
         },
       },
       {
@@ -448,24 +448,24 @@ Maxfiy fayllar (SSH kaliti, .env) shu raqam bilan saqlanadi: **chmod 600 id_rsa*
     content: {
       uz: `## Foydalanuvchilar va guruhlar
 
-Linux — ko'p foydalanuvchili tizim. Har bir jarayon biron foydalanuvchi nomidan ishlaydi.
+Linux - ko'p foydalanuvchili tizim. Har bir jarayon biron foydalanuvchi nomidan ishlaydi.
 
-- **id** — sizning UID, GID va guruhlaringizni ko'rsatadi.
-- **whoami** — joriy foydalanuvchi nomini chiqaradi.
-- **chown** — fayl egasini o'zgartiradi: \`chown ali fayl.txt\`.
-- **chmod** — fayl ruxsatlarini o'zgartiradi.
+- **id** - sizning UID, GID va guruhlaringizni ko'rsatadi.
+- **whoami** - joriy foydalanuvchi nomini chiqaradi.
+- **chown** - fayl egasini o'zgartiradi: \`chown ali fayl.txt\`.
+- **chmod** - fayl ruxsatlarini o'zgartiradi.
 
 Har bir foydalanuvchi kamida bitta **guruh**ga kiradi. Guruh orqali bir nechta odamga bir xil ruxsat berish qulay.
 
 > **Xavfsizlik:** har bir xizmat (masalan, veb-server) alohida **xizmat foydalanuvchisi** nomidan ishlashi kerak. Agar u buzilsa, buzg'unchi faqat shu cheklangan huquqqa ega bo'ladi.`,
       ru: `## Пользователи и группы
 
-Linux — многопользовательская система. Каждый процесс работает от имени какого-то пользователя.
+Linux - многопользовательская система. Каждый процесс работает от имени какого-то пользователя.
 
-- **id** — показывает ваш UID, GID и группы.
-- **whoami** — выводит имя текущего пользователя.
-- **chown** — меняет владельца файла: \`chown ali file.txt\`.
-- **chmod** — меняет права файла.
+- **id** - показывает ваш UID, GID и группы.
+- **whoami** - выводит имя текущего пользователя.
+- **chown** - меняет владельца файла: \`chown ali file.txt\`.
+- **chmod** - меняет права файла.
 
 Каждый пользователь входит хотя бы в одну **группу**. Через группу удобно выдать одинаковые права сразу нескольким людям.
 
@@ -487,8 +487,8 @@ Linux — многопользовательская система. Кажды�
         ],
         answer: 'a',
         explain: {
-          uz: "chown — change owner, egasini almashtiradi. chmod esa ruxsatlarni o'zgartiradi. Bu ikkovini chalkashtirmaslik kerak.",
-          ru: 'chown — change owner, меняет владельца. chmod меняет права. Эти две команды важно не путать.',
+          uz: "chown - change owner, egasini almashtiradi. chmod esa ruxsatlarni o'zgartiradi. Bu ikkovini chalkashtirmaslik kerak.",
+          ru: 'chown - change owner, меняет владельца. chmod меняет права. Эти две команды важно не путать.',
         },
       },
       {
@@ -521,7 +521,7 @@ Linux — многопользовательская система. Кажды�
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "chown egalikni, chmod ruxsatni, whoami nomni ko'rsatadi, sudo esa vaqtincha huquqni oshiradi. Har biri o'z ishini qiladi.",
-          ru: 'chown управляет владельцем, chmod — правами, whoami показывает имя, а sudo временно повышает права. У каждой команды своя задача.',
+          ru: 'chown управляет владельцем, chmod - правами, whoami показывает имя, а sudo временно повышает права. У каждой команды своя задача.',
         },
       },
       {
@@ -533,7 +533,7 @@ Linux — многопользовательская система. Кажды�
         },
         answer: 'true',
         explain: {
-          uz: "Agar xizmat cheklangan foydalanuvchi bilan ishlasa, u buzilganda buzg'unchi ham shu cheklangan huquqqa ega bo'ladi — butun tizim emas. Bu least privilege tamoyili.",
+          uz: "Agar xizmat cheklangan foydalanuvchi bilan ishlasa, u buzilganda buzg'unchi ham shu cheklangan huquqqa ega bo'ladi - butun tizim emas. Bu least privilege tamoyili.",
           ru: 'Если служба работает от ограниченного пользователя, то при её взломе злоумышленник получит только эти ограниченные права, а не всю систему. Это принцип наименьших привилегий.',
         },
       },
@@ -548,7 +548,7 @@ Linux — многопользовательская система. Кажды�
     content: {
       uz: `## Jarayonlar va xizmatlar
 
-Ishlayotgan dastur — bu **jarayon (process)**. Har biri PID (raqamli identifikator) oladi.
+Ishlayotgan dastur - bu **jarayon (process)**. Har biri PID (raqamli identifikator) oladi.
 
 | Buyruq | Vazifa |
 |---|---|
@@ -558,12 +558,12 @@ Ishlayotgan dastur — bu **jarayon (process)**. Har biri PID (raqamli identifik
 | systemctl status ssh | Xizmat holatini ko'rsatadi |
 | systemctl restart ssh | Xizmatni qayta ishga tushiradi |
 
-**Xizmat (service yoki daemon)** — fon rejimida doim ishlab turadigan dastur: SSH, veb-server, ma'lumotlar bazasi.
+**Xizmat (service yoki daemon)** - fon rejimida doim ishlab turadigan dastur: SSH, veb-server, ma'lumotlar bazasi.
 
-> **Xavfsizlik:** keraksiz xizmatlarni o'chirib qo'yish kerak — har bir ochiq xizmat hujum yuzasini kengaytiradi. \`systemctl\` bilan nima ishlayotganini tekshirib turing.`,
+> **Xavfsizlik:** keraksiz xizmatlarni o'chirib qo'yish kerak - har bir ochiq xizmat hujum yuzasini kengaytiradi. \`systemctl\` bilan nima ishlayotganini tekshirib turing.`,
       ru: `## Процессы и службы
 
-Запущенная программа — это **процесс**. Каждый получает PID (числовой идентификатор).
+Запущенная программа - это **процесс**. Каждый получает PID (числовой идентификатор).
 
 | Команда | Задача |
 |---|---|
@@ -573,9 +573,9 @@ Ishlayotgan dastur — bu **jarayon (process)**. Har biri PID (raqamli identifik
 | systemctl status ssh | Показывает состояние службы |
 | systemctl restart ssh | Перезапускает службу |
 
-**Служба (service или daemon)** — программа, которая постоянно работает в фоне: SSH, веб-сервер, база данных.
+**Служба (service или daemon)** - программа, которая постоянно работает в фоне: SSH, веб-сервер, база данных.
 
-> **Безопасность:** ненужные службы надо отключать — каждая открытая служба расширяет поверхность атаки. Следите за тем, что работает, с помощью \`systemctl\`.`,
+> **Безопасность:** ненужные службы надо отключать - каждая открытая служба расширяет поверхность атаки. Следите за тем, что работает, с помощью \`systemctl\`.`,
     },
     exercises: [
       {
@@ -593,8 +593,8 @@ Ishlayotgan dastur — bu **jarayon (process)**. Har biri PID (raqamli identifik
         ],
         answer: 'a',
         explain: {
-          uz: "SSH, veb-server, ma'lumotlar bazasi — bularning hammasi fon xizmatlari. Ular tizim yonganda ishga tushadi va doim kutib turadi.",
-          ru: 'SSH, веб-сервер, база данных — всё это фоновые службы. Они стартуют при загрузке системы и постоянно ожидают запросов.',
+          uz: "SSH, veb-server, ma'lumotlar bazasi - bularning hammasi fon xizmatlari. Ular tizim yonganda ishga tushadi va doim kutib turadi.",
+          ru: 'SSH, веб-сервер, база данных - всё это фоновые службы. Они стартуют при загрузке системы и постоянно ожидают запросов.',
         },
       },
       {
@@ -607,8 +607,8 @@ Ishlayotgan dastur — bu **jarayon (process)**. Har biri PID (raqamli identifik
         answer: 'pid',
         accepted: ['pid'],
         explain: {
-          uz: "PID (Process ID) — har bir jarayonga beriladigan raqam. kill buyrug'iga aynan shu raqam beriladi: kill 1234.",
-          ru: 'PID (Process ID) — номер, выдаваемый каждому процессу. Именно его передают команде kill: kill 1234.',
+          uz: "PID (Process ID) - har bir jarayonga beriladigan raqam. kill buyrug'iga aynan shu raqam beriladi: kill 1234.",
+          ru: 'PID (Process ID) - номер, выдаваемый каждому процессу. Именно его передают команде kill: kill 1234.',
         },
       },
       {
@@ -627,15 +627,15 @@ Ishlayotgan dastur — bu **jarayon (process)**. Har biri PID (raqamli identifik
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "ps bir lahzalik ro'yxat beradi, top jonli kuzatuv, kill jarayonni to'xtatadi, systemctl esa xizmatlarni yoqadi, o'chiradi va qayta ishga tushiradi.",
-          ru: 'ps даёт разовый список, top — живое наблюдение, kill останавливает процесс, а systemctl включает, выключает и перезапускает службы.',
+          ru: 'ps даёт разовый список, top - живое наблюдение, kill останавливает процесс, а systemctl включает, выключает и перезапускает службы.',
         },
       },
       {
         id: 'e4',
         type: 'order',
         q: {
-          uz: "Yangi xizmatni to'liq ishga tushirish tartibini joylang (birinchisi — birinchi qadam)",
-          ru: 'Расставьте шаги полного запуска новой службы (первый — самый первый)',
+          uz: "Yangi xizmatni to'liq ishga tushirish tartibini joylang (birinchisi - birinchi qadam)",
+          ru: 'Расставьте шаги полного запуска новой службы (первый - самый первый)',
         },
         items: [
           { id: 'i1', uz: "O'rnatish: sudo apt install <xizmat>", ru: 'Установить: sudo apt install <служба>' },
@@ -670,7 +670,7 @@ Dasturlar **paket menejeri** orqali o'rnatiladi va yangilanadi.
 
 Fedora va CentOS'da bu ishlarni **dnf** bajaradi.
 
-**Loglar** — tizimda nima bo'lganini yozib boradi. Ubuntu'da ko'p loglar **/var/log** ichida, xizmat loglari esa \`journalctl\` buyrug'i bilan ko'riladi.
+**Loglar** - tizimda nima bo'lganini yozib boradi. Ubuntu'da ko'p loglar **/var/log** ichida, xizmat loglari esa \`journalctl\` buyrug'i bilan ko'riladi.
 
 > **Xavfsizlik:** muntazam \`apt upgrade\` zaifliklarni yopadi. Loglarni kuzatish esa shubhali faoliyatni (ko'p marta urinilgan parol, kutilmagan xizmat) erta aniqlashga yordam beradi.`,
       ru: `## Пакеты и логи
@@ -686,7 +686,7 @@ Fedora va CentOS'da bu ishlarni **dnf** bajaradi.
 
 В Fedora и CentOS это делает **dnf**.
 
-**Логи** — запись того, что происходило в системе. В Ubuntu большинство логов лежит в **/var/log**, а логи служб смотрят командой \`journalctl\`.
+**Логи** - запись того, что происходило в системе. В Ubuntu большинство логов лежит в **/var/log**, а логи служб смотрят командой \`journalctl\`.
 
 > **Безопасность:** регулярный \`apt upgrade\` закрывает уязвимости. А наблюдение за логами помогает рано заметить подозрительную активность (много попыток входа, неожиданная служба).`,
     },
@@ -726,7 +726,7 @@ Fedora va CentOS'da bu ishlarni **dnf** bajaradi.
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "update faqat ro'yxatni yangilaydi, install dasturni o'rnatadi, journalctl xizmat loglarini ko'rsatadi, /var/log esa log fayllar saqlanadigan papka.",
-          ru: 'update обновляет только список, install устанавливает программу, journalctl показывает логи служб, а /var/log — папка, где лежат лог-файлы.',
+          ru: 'update обновляет только список, install устанавливает программу, journalctl показывает логи служб, а /var/log - папка, где лежат лог-файлы.',
         },
       },
       {
@@ -739,8 +739,8 @@ Fedora va CentOS'da bu ishlarni **dnf** bajaradi.
         answer: 'dnf',
         accepted: ['dnf', 'yum'],
         explain: {
-          uz: "dnf — Fedora/CentOS oilasidagi paket menejeri (avvalgi nomi yum). Debian/Ubuntu esa apt dan foydalanadi.",
-          ru: 'dnf — менеджер пакетов в семействе Fedora/CentOS (прежнее название yum). Debian/Ubuntu использует apt.',
+          uz: "dnf - Fedora/CentOS oilasidagi paket menejeri (avvalgi nomi yum). Debian/Ubuntu esa apt dan foydalanadi.",
+          ru: 'dnf - менеджер пакетов в семействе Fedora/CentOS (прежнее название yum). Debian/Ubuntu использует apt.',
         },
       },
       {
@@ -767,10 +767,10 @@ Fedora va CentOS'da bu ishlarni **dnf** bajaradi.
     content: {
       uz: `## Linux xavfsizlik asoslari
 
-- **sudo** — oddiy foydalanuvchi faqat kerak bo'lganda vaqtinchalik ko'tariladi. Doim root bilan ishlash bitta xatoda tizimni yo'qotadi.
-- **Yangilanishlar** — \`apt update\` va \`apt upgrade\` zaifliklarni yopadi.
-- **SSH kalitlari** — parol o'rniga juft kalit ishlatiladi; maxfiy qism hech qayerga yuborilmaydi.
-- **Firewall** — \`ufw\` bilan faqat kerakli eshik ochiladi, qolgani yopiq qoladi.
+- **sudo** - oddiy foydalanuvchi faqat kerak bo'lganda vaqtinchalik ko'tariladi. Doim root bilan ishlash bitta xatoda tizimni yo'qotadi.
+- **Yangilanishlar** - \`apt update\` va \`apt upgrade\` zaifliklarni yopadi.
+- **SSH kalitlari** - parol o'rniga juft kalit ishlatiladi; maxfiy qism hech qayerga yuborilmaydi.
+- **Firewall** - \`ufw\` bilan faqat kerakli eshik ochiladi, qolgani yopiq qoladi.
 
 | Buyruq | Vazifa |
 |---|---|
@@ -781,10 +781,10 @@ Fedora va CentOS'da bu ishlarni **dnf** bajaradi.
 Xavfsizlik qatlamlardan iborat: bittasi buzilsa, qolgani to'sib qo'yadi.`,
       ru: `## Основы безопасности Linux
 
-- **sudo** — обычный пользователь получает права только при необходимости и на время. Постоянная работа от root — один неверный шаг, и система потеряна.
-- **Обновления** — \`apt update\` и \`apt upgrade\` закрывают уязвимости.
-- **SSH-ключи** — вместо пароля используется ключевая пара; закрытая часть никуда не отправляется.
-- **Фаервол** — с \`ufw\` открыт только нужный порт, остальные закрыты.
+- **sudo** - обычный пользователь получает права только при необходимости и на время. Постоянная работа от root - один неверный шаг, и система потеряна.
+- **Обновления** - \`apt update\` и \`apt upgrade\` закрывают уязвимости.
+- **SSH-ключи** - вместо пароля используется ключевая пара; закрытая часть никуда не отправляется.
+- **Фаервол** - с \`ufw\` открыт только нужный порт, остальные закрыты.
 
 | Команда | Зачем |
 |---|---|
@@ -792,7 +792,7 @@ Xavfsizlik qatlamlardan iborat: bittasi buzilsa, qolgani to'sib qo'yadi.`,
 | ufw allow OpenSSH | Разрешить SSH |
 | ufw enable | Включить фаервол |
 
-Безопасность состоит из слоёв: сорвётся один — остальные задержат атаку.`,
+Безопасность состоит из слоёв: сорвётся один - остальные задержат атаку.`,
     },
     exercises: [
       {
@@ -810,7 +810,7 @@ Xavfsizlik qatlamlardan iborat: bittasi buzilsa, qolgani to'sib qo'yadi.`,
         ],
         answer: 'a',
         explain: {
-          uz: 'Bu — kam ruxsat tamoyili (least privilege): odatda siz oddiy foydalanuvchisiz, faqat sudo paytida huquq oshadi. Xato qilsangiz, zarar oddiy foydalanuvchi darajasida cheklanadi.',
+          uz: 'Bu - kam ruxsat tamoyili (least privilege): odatda siz oddiy foydalanuvchisiz, faqat sudo paytida huquq oshadi. Xato qilsangiz, zarar oddiy foydalanuvchi darajasida cheklanadi.',
           ru: 'Это принцип наименьших привилегий: обычно вы обычный пользователь, права повышаются только на время sudo. При ошибке ущерб ограничен обычным уровнем.',
         },
       },
@@ -818,13 +818,13 @@ Xavfsizlik qatlamlardan iborat: bittasi buzilsa, qolgani to'sib qo'yadi.`,
         id: 'e2',
         type: 'tf',
         q: {
-          uz: 'SSH juft kalitining maxfiy (private) qismi hech qayerga yuborilmaydi — u doim sizda qoladi.',
-          ru: 'Закрытая (private) часть SSH-ключа никуда не отправляется — она всегда остаётся у вас.',
+          uz: 'SSH juft kalitining maxfiy (private) qismi hech qayerga yuborilmaydi - u doim sizda qoladi.',
+          ru: 'Закрытая (private) часть SSH-ключа никуда не отправляется - она всегда остаётся у вас.',
         },
         answer: 'true',
         explain: {
-          uz: 'Serverga faqat ochiq (public) qism o\'rnatiladi. Maxfiy qism tarqatilsa, kalitning himoya maqsadi yo\'qoladi — uni hech qachon bermang.',
-          ru: 'На сервер ставится только открытая часть. Если закрытая часть уйдёт другим, смысл защиты исчезает — её никогда не отдают.',
+          uz: 'Serverga faqat ochiq (public) qism o\'rnatiladi. Maxfiy qism tarqatilsa, kalitning himoya maqsadi yo\'qoladi - uni hech qachon bermang.',
+          ru: 'На сервер ставится только открытая часть. Если закрытая часть уйдёт другим, смысл защиты исчезает - её никогда не отдают.',
         },
       },
       {
@@ -843,7 +843,7 @@ Xavfsizlik qatlamlardan iborat: bittasi buzilsa, qolgani to'sib qo'yadi.`,
         answers: ['a', 'b', 'd'],
         explain: {
           uz: 'Kalit juftligi parolni almashtiradi, root kirishini o\'chirish zararlanish darajasini kamaytiradi, passphrase esa o\'g\'irlangan kalitni ham bloklaydi. Qisqa parol esa qaytadan zaiflik yaratadi.',
-          ru: 'Ключевая пара заменяет пароль, отключение root снижает урон при взломе, passphrase блокирует украденный ключ. Короткий пароль — наоборот, слабость.',
+          ru: 'Ключевая пара заменяет пароль, отключение root снижает урон при взломе, passphrase блокирует украденный ключ. Короткий пароль - наоборот, слабость.',
         },
       },
       {
@@ -862,8 +862,8 @@ Xavfsizlik qatlamlardan iborat: bittasi buzilsa, qolgani to'sib qo'yadi.`,
         ],
         answer: 'a',
         explain: {
-          uz: 'allow — ruxsat berish, OpenSSH — SSH xizmati. Qolgan eshiklar yopiq qoladi: tashqaridan avval hech narsa ochilmaydi, kerakli xizmatni qo\'lda qo\'shasiz.',
-          ru: 'allow — разрешить, OpenSSH — служба SSH. Остальные порты остаются закрытыми: снаружи ничего не открыто, нужные службы добавляются точечно.',
+          uz: 'allow - ruxsat berish, OpenSSH - SSH xizmati. Qolgan eshiklar yopiq qoladi: tashqaridan avval hech narsa ochilmaydi, kerakli xizmatni qo\'lda qo\'shasiz.',
+          ru: 'allow - разрешить, OpenSSH - служба SSH. Остальные порты остаются закрытыми: снаружи ничего не открыто, нужные службы добавляются точечно.',
         },
       },
     ],
@@ -912,7 +912,7 @@ Linux bo'yicha bilimingizni tekshiring: buyruqlar, fayl tizimi, ruxsatlar, foyda
         },
         answer: '755',
         explain: {
-          uz: 'Har uch guruhni alohida hisoblaymiz: rwx = 4+2+1 = 7, r-x = 4+1 = 5, r-x = 5. Jami — **755**: egasi hamma narsa qila oladi, boshqalari o\'qib-bajaradi.',
+          uz: 'Har uch guruhni alohida hisoblaymiz: rwx = 4+2+1 = 7, r-x = 4+1 = 5, r-x = 5. Jami - **755**: egasi hamma narsa qila oladi, boshqalari o\'qib-bajaradi.',
           ru: 'Считаем каждую группу отдельно: rwx = 4+2+1 = 7, r-x = 4+1 = 5, r-x = 5. Итого **755**: владелец всё, остальные читают и запускают.',
         },
       },
@@ -931,16 +931,16 @@ Linux bo'yicha bilimingizni tekshiring: buyruqlar, fayl tizimi, ruxsatlar, foyda
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: 'Yangilanish zaiflikni yopadi, oddiy foydalanuvchi + sudo zararni chekladi, ufw esa tashqi trafikni tashqarida qoldiradi. Barcha port ochish — bu eshikni yopish emas.',
-          ru: 'Обновления закрывают уязвимости, обычный пользователь с sudo ограничивает урон, ufw держит внешний трафик снаружи. Открытые все порты — это не защита.',
+          uz: 'Yangilanish zaiflikni yopadi, oddiy foydalanuvchi + sudo zararni chekladi, ufw esa tashqi trafikni tashqarida qoldiradi. Barcha port ochish - bu eshikni yopish emas.',
+          ru: 'Обновления закрывают уязвимости, обычный пользователь с sudo ограничивает урон, ufw держит внешний трафик снаружи. Открытые все порты - это не защита.',
         },
       },
       {
         id: 'e4',
         type: 'order',
         q: {
-          uz: 'Yangi serverni sozlashda to\'g\'ri tartib (birinchisi — eng muhim)',
-          ru: 'Расставьте шаги настройки нового сервера (первый — самый важный)',
+          uz: 'Yangi serverni sozlashda to\'g\'ri tartib (birinchisi - eng muhim)',
+          ru: 'Расставьте шаги настройки нового сервера (первый - самый важный)',
         },
         items: [
           { id: 'i1', uz: 'Yangi foydalanuvchi yaratib, unga sudo berish', ru: 'Создать нового пользователя и выдать ему sudo' },
@@ -958,8 +958,8 @@ Linux bo'yicha bilimingizni tekshiring: buyruqlar, fayl tizimi, ruxsatlar, foyda
         id: 'e5',
         type: 'tf',
         q: {
-          uz: 'sudo — bu har qanday foydalanuvchiga barcha huquqlarni avtomatik beradigan tugma.',
-          ru: 'sudo — это кнопка, которая автоматически даёт любому пользователю все права.',
+          uz: 'sudo - bu har qanday foydalanuvchiga barcha huquqlarni avtomatik beradigan tugma.',
+          ru: 'sudo - это кнопка, которая автоматически даёт любому пользователю все права.',
         },
         answer: 'false',
         explain: {

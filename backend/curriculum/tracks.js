@@ -1,5 +1,5 @@
 /**
- * Learning tracks — a thin grouping layer over the existing curriculum.
+ * Learning tracks - a thin grouping layer over the existing curriculum.
  *
  * A track references modules by slug. It never moves, renames or re-orders a
  * module: domains, module slugs, sequential unlock, progress rows and XP all
@@ -7,7 +7,7 @@
  * test); modules in no track (crypto, cloud, ethical testing, IT basics…) stay
  * reachable through Learn.
  *
- * `prerequisites` are RECOMMENDATIONS shown to the learner, not locks — the
+ * `prerequisites` are RECOMMENDATIONS shown to the learner, not locks - the
  * existing domain-level sequential unlock remains the only gate.
  *
  * `completion.rule = 'all_modules'`: a track is complete when every listed

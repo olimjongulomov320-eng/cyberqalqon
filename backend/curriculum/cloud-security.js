@@ -1,19 +1,19 @@
 /**
- * Curriculum — Cybersecurity path › Domain: Cloud security
+ * Curriculum - Cybersecurity path › Domain: Cloud security
  *
  * Shape (validated by scripts/validate-curriculum.js via lib/grade.validateExercise):
  *   module: { slug, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
  *   kind: 'lesson' | 'checkpoint'   (checkpoint = end-of-domain trophy node)
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language.
+ *   - Lesson prose: short. 6-14 markdown lines per language.
  *   - Every exercise: bilingual q + explain, beginner level, no trick questions.
  *   - Vendor-neutral concepts only (shared responsibility, IAM, VPC, buckets).
  *     No product names, no prices, no invented numbers.
  *   - Exercise ids: e1..eN in delivery order.
  *   - Uzbek: simple, modern Uzbek Latin. Russian: natural, not machine-translated.
  *   - Any string containing a straight ' MUST be double-quoted (or a template
- *     literal) — a ' inside a single-quoted string breaks the file.
+ *     literal) - a ' inside a single-quoted string breaks the file.
  */
 
 module.exports = [
@@ -25,36 +25,36 @@ module.exports = [
     content: {
       uz: `## Bulut (cloud) nima
 
-**Bulut** — hisoblash resurslarini (server, saqlash, tarmoq) internet orqali ijaraga olish. O'z server xonangizni qurish o'rniga, kerak bo'lganda olasiz.
+**Bulut** - hisoblash resurslarini (server, saqlash, tarmoq) internet orqali ijaraga olish. O'z server xonangizni qurish o'rniga, kerak bo'lganda olasiz.
 
 **Xizmat modellari:**
-- **IaaS** — infratuzilma ijarasi (virtual server, tarmoq).
-- **PaaS** — tayyor platforma (ilovani joylash muhiti).
-- **SaaS** — tayyor dastur (pochta, hujjat, CRM).
+- **IaaS** - infratuzilma ijarasi (virtual server, tarmoq).
+- **PaaS** - tayyor platforma (ilovani joylash muhiti).
+- **SaaS** - tayyor dastur (pochta, hujjat, CRM).
 
 **Joylashuv (deployment):** public (umumiy provayder), private (faqat tashkilot ichida), hybrid (ikkisi birga).
 
-> **Xavfsizlik:** bulut "xavfsiz" yoki "xavfli" emas — bu boshqaruv masalasi. Ko'p jihatdan xavfsizlik **sizning sozlamalaringizga** bog'liq.`,
+> **Xavfsizlik:** bulut "xavfsiz" yoki "xavfli" emas - bu boshqaruv masalasi. Ko'p jihatdan xavfsizlik **sizning sozlamalaringizga** bog'liq.`,
       ru: `## Что такое облако (cloud)
 
-**Облако** — аренда вычислительных ресурсов (сервер, хранилище, сеть) через интернет. Вместо своей серверной вы берёте нужное по мере надобности.
+**Облако** - аренда вычислительных ресурсов (сервер, хранилище, сеть) через интернет. Вместо своей серверной вы берёте нужное по мере надобности.
 
 **Модели услуг:**
-- **IaaS** — аренда инфраструктуры (виртуальный сервер, сеть).
-- **PaaS** — готовая платформа (среда для размещения приложения).
-- **SaaS** — готовое приложение (почта, документы, CRM).
+- **IaaS** - аренда инфраструктуры (виртуальный сервер, сеть).
+- **PaaS** - готовая платформа (среда для размещения приложения).
+- **SaaS** - готовое приложение (почта, документы, CRM).
 
 **Размещение (deployment):** public (общий провайдер), private (только внутри организации), hybrid (оба вместе).
 
-> **Безопасность:** облако не «безопасное» и не «опасное» — это вопрос управления. Во многом безопасность зависит от **ваших настроек**.`,
+> **Безопасность:** облако не «безопасное» и не «опасное» - это вопрос управления. Во многом безопасность зависит от **ваших настроек**.`,
     },
     exercises: [
       {
         id: 'e1',
         type: 'mc',
         q: {
-          uz: 'IaaS, PaaS, SaaS — qaysi biri tayyor dasturni bildiradi?',
-          ru: 'IaaS, PaaS, SaaS — какая модель означает готовое приложение?',
+          uz: 'IaaS, PaaS, SaaS - qaysi biri tayyor dasturni bildiradi?',
+          ru: 'IaaS, PaaS, SaaS - какая модель означает готовое приложение?',
         },
         options: [
           { id: 'a', uz: 'SaaS', ru: 'SaaS' },
@@ -64,8 +64,8 @@ module.exports = [
         ],
         answer: 'a',
         explain: {
-          uz: "SaaS (Software as a Service) — tayyor dastur internet orqali. Foydalanuvchi infratuzilmani boshqarmaydi.",
-          ru: 'SaaS (Software as a Service) — готовое приложение через интернет. Пользователь не управляет инфраструктурой.',
+          uz: "SaaS (Software as a Service) - tayyor dastur internet orqali. Foydalanuvchi infratuzilmani boshqarmaydi.",
+          ru: 'SaaS (Software as a Service) - готовое приложение через интернет. Пользователь не управляет инфраструктурой.',
         },
       },
       {
@@ -77,8 +77,8 @@ module.exports = [
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — xavfsizlikning bir qismi sizda qoladi (mas'uliyat taqsimoti). Noto'g'ri sozlama — eng keng tarqalgan bulut muammosi.",
-          ru: 'Нет — часть безопасности остаётся за вами (разделение ответственности). Неверная настройка — самая частая проблема в облаке.',
+          uz: "Yo'q - xavfsizlikning bir qismi sizda qoladi (mas'uliyat taqsimoti). Noto'g'ri sozlama - eng keng tarqalgan bulut muammosi.",
+          ru: 'Нет - часть безопасности остаётся за вами (разделение ответственности). Неверная настройка - самая частая проблема в облаке.',
         },
       },
       {
@@ -132,22 +132,22 @@ module.exports = [
 
 Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
 
-- **Provayder** — *bulutning* o'zi: fizik xavfsizlik, hostlar, tarmoq infratuzilmasi.
-- **Siz (mijoz)** — *bulutdagi* narsalar: ma'lumot, sozlamalar, identifikatsiya, ilova.
+- **Provayder** - *bulutning* o'zi: fizik xavfsizlik, hostlar, tarmoq infratuzilmasi.
+- **Siz (mijoz)** - *bulutdagi* narsalar: ma'lumot, sozlamalar, identifikatsiya, ilova.
 
 **Misol:** provayder serverni xavfsiz saqlaydi, lekin **siz** kim kirishi mumkinligini, saqlash ochiqmi-yo'qmi va yamoqlarni boshqarasiz.
 
-> **Xavfsizlik:** "Bu provayderning ishi" deb o'ylash — eng katta xato. Aksariyat bulut hodisalari **mijoz tomonidagi** noto'g'ri sozlamadan kelib chiqadi.`,
+> **Xavfsizlik:** "Bu provayderning ishi" deb o'ylash - eng katta xato. Aksariyat bulut hodisalari **mijoz tomonidagi** noto'g'ri sozlamadan kelib chiqadi.`,
       ru: `## Разделение ответственности (shared responsibility)
 
 В облаке безопасность делится между двумя сторонами:
 
-- **Провайдер** — само *облако*: физическая безопасность, хосты, сетевая инфраструктура.
-- **Вы (клиент)** — то, что *в облаке*: данные, настройки, идентификация, приложение.
+- **Провайдер** - само *облако*: физическая безопасность, хосты, сетевая инфраструктура.
+- **Вы (клиент)** - то, что *в облаке*: данные, настройки, идентификация, приложение.
 
 **Пример:** провайдер хранит сервер в безопасности, но **вы** решаете, кому можно входить, открыто ли хранилище и как ставить патчи.
 
-> **Безопасность:** мысль «это дело провайдера» — самая большая ошибка. Большинство облачных инцидентов происходит из-за неверных настроек **на стороне клиента**.`,
+> **Безопасность:** мысль «это дело провайдера» - самая большая ошибка. Большинство облачных инцидентов происходит из-за неверных настроек **на стороне клиента**.`,
     },
     exercises: [
       {
@@ -166,7 +166,7 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
         answer: 'a',
         explain: {
           uz: "Provayder infratuzilmani, mijoz esa ma'lumot, identifikatsiya va sozlamalarni himoya qiladi. Ma'lumot uchun javobgarlik mijozga tegishli.",
-          ru: 'Провайдер защищает инфраструктуру, а клиент — данные, идентификацию и настройки. Ответственность за данные лежит на клиенте.',
+          ru: 'Провайдер защищает инфраструктуру, а клиент - данные, идентификацию и настройки. Ответственность за данные лежит на клиенте.',
         },
       },
       {
@@ -174,12 +174,12 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
         type: 'tf',
         q: {
           uz: "\"Bu provayderning ishi\" degan fikr ko'p bulut hodisalarining sababi.",
-          ru: 'Мысль «это дело провайдера» — причина многих облачных инцидентов.',
+          ru: 'Мысль «это дело провайдера» - причина многих облачных инцидентов.',
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — aksariyat hodisa mijoz tomondagi noto'g'ri sozlama va boshqaruvdan kelib chiqadi.",
-          ru: 'Верно — большинство инцидентов происходит из-за неверных настроек и управления на стороне клиента.',
+          uz: "To'g'ri - aksariyat hodisa mijoz tomondagi noto'g'ri sozlama va boshqaruvdan kelib chiqadi.",
+          ru: 'Верно - большинство инцидентов происходит из-за неверных настроек и управления на стороне клиента.',
         },
       },
       {
@@ -197,8 +197,8 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Identifikatsiya, sozlamalar va ma'lumot — mijozda. Fizik qurilmalar va host infratuzilmasi esa provayderda.",
-          ru: 'Идентификация, настройки и данные — за клиентом. А физическое оборудование и хосты — за провайдером.',
+          uz: "Identifikatsiya, sozlamalar va ma'lumot - mijozda. Fizik qurilmalar va host infratuzilmasi esa provayderda.",
+          ru: 'Идентификация, настройки и данные - за клиентом. А физическое оборудование и хосты - за провайдером.',
         },
       },
       {
@@ -217,7 +217,7 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Provayder infratuzilmani, mijoz ma'lumot va sozlamalarni himoya qiladi. Noto'g'ri sozlama esa eng ko'p uchraydigan xato.",
-          ru: 'Провайдер защищает инфраструктуру, клиент — данные и настройки. А неверная настройка — самая частая ошибка.',
+          ru: 'Провайдер защищает инфраструктуру, клиент - данные и настройки. А неверная настройка - самая частая ошибка.',
         },
       },
     ],
@@ -231,30 +231,30 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
     content: {
       uz: `## Bulutda kirishni boshqarish (IAM)
 
-**IAM** (Identity and Access Management) — "kim nimaga kira oladi"ni boshqaradi.
+**IAM** (Identity and Access Management) - "kim nimaga kira oladi"ni boshqaradi.
 
 **Asosiy tamoyillar:**
-- **Eng kam imtiyoz** — har bir foydalanuvchi/xizmatga faqat kerakli huquq.
-- **Rollar** — huquqni odamga emas, vazifaga (rolga) berish.
-- **MFA** — kuchli autentifikatsiya, ayniqsa admin hisoblarda.
-- **Kalitlarni boshqarish** — API kalit va parollarni kodda emas, xavfsiz saqlash (secrets).
+- **Eng kam imtiyoz** - har bir foydalanuvchi/xizmatga faqat kerakli huquq.
+- **Rollar** - huquqni odamga emas, vazifaga (rolga) berish.
+- **MFA** - kuchli autentifikatsiya, ayniqsa admin hisoblarda.
+- **Kalitlarni boshqarish** - API kalit va parollarni kodda emas, xavfsiz saqlash (secrets).
 
-**Xato:** root/admin hisobdan kundalik ish qilish. Uning huquqi cheksiz — buzilsa, hammasi ketadi.
+**Xato:** root/admin hisobdan kundalik ish qilish. Uning huquqi cheksiz - buzilsa, hammasi ketadi.
 
-> **Xavfsizlik:** bulutdagi eng katta zarba — **buzilgan identifikatsiya**. Bitta noto'g'ri ochilgan kalit yoki admin parol butun muhitni ochib qo'yadi.`,
+> **Xavfsizlik:** bulutdagi eng katta zarba - **buzilgan identifikatsiya**. Bitta noto'g'ri ochilgan kalit yoki admin parol butun muhitni ochib qo'yadi.`,
       ru: `## Управление доступом в облаке (IAM)
 
 **IAM** (Identity and Access Management) управляет тем, «кто к чему имеет доступ».
 
 **Основные принципы:**
-- **Наименьшие привилегии** — каждому пользователю/сервису только необходимые права.
-- **Роли** — давать права не человеку, а задаче (роли).
-- **MFA** — сильная аутентификация, особенно для админских учёток.
-- **Управление ключами** — API-ключи и пароли хранить безопасно, не в коде (secrets).
+- **Наименьшие привилегии** - каждому пользователю/сервису только необходимые права.
+- **Роли** - давать права не человеку, а задаче (роли).
+- **MFA** - сильная аутентификация, особенно для админских учёток.
+- **Управление ключами** - API-ключи и пароли хранить безопасно, не в коде (secrets).
 
-**Ошибка:** работать с root/admin-учётки в повседневных задачах. Её права безграничны — при компрометации теряется всё.
+**Ошибка:** работать с root/admin-учётки в повседневных задачах. Её права безграничны - при компрометации теряется всё.
 
-> **Безопасность:** самый большой удар в облаке — **скомпрометированная идентификация**. Один неверно открытый ключ или админский пароль открывает всю среду.`,
+> **Безопасность:** самый большой удар в облаке - **скомпрометированная идентификация**. Один неверно открытый ключ или админский пароль открывает всю среду.`,
     },
     exercises: [
       {
@@ -272,7 +272,7 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
         ],
         answer: 'a',
         explain: {
-          uz: 'IAM (Identity and Access Management) — identifikatsiya va huquqlarni boshqaradi.',
+          uz: 'IAM (Identity and Access Management) - identifikatsiya va huquqlarni boshqaradi.',
           ru: 'IAM (Identity and Access Management) управляет идентификацией и правами.',
         },
       },
@@ -285,8 +285,8 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — admin huquqi cheksiz, buzilsa zarar katta. Kundalik ish uchun eng kam imtiyozli hisob ishlatiladi.",
-          ru: 'Нет — у админа безграничные права, и при компрометации ущерб велик. Для повседневных задач используют учётку с наименьшими привилегиями.',
+          uz: "Yo'q - admin huquqi cheksiz, buzilsa zarar katta. Kundalik ish uchun eng kam imtiyozli hisob ishlatiladi.",
+          ru: 'Нет - у админа безграничные права, и при компрометации ущерб велик. Для повседневных задач используют учётку с наименьшими привилегиями.',
         },
       },
       {
@@ -305,7 +305,7 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
         answers: ['a', 'b', 'c'],
         explain: {
           uz: "Eng kam imtiyoz, rollar va MFA himoyani kuchaytiradi. Bitta 'super admin' esa bitta nuqta xatosi.",
-          ru: 'Наименьшие привилегии, роли и MFA усиливают защиту. А один «супер-админ» — это единая точка отказа.',
+          ru: 'Наименьшие привилегии, роли и MFA усиливают защиту. А один «супер-админ» - это единая точка отказа.',
         },
       },
       {
@@ -338,30 +338,30 @@ Bulutda xavfsizlik ikki tomon o'rtasida bo'linadi:
     content: {
       uz: `## Bulut tarmoq xavfsizligi
 
-Bulutda tarmoq **virtual** — dasturiy ta'minot bilan sozlanadi.
+Bulutda tarmoq **virtual** - dasturiy ta'minot bilan sozlanadi.
 
 **Tushunchalar:**
-- **Virtual tarmoq (VPC/VNet)** — sizga tegishli ajratilgan tarmoq.
-- **Public va private subnet** — tashqi dunyoga ochiq va faqat ichki qism.
-- **Security group / firewall** — kirish-chiqish qoidalari (kim, qaysi portga).
-- **Segmentatsiya** — kritik resurslarni alohida ajratish.
+- **Virtual tarmoq (VPC/VNet)** - sizga tegishli ajratilgan tarmoq.
+- **Public va private subnet** - tashqi dunyoga ochiq va faqat ichki qism.
+- **Security group / firewall** - kirish-chiqish qoidalari (kim, qaysi portga).
+- **Segmentatsiya** - kritik resurslarni alohida ajratish.
 
 **Xato:** keraksiz portni \`0.0.0.0/0\` (butun internet) ga ochib qo'yish. Masalan, boshqaruv porti hammani qabul qiladi.
 
-> **Xavfsizlik:** "hammasini blokla, keraklisini och" — bulutda ham asosiy qoida. Ochiq qolgan bitta port ko'p hodisaga sabab bo'ladi.`,
+> **Xavfsizlik:** "hammasini blokla, keraklisini och" - bulutda ham asosiy qoida. Ochiq qolgan bitta port ko'p hodisaga sabab bo'ladi.`,
       ru: `## Сетевая безопасность в облаке
 
-В облаке сеть **виртуальная** — настраивается программно.
+В облаке сеть **виртуальная** - настраивается программно.
 
 **Понятия:**
-- **Виртуальная сеть (VPC/VNet)** — выделенная сеть, принадлежащая вам.
-- **Public и private subnet** — открытая наружу часть и только внутренняя.
-- **Security group / firewall** — правила входа-выхода (кому и на какой порт).
-- **Сегментация** — выделение критичных ресурсов отдельно.
+- **Виртуальная сеть (VPC/VNet)** - выделенная сеть, принадлежащая вам.
+- **Public и private subnet** - открытая наружу часть и только внутренняя.
+- **Security group / firewall** - правила входа-выхода (кому и на какой порт).
+- **Сегментация** - выделение критичных ресурсов отдельно.
 
 **Ошибка:** открыть лишний порт на \`0.0.0.0/0\` (весь интернет). Например, порт управления начинает принимать всех.
 
-> **Безопасность:** «блокировать всё, открывать нужное» — главное правило и в облаке. Один оставшийся открытым порт становится причиной многих инцидентов.`,
+> **Безопасность:** «блокировать всё, открывать нужное» - главное правило и в облаке. Один оставшийся открытым порт становится причиной многих инцидентов.`,
     },
     exercises: [
       {
@@ -379,8 +379,8 @@ Bulutda tarmoq **virtual** — dasturiy ta'minot bilan sozlanadi.
         ],
         answer: 'a',
         explain: {
-          uz: "0.0.0.0/0 — barcha manzillar, ya'ni butun internet. Boshqaruv portini bunga ochish katta xavf.",
-          ru: '0.0.0.0/0 — все адреса, то есть весь интернет. Открывать на это порт управления — большой риск.',
+          uz: "0.0.0.0/0 - barcha manzillar, ya'ni butun internet. Boshqaruv portini bunga ochish katta xavf.",
+          ru: '0.0.0.0/0 - все адреса, то есть весь интернет. Открывать на это порт управления - большой риск.',
         },
       },
       {
@@ -392,8 +392,8 @@ Bulutda tarmoq **virtual** — dasturiy ta'minot bilan sozlanadi.
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — private subnet tashqi dunyoga to'g'ridan-to'g'ri ochilmaydi; kritik resurslar shu yerda saqlanadi.",
-          ru: 'Верно — private subnet не открыт напрямую наружу; критичные ресурсы хранят именно там.',
+          uz: "To'g'ri - private subnet tashqi dunyoga to'g'ridan-to'g'ri ochilmaydi; kritik resurslar shu yerda saqlanadi.",
+          ru: 'Верно - private subnet не открыт напрямую наружу; критичные ресурсы хранят именно там.',
         },
       },
       {
@@ -431,7 +431,7 @@ Bulutda tarmoq **virtual** — dasturiy ta'minot bilan sozlanadi.
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "VPC virtual tarmoq, private subnet faqat ichki, security group qoidalar, 0.0.0.0/0 esa butun internetni bildiradi.",
-          ru: 'VPC — виртуальная сеть, private subnet — только внутренняя, security group — правила, а 0.0.0.0/0 означает весь интернет.',
+          ru: 'VPC - виртуальная сеть, private subnet - только внутренняя, security group - правила, а 0.0.0.0/0 означает весь интернет.',
         },
       },
     ],
@@ -445,15 +445,15 @@ Bulutda tarmoq **virtual** — dasturiy ta'minot bilan sozlanadi.
     content: {
       uz: `## Bulut saqlash (storage) xavfsizligi
 
-Bulutda saqlash — **buckets / blobs** ko'rinishida. Noto'g'ri sozlansa, butun dunyo ko'radi.
+Bulutda saqlash - **buckets / blobs** ko'rinishida. Noto'g'ri sozlansa, butun dunyo ko'radi.
 
 **Asosiy qoidalar:**
-- **Public access** — sukut bo'yicha yopiq bo'lsin. Har bir ochiq joy ongli qaror bo'lsin.
-- **Eng kam imtiyoz** — kim o'qiy yoki o'chira olishini cheklash.
-- **Shifrlash** — saqlashda (at rest) va uzatishda (in transit).
-- **Versiyalash va nusxa** — tasodifan o'chirilgan ma'lumotni tiklash.
+- **Public access** - sukut bo'yicha yopiq bo'lsin. Har bir ochiq joy ongli qaror bo'lsin.
+- **Eng kam imtiyoz** - kim o'qiy yoki o'chira olishini cheklash.
+- **Shifrlash** - saqlashda (at rest) va uzatishda (in transit).
+- **Versiyalash va nusxa** - tasodifan o'chirilgan ma'lumotni tiklash.
 
-**Xato:** maxfiy ma'lumot (kalit, shaxsiy ma'lumot) ochiq saqlashda qolib ketishi. Bu — eng ko'p uchraydigan bulut sizib chiqishi.
+**Xato:** maxfiy ma'lumot (kalit, shaxsiy ma'lumot) ochiq saqlashda qolib ketishi. Bu - eng ko'p uchraydigan bulut sizib chiqishi.
 
 > **Xavfsizlik:** saqlashni tekshirish oson va arzon: "bu joy kimga ko'rinadi?" degan savolni muntazam bering.`,
       ru: `## Безопасность облачного хранилища (storage)
@@ -461,12 +461,12 @@ Bulutda saqlash — **buckets / blobs** ko'rinishida. Noto'g'ri sozlansa, butun 
 В облаке хранилище существует в виде **buckets / blobs**. При неверной настройке его видит весь мир.
 
 **Основные правила:**
-- **Public access** — по умолчанию должно быть закрыто. Каждое открытие — осознанное решение.
-- **Наименьшие привилегии** — ограничить, кто может читать или удалять.
-- **Шифрование** — при хранении (at rest) и при передаче (in transit).
-- **Версионирование и копии** — восстановление случайно удалённых данных.
+- **Public access** - по умолчанию должно быть закрыто. Каждое открытие - осознанное решение.
+- **Наименьшие привилегии** - ограничить, кто может читать или удалять.
+- **Шифрование** - при хранении (at rest) и при передаче (in transit).
+- **Версионирование и копии** - восстановление случайно удалённых данных.
 
-**Ошибка:** секретные данные (ключи, персональные данные) остаются в открытом хранилище. Это — самая частая облачная утечка.
+**Ошибка:** секретные данные (ключи, персональные данные) остаются в открытом хранилище. Это - самая частая облачная утечка.
 
 > **Безопасность:** проверять хранилище просто и дешёво: регулярно задавайте вопрос «кто это видит?».`,
     },
@@ -486,21 +486,21 @@ Bulutda saqlash — **buckets / blobs** ko'rinishida. Noto'g'ri sozlansa, butun 
         ],
         answer: 'a',
         explain: {
-          uz: "Ochiq bucket — eng ko'p uchraydigan bulut sizib chiqishi. Ma'lumot hammaga ko'rinib qoladi.",
-          ru: 'Открытый bucket — самая частая облачная утечка. Данные становятся видны всем.',
+          uz: "Ochiq bucket - eng ko'p uchraydigan bulut sizib chiqishi. Ma'lumot hammaga ko'rinib qoladi.",
+          ru: 'Открытый bucket - самая частая облачная утечка. Данные становятся видны всем.',
         },
       },
       {
         id: 'e2',
         type: 'tf',
         q: {
-          uz: "Bulut saqlash sukut (default) holatida ochiq bo'lishi kerak — qulaylik uchun.",
-          ru: 'Облачное хранилище по умолчанию должно быть открытым — ради удобства.',
+          uz: "Bulut saqlash sukut (default) holatida ochiq bo'lishi kerak - qulaylik uchun.",
+          ru: 'Облачное хранилище по умолчанию должно быть открытым - ради удобства.',
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — sukut bo'yicha yopiq bo'lishi kerak. Har bir ochiq joy ongli va asoslangan qaror bo'lsin.",
-          ru: 'Нет — по умолчанию оно должно быть закрыто. Каждое открытие — осознанное и обоснованное решение.',
+          uz: "Yo'q - sukut bo'yicha yopiq bo'lishi kerak. Har bir ochiq joy ongli va asoslangan qaror bo'lsin.",
+          ru: 'Нет - по умолчанию оно должно быть закрыто. Каждое открытие - осознанное и обоснованное решение.',
         },
       },
       {
@@ -537,8 +537,8 @@ Bulutda saqlash — **buckets / blobs** ko'rinishida. Noto'g'ri sozlansa, butun 
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "At rest va in transit shifrlashning ikki holati, public bucket — ochiq saqlash, eng kam imtiyoz esa kirishni cheklaydi.",
-          ru: 'At rest и in transit — два состояния шифрования, public bucket — открытое хранилище, а наименьшие привилегии ограничивают доступ.',
+          uz: "At rest va in transit shifrlashning ikki holati, public bucket - ochiq saqlash, eng kam imtiyoz esa kirishni cheklaydi.",
+          ru: 'At rest и in transit - два состояния шифрования, public bucket - открытое хранилище, а наименьшие привилегии ограничивают доступ.',
         },
       },
     ],
@@ -553,33 +553,33 @@ Bulutda saqlash — **buckets / blobs** ko'rinishida. Noto'g'ri sozlansa, butun 
       uz: `## Bulutda kuzatish va mustahkamlash
 
 **Kuzatish:**
-- **Audit log** — bulutda kim nima qilgani (kim resurs yaratdi yoki o'chirdi).
-- **Config monitoring** — sozlama o'zgarganini payqash.
-- **Anomaliya** — kutilmagan joydan kirish yoki resurs sarfi.
+- **Audit log** - bulutda kim nima qilgani (kim resurs yaratdi yoki o'chirdi).
+- **Config monitoring** - sozlama o'zgarganini payqash.
+- **Anomaliya** - kutilmagan joydan kirish yoki resurs sarfi.
 
 **Mustahkamlash:**
 - Yamoqlar va yangilangan obrazlar (image) ishlatish.
 - Standart sozlamani o'zgartirish (standart parol, ochiq port).
-- Keraksiz resurslarni o'chirish — ishlatilmaydigan narsa xavf manbai.
+- Keraksiz resurslarni o'chirish - ishlatilmaydigan narsa xavf manbai.
 
 **Xato:** audit logni yoqmaslik. Hodisa bo'lganda "kim qildi?" degan savolga javob bo'lmaydi.
 
-> **Xavfsizlik:** bulut tez o'zgaradi — monitoring ham doimiy bo'lishi kerak. Bir marta sozlab, unutib qo'yish yetarli emas.`,
+> **Xavfsizlik:** bulut tez o'zgaradi - monitoring ham doimiy bo'lishi kerak. Bir marta sozlab, unutib qo'yish yetarli emas.`,
       ru: `## Мониторинг и укрепление в облаке
 
 **Мониторинг:**
-- **Audit log** — кто что делал в облаке (кто создал или удалил ресурс).
-- **Config monitoring** — заметить изменение настройки.
-- **Аномалия** — вход из неожиданного места или необычный расход ресурсов.
+- **Audit log** - кто что делал в облаке (кто создал или удалил ресурс).
+- **Config monitoring** - заметить изменение настройки.
+- **Аномалия** - вход из неожиданного места или необычный расход ресурсов.
 
 **Укрепление:**
 - Использовать патчи и обновлённые образы (image).
 - Сменить настройки по умолчанию (стандартный пароль, открытый порт).
-- Удалять лишние ресурсы — неиспользуемое становится источником риска.
+- Удалять лишние ресурсы - неиспользуемое становится источником риска.
 
 **Ошибка:** не включить audit log. При инциденте не будет ответа на вопрос «кто это сделал?».
 
-> **Безопасность:** облако меняется быстро — и мониторинг должен быть постоянным. Настроить один раз и забыть недостаточно.`,
+> **Безопасность:** облако меняется быстро - и мониторинг должен быть постоянным. Настроить один раз и забыть недостаточно.`,
     },
     exercises: [
       {
@@ -610,8 +610,8 @@ Bulutda saqlash — **buckets / blobs** ko'rinishida. Noto'g'ri sozlansa, butun 
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — bulut doim o'zgaradi. Yangi resurs va yangi sozlama yangi xavf olib keladi; monitoring doimiy bo'lishi kerak.",
-          ru: 'Нет — облако постоянно меняется. Новый ресурс и новая настройка несут новый риск; мониторинг должен быть постоянным.',
+          uz: "Yo'q - bulut doim o'zgaradi. Yangi resurs va yangi sozlama yangi xavf olib keladi; monitoring doimiy bo'lishi kerak.",
+          ru: 'Нет - облако постоянно меняется. Новый ресурс и новая настройка несут новый риск; мониторинг должен быть постоянным.',
         },
       },
       {
@@ -649,7 +649,7 @@ Bulutda saqlash — **buckets / blobs** ko'rinishida. Noto'g'ri sozlansa, butun 
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Audit log harakatlarni yozadi, config monitoring o'zgarishni payqaydi, anomaliya kutilmagan hodisa, keraksiz resurs esa o'chirilishi kerak.",
-          ru: 'Audit log фиксирует действия, config monitoring замечает изменения, аномалия — неожиданное событие, а лишний ресурс нужно удалить.',
+          ru: 'Audit log фиксирует действия, config monitoring замечает изменения, аномалия - неожиданное событие, а лишний ресурс нужно удалить.',
         },
       },
     ],
@@ -685,7 +685,7 @@ Bulut xavfsizligi bo'yicha bilimingizni tekshiring: xizmat modellari, mas'uliyat
         answer: 'a',
         explain: {
           uz: "Mas'uliyat bo'linadi: provayder infratuzilma, mijoz ma'lumot va sozlama uchun.",
-          ru: 'Ответственность делится: провайдер — за инфраструктуру, клиент — за данные и настройки.',
+          ru: 'Ответственность делится: провайдер - за инфраструктуру, клиент - за данные и настройки.',
         },
       },
       {
@@ -693,12 +693,12 @@ Bulut xavfsizligi bo'yicha bilimingizni tekshiring: xizmat modellari, mas'uliyat
         type: 'tf',
         q: {
           uz: "Ochiq qolib ketgan saqlash (bucket) keng tarqalgan bulut sizib chiqishidir.",
-          ru: 'Оставшееся открытым хранилище (bucket) — распространённая облачная утечка.',
+          ru: 'Оставшееся открытым хранилище (bucket) - распространённая облачная утечка.',
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — public bucket eng ko'p uchraydigan sabablardan. Sukut bo'yicha yopiq bo'lishi kerak.",
-          ru: 'Верно — public bucket одна из самых частых причин. По умолчанию он должен быть закрыт.',
+          uz: "To'g'ri - public bucket eng ko'p uchraydigan sabablardan. Sukut bo'yicha yopiq bo'lishi kerak.",
+          ru: 'Верно - public bucket одна из самых частых причин. По умолчанию он должен быть закрыт.',
         },
       },
       {
@@ -736,7 +736,7 @@ Bulut xavfsizligi bo'yicha bilimingizni tekshiring: xizmat modellari, mas'uliyat
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "IAM kirishni, security group tarmoqni, shifrlash ma'lumotni himoya qiladi, audit log esa harakatlar tarixini saqlaydi.",
-          ru: 'IAM защищает доступ, security group — сеть, шифрование — данные, а audit log хранит историю действий.',
+          ru: 'IAM защищает доступ, security group - сеть, шифрование - данные, а audit log хранит историю действий.',
         },
       },
       {
@@ -754,8 +754,8 @@ Bulut xavfsizligi bo'yicha bilimingizni tekshiring: xizmat modellari, mas'uliyat
         ],
         order: ['i1', 'i2', 'i3', 'i4'],
         explain: {
-          uz: "Avval huquq cheklanadi, keyin yopiq sozlanadi, faqat kerakli ochiladi va nihoyat kuzatuv yoqiladi — shunda resurs boshidan xavfsiz boshlanadi.",
-          ru: 'Сначала ограничивают права, затем настраивают закрыто, открывают только нужное и включают наблюдение — так ресурс безопасен с самого начала.',
+          uz: "Avval huquq cheklanadi, keyin yopiq sozlanadi, faqat kerakli ochiladi va nihoyat kuzatuv yoqiladi - shunda resurs boshidan xavfsiz boshlanadi.",
+          ru: 'Сначала ограничивают права, затем настраивают закрыто, открывают только нужное и включают наблюдение - так ресурс безопасен с самого начала.',
         },
       },
     ],

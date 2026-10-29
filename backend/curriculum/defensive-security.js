@@ -1,13 +1,13 @@
 /**
- * Curriculum — Cybersecurity path › Domain: Defensive security (blue team / SOC)
+ * Curriculum - Cybersecurity path › Domain: Defensive security (blue team / SOC)
  *
  * Shape (validated by scripts/validate-curriculum.js via lib/grade.validateExercise):
  *   module: { slug, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
  *   kind: 'lesson' | 'checkpoint'   (checkpoint = end-of-domain trophy node)
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language. This is a
- *     warm-up, not a textbook — the exercises do the teaching.
+ *   - Lesson prose: short. 6-14 markdown lines per language. This is a
+ *     warm-up, not a textbook - the exercises do the teaching.
  *   - Every exercise: bilingual q + explain, technically accurate, beginner
  *     level, no trick questions, explanations teach the WHY.
  *   - Prefer established, vendor-neutral concepts (defense in depth, IDS/IPS,
@@ -15,7 +15,7 @@
  *   - Exercise ids: e1..eN in delivery order.
  *   - Uzbek: simple, modern Uzbek Latin. Russian: natural, not machine-translated.
  *   - Any string containing an apostrophe MUST be double-quoted (or a template
- *     literal) — a straight ' inside a single-quoted string breaks the file.
+ *     literal) - a straight ' inside a single-quoted string breaks the file.
  */
 
 module.exports = [
@@ -27,30 +27,30 @@ module.exports = [
     content: {
       uz: `## Chuqur himoya (defense in depth)
 
-Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir necha qatlam** qo'yiladi.
+Bitta himoya yetarli emas - u buzilsa, hammasi ochiladi. Shuning uchun **bir necha qatlam** qo'yiladi.
 
 **Qatlamlar misoli:**
-- **Tarmoq** — firewall, segmentatsiya
-- **Tizim** — yamaqlar, eng kam imtiyoz, shifrlash
-- **Ilova** — xavfsiz kod, kirishni tekshirish
-- **Inson** — o'qitish, MFA, ogohlik
+- **Tarmoq** - firewall, segmentatsiya
+- **Tizim** - yamaqlar, eng kam imtiyoz, shifrlash
+- **Ilova** - xavfsiz kod, kirishni tekshirish
+- **Inson** - o'qitish, MFA, ogohlik
 
-**Nega ishlaydi:** buzg'unchi bir qatlamni yorib o'tsa ham, keyingisiga uriladi. Bu vaqt va iz qoldiradi — himoyaga aniqlash imkonini beradi.
+**Nega ishlaydi:** buzg'unchi bir qatlamni yorib o'tsa ham, keyingisiga uriladi. Bu vaqt va iz qoldiradi - himoyaga aniqlash imkonini beradi.
 
-> **Xavfsizlik:** "hech narsa buzilmaydi" degan himoya yo'q. Maqsad — o'tishni qiyinlashtirish va payqash. Qatlamlar shuni beradi.`,
+> **Xavfsizlik:** "hech narsa buzilmaydi" degan himoya yo'q. Maqsad - o'tishni qiyinlashtirish va payqash. Qatlamlar shuni beradi.`,
       ru: `## Эшелонированная защита (defense in depth)
 
-Одной защиты недостаточно — если она сломается, откроется всё. Поэтому ставят **несколько слоёв**.
+Одной защиты недостаточно - если она сломается, откроется всё. Поэтому ставят **несколько слоёв**.
 
 **Примеры слоёв:**
-- **Сеть** — firewall, сегментация
-- **Система** — патчи, наименьшие привилегии, шифрование
-- **Приложение** — безопасный код, проверка доступа
-- **Человек** — обучение, MFA, осведомлённость
+- **Сеть** - firewall, сегментация
+- **Система** - патчи, наименьшие привилегии, шифрование
+- **Приложение** - безопасный код, проверка доступа
+- **Человек** - обучение, MFA, осведомлённость
 
-**Почему работает:** даже если злоумышленник пробил один слой, он упирается в следующий. Это даёт время и оставляет следы — возможность обнаружить атаку.
+**Почему работает:** даже если злоумышленник пробил один слой, он упирается в следующий. Это даёт время и оставляет следы - возможность обнаружить атаку.
 
-> **Безопасность:** защиты «ничего никогда не сломается» не существует. Цель — затруднить проход и заметить его. Именно это дают слои.`,
+> **Безопасность:** защиты «ничего никогда не сломается» не существует. Цель - затруднить проход и заметить его. Именно это дают слои.`,
     },
     exercises: [
       {
@@ -68,8 +68,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         answer: 'a',
         explain: {
-          uz: "Defense in depth — bir necha qatlam: bittasi buzilsa, boshqalari to'sadi. Bu bitta himoyaga tayanishdan ancha ishonchli.",
-          ru: 'Defense in depth — это несколько слоёв: если один сломан, остальные сдерживают. Это надёжнее, чем полагаться на одну защиту.',
+          uz: "Defense in depth - bir necha qatlam: bittasi buzilsa, boshqalari to'sadi. Bu bitta himoyaga tayanishdan ancha ishonchli.",
+          ru: 'Defense in depth - это несколько слоёв: если один сломан, остальные сдерживают. Это надёжнее, чем полагаться на одну защиту.',
         },
       },
       {
@@ -81,8 +81,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — har qanday yagona himoya bir kun buzilishi mumkin. Qatlamlar bir-birini qoplaydi va buzg'unchiga to'sqinlik qiladi.",
-          ru: 'Нет — любая единственная защита однажды может быть сломана. Слои дополняют друг друга и мешают злоумышленнику.',
+          uz: "Yo'q - har qanday yagona himoya bir kun buzilishi mumkin. Qatlamlar bir-birini qoplaydi va buzg'unchiga to'sqinlik qiladi.",
+          ru: 'Нет - любая единственная защита однажды может быть сломана. Слои дополняют друг друга и мешают злоумышленнику.',
         },
       },
       {
@@ -100,8 +100,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Tarmoq, tizim va inson qatlamlari birga ishlaydi. Bitta parolga tayanish esa qatlam emas — bitta nuqta.",
-          ru: 'Слои сети, системы и человека работают вместе. А ставка на один пароль — это не слой, а одна точка.',
+          uz: "Tarmoq, tizim va inson qatlamlari birga ishlaydi. Bitta parolga tayanish esa qatlam emas - bitta nuqta.",
+          ru: 'Слои сети, системы и человека работают вместе. А ставка на один пароль - это не слой, а одна точка.',
         },
       },
       {
@@ -115,7 +115,7 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
           { id: 'p1', left: { uz: 'Qatlamli himoya', ru: 'Слойная защита' }, right: { uz: "Bir nechta mustaqil to'siq", ru: 'Несколько независимых барьеров' } },
           { id: 'p2', left: { uz: 'Aniqlash', ru: 'Обнаружение' }, right: { uz: 'Buzilishni payqash', ru: 'Заметить взлом' } },
           { id: 'p3', left: { uz: 'Eng kam imtiyoz', ru: 'Наименьшие привилегии' }, right: { uz: 'Faqat kerakli huquq', ru: 'Только необходимые права' } },
-          { id: 'p4', left: { uz: 'Yagona himoya', ru: 'Единая защита' }, right: { uz: 'Bir joyda buzilsa — hammasi ochiladi', ru: 'Сломается в одном месте — откроется всё' } },
+          { id: 'p4', left: { uz: 'Yagona himoya', ru: 'Единая защита' }, right: { uz: 'Bir joyda buzilsa - hammasi ochiladi', ru: 'Сломается в одном месте - откроется всё' } },
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
@@ -134,7 +134,7 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
     content: {
       uz: `## Loglar va kuzatish
 
-**Log** — tizimda nima bo'lganini yozib boruvchi yozuv. Kuzatmasdan himoya qilish qiyin: ko'rinmasa, bilmaysan.
+**Log** - tizimda nima bo'lganini yozib boruvchi yozuv. Kuzatmasdan himoya qilish qiyin: ko'rinmasa, bilmaysan.
 
 **Nima log qilinadi:**
 - Kirishlar (muvaffaqiyatli va muvaffaqiyatsiz)
@@ -149,7 +149,7 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
 > **Xavfsizlik:** buzg'unchi birinchi navbatda loglarni o'chirishga urinadi. Shuning uchun loglar **alohida** va o'zgartirilishi qiyin joyda saqlanishi kerak.`,
       ru: `## Логи и мониторинг
 
-**Лог** — запись о том, что происходило в системе. Без наблюдения защищать трудно: чего не видишь, о том не знаешь.
+**Лог** - запись о том, что происходило в системе. Без наблюдения защищать трудно: чего не видишь, о том не знаешь.
 
 **Что логируют:**
 - Входы (успешные и неудачные)
@@ -172,7 +172,7 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
           ru: 'Почему логи важны?',
         },
         options: [
-          { id: 'a', uz: "Tizimda nima bo'lganini ko'rsatadi — aniqlash uchun asos", ru: 'Показывают, что происходило в системе — основа для обнаружения' },
+          { id: 'a', uz: "Tizimda nima bo'lganini ko'rsatadi - aniqlash uchun asos", ru: 'Показывают, что происходило в системе - основа для обнаружения' },
           { id: 'b', uz: 'Fayllarni siqadi', ru: 'Сжимают файлы' },
           { id: 'c', uz: 'Internetni tezlashtiradi', ru: 'Ускоряют интернет' },
           { id: 'd', uz: 'Parollarni saqlaydi', ru: 'Хранят пароли' },
@@ -192,8 +192,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — markaziy saqlash tahlilni osonlashtiradi va buzg'unchi hamma nusxani bir vaqtda o'chira olmaydi.",
-          ru: 'Верно — центральное хранение упрощает анализ, и злоумышленник не может удалить все копии сразу.',
+          uz: "To'g'ri - markaziy saqlash tahlilni osonlashtiradi va buzg'unchi hamma nusxani bir vaqtda o'chira olmaydi.",
+          ru: 'Верно - центральное хранение упрощает анализ, и злоумышленник не может удалить все копии сразу.',
         },
       },
       {
@@ -211,8 +211,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Kirishlar, huquq va konfiguratsiya o'zgarishlari — xavfsizlik uchun eng muhim hodisalar. Ular keyin tekshirish (audit) uchun asos bo'ladi.",
-          ru: 'Входы, изменения прав и конфигурации — самые важные для безопасности события. Они становятся основой для последующего аудита.',
+          uz: "Kirishlar, huquq va konfiguratsiya o'zgarishlari - xavfsizlik uchun eng muhim hodisalar. Ular keyin tekshirish (audit) uchun asos bo'ladi.",
+          ru: 'Входы, изменения прав и конфигурации - самые важные для безопасности события. Они становятся основой для последующего аудита.',
         },
       },
       {
@@ -245,26 +245,26 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
     content: {
       uz: `## SIEM va ogohlantirishlar
 
-**SIEM** — turli manbalardan loglarni **yig'ib**, ularni **bog'lab** (correlate) va **shubhali holatda ogohlantirish** beruvchi tizim.
+**SIEM** - turli manbalardan loglarni **yig'ib**, ularni **bog'lab** (correlate) va **shubhali holatda ogohlantirish** beruvchi tizim.
 
-**Nega birlashtirish kerak:** bitta log o'zi zararsiz ko'rinadi. Lekin "ko'p marta xato parol" + "keyin muvaffaqiyatli kirish" birga — shubhali naqsh (pattern).
+**Nega birlashtirish kerak:** bitta log o'zi zararsiz ko'rinadi. Lekin "ko'p marta xato parol" + "keyin muvaffaqiyatli kirish" birga - shubhali naqsh (pattern).
 
-**Muammo — shovqin:** noto'g'ri ogohlantirish (false positive) ko'p bo'lsa, jamoa ularga o'rganib qoladi va haqiqiysini o'tkazib yuboradi.
+**Muammo - shovqin:** noto'g'ri ogohlantirish (false positive) ko'p bo'lsa, jamoa ularga o'rganib qoladi va haqiqiysini o'tkazib yuboradi.
 
 **Yechim:** ogohlantirishni sozlash (tuning), jiddiylik bo'yicha tartiblash, har bir ogohlantirishni tekshirish (triage).
 
-> **Xavfsizlik:** SIEM sehrli quti emas — uni to'g'ri sozlash va o'qiy oladigan jamoa kerak. Aks holda u shovqin manbaiga aylanadi.`,
+> **Xavfsizlik:** SIEM sehrli quti emas - uni to'g'ri sozlash va o'qiy oladigan jamoa kerak. Aks holda u shovqin manbaiga aylanadi.`,
       ru: `## SIEM и оповещения
 
-**SIEM** — система, которая **собирает** логи из разных источников, **связывает** их (correlation) и **оповещает о подозрительном**.
+**SIEM** - система, которая **собирает** логи из разных источников, **связывает** их (correlation) и **оповещает о подозрительном**.
 
-**Зачем связывать:** отдельная запись выглядит безобидно. Но «много неверных паролей» + «затем успешный вход» вместе — подозрительный шаблон (pattern).
+**Зачем связывать:** отдельная запись выглядит безобидно. Но «много неверных паролей» + «затем успешный вход» вместе - подозрительный шаблон (pattern).
 
-**Проблема — шум:** если ложных оповещений (false positive) много, команда привыкает к ним и пропускает настоящее.
+**Проблема - шум:** если ложных оповещений (false positive) много, команда привыкает к ним и пропускает настоящее.
 
 **Решение:** настройка оповещений (tuning), сортировка по серьёзности, проверка каждого оповещения (triage).
 
-> **Безопасность:** SIEM — не волшебная коробка: его нужно правильно настроить и иметь команду, умеющую читать его вывод. Иначе он превращается в источник шума.`,
+> **Безопасность:** SIEM - не волшебная коробка: его нужно правильно настроить и иметь команду, умеющую читать его вывод. Иначе он превращается в источник шума.`,
     },
     exercises: [
       {
@@ -282,7 +282,7 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         answer: 'a',
         explain: {
-          uz: "SIEM loglarni markazlashtiradi, ularni bog'lab naqsh topadi va shubhali holatda ogoh beradi. Bu — blue team ning markaziy quroli.",
+          uz: "SIEM loglarni markazlashtiradi, ularni bog'lab naqsh topadi va shubhali holatda ogoh beradi. Bu - blue team ning markaziy quroli.",
           ru: 'SIEM централизует логи, связывает их, находит шаблоны и оповещает о подозрительном. Это центральный инструмент blue team.',
         },
       },
@@ -290,13 +290,13 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         id: 'e2',
         type: 'tf',
         q: {
-          uz: "Bitta log yozuvi 'xato parol' + 'keyin muvaffaqiyatli kirish' naqshini o'zi ko'rsatmaydi — buni ko'rish uchun bir nechta manbani bog'lash kerak.",
-          ru: 'Одна запись лога сама не показывает шаблон «неверный пароль + затем успешный вход» — для этого нужно связать несколько источников.',
+          uz: "Bitta log yozuvi 'xato parol' + 'keyin muvaffaqiyatli kirish' naqshini o'zi ko'rsatmaydi - buni ko'rish uchun bir nechta manbani bog'lash kerak.",
+          ru: 'Одна запись лога сама не показывает шаблон «неверный пароль + затем успешный вход» - для этого нужно связать несколько источников.',
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — alohida yozuvlar zararsiz ko'rinadi, lekin bog'langanda (correlation) hujum naqshi ko'rinadi. SIEM aynan shu uchun.",
-          ru: 'Верно — отдельные записи выглядят безобидно, но при связывании (correlation) проявляется шаблон атаки. SIEM как раз для этого.',
+          uz: "To'g'ri - alohida yozuvlar zararsiz ko'rinadi, lekin bog'langanda (correlation) hujum naqshi ko'rinadi. SIEM aynan shu uchun.",
+          ru: 'Верно - отдельные записи выглядят безобидно, но при связывании (correlation) проявляется шаблон атаки. SIEM как раз для этого.',
         },
       },
       {
@@ -314,8 +314,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Sozlash, tartiblash va tekshirish shovqinni kamaytiradi. Hammasini o'chirish esa haqiqiy hujumni ham ko'rinmas qiladi — bu xato.",
-          ru: 'Настройка, сортировка и проверка снижают шум. А отключение всех оповещений скрывает и реальную атаку — это ошибка.',
+          uz: "Sozlash, tartiblash va tekshirish shovqinni kamaytiradi. Hammasini o'chirish esa haqiqiy hujumni ham ko'rinmas qiladi - bu xato.",
+          ru: 'Настройка, сортировка и проверка снижают шум. А отключение всех оповещений скрывает и реальную атаку - это ошибка.',
         },
       },
       {
@@ -333,8 +333,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "SIEM platforma, correlation naqsh topadi, false positive — shovqin, triage esa ularni tartiblab tekshiradi.",
-          ru: 'SIEM — платформа, correlation находит шаблон, false positive — шум, а triage проверяет и сортирует оповещения.',
+          uz: "SIEM platforma, correlation naqsh topadi, false positive - shovqin, triage esa ularni tartiblab tekshiradi.",
+          ru: 'SIEM - платформа, correlation находит шаблон, false positive - шум, а triage проверяет и сортирует оповещения.',
         },
       },
     ],
@@ -348,30 +348,30 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
     content: {
       uz: `## Tarmoq va qurilma himoyasi
 
-**Firewall** — qoidalar bo'yicha trafikni o'tkazadi yoki to'xtatadi. Xavfsizroq yondashuv: "hammasini blokla, faqat keraklisini och".
+**Firewall** - qoidalar bo'yicha trafikni o'tkazadi yoki to'xtatadi. Xavfsizroq yondashuv: "hammasini blokla, faqat keraklisini och".
 
-**Segmentatsiya** — tarmoqni bo'laklarga ajratish. Buzg'unchi bitta bo'lakka kirsa, boshqalariga oson o'ta olmaydi.
+**Segmentatsiya** - tarmoqni bo'laklarga ajratish. Buzg'unchi bitta bo'lakka kirsa, boshqalariga oson o'ta olmaydi.
 
 **IDS / IPS:**
-- **IDS** — shubhali trafikni **aniqlaydi** va ogoh beradi.
-- **IPS** — aniqlab, **to'xtatadi** (bloklaydi).
+- **IDS** - shubhali trafikni **aniqlaydi** va ogoh beradi.
+- **IPS** - aniqlab, **to'xtatadi** (bloklaydi).
 
-**Qurilma (endpoint) himoyasi** — kompyuter/server darajasida: antivirus/EDR, host firewall, yamaqlar, eng kam imtiyoz.
+**Qurilma (endpoint) himoyasi** - kompyuter/server darajasida: antivirus/EDR, host firewall, yamaqlar, eng kam imtiyoz.
 
-> **Xavfsizlik:** tarmoq va qurilma himoyasi birga ishlaydi. Faqat chegaraga tayanmang — "ichkarida hamma ishonchli" degan fikr xato (zero trust tamoyili).`,
+> **Xavfsizlik:** tarmoq va qurilma himoyasi birga ishlaydi. Faqat chegaraga tayanmang - "ichkarida hamma ishonchli" degan fikr xato (zero trust tamoyili).`,
       ru: `## Защита сети и устройств
 
-**Firewall** — пропускает или блокирует трафик по правилам. Более безопасный подход: «блокировать всё, открывать только нужное».
+**Firewall** - пропускает или блокирует трафик по правилам. Более безопасный подход: «блокировать всё, открывать только нужное».
 
-**Сегментация** — деление сети на части. Если злоумышленник проник в один сегмент, он с трудом попадёт в другие.
+**Сегментация** - деление сети на части. Если злоумышленник проник в один сегмент, он с трудом попадёт в другие.
 
 **IDS / IPS:**
-- **IDS** — **обнаруживает** подозрительный трафик и оповещает.
-- **IPS** — обнаруживает и **останавливает** (блокирует).
+- **IDS** - **обнаруживает** подозрительный трафик и оповещает.
+- **IPS** - обнаруживает и **останавливает** (блокирует).
 
-**Защита устройства (endpoint)** — на уровне компьютера/сервера: антивирус/EDR, host firewall, патчи, наименьшие привилегии.
+**Защита устройства (endpoint)** - на уровне компьютера/сервера: антивирус/EDR, host firewall, патчи, наименьшие привилегии.
 
-> **Безопасность:** защита сети и устройств работает вместе. Не полагайтесь только на периметр — мнение «внутри всё доверенное» ошибочно (принцип zero trust).`,
+> **Безопасность:** защита сети и устройств работает вместе. Не полагайтесь только на периметр - мнение «внутри всё доверенное» ошибочно (принцип zero trust).`,
     },
     exercises: [
       {
@@ -384,13 +384,13 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         options: [
           { id: 'a', uz: "IDS aniqlaydi va ogoh beradi, IPS esa to'xtatadi", ru: 'IDS обнаруживает и оповещает, а IPS останавливает' },
           { id: 'b', uz: 'Ikkalasi bir xil narsa', ru: 'Это одно и то же' },
-          { id: 'c', uz: 'IDS faqat antivirus', ru: 'IDS — это только антивирус' },
+          { id: 'c', uz: 'IDS faqat antivirus', ru: 'IDS - это только антивирус' },
           { id: 'd', uz: 'IPS faqat log yozadi', ru: 'IPS только пишет логи' },
         ],
         answer: 'a',
         explain: {
-          uz: "IDS — aniqlash (detect) va ogohlantirish; IPS — aniqlash va bloklash (prevent). IPS ko'pincha IDS dan keyingi qadam.",
-          ru: 'IDS — обнаружение (detect) и оповещение; IPS — обнаружение и блокировка (prevent). IPS часто следующий шаг после IDS.',
+          uz: "IDS - aniqlash (detect) va ogohlantirish; IPS - aniqlash va bloklash (prevent). IPS ko'pincha IDS dan keyingi qadam.",
+          ru: 'IDS - обнаружение (detect) и оповещение; IPS - обнаружение и блокировка (prevent). IPS часто следующий шаг после IDS.',
         },
       },
       {
@@ -402,8 +402,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — buzg'unchi tashqi chegarani chetlab, ichkariga kirishi mumkin. Zero trust tamoyili: har so'rovni tekshir, ichkariga ham ko'r-ko'rona ishonma.",
-          ru: 'Нет — злоумышленник может обойти внешний периметр и попасть внутрь. Принцип zero trust: проверяй каждый запрос, не доверяй вслепую и внутренней сети.',
+          uz: "Yo'q - buzg'unchi tashqi chegarani chetlab, ichkariga kirishi mumkin. Zero trust tamoyili: har so'rovni tekshir, ichkariga ham ko'r-ko'rona ishonma.",
+          ru: 'Нет - злоумышленник может обойти внешний периметр и попасть внутрь. Принцип zero trust: проверяй каждый запрос, не доверяй вслепую и внутренней сети.',
         },
       },
       {
@@ -454,28 +454,28 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
     content: {
       uz: `## Mustahkamlash va yamash
 
-**Hardening** — tizimdan keraksiz hamma narsani olib tashlash, hujum yuzasini kamaytirish.
+**Hardening** - tizimdan keraksiz hamma narsani olib tashlash, hujum yuzasini kamaytirish.
 
 **Asosiy qadamlar:**
-- **Yamalash (patching)** — ma'lum zaifliklarni yopish. Eng arzon va samarali chora.
-- **Keraksiz xizmat va portlarni o'chirish** — ishlatilmasa, xavf manbai bo'lmasin.
-- **Standart sozlamalarni o'zgartirish** — standart parol va sozlamalar hammaga ma'lum.
-- **Eng kam imtiyoz** — har kimga faqat kerakli huquq.
+- **Yamalash (patching)** - ma'lum zaifliklarni yopish. Eng arzon va samarali chora.
+- **Keraksiz xizmat va portlarni o'chirish** - ishlatilmasa, xavf manbai bo'lmasin.
+- **Standart sozlamalarni o'zgartirish** - standart parol va sozlamalar hammaga ma'lum.
+- **Eng kam imtiyoz** - har kimga faqat kerakli huquq.
 - **MFA va kuchli autentifikatsiya.**
 
-> **Xavfsizlik:** yamalanmagan tizim — eng ko'p nishonga olinadigan holat. Ma'lum zaiflikni yopish, yangisini izlashdan ancha oson.`,
+> **Xavfsizlik:** yamalanmagan tizim - eng ko'p nishonga olinadigan holat. Ma'lum zaiflikni yopish, yangisini izlashdan ancha oson.`,
       ru: `## Укрепление и патчи
 
-**Hardening** — убрать из системы всё лишнее, уменьшить поверхность атаки.
+**Hardening** - убрать из системы всё лишнее, уменьшить поверхность атаки.
 
 **Основные шаги:**
-- **Патчинг (patching)** — закрытие известных уязвимостей. Самая дешёвая и эффективная мера.
-- **Отключение лишних служб и портов** — если не используется, пусть не будет источником риска.
-- **Смена настроек по умолчанию** — стандартные пароли и настройки известны всем.
-- **Наименьшие привилегии** — каждому только необходимые права.
+- **Патчинг (patching)** - закрытие известных уязвимостей. Самая дешёвая и эффективная мера.
+- **Отключение лишних служб и портов** - если не используется, пусть не будет источником риска.
+- **Смена настроек по умолчанию** - стандартные пароли и настройки известны всем.
+- **Наименьшие привилегии** - каждому только необходимые права.
 - **MFA и сильная аутентификация.**
 
-> **Безопасность:** непатченная система — самая частая цель. Закрыть известную уязвимость намного проще, чем искать новую.`,
+> **Безопасность:** непатченная система - самая частая цель. Закрыть известную уязвимость намного проще, чем искать новую.`,
     },
     exercises: [
       {
@@ -493,8 +493,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         answer: 'a',
         explain: {
-          uz: "Hardening keraksiz hamma narsani olib tashlaydi — natijada hujum qiladigan yuza kichrayadi. Bu himoyaning asosiy tamoyillaridan biri.",
-          ru: 'Hardening убирает всё лишнее — в результате поверхность для атаки уменьшается. Это один из главных принципов защиты.',
+          uz: "Hardening keraksiz hamma narsani olib tashlaydi - natijada hujum qiladigan yuza kichrayadi. Bu himoyaning asosiy tamoyillaridan biri.",
+          ru: 'Hardening убирает всё лишнее - в результате поверхность для атаки уменьшается. Это один из главных принципов защиты.',
         },
       },
       {
@@ -506,8 +506,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — ma'lum zaiflik yopilgan bo'lsa, buzg'unchi undan foydalana olmaydi. Shuning uchun muntazam yamalash juda muhim.",
-          ru: 'Верно — если известная уязвимость закрыта, злоумышленник не сможет её использовать. Поэтому регулярный патчинг очень важен.',
+          uz: "To'g'ri - ma'lum zaiflik yopilgan bo'lsa, buzg'unchi undan foydalana olmaydi. Shuning uchun muntazam yamalash juda muhim.",
+          ru: 'Верно - если известная уязвимость закрыта, злоумышленник не сможет её использовать. Поэтому регулярный патчинг очень важен.',
         },
       },
       {
@@ -526,7 +526,7 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         answers: ['a', 'b', 'c'],
         explain: {
           uz: "Keraksizni o'chirish, standart sozlamani almashtirish va eng kam imtiyoz hujum yuzasini kamaytiradi. Hammasini yoqish esa aksincha.",
-          ru: 'Отключение лишнего, смена настроек по умолчанию и наименьшие привилегии уменьшают поверхность атаки. А включение всего — наоборот.',
+          ru: 'Отключение лишнего, смена настроек по умолчанию и наименьшие привилегии уменьшают поверхность атаки. А включение всего - наоборот.',
         },
       },
       {
@@ -544,8 +544,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         order: ['i1', 'i2', 'i3', 'i4'],
         explain: {
-          uz: "Avval zaiflik aniqlanadi, keyin baholanadi, sinovdan o'tadi va ishlab chiqarishga qo'llaniladi — shunda tizim buzilmaydi.",
-          ru: 'Сначала уязвимость обнаруживают, затем оценивают, проверяют в тесте и применяют в рабочей среде — так система не сломается.',
+          uz: "Avval zaiflik aniqlanadi, keyin baholanadi, sinovdan o'tadi va ishlab chiqarishga qo'llaniladi - shunda tizim buzilmaydi.",
+          ru: 'Сначала уязвимость обнаруживают, затем оценивают, проверяют в тесте и применяют в рабочей среде - так система не сломается.',
         },
       },
     ],
@@ -559,28 +559,28 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
     content: {
       uz: `## Hodisalarga javob (incident response)
 
-**Hodisa (incident)** — xavfsizlikka ta'sir qilgan voqea. Javob rejasiz, sarosimada o'tadi.
+**Hodisa (incident)** - xavfsizlikka ta'sir qilgan voqea. Javob rejasiz, sarosimada o'tadi.
 
 **Bosqichlar:**
-1. **Tayyorgarlik** — reja, aloqa, vositalar oldindan tayyor.
-2. **Aniqlash** — hodisani payqash va tasdiqlash.
-3. **Cheklash (containment)** — tarqalishni to'xtatish (masalan, tizimni tarmoqdan uzish).
-4. **Yo'q qilish (eradication)** — sababni olib tashlash (zararli fayl, zaiflik).
-5. **Tiklash (recovery)** — xizmatni toza holatdan qayta tiklash.
-6. **Saboq (lessons learned)** — nima bo'ldi, nimani yaxshilash kerak.
+1. **Tayyorgarlik** - reja, aloqa, vositalar oldindan tayyor.
+2. **Aniqlash** - hodisani payqash va tasdiqlash.
+3. **Cheklash (containment)** - tarqalishni to'xtatish (masalan, tizimni tarmoqdan uzish).
+4. **Yo'q qilish (eradication)** - sababni olib tashlash (zararli fayl, zaiflik).
+5. **Tiklash (recovery)** - xizmatni toza holatdan qayta tiklash.
+6. **Saboq (lessons learned)** - nima bo'ldi, nimani yaxshilash kerak.
 
 > **Xavfsizlik:** tezlik muhim, lekin **dalillarni saqlash** ham shart. Tizimni o'chirishdan oldin nusxa va log oling, aks holda sababini aniqlab bo'lmaydi.`,
       ru: `## Реагирование на инциденты (incident response)
 
-**Инцидент** — событие, повлиявшее на безопасность. Без плана реагирование идёт в панике.
+**Инцидент** - событие, повлиявшее на безопасность. Без плана реагирование идёт в панике.
 
 **Этапы:**
-1. **Подготовка** — план, связь, инструменты готовы заранее.
-2. **Обнаружение** — заметить и подтвердить инцидент.
-3. **Сдерживание (containment)** — остановить распространение (например, отключить систему от сети).
-4. **Устранение (eradication)** — убрать причину (вредоносный файл, уязвимость).
-5. **Восстановление (recovery)** — вернуть сервис из чистого состояния.
-6. **Выводы (lessons learned)** — что произошло и что улучшить.
+1. **Подготовка** - план, связь, инструменты готовы заранее.
+2. **Обнаружение** - заметить и подтвердить инцидент.
+3. **Сдерживание (containment)** - остановить распространение (например, отключить систему от сети).
+4. **Устранение (eradication)** - убрать причину (вредоносный файл, уязвимость).
+5. **Восстановление (recovery)** - вернуть сервис из чистого состояния.
+6. **Выводы (lessons learned)** - что произошло и что улучшить.
 
 > **Безопасность:** скорость важна, но **сохранение доказательств** обязательно. До выключения системы сделайте копию и сохраните логи, иначе причину не установить.`,
     },
@@ -621,8 +621,8 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         answer: 'a',
         explain: {
-          uz: "Cheklash — hujum tarqalishini to'xtatish (masalan, tizimni tarmoqdan uzish). Sababni yo'q qilish ancha keyin keladi.",
-          ru: 'Сдерживание — остановка распространения атаки (например, отключение системы от сети). Устранение причины происходит позже.',
+          uz: "Cheklash - hujum tarqalishini to'xtatish (masalan, tizimni tarmoqdan uzish). Sababni yo'q qilish ancha keyin keladi.",
+          ru: 'Сдерживание - остановка распространения атаки (например, отключение системы от сети). Устранение причины происходит позже.',
         },
       },
       {
@@ -630,12 +630,12 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         type: 'tf',
         q: {
           uz: "Hodisa paytida tizimni darhol o'chirib, log va nusxa saqlamaslik eng to'g'ri qaror.",
-          ru: 'При инциденте сразу выключить систему, не сохранив логи и копию, — самое правильное решение.',
+          ru: 'При инциденте сразу выключить систему, не сохранив логи и копию, - самое правильное решение.',
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — dalilsiz sababni aniqlab bo'lmaydi. Avval log va nusxa oling, keyin cheklang va tiklang.",
-          ru: 'Нет — без доказательств причину не установить. Сначала сохраните логи и копию, затем сдерживайте и восстанавливайте.',
+          uz: "Yo'q - dalilsiz sababni aniqlab bo'lmaydi. Avval log va nusxa oling, keyin cheklang va tiklang.",
+          ru: 'Нет - без доказательств причину не установить. Сначала сохраните логи и копию, затем сдерживайте и восстанавливайте.',
         },
       },
       {
@@ -668,30 +668,30 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
     content: {
       uz: `## Zaifliklarni boshqarish
 
-**Zaiflik (vulnerability)** — tizimdagi kamchilik, undan hujumchi foydalanishi mumkin.
+**Zaiflik (vulnerability)** - tizimdagi kamchilik, undan hujumchi foydalanishi mumkin.
 
 **Jarayon:**
-1. **Topish** — skaner va audit bilan zaifliklarni qidirish.
-2. **Baholash** — qaysi biri jiddiy va haqiqatan muhim?
-3. **Tuzatish** — yamaq, sozlama o'zgarishi yoki boshqa chora.
-4. **Tekshirish** — muammo haqiqatan yopilganini qayta sinash.
+1. **Topish** - skaner va audit bilan zaifliklarni qidirish.
+2. **Baholash** - qaysi biri jiddiy va haqiqatan muhim?
+3. **Tuzatish** - yamaq, sozlama o'zgarishi yoki boshqa chora.
+4. **Tekshirish** - muammo haqiqatan yopilganini qayta sinash.
 
-**Muhim nuqta:** hamma zaiflikni bir vaqtda tuzatib bo'lmaydi. **Xavfga qarab** tartiblash kerak — eng jiddiy va ochiq turganidan boshlab.
+**Muhim nuqta:** hamma zaiflikni bir vaqtda tuzatib bo'lmaydi. **Xavfga qarab** tartiblash kerak - eng jiddiy va ochiq turganidan boshlab.
 
-> **Xavfsizlik:** skanerning topgani — faqat ro'yxat. U hali hujum emas. Lekin yopilmagan zaiflik — tayyor eshik. Shuning uchun bu jarayon doimiy bo'lishi kerak.`,
+> **Xavfsizlik:** skanerning topgani - faqat ro'yxat. U hali hujum emas. Lekin yopilmagan zaiflik - tayyor eshik. Shuning uchun bu jarayon doimiy bo'lishi kerak.`,
       ru: `## Управление уязвимостями
 
-**Уязвимость (vulnerability)** — недостаток в системе, которым может воспользоваться злоумышленник.
+**Уязвимость (vulnerability)** - недостаток в системе, которым может воспользоваться злоумышленник.
 
 **Процесс:**
-1. **Поиск** — искать уязвимости сканером и аудитом.
-2. **Оценка** — какая из них серьёзна и действительно важна?
-3. **Устранение** — патч, изменение настройки или другая мера.
-4. **Проверка** — заново убедиться, что проблема закрыта.
+1. **Поиск** - искать уязвимости сканером и аудитом.
+2. **Оценка** - какая из них серьёзна и действительно важна?
+3. **Устранение** - патч, изменение настройки или другая мера.
+4. **Проверка** - заново убедиться, что проблема закрыта.
 
-**Важный момент:** все уязвимости сразу не закрыть. Нужно расставлять приоритеты **по риску** — начиная с самых серьёзных и открытых.
+**Важный момент:** все уязвимости сразу не закрыть. Нужно расставлять приоритеты **по риску** - начиная с самых серьёзных и открытых.
 
-> **Безопасность:** найденное сканером — лишь список. Это ещё не атака. Но незакрытая уязвимость — готовая дверь. Поэтому процесс должен быть постоянным.`,
+> **Безопасность:** найденное сканером - лишь список. Это ещё не атака. Но незакрытая уязвимость - готовая дверь. Поэтому процесс должен быть постоянным.`,
     },
     exercises: [
       {
@@ -717,13 +717,13 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         id: 'e2',
         type: 'tf',
         q: {
-          uz: "'Skaner zaiflikni topdi' degani — tizim allaqachon buzilgan degani.",
+          uz: "'Skaner zaiflikni topdi' degani - tizim allaqachon buzilgan degani.",
           ru: '«Сканер нашёл уязвимость» означает, что система уже взломана.',
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — skaner faqat ro'yxatni beradi: bu yerda zaiflik bor. U hali ishlatilmagan bo'lishi mumkin. Lekin yopilmasa — haqiqiy xavf.",
-          ru: 'Нет — сканер лишь даёт список: здесь есть уязвимость. Её могли ещё не использовать. Но если не закрыть — это реальный риск.',
+          uz: "Yo'q - skaner faqat ro'yxatni beradi: bu yerda zaiflik bor. U hali ishlatilmagan bo'lishi mumkin. Lekin yopilmasa - haqiqiy xavf.",
+          ru: 'Нет - сканер лишь даёт список: здесь есть уязвимость. Её могли ещё не использовать. Но если не закрыть - это реальный риск.',
         },
       },
       {
@@ -760,7 +760,7 @@ Bitta himoya yetarli emas — u buzilsa, hammasi ochiladi. Shuning uchun **bir n
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Jiddiylik, tizim kritikligi va ochiqlik — xavfni aniqlaydi. Shunga qarab avval nimani tuzatish kerakligi belgilanadi.",
+          uz: "Jiddiylik, tizim kritikligi va ochiqlik - xavfni aniqlaydi. Shunga qarab avval nimani tuzatish kerakligi belgilanadi.",
           ru: 'Серьёзность, критичность системы и открытость определяют риск. По ним решают, что исправлять в первую очередь.',
         },
       },
@@ -796,7 +796,7 @@ Himoyaviy xavfsizlik bo'yicha bilimingizni tekshiring: qatlamlar, loglar, SIEM, 
         ],
         answer: 'a',
         explain: {
-          uz: "Blue team — himoya, kuzatish (monitoring) va hodisalarga javob (IR) bilan shug'ullanadi. Bu — defense in depth ning amaliy tomoni.",
+          uz: "Blue team - himoya, kuzatish (monitoring) va hodisalarga javob (IR) bilan shug'ullanadi. Bu - defense in depth ning amaliy tomoni.",
           ru: 'Blue team занимается защитой, мониторингом и реагированием на инциденты (IR). Это практическая сторона defense in depth.',
         },
       },
@@ -824,12 +824,12 @@ Himoyaviy xavfsizlik bo'yicha bilimingizni tekshiring: qatlamlar, loglar, SIEM, 
         type: 'tf',
         q: {
           uz: 'IDS va IPS bir xil narsa.',
-          ru: 'IDS и IPS — это одно и то же.',
+          ru: 'IDS и IPS - это одно и то же.',
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — IDS shubhali trafikni aniqlab ogoh beradi, IPS esa uni to'xtatadi (bloklaydi).",
-          ru: 'Нет — IDS обнаруживает подозрительный трафик и оповещает, а IPS его останавливает (блокирует).',
+          uz: "Yo'q - IDS shubhali trafikni aniqlab ogoh beradi, IPS esa uni to'xtatadi (bloklaydi).",
+          ru: 'Нет - IDS обнаруживает подозрительный трафик и оповещает, а IPS его останавливает (блокирует).',
         },
       },
       {
@@ -847,8 +847,8 @@ Himoyaviy xavfsizlik bo'yicha bilimingizni tekshiring: qatlamlar, loglar, SIEM, 
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "Log yozuv, SIEM platforma, yamalash zaiflikni yopadi, segmentatsiya tarmoqni ajratadi — hammasi himoya qatlamlari.",
-          ru: 'Лог — запись, SIEM — платформа, патчинг закрывает уязвимость, сегментация делит сеть — всё это слои защиты.',
+          uz: "Log yozuv, SIEM platforma, yamalash zaiflikni yopadi, segmentatsiya tarmoqni ajratadi - hammasi himoya qatlamlari.",
+          ru: 'Лог - запись, SIEM - платформа, патчинг закрывает уязвимость, сегментация делит сеть - всё это слои защиты.',
         },
       },
       {

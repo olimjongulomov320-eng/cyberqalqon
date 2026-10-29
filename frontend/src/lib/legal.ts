@@ -39,8 +39,8 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
           heading: 'Qanday maʼlumot saqlanadi',
           paragraphs: [],
           bullets: [
-            'Telegram orqali kirishda — Telegram identifikatori, username va ism',
-            'Oddiy roʻyxatdan oʻtishda — username, parolning xesh koʻrinishi va ism',
+            'Telegram orqali kirishda - Telegram identifikatori, username va ism',
+            'Oddiy roʻyxatdan oʻtishda - username, parolning xesh koʻrinishi va ism',
             'Parol hech qachon ochiq koʻrinishda saqlanmaydi',
             'Avatar rasm emas, emoji belgi sifatida saqlanadi',
             'Elektron pochta va telefon raqami talab qilinmaydi va yigʻilmaydi',
@@ -55,7 +55,7 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
         {
           heading: 'Reyting',
           paragraphs: [
-            'Reyting ochiq. Ismingiz, avatar emojingiz va XP miqdoringiz boshqa foydalanuvchilar koʻradi. Xohlasangiz, oʻz maʼlumotlaringizni koʻrsatmasdan reytingda qolishingiz mumkin — bunda faqat ism oʻrniga avatar belgisi koʻrsatiladi.',
+            'Reyting ochiq. Ismingiz, avatar emojingiz va XP miqdoringiz boshqa foydalanuvchilar koʻradi. Xohlasangiz, oʻz maʼlumotlaringizni koʻrsatmasdan reytingda qolishingiz mumkin - bunda faqat ism oʻrniga avatar belgisi koʻrsatiladi.',
           ],
         },
         {
@@ -77,15 +77,15 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
       title: 'Политика конфиденциальности',
       updated: 'Последнее изменение: 2026',
       intro: [
-        'CyberQalqon — образовательная платформа для обучения кибербезопасности с помощью коротких уроков. Ниже описано, какие данные собирает платформа.',
+        'CyberQalqon - образовательная платформа для обучения кибербезопасности с помощью коротких уроков. Ниже описано, какие данные собирает платформа.',
       ],
       sections: [
         {
           heading: 'Какие данные хранятся',
           paragraphs: [],
           bullets: [
-            'При входе через Telegram — идентификатор Telegram, username и имя',
-            'При обычной регистрации — username, хеш пароля и имя',
+            'При входе через Telegram - идентификатор Telegram, username и имя',
+            'При обычной регистрации - username, хеш пароля и имя',
             'Пароль никогда не хранится в открытом виде',
             'Аватар хранится не как изображение, а как emoji-символ',
             'Электронная почта и номер телефона не требуются и не собираются',
@@ -100,7 +100,7 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
         {
           heading: 'Рейтинг',
           paragraphs: [
-            'Рейтинг открыт. Ваше имя, emoji-аватар и количество XP видят другие пользователи. При желании вы можете оставаться в рейтинге, не показывая свои данные — тогда вместо имени отображается только символ аватара.',
+            'Рейтинг открыт. Ваше имя, emoji-аватар и количество XP видят другие пользователи. При желании вы можете оставаться в рейтинге, не показывая свои данные - тогда вместо имени отображается только символ аватара.',
           ],
         },
         {
@@ -128,7 +128,7 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
         {
           heading: 'Platforma nima uchun',
           paragraphs: [
-            'CyberQalqon — oʻquv quroli. U maʼlumotnoma, ilmiy maʼlumotnoma yoki professional sertifikat emas. Platforma professional kiberxavfsizlik malakasi bermaydi.',
+            'CyberQalqon - oʻquv quroli. U maʼlumotnoma, ilmiy maʼlumotnoma yoki professional sertifikat emas. Platforma professional kiberxavfsizlik malakasi bermaydi.',
           ],
         },
         {
@@ -169,7 +169,7 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
         {
           heading: 'Назначение платформы',
           paragraphs: [
-            'CyberQalqon — учебный инструмент. Это не справочник, не академическое пособие и не профессиональный сертификат. Платформа не даёт профессиональной квалификации в области кибербезопасности.',
+            'CyberQalqon - учебный инструмент. Это не справочник, не академическое пособие и не профессиональный сертификат. Платформа не даёт профессиональной квалификации в области кибербезопасности.',
           ],
         },
         {

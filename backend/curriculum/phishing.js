@@ -1,5 +1,5 @@
 /**
- * Phishing & social engineering — DRAFT CONTENT (needs_review: true).
+ * Phishing & social engineering - DRAFT CONTENT (needs_review: true).
  *
  * The Uzbek and Russian text was drafted for beginners and has NOT been checked
  * by a proficient native speaker. It must be reviewed before production
@@ -22,9 +22,9 @@ module.exports = [
 Misol (xayoliy): *«Hurmatli mijoz, hisobingiz bloklandi. 1 soat ichida https://bank-tekshiruv.example.net/kirish havolasida tasdiqlang.»*
 
 1. **Kim yubordi?** Ko'rinadigan ism emas, to'liq manzilga qarang.
-2. **Havola qayerga olib boradi?** Bosishdan oldin manzilni ko'ring — u bank saytiga o'xshashmi?
+2. **Havola qayerga olib boradi?** Bosishdan oldin manzilni ko'ring - u bank saytiga o'xshashmi?
 3. **Nima so'rayapti?** Parol, SMS-kod yoki karta ma'lumotini hech bir rasmiy xizmat xat orqali so'ramaydi.
-4. **Qanday his qildiryapti?** Shoshilinch yoki qo'rquv — bu hujumchining quroli.
+4. **Qanday his qildiryapti?** Shoshilinch yoki qo'rquv - bu hujumchining quroli.
 
 Shubha bo'lsa: xabarga javob bermang, rasmiy ilova yoki saytni o'zingiz oching.`,
       ru: `## Проверьте сообщение за 4 шага
@@ -32,11 +32,11 @@ Shubha bo'lsa: xabarga javob bermang, rasmiy ilova yoki saytni o'zingiz oching.`
 Пример (вымышленный): *«Уважаемый клиент, ваш счёт заблокирован. Подтвердите в течение часа: https://bank-tekshiruv.example.net/kirish»*
 
 1. **Кто отправил?** Смотрите на полный адрес, а не на отображаемое имя.
-2. **Куда ведёт ссылка?** Прочитайте адрес до нажатия — похож ли он на сайт банка?
+2. **Куда ведёт ссылка?** Прочитайте адрес до нажатия - похож ли он на сайт банка?
 3. **Что просят?** Ни одна настоящая служба не просит пароль, SMS-код или данные карты по письму.
-4. **Какие эмоции вызывает?** Спешка и страх — инструменты злоумышленника.
+4. **Какие эмоции вызывает?** Спешка и страх - инструменты злоумышленника.
 
-Сомневаетесь — не отвечайте, откройте официальное приложение или сайт сами.`,
+Сомневаетесь - не отвечайте, откройте официальное приложение или сайт сами.`,
     },
     exercises: [
       {
@@ -46,12 +46,12 @@ Shubha bo'lsa: xabarga javob bermang, rasmiy ilova yoki saytni o'zingiz oching.`
           { id: 'a', uz: '1 soatlik muddat (shoshilinch)', ru: 'Срок в 1 час (срочность)' },
           { id: 'b', uz: 'Bank nomiga o‘xshash, lekin begona domen', ru: 'Домен похож на банк, но чужой' },
           { id: 'c', uz: 'Xabar o‘zbek tilida yozilgan', ru: 'Сообщение написано на узбекском' },
-          { id: 'd', uz: '«Hurmatli mijoz» — shaxsiy ism yo‘q', ru: '«Уважаемый клиент» — нет личного имени' },
+          { id: 'd', uz: '«Hurmatli mijoz» - shaxsiy ism yo‘q', ru: '«Уважаемый клиент» - нет личного имени' },
         ],
         answers: ['a', 'b', 'd'],
         explain: {
-          uz: 'Shoshilinchlik, begona domen va umumiy murojaat — klassik belgilar. Til esa o‘z-o‘zidan shubha tug‘dirmaydi.',
-          ru: 'Срочность, чужой домен и безличное обращение — классические признаки. Язык сам по себе подозрений не вызывает.',
+          uz: 'Shoshilinchlik, begona domen va umumiy murojaat - klassik belgilar. Til esa o‘z-o‘zidan shubha tug‘dirmaydi.',
+          ru: 'Срочность, чужой домен и безличное обращение - классические признаки. Язык сам по себе подозрений не вызывает.',
         },
       },
       {
@@ -73,8 +73,8 @@ Shubha bo'lsa: xabarga javob bermang, rasmiy ilova yoki saytni o'zingiz oching.`
         q: { uz: 'Rasmiy xizmat SMS-kodingizni xat orqali so‘rashi mumkin.', ru: 'Настоящая служба может запросить ваш SMS-код по письму.' },
         answer: 'false',
         explain: {
-          uz: 'Bir martalik kod faqat sizniki. Uni so‘ragan har qanday xabar — firibgarlik belgisi.',
-          ru: 'Одноразовый код — только ваш. Любое сообщение с просьбой назвать его — признак мошенничества.',
+          uz: 'Bir martalik kod faqat sizniki. Uni so‘ragan har qanday xabar - firibgarlik belgisi.',
+          ru: 'Одноразовый код - только ваш. Любое сообщение с просьбой назвать его - признак мошенничества.',
         },
       },
       {
@@ -88,8 +88,8 @@ Shubha bo'lsa: xabarga javob bermang, rasmiy ilova yoki saytni o'zingiz oching.`
         ],
         order: ['i1', 'i2', 'i3', 'i4'],
         explain: {
-          uz: 'Avval manba, keyin havola, keyin so‘rov — oxirida mustaqil tasdiq.',
-          ru: 'Сначала источник, затем ссылка, затем запрос — в конце независимое подтверждение.',
+          uz: 'Avval manba, keyin havola, keyin so‘rov - oxirida mustaqil tasdiq.',
+          ru: 'Сначала источник, затем ссылка, затем запрос - в конце независимое подтверждение.',
         },
       },
     ],
@@ -103,21 +103,21 @@ Shubha bo'lsa: xabarga javob bermang, rasmiy ilova yoki saytni o'zingiz oching.`
     content: {
       uz: `## Hujumchi odamga ta'sir qiladi
 
-Ijtimoiy muhandislik — texnikani emas, **ishonchni** buzish.
+Ijtimoiy muhandislik - texnikani emas, **ishonchni** buzish.
 
 - **Pretexting:** yolg'on bahona. «Men IT bo'limdanman, parolingiz kerak.»
 - **Vishing:** telefon orqali aldash. «Bank xavfsizlik xizmati» deb qo'ng'iroq qilish.
-- **Baiting:** o'ljaga tashlangan «o'lja» — yo'lda topilgan USB-fleshka.
+- **Baiting:** o'ljaga tashlangan «o'lja» - yo'lda topilgan USB-fleshka.
 - **Tailgating:** ruxsatli odamning ortidan eshikdan o'tib ketish.
 
 Umumiy qoida: **to'xtang, o'zingiz qayta qo'ng'iroq qiling** (rasmiy raqamga), va hech qachon parol yoki kodni aytmang.`,
       ru: `## Злоумышленник воздействует на человека
 
-Социальная инженерия — это взлом не техники, а **доверия**.
+Социальная инженерия - это взлом не техники, а **доверия**.
 
 - **Претекстинг:** выдуманный предлог. «Я из IT-отдела, нужен ваш пароль».
 - **Вишинг:** обман по телефону. Звонок от «службы безопасности банка».
-- **Бейтинг:** приманка — найденная на улице флешка.
+- **Бейтинг:** приманка - найденная на улице флешка.
 - **Tailgating:** проход в дверь следом за сотрудником с допуском.
 
 Общее правило: **остановитесь, перезвоните сами** (по официальному номеру) и никогда не называйте пароль или код.`,
@@ -145,12 +145,12 @@ Umumiy qoida: **to'xtang, o'zingiz qayta qo'ng'iroq qiling** (rasmiy raqamga), v
         },
         options: [
           { id: 'a', uz: 'Qo‘ng‘iroqni tugatib, kartadagi rasmiy raqamga o‘zim qo‘ng‘iroq qilaman', ru: 'Завершить звонок и самому позвонить по официальному номеру' },
-          { id: 'b', uz: 'Kodni aytaman — ular bank-ku', ru: 'Назвать код — это же банк' },
+          { id: 'b', uz: 'Kodni aytaman - ular bank-ku', ru: 'Назвать код - это же банк' },
           { id: 'c', uz: 'Kodning faqat yarmini aytaman', ru: 'Назвать только половину кода' },
         ],
         answer: 'a',
         explain: {
-          uz: 'Raqamni siz tanlasangiz, hujumchi aralasha olmaydi. Kodni hech kimga aytmang — yarmini ham.',
+          uz: 'Raqamni siz tanlasangiz, hujumchi aralasha olmaydi. Kodni hech kimga aytmang - yarmini ham.',
           ru: 'Когда номер выбираете вы, злоумышленник не может вмешаться. Код нельзя называть никому, даже частично.',
         },
       },
@@ -176,9 +176,9 @@ Umumiy qoida: **to'xtang, o'zingiz qayta qo'ng'iroq qiling** (rasmiy raqamga), v
 
 \`https://hisob.bank.example.com/kirish\`
 
-Haqiqiy xo'jayin — **oxirgi ikki bo'lak** (\`example.com\`). \`hisob.bank\` esa shunchaki old qo'shimcha.
+Haqiqiy xo'jayin - **oxirgi ikki bo'lak** (\`example.com\`). \`hisob.bank\` esa shunchaki old qo'shimcha.
 
-Aldamchi: \`https://bank.example.com.kirish-tasdiq.example.net\` — bu \`example.net\` saytiga tegishli!
+Aldamchi: \`https://bank.example.com.kirish-tasdiq.example.net\` - bu \`example.net\` saytiga tegishli!
 
 **Fayllar:** \`hisob.pdf.exe\` aslida dastur. Kutilmagan \`.exe\`, \`.js\`, \`.scr\` va makroli ofis fayllarini ochmang.
 
@@ -187,13 +187,13 @@ Aldamchi: \`https://bank.example.com.kirish-tasdiq.example.net\` — bu \`exampl
 
 \`https://hisob.bank.example.com/kirish\`
 
-Настоящий владелец — **последние две части** (\`example.com\`). Часть \`hisob.bank\` — лишь приставка.
+Настоящий владелец - **последние две части** (\`example.com\`). Часть \`hisob.bank\` - лишь приставка.
 
-Обман: \`https://bank.example.com.kirish-tasdiq.example.net\` — это сайт \`example.net\`!
+Обман: \`https://bank.example.com.kirish-tasdiq.example.net\` - это сайт \`example.net\`!
 
-**Файлы:** \`hisob.pdf.exe\` — на самом деле программа. Не открывайте неожиданные \`.exe\`, \`.js\`, \`.scr\` и офисные файлы с макросами.
+**Файлы:** \`hisob.pdf.exe\` - на самом деле программа. Не открывайте неожиданные \`.exe\`, \`.js\`, \`.scr\` и офисные файлы с макросами.
 
-**QR-код** — тоже ссылка: перед переходом проверьте показанный адрес.`,
+**QR-код** - тоже ссылка: перед переходом проверьте показанный адрес.`,
     },
     exercises: [
       {
@@ -233,8 +233,8 @@ Aldamchi: \`https://bank.example.com.kirish-tasdiq.example.net\` — bu \`exampl
         q: { uz: 'QR-kodni skanerlash havolani bosish bilan bir xil xavf tug‘diradi.', ru: 'Сканирование QR-кода несёт тот же риск, что и нажатие на ссылку.' },
         answer: 'true',
         explain: {
-          uz: 'QR — havolaning boshqa ko‘rinishi. Ochishdan oldin manzilni tekshiring.',
-          ru: 'QR — это та же ссылка в другом виде. Проверьте адрес перед открытием.',
+          uz: 'QR - havolaning boshqa ko‘rinishi. Ochishdan oldin manzilni tekshiring.',
+          ru: 'QR - это та же ссылка в другом виде. Проверьте адрес перед открытием.',
         },
       },
     ],
@@ -264,7 +264,7 @@ Bu bo'limda siz xabarni tekshirish, ijtimoiy muhandislik usullari va havolalar/f
         ],
         answer: 'a',
         explain: {
-          uz: 'Xabardagi havola va raqamni hujumchi tanlagan. Mustaqil kanal — ishonchli.',
+          uz: 'Xabardagi havola va raqamni hujumchi tanlagan. Mustaqil kanal - ishonchli.',
           ru: 'Ссылку и номер в сообщении выбрал злоумышленник. Независимый канал надёжен.',
         },
       },
@@ -291,7 +291,7 @@ Bu bo'limda siz xabarni tekshirish, ijtimoiy muhandislik usullari va havolalar/f
         answers: ['a', 'c', 'd'],
         explain: {
           uz: 'Shaxsiy ism ishonchli ko‘rinishi mumkin, lekin o‘z-o‘zidan xavfsizlik belgisi emas; qolganlari qizil bayroqlar.',
-          ru: 'Обращение по имени может выглядеть убедительно, но само по себе безопасность не доказывает; остальное — красные флаги.',
+          ru: 'Обращение по имени может выглядеть убедительно, но само по себе безопасность не доказывает; остальное - красные флаги.',
         },
       },
       {
@@ -299,7 +299,7 @@ Bu bo'limda siz xabarni tekshirish, ijtimoiy muhandislik usullari va havolalar/f
         q: { uz: 'Havolani bosib qo‘yganingizdan keyingi harakatlarni tartiblang.', ru: 'Расставьте действия после того, как вы нажали на ссылку.' },
         items: [
           { id: 'i1', uz: 'Hech narsa kiritmay sahifani yopish', ru: 'Закрыть страницу, ничего не вводя' },
-          { id: 'i2', uz: 'Agar parol kiritgan bo‘lsangiz, uni darhol almashtirish', ru: 'Если вводили пароль — сразу сменить его' },
+          { id: 'i2', uz: 'Agar parol kiritgan bo‘lsangiz, uni darhol almashtirish', ru: 'Если вводили пароль - сразу сменить его' },
           { id: 'i3', uz: 'Ikki bosqichli tasdiqni yoqish/tekshirish', ru: 'Включить или проверить двухэтапную защиту' },
           { id: 'i4', uz: 'Xabarni IT yoki xizmat qo‘llab-quvvatlashiga yetkazish', ru: 'Сообщить о письме в IT или поддержку' },
         ],

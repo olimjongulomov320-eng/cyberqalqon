@@ -17,6 +17,12 @@ Everything learners see is **data in `backend/curriculum/`**, not component code
 
 Lessons unlock in order inside a domain; the server enforces it.
 
+**How a lesson plays.** The concept (`content`) sits on the left and the `exercises` are
+tasks on the right, like a practice problem set. A wrong answer returns a verdict only;
+the explanation and answer appear once the task is solved, or on request ("Show
+solution") after two failed attempts, which never counts as solving. A lesson is complete
+when every task is solved (enforced by the server from its own attempt records).
+
 ## A coding challenge
 
 Add an object to `backend/curriculum/challenges.js`:

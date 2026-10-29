@@ -1,5 +1,5 @@
 /**
- * Privacy & data protection — DRAFT CONTENT (needs_review: true).
+ * Privacy & data protection - DRAFT CONTENT (needs_review: true).
  *
  * Uzbek and Russian text is a beginner-level draft that has NOT been checked by
  * a proficient native speaker; review it before production release (see
@@ -20,7 +20,7 @@ module.exports = [
     content: {
       uz: `## Sizni aniqlaydigan har qanday ma'lumot
 
-**Shaxsiy ma'lumot** — shaxsni aniqlashga yordam beradigan axborot: ism, telefon, manzil, pasport raqami, joylashuv, fotosurat.
+**Shaxsiy ma'lumot** - shaxsni aniqlashga yordam beradigan axborot: ism, telefon, manzil, pasport raqami, joylashuv, fotosurat.
 
 Ayrim ma'lumotlar **sezgir**: sog'liq, moliyaviy holat, biometrika. Ular sizib chiqsa, zarar kattaroq.
 
@@ -29,7 +29,7 @@ Ayrim ma'lumotlar **sezgir**: sog'liq, moliyaviy holat, biometrika. Ular sizib c
 Ma'lumotlaringiz qancha ko'p joyda tursa, hujum yuzasi shuncha katta.`,
       ru: `## Любые данные, по которым можно узнать человека
 
-**Персональные данные** — сведения, позволяющие определить личность: имя, телефон, адрес, номер паспорта, геолокация, фотография.
+**Персональные данные** - сведения, позволяющие определить личность: имя, телефон, адрес, номер паспорта, геолокация, фотография.
 
 Некоторые данные **чувствительны**: здоровье, финансы, биометрия. При утечке вред больше.
 
@@ -63,8 +63,8 @@ Ma'lumotlaringiz qancha ko'p joyda tursa, hujum yuzasi shuncha katta.`,
         ],
         answer: 'a',
         explain: {
-          uz: 'Kam ma’lumot — kam xavf. Sizib chiqsa ham, yo‘qotish kichikroq bo‘ladi.',
-          ru: 'Меньше данных — меньше риск. Даже при утечке потери будут меньше.',
+          uz: 'Kam ma’lumot - kam xavf. Sizib chiqsa ham, yo‘qotish kichikroq bo‘ladi.',
+          ru: 'Меньше данных - меньше риск. Даже при утечке потери будут меньше.',
         },
       },
       {
@@ -92,7 +92,7 @@ Ma'lumotlaringiz qancha ko'p joyda tursa, hujum yuzasi shuncha katta.`,
     content: {
       uz: `## Internetda yozilgan narsa qoladi
 
-Bir marta ulashilgan rasm yoki post nusxalanishi mumkin — keyin o'chirsangiz ham.
+Bir marta ulashilgan rasm yoki post nusxalanishi mumkin - keyin o'chirsangiz ham.
 
 **Nima qilish kerak:**
 - Profil va postlarni «faqat do'stlar» ko'rinishiga o'tkazing.
@@ -103,7 +103,7 @@ Bir marta ulashilgan rasm yoki post nusxalanishi mumkin — keyin o'chirsangiz h
 **Ogohlantirish:** chiptangiz, hujjatingiz yoki uyingiz tasviri ba'zan shaxsiy ma'lumotni ko'rsatib qo'yadi.`,
       ru: `## Написанное в интернете остаётся
 
-Однажды опубликованное фото или пост могут скопировать — даже если вы потом удалите.
+Однажды опубликованное фото или пост могут скопировать - даже если вы потом удалите.
 
 **Что делать:**
 - Переведите профиль и посты в режим «только друзья».
@@ -121,14 +121,14 @@ Bir marta ulashilgan rasm yoki post nusxalanishi mumkin — keyin o'chirsangiz h
           ru: 'Приложение-фонарик просит доступ к контактам. Что лучше сделать?',
         },
         options: [
-          { id: 'a', uz: 'Ruxsat bermayman — ilovaga bu kerak emas', ru: 'Отказать — приложению это не нужно' },
+          { id: 'a', uz: 'Ruxsat bermayman - ilovaga bu kerak emas', ru: 'Отказать - приложению это не нужно' },
           { id: 'b', uz: 'Doim ruxsat beraman', ru: 'Всегда разрешать' },
           { id: 'c', uz: 'Ilovaga ishonib, hech narsani tekshirmayman', ru: 'Довериться и ничего не проверять' },
         ],
         answer: 'a',
         explain: {
-          uz: 'Ruxsat ilova vazifasiga mos bo‘lishi kerak. Ortiqcha ruxsat — ortiqcha xavf.',
-          ru: 'Разрешение должно соответствовать назначению приложения. Лишние права — лишний риск.',
+          uz: 'Ruxsat ilova vazifasiga mos bo‘lishi kerak. Ortiqcha ruxsat - ortiqcha xavf.',
+          ru: 'Разрешение должно соответствовать назначению приложения. Лишние права - лишний риск.',
         },
       },
       {
@@ -166,24 +166,24 @@ Bir marta ulashilgan rasm yoki post nusxalanishi mumkin — keyin o'chirsangiz h
     content: {
       uz: `## Tezkor reja
 
-Xizmat «ma'lumotlar sizib chiqdi» deb xabar bersa, vahima qilmang — reja bo'yicha ishlang:
+Xizmat «ma'lumotlar sizib chiqdi» deb xabar bersa, vahima qilmang - reja bo'yicha ishlang:
 
-1. **Parolni almashtiring** — shu xizmatda va bir xil parol ishlatilgan boshqa joylarda.
+1. **Parolni almashtiring** - shu xizmatda va bir xil parol ishlatilgan boshqa joylarda.
 2. **Ikki bosqichli tasdiqni yoqing.**
 3. **Moliyaviy ma'lumot** sizsa, bank bilan bog'lanib, kartani bloklang yoki kuzating.
 4. **Phishingga ehtiyot bo'ling:** sizib chiqqan ma'lumot asosida aldovchi xabarlar kelishi mumkin.
 
-Har xizmat uchun alohida parol — bitta sizish hamma joyni ochmasligi uchun.`,
+Har xizmat uchun alohida parol - bitta sizish hamma joyni ochmasligi uchun.`,
       ru: `## Быстрый план
 
-Если сервис сообщает об утечке, не паникуйте — действуйте по плану:
+Если сервис сообщает об утечке, не паникуйте - действуйте по плану:
 
-1. **Смените пароль** — в этом сервисе и везде, где был такой же.
+1. **Смените пароль** - в этом сервисе и везде, где был такой же.
 2. **Включите двухэтапную защиту.**
 3. **Если затронуты финансовые данные**, свяжитесь с банком, заблокируйте или отслеживайте карту.
 4. **Остерегайтесь фишинга:** на основе утёкших данных могут присылать убедительные письма.
 
-Отдельный пароль для каждого сервиса — чтобы одна утечка не открыла всё.`,
+Отдельный пароль для каждого сервиса - чтобы одна утечка не открыла всё.`,
     },
     exercises: [
       {

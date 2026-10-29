@@ -1,5 +1,5 @@
 /**
- * Curriculum — Kriptografiya (crypto) + IT asoslari (it-basics, databases, git)
+ * Curriculum - Kriptografiya (crypto) + IT asoslari (it-basics, databases, git)
  *
  * Shape (validated by scripts/validate-curriculum.js via lib/grade.validateExercise):
  *   module: { slug, domain, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
@@ -11,8 +11,8 @@
  * this file = learning order within each domain.
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language. This is a
- *     warm-up, not a textbook — the exercises do the teaching.
+ *   - Lesson prose: short. 6-14 markdown lines per language. This is a
+ *     warm-up, not a textbook - the exercises do the teaching.
  *   - Every exercise: bilingual q + explain, technically accurate, beginner
  *     level, no trick questions, explanations teach the WHY.
  *   - Exercise ids: e1..eN in delivery order.
@@ -28,14 +28,14 @@ module.exports = [
     domain: 'crypto',
     kind: 'lesson',
     xp_reward: 25,
-    title: { uz: 'Hash va shifrlash — farq nima?', ru: 'Хеширование и шифрование — в чём разница' },
+    title: { uz: 'Hash va shifrlash - farq nima?', ru: 'Хеширование и шифрование - в чём разница' },
     content: {
-      uz: `## Hash va shifrlash — farq nima?
+      uz: `## Hash va shifrlash - farq nima?
 
 Ikkelasi ham ma'lumotni o'zgartiradi, lekin maqsadi butunlay boshqa:
 
-- **Hash** — bir tomonlama: ma'lumotdan qisqa "iz" chiqadi, izdan ma'lumotni qaytarib bo'lmaydi.
-- **Shifrlash (encryption)** — ikki tomonlama: maxfiy matn → shifrlangan matn → **kalit** yordamida yana ochiladi.
+- **Hash** - bir tomonlama: ma'lumotdan qisqa "iz" chiqadi, izdan ma'lumotni qaytarib bo'lmaydi.
+- **Shifrlash (encryption)** - ikki tomonlama: maxfiy matn → shifrlangan matn → **kalit** yordamida yana ochiladi.
 
 \`\`\`
 parol  → [hash]    → 9f86d081…   (qaytarib bo'lmaydi)
@@ -43,19 +43,19 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
 \`\`\`
 
 > **Qoida:** parollar **hashlanadi**, maxfiy fayllar va trafik esa **shifrlanadi**. Server administratoriga ham ochiq parol ko'rinishda kerak emas.`,
-      ru: `## Хеширование и шифрование — в чём разница
+      ru: `## Хеширование и шифрование - в чём разница
 
 Оба действия меняют данные, но цель у них совсем разная:
 
-- **Хеш** — односторонний: из данных получается короткий «отпечаток», но по отпечатку данные не восстановить.
-- **Шифрование (encryption)** — обратимое: открытый текст → шифротекст → **ключ** снова открывает его.
+- **Хеш** - односторонний: из данных получается короткий «отпечаток», но по отпечатку данные не восстановить.
+- **Шифрование (encryption)** - обратимое: открытый текст → шифротекст → **ключ** снова открывает его.
 
 \`\`\`
 пароль → [hash]    → 9f86d081…   (не обратим)
 текст  → [encrypt] → aGf3Kp…     → [ключ] → текст
 \`\`\`
 
-> **Правило:** пароли **хешируют**, конфиденциальные файлы и трафик — **шифруют**. Даже у администратора сервера не должно быть доступа к открытому паролю.`,
+> **Правило:** пароли **хешируют**, конфиденциальные файлы и трафик - **шифруют**. Даже у администратора сервера не должно быть доступа к открытому паролю.`,
     },
     exercises: [
       {
@@ -81,13 +81,13 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
         id: 'e2',
         type: 'tf',
         q: {
-          uz: "Hash — qaytarib bo'ladigan jarayon: natijadan original matnni tiklash mumkin.",
-          ru: 'Хеш — обратимый процесс: по результату можно восстановить исходный текст.',
+          uz: "Hash - qaytarib bo'ladigan jarayon: natijadan original matnni tiklash mumkin.",
+          ru: 'Хеш - обратимый процесс: по результату можно восстановить исходный текст.',
         },
         answer: 'false',
         explain: {
-          uz: "Hash bir tomonlama: originaldan hash oson, lekin hashdan originalga yo'q. Vazifa faqat taxmin qilib ko'rish — shuning uchun parol uchun kuchli, uzun kalit tanlash muhim.",
-          ru: 'Хеш односторонний: получить хеш из текста легко, а текст из хеша нельзя. Остаётся только подбирать — поэтому для паролей выбирают длинные, сложные строки.',
+          uz: "Hash bir tomonlama: originaldan hash oson, lekin hashdan originalga yo'q. Vazifa faqat taxmin qilib ko'rish - shuning uchun parol uchun kuchli, uzun kalit tanlash muhim.",
+          ru: 'Хеш односторонний: получить хеш из текста легко, а текст из хеша нельзя. Остаётся только подбирать - поэтому для паролей выбирают длинные, сложные строки.',
         },
       },
       {
@@ -101,7 +101,7 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
           {
             id: 'p1',
             left: { uz: 'Hash', ru: 'Хеш' },
-            right: { id: 'p1', uz: "Bir tomonlama — izdan ma'lumot qaymaydi", ru: 'Односторонний — данные не вернуть' },
+            right: { id: 'p1', uz: "Bir tomonlama - izdan ma'lumot qaymaydi", ru: 'Односторонний - данные не вернуть' },
           },
           {
             id: 'p2',
@@ -116,8 +116,8 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Hash qaytarib bo\'lmaydi, shifrlash ochiladi, fayl yaxlitligi esa hash solishtirish bilan tekshiriladi — bitta bayt o\'zgarsa, hash farq qiladi.',
-          ru: 'Хеш необратим, шифрование открывается, а целостность файла проверяют сравнением хешей — изменился один байт, хеш уже другой.',
+          uz: 'Hash qaytarib bo\'lmaydi, shifrlash ochiladi, fayl yaxlitligi esa hash solishtirish bilan tekshiriladi - bitta bayt o\'zgarsa, hash farq qiladi.',
+          ru: 'Хеш необратим, шифрование открывается, а целостность файла проверяют сравнением хешей - изменился один байт, хеш уже другой.',
         },
       },
       {
@@ -135,8 +135,8 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: 'Saqlash, yaxlitlik va yuklab olishni tekshirish — hammasi bir tomonlama ishga yaraydi. Xatni keyin o\'qish uchun esa qaytarib bo\'ladigan shifrlash kerak.',
-          ru: 'Хранение, целостность и проверка скачивания — всё это задачи для одностороннего преобразования. Для повторного чтения письма нужно обратимое шифрование.',
+          uz: 'Saqlash, yaxlitlik va yuklab olishni tekshirish - hammasi bir tomonlama ishga yaraydi. Xatni keyin o\'qish uchun esa qaytarib bo\'ladigan shifrlash kerak.',
+          ru: 'Хранение, целостность и проверка скачивания - всё это задачи для одностороннего преобразования. Для повторного чтения письма нужно обратимое шифрование.',
         },
       },
     ],
@@ -151,30 +151,30 @@ matn   → [encrypt] → aGf3Kp…     → [kalit] → matn
     content: {
       uz: `## Parolni saqlash: hash, tuz va sekinlik
 
-Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
+Parol avval **hash**lanadi - bu to'g'ri. Lekin oddiy hash yetarli emas.
 
-**Muammo 1 — bir xil parol, bir xil hash:** ikki odamda bir xil parol bo'lsa, ikkalasining hash'i ham bir xil. Buzg'unchi buni darhol payqaydi.
+**Muammo 1 - bir xil parol, bir xil hash:** ikki odamda bir xil parol bo'lsa, ikkalasining hash'i ham bir xil. Buzg'unchi buni darhol payqaydi.
 
-**Yechim — tuz (salt):** har bir parolga tasodifiy qo'shimcha qo'shiladi. Endi bir xil parollar ham har xil hash beradi.
+**Yechim - tuz (salt):** har bir parolga tasodifiy qo'shimcha qo'shiladi. Endi bir xil parollar ham har xil hash beradi.
 
-**Muammo 2 — tez hash:** MD5 va SHA juda tez ishlaydi. Buzg'unchi sekundiga milliardlab variant sinab ko'radi.
+**Muammo 2 - tez hash:** MD5 va SHA juda tez ishlaydi. Buzg'unchi sekundiga milliardlab variant sinab ko'radi.
 
-**Yechim — sekin funksiya:** **bcrypt**, **scrypt** va **Argon2** ataylab sekin ishlaydi. Foydalanuvchi bir marta kiradi (0,1 sekund muhim emas), hujumchi esa million marta sinay olmaydi.
+**Yechim - sekin funksiya:** **bcrypt**, **scrypt** va **Argon2** ataylab sekin ishlaydi. Foydalanuvchi bir marta kiradi (0,1 sekund muhim emas), hujumchi esa million marta sinay olmaydi.
 
-> **Xavfsizlik:** parol uchun hech qachon oddiy MD5/SHA ishlatmang. Tuz (salt) + sekin funksiya (bcrypt/Argon2) — sanoat standarti.`,
+> **Xavfsizlik:** parol uchun hech qachon oddiy MD5/SHA ishlatmang. Tuz (salt) + sekin funksiya (bcrypt/Argon2) - sanoat standarti.`,
       ru: `## Хранение пароля: хеш, соль и медленность
 
-Пароль сначала **хешируют** — это правильно. Но обычного хеша недостаточно.
+Пароль сначала **хешируют** - это правильно. Но обычного хеша недостаточно.
 
-**Проблема 1 — одинаковый пароль, одинаковый хеш:** если у двух людей один пароль, то и хеш одинаковый. Злоумышленник сразу это заметит.
+**Проблема 1 - одинаковый пароль, одинаковый хеш:** если у двух людей один пароль, то и хеш одинаковый. Злоумышленник сразу это заметит.
 
-**Решение — соль (salt):** к каждому паролю добавляется случайная приписка. Теперь даже одинаковые пароли дают разные хеши.
+**Решение - соль (salt):** к каждому паролю добавляется случайная приписка. Теперь даже одинаковые пароли дают разные хеши.
 
-**Проблема 2 — быстрый хеш:** MD5 и SHA работают слишком быстро. Злоумышленник перебирает миллиарды вариантов в секунду.
+**Проблема 2 - быстрый хеш:** MD5 и SHA работают слишком быстро. Злоумышленник перебирает миллиарды вариантов в секунду.
 
-**Решение — медленная функция:** **bcrypt**, **scrypt** и **Argon2** работают намеренно медленно. Пользователь входит один раз (0,1 секунды не важны), а атакующий не может перебрать миллион раз.
+**Решение - медленная функция:** **bcrypt**, **scrypt** и **Argon2** работают намеренно медленно. Пользователь входит один раз (0,1 секунды не важны), а атакующий не может перебрать миллион раз.
 
-> **Безопасность:** никогда не используйте для паролей обычные MD5/SHA. Соль (salt) + медленная функция (bcrypt/Argon2) — отраслевой стандарт.`,
+> **Безопасность:** никогда не используйте для паролей обычные MD5/SHA. Соль (salt) + медленная функция (bcrypt/Argon2) - отраслевой стандарт.`,
     },
     exercises: [
       {
@@ -186,7 +186,7 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
         },
         options: [
           { id: 'a', uz: 'bcrypt/Argon2 (tuz bilan, sekin)', ru: 'bcrypt/Argon2 (с солью, медленно)' },
-          { id: 'b', uz: 'MD5 — tez va qulay', ru: 'MD5 — быстро и удобно' },
+          { id: 'b', uz: 'MD5 - tez va qulay', ru: 'MD5 - быстро и удобно' },
           { id: 'c', uz: 'Ochiq matn', ru: 'Открытым текстом' },
           { id: 'd', uz: 'Faqat SHA1', ru: 'Только SHA1' },
         ],
@@ -206,7 +206,7 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
         answer: 'salt',
         accepted: ['salt', 'tuz', 'соль'],
         explain: {
-          uz: "Bu — tuz (salt). Usiz bir xil parollar bir xil hash beradi va buzg'unchi bu bir xillikdan foydalanadi.",
+          uz: "Bu - tuz (salt). Usiz bir xil parollar bir xil hash beradi va buzg'unchi bu bir xillikdan foydalanadi.",
           ru: 'Это соль (salt). Без неё одинаковые пароли дают одинаковый хеш, и злоумышленник пользуется этим совпадением.',
         },
       },
@@ -238,8 +238,8 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
         },
         answer: 'false',
         explain: {
-          uz: "Tuz maxfiy emas — u hash bilan birga ochiq saqlanadi. Tuzning vazifasi sir saqlash emas, balki bir xil parollarni farqlash. Sir bo'lib qoladigan narsa — parolning o'zi.",
-          ru: 'Соль не секретна — её хранят открыто вместе с хешем. Её задача не хранить тайну, а различать одинаковые пароли. Секретом остаётся сам пароль.',
+          uz: "Tuz maxfiy emas - u hash bilan birga ochiq saqlanadi. Tuzning vazifasi sir saqlash emas, balki bir xil parollarni farqlash. Sir bo'lib qoladigan narsa - parolning o'zi.",
+          ru: 'Соль не секретна - её хранят открыто вместе с хешем. Её задача не хранить тайну, а различать одинаковые пароли. Секретом остаётся сам пароль.',
         },
       },
     ],
@@ -254,20 +254,20 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
     content: {
       uz: `## Simmetrik va asimmetrik shifrlash
 
-**Kalit** — shifrni ochadigan maxfiy ma'lumot.
+**Kalit** - shifrni ochadigan maxfiy ma'lumot.
 
-- **Simmetrik** — bitta umumiy kalit: u ham shifrlaydi, ham ochadi. Tez, lekin shu kalitni xavfsiz yetkazish muammo.
-- **Asimmetrik** — kalit juftligi: **ochiq kalit** hamma uchun ochiq, **shaxsiy kalit** faqat egasida. Ochiq kalit bilan shifrlangan narsani faqat shaxsiy kalit ochadi.
+- **Simmetrik** - bitta umumiy kalit: u ham shifrlaydi, ham ochadi. Tez, lekin shu kalitni xavfsiz yetkazish muammo.
+- **Asimmetrik** - kalit juftligi: **ochiq kalit** hamma uchun ochiq, **shaxsiy kalit** faqat egasida. Ochiq kalit bilan shifrlangan narsani faqat shaxsiy kalit ochadi.
 
 **TLS handshaki bitta gapda:** mijoz va server avval ochiq-oydin tanishib, keyin xavfsiz **simmetrik session kalit**ni kelishib oladi.
 
 > **HTTPS ikkalasidan ham foydalanadi:** asimmetrik kalitlar session kalitni xavfsiz almashishga xizmat qiladi, asosiy ma'lumot esa tez simmetrik kalit bilan shifrlanadi.`,
       ru: `## Симметричное и асимметричное шифрование
 
-**Ключ** — секрет, который открывает шифр.
+**Ключ** - секрет, который открывает шифр.
 
-- **Симметричное** — один общий ключ: им и шифруют, и расшифровывают. Быстро, но как безопасно его доставить — отдельная задача.
-- **Асимметричное** — пара ключей: **открытый ключ** известен всем, **закрытый ключ** остаётся у владельца. То, что зашифровано открытым ключом, открыть можно только закрытым.
+- **Симметричное** - один общий ключ: им и шифруют, и расшифровывают. Быстро, но как безопасно его доставить - отдельная задача.
+- **Асимметричное** - пара ключей: **открытый ключ** известен всем, **закрытый ключ** остаётся у владельца. То, что зашифровано открытым ключом, открыть можно только закрытым.
 
 **TLS-рукопожатие в одном предложении:** клиент и сервер сначала знакомятся открыто, потом договариваются о безопасном **симметричном сессионном ключе**.
 
@@ -283,14 +283,14 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
         },
         options: [
           { id: 'a', uz: 'Simmetrik kalit yetadi, asimmetrik bezovta qiladi', ru: 'Симметричного ключа достаточно, асимметричный только мешает' },
-          { id: 'b', uz: 'Session kalitni xavfsiz almashish uchun asimmetrik, asosiy trafik uchun tez simmetrik', ru: 'Асимметричный — для безопасного обмена сессионным ключом, симметричный — для самого трафика' },
+          { id: 'b', uz: 'Session kalitni xavfsiz almashish uchun asimmetrik, asosiy trafik uchun tez simmetrik', ru: 'Асимметричный - для безопасного обмена сессионным ключом, симметричный - для самого трафика' },
           { id: 'c', uz: 'HTTPS umuman shifrlamaydi', ru: 'HTTPS вообще ничего не шифрует' },
           { id: 'd', uz: 'Shunchaki, an\'ana shunday', ru: 'Просто традиция' },
         ],
         answer: 'b',
         explain: {
-          uz: 'Asimmetrik kalit sekin, lekin muammani hal qiladi: session kalitni xavfsiz uzatadi. Katta ma\'lumot esa tezroq simmetrik kalit bilan shifrlanadi — shuning uchun HTTPS ikkallasidan foydalanadi.',
-          ru: 'Асимметричное шифрование медленнее, но решает главную задачу — безопасно передать сессионный ключ. Объёмные данные быстрее шифровать симметричным ключом, поэтому в HTTPS работают оба.',
+          uz: 'Asimmetrik kalit sekin, lekin muammani hal qiladi: session kalitni xavfsiz uzatadi. Katta ma\'lumot esa tezroq simmetrik kalit bilan shifrlanadi - shuning uchun HTTPS ikkallasidan foydalanadi.',
+          ru: 'Асимметричное шифрование медленнее, но решает главную задачу - безопасно передать сессионный ключ. Объёмные данные быстрее шифровать симметричным ключом, поэтому в HTTPS работают оба.',
         },
       },
       {
@@ -309,7 +309,7 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
         order: ['i1', 'i2', 'i3', 'i4'],
         explain: {
           uz: 'Avval server o\'zini tanishtiradi (sertifikat), mijoz uni tekshiradi, keyin xavfsiz session kelishiladi va shundan keyin ma\'lumot shifrlanib yuradi.',
-          ru: 'Сначала сервер представляется (сертификат), клиент его проверяет, затем договариваются о безопасном сессионном ключе — и только после этого данные идут шифрованными.',
+          ru: 'Сначала сервер представляется (сертификат), клиент его проверяет, затем договариваются о безопасном сессионном ключе - и только после этого данные идут шифрованными.',
         },
       },
       {
@@ -339,7 +339,7 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
           uz: 'Simmetrikda bitta kalit, asimmetrikda juftlik bor. HTTPS esa ikkalasini birlashtiradi: avval asimmetrik, keyin simmetrik.',
-          ru: 'В симметричном — один ключ, в асимметричном — пара. HTTPS объединяет оба подхода: сначала асимметричный, потом симметричный.',
+          ru: 'В симметричном - один ключ, в асимметричном - пара. HTTPS объединяет оба подхода: сначала асимметричный, потом симметричный.',
         },
       },
       {
@@ -351,8 +351,8 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
         },
         answer: 'true',
         explain: {
-          uz: 'To\'g\'ri: asimmetrik operatsiyalar og\'irroq. Shuning uchun uni kalit almashishga, qolgan ishga esa tez simmetrik kalitga topshirishadi — aralash (hybrid) sxema shunday ishlaydi.',
-          ru: 'Верно: асимметричные операции тяжелее. Поэтому её оставляют для обмена ключами, а остальную работу поручают быстрому симметричному ключу — так устроена гибридная схема.',
+          uz: 'To\'g\'ri: asimmetrik operatsiyalar og\'irroq. Shuning uchun uni kalit almashishga, qolgan ishga esa tez simmetrik kalitga topshirishadi - aralash (hybrid) sxema shunday ishlaydi.',
+          ru: 'Верно: асимметричные операции тяжелее. Поэтому её оставляют для обмена ключами, а остальную работу поручают быстрому симметричному ключу - так устроена гибридная схема.',
         },
       },
     ],
@@ -369,24 +369,24 @@ Parol avval **hash**lanadi — bu to'g'ri. Lekin oddiy hash yetarli emas.
 
 Shifrlash maxfiylik beradi. **Raqamli imzo** esa boshqa ishni qiladi: **kim yuborganini** va **o'zgargan-o'zgarmaganini** isbotlaydi.
 
-Imzo **shaxsiy kalit** bilan yaratiladi, **ochiq kalit** bilan tekshiriladi. Boshqa hech kim to'g'ri imzo qo'ya olmaydi — shaxsiy kalit faqat egasida bo'ladi.
+Imzo **shaxsiy kalit** bilan yaratiladi, **ochiq kalit** bilan tekshiriladi. Boshqa hech kim to'g'ri imzo qo'ya olmaydi - shaxsiy kalit faqat egasida bo'ladi.
 
-**Sertifikat** — bu ochiq kalitning "pasporti": u kimning kaliti ekanini va qaysi **domenga** tegishli ekanini tasdiqlaydi.
+**Sertifikat** - bu ochiq kalitning "pasporti": u kimning kaliti ekanini va qaysi **domenga** tegishli ekanini tasdiqlaydi.
 
 **CA (sertifikat markazi) zanjiri:** brauzer CA ga ishonadi → CA saytga sertifikat beradi → sayt shu sertifikat bilan o'zini isbotlaydi.
 
-> **Xavfsizlik:** imzo — bu maxfiylik emas, balki **haqiqiylik va yaxlitlik**. Imzolangan xat o'qilishi mumkin, lekin o'zgartirilsa yoki boshqa odam nomidan yuborilsa — imzo mos kelmaydi.`,
+> **Xavfsizlik:** imzo - bu maxfiylik emas, balki **haqiqiylik va yaxlitlik**. Imzolangan xat o'qilishi mumkin, lekin o'zgartirilsa yoki boshqa odam nomidan yuborilsa - imzo mos kelmaydi.`,
       ru: `## Цифровая подпись и PKI
 
 Шифрование даёт конфиденциальность. **Цифровая подпись** делает другое: подтверждает, **кто отправил** и **не изменялись ли данные**.
 
-Подпись создаётся **закрытым ключом**, а проверяется **открытым**. Никто другой не сможет поставить верную подпись — закрытый ключ есть только у владельца.
+Подпись создаётся **закрытым ключом**, а проверяется **открытым**. Никто другой не сможет поставить верную подпись - закрытый ключ есть только у владельца.
 
-**Сертификат** — «паспорт» открытого ключа: он подтверждает, чей это ключ и какому **домену** принадлежит.
+**Сертификат** - «паспорт» открытого ключа: он подтверждает, чей это ключ и какому **домену** принадлежит.
 
 **Цепочка CA (центра сертификации):** браузер доверяет CA → CA выдаёт сертификат сайту → сайт доказывает себя этим сертификатом.
 
-> **Безопасность:** подпись — это не конфиденциальность, а **подлинность и целостность**. Подписанное письмо можно прочитать, но если его изменят или подделают автора — подпись не сойдётся.`,
+> **Безопасность:** подпись - это не конфиденциальность, а **подлинность и целостность**. Подписанное письмо можно прочитать, но если его изменят или подделают автора - подпись не сойдётся.`,
     },
     exercises: [
       {
@@ -404,8 +404,8 @@ Imzo **shaxsiy kalit** bilan yaratiladi, **ochiq kalit** bilan tekshiriladi. Bos
         ],
         answer: 'a',
         explain: {
-          uz: "Imzo kim yuborganini (autentifikatsiya) va ma'lumot o'zgargan-o'zgarmaganini (yaxlitlik) ko'rsatadi. Maxfiylik uchun esa shifrlash kerak — bu boshqa vazifa.",
-          ru: 'Подпись показывает, кто отправил (аутентификация) и не изменены ли данные (целостность). Для конфиденциальности нужно шифрование — это другая задача.',
+          uz: "Imzo kim yuborganini (autentifikatsiya) va ma'lumot o'zgargan-o'zgarmaganini (yaxlitlik) ko'rsatadi. Maxfiylik uchun esa shifrlash kerak - bu boshqa vazifa.",
+          ru: 'Подпись показывает, кто отправил (аутентификация) и не изменены ли данные (целостность). Для конфиденциальности нужно шифрование - это другая задача.',
         },
       },
       {
@@ -417,8 +417,8 @@ Imzo **shaxsiy kalit** bilan yaratiladi, **ochiq kalit** bilan tekshiriladi. Bos
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — imzo maxfiylik bermaydi, u faqat haqiqiylik va yaxlitlikni isbotlaydi. O'qib bo'lmaydigan qilish uchun shifrlash ishlatiladi.",
-          ru: 'Нет — подпись не даёт конфиденциальности, она подтверждает лишь подлинность и целостность. Чтобы сделать нечитаемым, применяют шифрование.',
+          uz: "Yo'q - imzo maxfiylik bermaydi, u faqat haqiqiylik va yaxlitlikni isbotlaydi. O'qib bo'lmaydigan qilish uchun shifrlash ishlatiladi.",
+          ru: 'Нет - подпись не даёт конфиденциальности, она подтверждает лишь подлинность и целостность. Чтобы сделать нечитаемым, применяют шифрование.',
         },
       },
       {
@@ -450,7 +450,7 @@ Imzo **shaxsiy kalit** bilan yaratiladi, **ochiq kalit** bilan tekshiriladi. Bos
         answer: 'certificate',
         accepted: ['certificate', 'cert', 'sertifikat', 'сертификат'],
         explain: {
-          uz: "Bu — sertifikat. U domen, ochiq kalit va CA imzosini bir-biriga bog'lab, brauzerga sayt haqiqiy ekanini isbotlaydi.",
+          uz: "Bu - sertifikat. U domen, ochiq kalit va CA imzosini bir-biriga bog'lab, brauzerga sayt haqiqiy ekanini isbotlaydi.",
           ru: 'Это сертификат. Он связывает домен, открытый ключ и подпись CA, доказывая браузеру, что сайт подлинный.',
         },
       },
@@ -466,12 +466,12 @@ Imzo **shaxsiy kalit** bilan yaratiladi, **ochiq kalit** bilan tekshiriladi. Bos
     content: {
       uz: `## 🏆 Nazorat
 
-To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi, biroz murakkabroq savollar — o'ylab javob bering.
+To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi, biroz murakkabroq savollar - o'ylab javob bering.
 
 **O'tilgan mavzular:** hash va shifrlash, parolni saqlash (tuz va sekin funksiya), simmetrik va asimmetrik kalitlar, HTTPS, raqamli imzo va sertifikatlar.`,
       ru: `## 🏆 Проверка
 
-Вопросы, проверяющие знания из четырёх уроков. На этот раз — ситуации посложнее, отвечайте обдуманно.
+Вопросы, проверяющие знания из четырёх уроков. На этот раз - ситуации посложнее, отвечайте обдуманно.
 
 **Пройденные темы:** хеширование и шифрование, хранение паролей (соль и медленная функция), симметричные и асимметричные ключи, HTTPS, цифровая подпись и сертификаты.`,
     },
@@ -491,8 +491,8 @@ To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi
         ],
         answer: 'a',
         explain: {
-          uz: 'Asimmetrik kalitlar faqat handshake davrida session kalitni xavfsiz kelishish uchun ishlatiladi. Uzoq asosiy trafik esa shu kelishilgan simmetrik session kalit bilan shifrlanadi — u tezroq.',
-          ru: 'Асимметричные ключи работают только во время рукопожатия — чтобы безопасно договориться о сессионном ключе. Основной поток данных шифруется уже этим симметричным ключом, потому что он быстрее.',
+          uz: 'Asimmetrik kalitlar faqat handshake davrida session kalitni xavfsiz kelishish uchun ishlatiladi. Uzoq asosiy trafik esa shu kelishilgan simmetrik session kalit bilan shifrlanadi - u tezroq.',
+          ru: 'Асимметричные ключи работают только во время рукопожатия - чтобы безопасно договориться о сессионном ключе. Основной поток данных шифруется уже этим симметричным ключом, потому что он быстрее.',
         },
       },
       {
@@ -503,15 +503,15 @@ To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi
           ru: 'Для каких данных выбран правильный способ хранения? (выберите несколько)',
         },
         options: [
-          { id: 'a', uz: 'Parollar — hash sifatida', ru: 'Пароли — в виде хеша' },
-          { id: 'b', uz: 'Maxfiy shaxsiy xatlar — shifrlangan holda', ru: 'Личные письма — в зашифрованном виде' },
-          { id: 'c', uz: 'Fayl yaxlitligi — hash solishtirish orqali', ru: 'Целостность файла — сравнением хешей' },
+          { id: 'a', uz: 'Parollar - hash sifatida', ru: 'Пароли - в виде хеша' },
+          { id: 'b', uz: 'Maxfiy shaxsiy xatlar - shifrlangan holda', ru: 'Личные письма - в зашифрованном виде' },
+          { id: 'c', uz: 'Fayl yaxlitligi - hash solishtirish orqali', ru: 'Целостность файла - сравнением хешей' },
           { id: 'd', uz: 'Barcha parollar ochiq matn sifatida jadvalda', ru: 'Все пароли открытым текстом в таблице' },
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: 'Parol uchun bitta tomonlama hash, maxfiy xat uchun qaytarib bo\'ladigan shifrlash, yaxlitlik uchun hash solishtirish — har bir vazifaga o\'z usuli. Ochiq matndagi parollar esa birinchi o\'g\'irlikda yo\'qoladi.',
-          ru: 'Для пароля — односторонний хеш, для секретного письма — обратимое шифрование, для целостности — сравнение хешей: у каждой задачи свой способ. Пароли открытым текстом утекают первыми.',
+          uz: 'Parol uchun bitta tomonlama hash, maxfiy xat uchun qaytarib bo\'ladigan shifrlash, yaxlitlik uchun hash solishtirish - har bir vazifaga o\'z usuli. Ochiq matndagi parollar esa birinchi o\'g\'irlikda yo\'qoladi.',
+          ru: 'Для пароля - односторонний хеш, для секретного письма - обратимое шифрование, для целостности - сравнение хешей: у каждой задачи свой способ. Пароли открытым текстом утекают первыми.',
         },
       },
       {
@@ -546,7 +546,7 @@ To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: 'Har bir vaziyatga o\'z mosligi bor: parolga hash, HTTPS\'ga aralash sxema, ochiq kalit ochiq, shaxsiy kalit esa sir bo\'lib qoladi.',
-          ru: 'Каждой ситуации — своё: паролю хеш, HTTPS гибридная схема, открытый ключ открыт всем, закрытый ключ остаётся секретным.',
+          ru: 'Каждой ситуации - своё: паролю хеш, HTTPS гибридная схема, открытый ключ открыт всем, закрытый ключ остаётся секретным.',
         },
       },
       {
@@ -559,7 +559,7 @@ To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi
         answer: 'hash',
         accepted: ['хеш', 'хеширование', 'hashing'],
         explain: {
-          uz: 'Bu — **hash**. Bir xil kiritish har doim bir xil beradi (shuning uchun solishtirish mumkin), lekin qaytarish mumkin emas (shuning uchun parol xavfsiz saqlanadi).',
+          uz: 'Bu - **hash**. Bir xil kiritish har doim bir xil beradi (shuning uchun solishtirish mumkin), lekin qaytarish mumkin emas (shuning uchun parol xavfsiz saqlanadi).',
           ru: 'Это **hash**. Одинаковый вход всегда даёт одинаковый результат (поэтому можно сравнивать), но обратное преобразование невозможно (поэтому пароль в безопасности).',
         },
       },
@@ -574,12 +574,12 @@ To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi
           { id: 'i1', uz: 'Foydalanuvchi parolni kiritadi', ru: 'Пользователь вводит пароль' },
           { id: 'i2', uz: 'Server kiritilgan parolni hashlaydi', ru: 'Сервер хеширует введённый пароль' },
           { id: 'i3', uz: 'Hashni bazadagi hash bilan solishtiradi', ru: 'Сравнивает хеш с хешем из базы' },
-          { id: 'i4', uz: 'Mos kelsa — kirishga ruxsat', ru: 'Совпало — доступ разрешён' },
+          { id: 'i4', uz: 'Mos kelsa - kirishga ruxsat', ru: 'Совпало - доступ разрешён' },
         ],
         order: ['i1', 'i2', 'i3', 'i4'],
         explain: {
-          uz: 'Server hech qachon ochiq parolni saqlamaydi: u kiritilgan narsani hashlaydi va faqat hashlarni solishtiradi. Mos kelsa — kirish ochiladi.',
-          ru: 'Сервер никогда не хранит открытый пароль: он хеширует введённое и сравнивает только хеши. Совпало — вход открыт.',
+          uz: 'Server hech qachon ochiq parolni saqlamaydi: u kiritilgan narsani hashlaydi va faqat hashlarni solishtiradi. Mos kelsa - kirish ochiladi.',
+          ru: 'Сервер никогда не хранит открытый пароль: он хеширует введённое и сравнивает только хеши. Совпало - вход открыт.',
         },
       },
     ],
@@ -595,30 +595,30 @@ To'rt darsdan olingan bilimni tekshiradigan savollar. Bu safar vaziyat asosidagi
     content: {
       uz: `## Apparat asoslari
 
-Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
+Kompyuterning uchta asosiy qismi bor - vazifalari har xil:
 
 | Qism | Vazifa |
 |---|---|
-| **CPU** | Buyruqlarni hisoblab bajaradi — kompyuterning "miyasi" |
+| **CPU** | Buyruqlarni hisoblab bajaradi - kompyuterning "miyasi" |
 | **RAM** | Ochiq dasturlar uchun tez, lekin vaqtinchalik xotira |
 | **Disk (HDD/SSD)** | Fayllar uzoq muddat saqlanadi, faqat sekinroq |
 
 **Quyug' bosilganda:** BIOS/UEFI tekshiruvdan o'tadi → tizim (OS) diskdan yuklanadi → ishchi stol tayyor.
 
-> **Forensika uchun muhim:** RAM **o'zgaruvchan (volatile)** — o'chirilsa ma'lumot yo'qoladi. Diskda esa narsa qoladi. Shuning uchun tekshiruvda jonli tizimdan RAM ham, disk ham o'rganiladi.`,
+> **Forensika uchun muhim:** RAM **o'zgaruvchan (volatile)** - o'chirilsa ma'lumot yo'qoladi. Diskda esa narsa qoladi. Shuning uchun tekshiruvda jonli tizimdan RAM ham, disk ham o'rganiladi.`,
       ru: `## Основы железа
 
-У компьютера три основных узла — задачи у них разные:
+У компьютера три основных узла - задачи у них разные:
 
 | Узел | Задача |
 |---|---|
-| **ЦП (CPU)** | Считает и выполняет команды — «мозг» компьютера |
+| **ЦП (CPU)** | Считает и выполняет команды - «мозг» компьютера |
 | **ОЗУ (RAM)** | Быстрая, но временная память для открытых программ |
 | **Диск (HDD/SSD)** | Долговременное хранение файлов, только медленнее |
 
 **После нажатия кнопки питания:** BIOS/UEFI проходит самопроверку → операционная система загружается с диска → рабочий стол готов.
 
-> **Важно для форензики:** RAM — энергозависимая (volatile), при отключении данные исчезают. На диске данные остаются. Поэтому при расследовании изучают и живую память, и диск.`,
+> **Важно для форензики:** RAM - энергозависимая (volatile), при отключении данные исчезают. На диске данные остаются. Поэтому при расследовании изучают и живую память, и диск.`,
     },
     exercises: [
       {
@@ -636,8 +636,8 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
         ],
         answer: 'b',
         explain: {
-          uz: 'CPU (markaziy protsessor) barcha hisob-kitoblarni bajaradi. RAM faqat vaqtinchalik saqlaydi, disk — uzoq muddat, monitor esa natijani ko\'rsatadi.',
-          ru: 'ЦП (центральный процессор) выполняет все вычисления. RAM хранит временно, диск — долговременно, монитор лишь показывает результат.',
+          uz: 'CPU (markaziy protsessor) barcha hisob-kitoblarni bajaradi. RAM faqat vaqtinchalik saqlaydi, disk - uzoq muddat, monitor esa natijani ko\'rsatadi.',
+          ru: 'ЦП (центральный процессор) выполняет все вычисления. RAM хранит временно, диск - долговременно, монитор лишь показывает результат.',
         },
       },
       {
@@ -679,8 +679,8 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
         },
         answer: 'false',
         explain: {
-          uz: 'RAM o\'zgaruvchan (volatile) xotira: quvvat uzilsa, ma\'lumot yo\'qoladi. Shuning uchun saqlanmagan ish yo\'qoladi — va shuning uchun jonli tizimdan olingan RAM tasviri forensikada qimmatli.',
-          ru: 'RAM энергозависимая память: пропало питание — данные исчезают. Поэтому несохранённая работа теряется, а снимок оперативной памяти живой системы ценен для форензики.',
+          uz: 'RAM o\'zgaruvchan (volatile) xotira: quvvat uzilsa, ma\'lumot yo\'qoladi. Shuning uchun saqlanmagan ish yo\'qoladi - va shuning uchun jonli tizimdan olingan RAM tasviri forensikada qimmatli.',
+          ru: 'RAM энергозависимая память: пропало питание - данные исчезают. Поэтому несохранённая работа теряется, а снимок оперативной памяти живой системы ценен для форензики.',
         },
       },
       {
@@ -714,11 +714,11 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
     content: {
       uz: `## Operatsion tizim nima?
 
-**Operatsion tizim (OS)** — foydalanuvchi bilan kompyuter apparati orasidagi vositachi. U uch ishni bajaradi:
+**Operatsion tizim (OS)** - foydalanuvchi bilan kompyuter apparati orasidagi vositachi. U uch ishni bajaradi:
 
-- **Yadro (kernel)** — apparatni boshqaradi va dasturlarga ruxsat beradi
-- **Jarayonlar (process)** — bir vaqtda ishlayotgan dasturlarni tartiblaydi
-- **Fayl tizimi (filesystem)** — fayllarni papkalarda tartibli saqlaydi
+- **Yadro (kernel)** - apparatni boshqaradi va dasturlarga ruxsat beradi
+- **Jarayonlar (process)** - bir vaqtda ishlayotgan dasturlarni tartiblaydi
+- **Fayl tizimi (filesystem)** - fayllarni papkalarda tartibli saqlaydi
 
 | | Windows | Linux |
 |---|---|---|
@@ -726,14 +726,14 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
 | Litsenziya | Pullik litsenziya kerak | Odatda ochiq va bepul |
 | Qo'llanilishi | Ish stoli, o'yin | Serverlar, telefon, sun'iy intellekt |
 
-> **Xavfsizlikda muhim:** dasturlar barcha ruxsatni OS dan so'raydi — agar ruxsatlar tizimi zaif bo'lsa, hujumchi ham xuddi shu ruxsatlardan foydalanadi.`,
+> **Xavfsizlikda muhim:** dasturlar barcha ruxsatni OS dan so'raydi - agar ruxsatlar tizimi zaif bo'lsa, hujumchi ham xuddi shu ruxsatlardan foydalanadi.`,
       ru: `## Что такое операционная система?
 
-**Операционная система (ОС)** — посредник между человеком и железом компьютера. Она делает три вещи:
+**Операционная система (ОС)** - посредник между человеком и железом компьютера. Она делает три вещи:
 
-- **Ядро (kernel)** — управляет оборудованием и выдаёт программам разрешения
-- **Процессы** — распоряжается программами, работающими одновременно
-- **Файловая система** — хранит файлы аккуратно, в папках
+- **Ядро (kernel)** - управляет оборудованием и выдаёт программам разрешения
+- **Процессы** - распоряжается программами, работающими одновременно
+- **Файловая система** - хранит файлы аккуратно, в папках
 
 | | Windows | Linux |
 |---|---|---|
@@ -741,7 +741,7 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
 | Лицензия | Нужна платная лицензия | Обычно открыт и бесплатен |
 | Где используют | Рабочий стол, игры | Серверы, телефоны, ИИ |
 
-> **Важно для безопасности:** все разрешения программы запрашивают у ОС — если система прав устроена неправильно, атакер получит те же разрешения.`,
+> **Важно для безопасности:** все разрешения программы запрашивают у ОС - если система прав устроена неправильно, атакер получит те же разрешения.`,
     },
     exercises: [
       {
@@ -759,8 +759,8 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
         ],
         answer: 'b',
         explain: {
-          uz: 'Yadro — OS ning markazi: u apparatni boshqaradi va dasturlar apparatga to\'g\'ridan-to\'g\'ri tegishiga yo\'l qo\'ymaydi. Chop etish va skanerlash — alohida dasturlarning ishi.',
-          ru: 'Ядро — центр ОС: оно управляет оборудованием и не даёт программам обращаться к нему напрямую. Печать и сканерирование — задачи отдельных программ.',
+          uz: 'Yadro - OS ning markazi: u apparatni boshqaradi va dasturlar apparatga to\'g\'ridan-to\'g\'ri tegishiga yo\'l qo\'ymaydi. Chop etish va skanerlash - alohida dasturlarning ishi.',
+          ru: 'Ядро - центр ОС: оно управляет оборудованием и не даёт программам обращаться к нему напрямую. Печать и сканерирование - задачи отдельных программ.',
         },
       },
       {
@@ -789,8 +789,8 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Yadro boshqaradi, har bir ochiq dastur — bu alohida jarayon, fayl tizimi esa fayllar qayerda turganini biladi.',
-          ru: 'Ядро управляет, каждая запущенная программа — это процесс, а файловая система знает, где лежат файлы.',
+          uz: 'Yadro boshqaradi, har bir ochiq dastur - bu alohida jarayon, fayl tizimi esa fayllar qayerda turganini biladi.',
+          ru: 'Ядро управляет, каждая запущенная программа - это процесс, а файловая система знает, где лежат файлы.',
         },
       },
       {
@@ -808,16 +808,16 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: 'Linux ochiq kodli va serverlarda ustunlik qiladi, lekin grafik muhitga ham ega. Windows esa mashhur ish stoli tizimi. "Faqat o\'yin" — bu noto\'g\'ri.',
-          ru: 'Linux открыт и доминирует на серверах, но умеет и в графику. Windows — популярная настольная ОС. «Только для игр» — неверно.',
+          uz: 'Linux ochiq kodli va serverlarda ustunlik qiladi, lekin grafik muhitga ham ega. Windows esa mashhur ish stoli tizimi. "Faqat o\'yin" - bu noto\'g\'ri.',
+          ru: 'Linux открыт и доминирует на серверах, но умеет и в графику. Windows - популярная настольная ОС. «Только для игр» - неверно.',
         },
       },
       {
         id: 'e4',
         type: 'tf',
         q: {
-          uz: "Bir vaqtda ko'p dastur ishlashi — OS boshqaruvi (jarayonlarni tartiblash) natijasi.",
-          ru: 'Одновременная работа многих программ — результат управления процессами ОС.',
+          uz: "Bir vaqtda ko'p dastur ishlashi - OS boshqaruvi (jarayonlarni tartiblash) natijasi.",
+          ru: 'Одновременная работа многих программ - результат управления процессами ОС.',
         },
         answer: 'true',
         explain: {
@@ -838,26 +838,26 @@ Kompyuterning uchta asosiy qismi bor — vazifalari har xil:
     content: {
       uz: `## Ma'lumotlar bazasi nima?
 
-**Ma'lumotlar bazasi (DB)** — ma'lumotni tartibli va tez qidirib bo'ladigan holda saqlash tizimi. Oddiy fayllardan farqi: izlash tezroq va xavfsizroq.
+**Ma'lumotlar bazasi (DB)** - ma'lumotni tartibli va tez qidirib bo'ladigan holda saqlash tizimi. Oddiy fayllardan farqi: izlash tezroq va xavfsizroq.
 
 Tuzilishi uch qatlamli:
 
-- **Jadval (table)** — bitta mavzudagi ma'lumotlar to'plami. Masalan, \`users\`.
-- **Qator (row)** — bitta yozuv: bitta foydalanuvchi.
-- **Ustun (column)** — bitta xususiyat: \`name\`, \`email\`, \`password_hash\`.
+- **Jadval (table)** - bitta mavzudagi ma'lumotlar to'plami. Masalan, \`users\`.
+- **Qator (row)** - bitta yozuv: bitta foydalanuvchi.
+- **Ustun (column)** - bitta xususiyat: \`name\`, \`email\`, \`password_hash\`.
 
-> **Ikki asosiy himoya:** muntazam **zaxira nusxa (backup)** — buzilgan ma'lumotni tiklash uchun; **kirish huquqlarini cheklash** — kerak bo'lmagan ma'lumotni ko'ra olmasligi uchun.`,
+> **Ikki asosiy himoya:** muntazam **zaxira nusxa (backup)** - buzilgan ma'lumotni tiklash uchun; **kirish huquqlarini cheklash** - kerak bo'lmagan ma'lumotni ko'ra olmasligi uchun.`,
       ru: `## Что такое база данных?
 
-**База данных (БД)** — система хранения данных, упорядоченная так, чтобы быстро искать нужное. Обычных файлов она отличается тем, что поиск быстрее и безопаснее.
+**База данных (БД)** - система хранения данных, упорядоченная так, чтобы быстро искать нужное. Обычных файлов она отличается тем, что поиск быстрее и безопаснее.
 
-Устройство — три уровня:
+Устройство - три уровня:
 
-- **Таблица (table)** — набор данных на одну тему. Например, \`users\`.
-- **Строка (row)** — одна запись: один пользователь.
-- **Столбец (column)** — одно свойство: \`name\`, \`email\`, \`password_hash\`.
+- **Таблица (table)** - набор данных на одну тему. Например, \`users\`.
+- **Строка (row)** - одна запись: один пользователь.
+- **Столбец (column)** - одно свойство: \`name\`, \`email\`, \`password_hash\`.
 
-> **Два главных правила защиты:** регулярные **резервные копии** — чтобы восстановить повреждённые данные; **ограничение доступа** — чтобы лишний человек ничего не увидел.`,
+> **Два главных правила защиты:** регулярные **резервные копии** - чтобы восстановить повреждённые данные; **ограничение доступа** - чтобы лишний человек ничего не увидел.`,
     },
     exercises: [
       {
@@ -875,8 +875,8 @@ Tuzilishi uch qatlamli:
         ],
         answer: 'b',
         explain: {
-          uz: 'Qator (row) — bitta yozuv, ya\'ni bitta foydalanuvchi. Ustun (column) esa uning xususiyati: name yoki email. So\'rov — bazaga berilgan savol.',
-          ru: 'Строка (row) — это одна запись, то есть один пользователь. Столбец (column) — его свойство: name или email. Запрос — это вопрос к базе.',
+          uz: 'Qator (row) - bitta yozuv, ya\'ni bitta foydalanuvchi. Ustun (column) esa uning xususiyati: name yoki email. So\'rov - bazaga berilgan savol.',
+          ru: 'Строка (row) - это одна запись, то есть один пользователь. Столбец (column) - его свойство: name или email. Запрос - это вопрос к базе.',
         },
       },
       {
@@ -895,7 +895,7 @@ Tuzilishi uch qatlamli:
           {
             id: 'p2',
             left: { uz: 'Qator (row)', ru: 'Строка (row)' },
-            right: { id: 'p2', uz: 'Bitta yozuv — bitta foydalanuvchi', ru: 'Одна запись — один пользователь' },
+            right: { id: 'p2', uz: 'Bitta yozuv - bitta foydalanuvchi', ru: 'Одна запись - один пользователь' },
           },
           {
             id: 'p3',
@@ -905,8 +905,8 @@ Tuzilishi uch qatlamli:
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Jadval — butun "ilova", qator — bitta odam, ustun esa uning bir xususiyati. Uch qatlamni aynan shunday eslab qoling.',
-          ru: 'Таблица — вся «ilova», строка — один человек, столбец — одно его свойство. Запомните эти три уровня именно так.',
+          uz: 'Jadval - butun "ilova", qator - bitta odam, ustun esa uning bir xususiyati. Uch qatlamni aynan shunday eslab qoling.',
+          ru: 'Таблица - вся «ilova», строка - один человек, столбец - одно его свойство. Запомните эти три уровня именно так.',
         },
       },
       {
@@ -918,8 +918,8 @@ Tuzilishi uch qatlamli:
         },
         answer: 'false',
         explain: {
-          uz: 'Bitta nusxa = bitta nuqtadagi nosozlik yoki hujum butun ma\'lumotni yo\'qotadi. Shuning uchun zaxira nusxalar muntazam va boshqa joyda saqlanadi — ransomware\'dan eng ishonchli himoya shu.',
-          ru: 'Одна копия = одна точка отказа или атака уничтожает все данные. Поэтому резервные копии делают регулярно и хранят отдельно — это самая надёжная защита от ransomware.',
+          uz: 'Bitta nusxa = bitta nuqtadagi nosozlik yoki hujum butun ma\'lumotni yo\'qotadi. Shuning uchun zaxira nusxalar muntazam va boshqa joyda saqlanadi - ransomware\'dan eng ishonchli himoya shu.',
+          ru: 'Одна копия = одна точка отказа или атака уничтожает все данные. Поэтому резервные копии делают регулярно и хранят отдельно - это самая надёжная защита от ransomware.',
         },
       },
       {
@@ -938,7 +938,7 @@ Tuzilishi uch qatlamli:
         answers: ['a', 'b', 'd'],
         explain: {
           uz: 'Backup tiklashni, cheklangan huquqlar ko\'rmaslikni, hash esa parol o\'g\'irlanishining oldini oladi. Barchaga admin berish esa himoyani butunlay yo\'q qiladi.',
-          ru: 'Бэкап позволяет восстановить, ограничения — скрыть лишнее, хеш — защитить пароли от утечки. Выдать всем права администратора — значит не защищать ничего.',
+          ru: 'Бэкап позволяет восстановить, ограничения - скрыть лишнее, хеш - защитить пароли от утечки. Выдать всем права администратора - значит не защищать ничего.',
         },
       },
     ],
@@ -951,14 +951,14 @@ Tuzilishi uch qatlamli:
     xp_reward: 20,
     title: { uz: 'SQL asoslari: SELECT, INSERT, UPDATE, DELETE', ru: 'Основы SQL: SELECT, INSERT, UPDATE, DELETE' },
     content: {
-      uz: `## SQL — ma'lumotlar bazasi tili
+      uz: `## SQL - ma'lumotlar bazasi tili
 
-SQL — bu ma'lumotlar bazasiga savol beradigan til. Asosiy to'rtta buyruq:
+SQL - bu ma'lumotlar bazasiga savol beradigan til. Asosiy to'rtta buyruq:
 
-- **SELECT** — ma'lumotni o'qiydi
-- **INSERT** — yangi qator qo'shadi
-- **UPDATE** — mavjud qatorni o'zgartiradi
-- **DELETE** — qatorni o'chiradi
+- **SELECT** - ma'lumotni o'qiydi
+- **INSERT** - yangi qator qo'shadi
+- **UPDATE** - mavjud qatorni o'zgartiradi
+- **DELETE** - qatorni o'chiradi
 
 Shart bilan filtr qo'shish uchun **WHERE** kaliti ishlatiladi:
 
@@ -966,15 +966,15 @@ Shart bilan filtr qo'shish uchun **WHERE** kaliti ishlatiladi:
 SELECT name, email FROM users WHERE city = 'Tashkent';
 \`\`\`
 
-> **Xavfsizlik eslatmasi:** foydalanuvchi matni to'g'ridan-to'g'ri so'rovga qo'shilsa, SQL injection paydo bo'ladi — shuning uchun so'rovlarni parametrlar bilan yozish shart.`,
-      ru: `## SQL — язык баз данных
+> **Xavfsizlik eslatmasi:** foydalanuvchi matni to'g'ridan-to'g'ri so'rovga qo'shilsa, SQL injection paydo bo'ladi - shuning uchun so'rovlarni parametrlar bilan yozish shart.`,
+      ru: `## SQL - язык баз данных
 
-SQL — это язык, на котором задают вопросы базе данных. Четыре основных запроса:
+SQL - это язык, на котором задают вопросы базе данных. Четыре основных запроса:
 
-- **SELECT** — читает данные
-- **INSERT** — добавляет новую строку
-- **UPDATE** — изменяет существующую строку
-- **DELETE** — удаляет строку
+- **SELECT** - читает данные
+- **INSERT** - добавляет новую строку
+- **UPDATE** - изменяет существующую строку
+- **DELETE** - удаляет строку
 
 Для фильтра используется ключевое слово **WHERE**:
 
@@ -982,7 +982,7 @@ SQL — это язык, на котором задают вопросы баз�
 SELECT name, email FROM users WHERE city = 'Tashkent';
 \`\`\`
 
-> **Замечание по безопасности:** если текст пользователя напрямую вставить в запрос, возникает SQL-инъекция — поэтому запросы пишут с параметрами.`,
+> **Замечание по безопасности:** если текст пользователя напрямую вставить в запрос, возникает SQL-инъекция - поэтому запросы пишут с параметрами.`,
     },
     exercises: [
       {
@@ -1001,8 +1001,8 @@ SELECT name, email FROM users WHERE city = 'Tashkent';
         ],
         answer: 'a',
         explain: {
-          uz: "SELECT ma'lumotni faqat o'qiydi, WHERE esa shart beradi: faqat 18 dan kattalar qoladi. Hech narsa o'zgarmaydi — ko'rish uchun xavfsiz so'rov.",
-          ru: 'SELECT только читает данные, а WHERE задаёт условие: остаются только совершеннолетние. Ничего не меняется — это безопасный запрос для просмотра.',
+          uz: "SELECT ma'lumotni faqat o'qiydi, WHERE esa shart beradi: faqat 18 dan kattalar qoladi. Hech narsa o'zgarmaydi - ko'rish uchun xavfsiz so'rov.",
+          ru: 'SELECT только читает данные, а WHERE задаёт условие: остаются только совершеннолетние. Ничего не меняется - это безопасный запрос для просмотра.',
         },
       },
       {
@@ -1021,7 +1021,7 @@ SELECT name, email FROM users WHERE city = 'Tashkent';
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: 'Bittasi o\'qiydi (SELECT), uchtasi ma\'lumotni o\'zgartiradi. Xavfsizlikda bu farq muhim: SELECT ni hamma kora oladi, boshqasi esa huquq talab qiladi.',
-          ru: 'Один читает (SELECT), три меняют данные. Для безопасности разница важна: доступ к SELECT можно дать многим, к остальным — только нужным.',
+          ru: 'Один читает (SELECT), три меняют данные. Для безопасности разница важна: доступ к SELECT можно дать многим, к остальным - только нужным.',
         },
       },
       {
@@ -1034,7 +1034,7 @@ SELECT name, email FROM users WHERE city = 'Tashkent';
         answer: 'select',
         accepted: ['показать', 'выбрать', 'show'],
         explain: {
-          uz: '**SELECT** — ma\'lumotni o\'qiydi va hech narsani o\'zgartirmaydi. INSERT/UPDATE/DELETE esa ma\'lumotga ta\'sir qiladi va ehtiyotkorlik talab qiladi.',
+          uz: '**SELECT** - ma\'lumotni o\'qiydi va hech narsani o\'zgartirmaydi. INSERT/UPDATE/DELETE esa ma\'lumotga ta\'sir qiladi va ehtiyotkorlik talab qiladi.',
           ru: '**SELECT** читает данные и ничего не меняет. INSERT/UPDATE/DELETE действуют на данные и требуют осторожности.',
         },
       },
@@ -1070,40 +1070,40 @@ SELECT name, email FROM users WHERE city = 'Tashkent';
     content: {
       uz: `## Git nima?
 
-**Git** — loyiha fayllari tarixini saqlaydigan **versiya nazorati** tizimi. Xato qilsang, o'tgan holatga qayta olasan.
+**Git** - loyiha fayllari tarixini saqlaydigan **versiya nazorati** tizimi. Xato qilsang, o'tgan holatga qayta olasan.
 
-- **Repozitoriy (repo)** — loyiha fayllari va ularning tarixi saqlanadigan joy.
-- **Commit** — bir lahzadagi "surat": nima o'zgargani va izoh yoziladi.
-- **Branch** — loyihaning alohida oqimi (keyingi darsda).
+- **Repozitoriy (repo)** - loyiha fayllari va ularning tarixi saqlanadigan joy.
+- **Commit** - bir lahzadagi "surat": nima o'zgargani va izoh yoziladi.
+- **Branch** - loyihaning alohida oqimi (keyingi darsda).
 
 \`\`\`bash
 git add fayl.txt
 git commit -m "Xavfsizlik tuzatilishi kiritildi"
 \`\`\`
 
-> **Nega xavfsizlik uchun muhim:** git tarixi kim, qachon va nima o'zgartirganini ko'rsatadi — bu **audit** uchun asos. Tarixni yo'qotish = javobgarlik izini yo'qotish.`,
+> **Nega xavfsizlik uchun muhim:** git tarixi kim, qachon va nima o'zgartirganini ko'rsatadi - bu **audit** uchun asos. Tarixni yo'qotish = javobgarlik izini yo'qotish.`,
       ru: `## Что такое Git?
 
-**Git** — система **контроля версий**, хранящая историю файлов проекта. Ошиблись — можно вернуться к прошлому состоянию.
+**Git** - система **контроля версий**, хранящая историю файлов проекта. Ошиблись - можно вернуться к прошлому состоянию.
 
-- **Репозиторий (repo)** — место, где хранятся файлы проекта и их история.
-- **Коммит (commit)** — «снимок» момента: что изменено и зачем.
-- **Ветка (branch)** — отдельная линия разработки (следующий урок).
+- **Репозиторий (repo)** - место, где хранятся файлы проекта и их история.
+- **Коммит (commit)** - «снимок» момента: что изменено и зачем.
+- **Ветка (branch)** - отдельная линия разработки (следующий урок).
 
 \`\`\`bash
 git add fayl.txt
 git commit -m "Исправление по безопасности добавлено"
 \`\`\`
 
-> **Почему это важно для безопасности:** история Git показывает, кто и когда что менял — это основа **аудита**. Потеря истории = потеря следов ответственности.`,
+> **Почему это важно для безопасности:** история Git показывает, кто и когда что менял - это основа **аудита**. Потеря истории = потеря следов ответственности.`,
     },
     exercises: [
       {
         id: 'e1',
         type: 'mc',
         q: {
-          uz: "Git — bu nima?",
-          ru: 'Git — это что?',
+          uz: "Git - bu nima?",
+          ru: 'Git - это что?',
         },
         options: [
           { id: 'a', uz: 'Antivirus dasturi', ru: 'Антивирус' },
@@ -1113,8 +1113,8 @@ git commit -m "Исправление по безопасности добавл
         ],
         answer: 'b',
         explain: {
-          uz: 'Git — versiya nazorati: u har bir "suratni" (commit) saqlaydi, shuning uchun istalgan o\'tgan holatga qaytish mumkin. Antivirus va brauzer boshqa vositalar.',
-          ru: 'Git — контроль версий: он хранит каждый «снимок» (коммит), поэтому можно вернуться к любому прошлому состоянию. Антивирус и браузер — другие инструменты.',
+          uz: 'Git - versiya nazorati: u har bir "suratni" (commit) saqlaydi, shuning uchun istalgan o\'tgan holatga qaytish mumkin. Antivirus va brauzer boshqa vositalar.',
+          ru: 'Git - контроль версий: он хранит каждый «снимок» (коммит), поэтому можно вернуться к любому прошлому состоянию. Антивирус и браузер - другие инструменты.',
         },
       },
       {
@@ -1143,21 +1143,21 @@ git commit -m "Исправление по безопасности добавл
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3' },
         explain: {
-          uz: 'Repo — uy, commit — har bir surat, branch esa alohida oqim. Commit qancha ko\'p bo\'lsa, tarix shuncha aniqroq bo\'ladi.',
-          ru: 'Репозиторий — дом, коммит — каждый снимок, ветка — отдельная линия. Чем больше коммитов, тем точнее история.',
+          uz: 'Repo - uy, commit - har bir surat, branch esa alohida oqim. Commit qancha ko\'p bo\'lsa, tarix shuncha aniqroq bo\'ladi.',
+          ru: 'Репозиторий - дом, коммит - каждый снимок, ветка - отдельная линия. Чем больше коммитов, тем точнее история.',
         },
       },
       {
         id: 'e3',
         type: 'tf',
         q: {
-          uz: "Git tarixi tufayli kim va qachon fayl o'zgartirganini ko'rish mumkin — bu xavfsizlik auditi uchun foydali.",
-          ru: 'Благодаря истории Git можно увидеть, кто и когда менял файл — это полезно для аудита безопасности.',
+          uz: "Git tarixi tufayli kim va qachon fayl o'zgartirganini ko'rish mumkin - bu xavfsizlik auditi uchun foydali.",
+          ru: 'Благодаря истории Git можно увидеть, кто и когда менял файл - это полезно для аудита безопасности.',
         },
         answer: 'true',
         explain: {
-          uz: 'Har commit muallif, sana va izoh bilan saqlanadi. Hujum yoki xato aniqlanganda kim mas\'ulatini tarixdan ko\'rish — aynan audit degani shu.',
-          ru: 'Каждый коммит хранит автора, дату и описание. Когда найдена атака или ошибка, по истории видно, кто отвечает — это и есть аудит.',
+          uz: 'Har commit muallif, sana va izoh bilan saqlanadi. Hujum yoki xato aniqlanganda kim mas\'ulatini tarixdan ko\'rish - aynan audit degani shu.',
+          ru: 'Каждый коммит хранит автора, дату и описание. Когда найдена атака или ошибка, по истории видно, кто отвечает - это и есть аудит.',
         },
       },
       {
@@ -1169,13 +1169,13 @@ git commit -m "Исправление по безопасности добавл
         },
         items: [
           { id: 'i1', uz: "Faylni tahrirlash", ru: 'Отредактировать файл' },
-          { id: 'i2', uz: 'git add bilan tayyorlash', ru: 'git add — подготовить' },
-          { id: 'i3', uz: 'git commit bilan saqlash', ru: 'git commit — сохранить' },
+          { id: 'i2', uz: 'git add bilan tayyorlash', ru: 'git add - подготовить' },
+          { id: 'i3', uz: 'git commit bilan saqlash', ru: 'git commit - сохранить' },
         ],
         order: ['i1', 'i2', 'i3'],
         explain: {
-          uz: 'Avval o\'zgartirasiz (working tree), keyin tanlanganlarni tayyorlaysiz (add), oxirida tarixga butunlay saqlaysiz (commit). Shu uch bosqich — Git\'ning kundalik ritmi.',
-          ru: 'Сначала меняете (рабочее дерево), затем готовите выбранные файлы (add), в конце навсегда сохраняете в историю (commit). Эти три шага — ежедневный ритм Git.',
+          uz: 'Avval o\'zgartirasiz (working tree), keyin tanlanganlarni tayyorlaysiz (add), oxirida tarixga butunlay saqlaysiz (commit). Shu uch bosqich - Git\'ning kundalik ritmi.',
+          ru: 'Сначала меняете (рабочее дерево), затем готовите выбранные файлы (add), в конце навсегда сохраняете в историю (commit). Эти три шага - ежедневный ритм Git.',
         },
       },
     ],
@@ -1188,32 +1188,32 @@ git commit -m "Исправление по безопасности добавл
     xp_reward: 25,
     title: { uz: 'Branch, merge va pull request', ru: 'Ветки, слияние и pull request' },
     content: {
-      uz: `## Branch — xavfsiz oqim
+      uz: `## Branch - xavfsiz oqim
 
-**Branch (filial)** — loyihaning mustaqil oqimi. Unda ishlash **asosiy (main) kodni o'zgartirmaydi**.
+**Branch (filial)** - loyihaning mustaqil oqimi. Unda ishlash **asosiy (main) kodni o'zgartirmaydi**.
 
-- **Merge** — ikki oqimni birlashtirish.
-- **Pull request (PR)** — o'zgarishni avval jamoa ko'rib chiqadi, keyin main'ga qo'shiladi.
+- **Merge** - ikki oqimni birlashtirish.
+- **Pull request (PR)** - o'zgarishni avval jamoa ko'rib chiqadi, keyin main'ga qo'shiladi.
 
 \`\`\`bash
 git checkout -b yangi-funksiya   # branch ochish
 git merge yangi-funksiya          # birlashtirish
 \`\`\`
 
-> **Nega main himoyalangan:** yangi kod avval branch'da sinab va tekshiriladi. Xato chiqsa — shu branch o'chiriladi, hamma ishlaydigan main buzilmaydi.`,
-      ru: `## Ветка — безопасная линия
+> **Nega main himoyalangan:** yangi kod avval branch'da sinab va tekshiriladi. Xato chiqsa - shu branch o'chiriladi, hamma ishlaydigan main buzilmaydi.`,
+      ru: `## Ветка - безопасная линия
 
-**Ветка (branch)** — независимая линия разработки. Работа в ней **не меняет основной (main) код**.
+**Ветка (branch)** - независимая линия разработки. Работа в ней **не меняет основной (main) код**.
 
-- **Merge (слияние)** — объединение двух линий.
-- **Pull request (PR)** — сначала команда рассматривает изменение, и только потом оно попадает в main.
+- **Merge (слияние)** - объединение двух линий.
+- **Pull request (PR)** - сначала команда рассматривает изменение, и только потом оно попадает в main.
 
 \`\`\`bash
 git checkout -b new-feature   # создать ветку
 git merge new-feature         # слить её
 \`\`\`
 
-> **Почему защищён main:** новый код сначала проверяют в ветке. Ошибка — ветку удаляют, а рабочий main остаётся целым.`,
+> **Почему защищён main:** новый код сначала проверяют в ветке. Ошибка - ветку удаляют, а рабочий main остаётся целым.`,
     },
     exercises: [
       {
@@ -1231,8 +1231,8 @@ git merge new-feature         # слить её
         ],
         answer: 'b',
         explain: {
-          uz: 'Branch — loyihaning yangi oqimi: unda xohlagancha o\'zgartirish qilasiz, lekin main faqat siz ruxsat berganingizgacha o\'zgarmaydi.',
-          ru: 'Ветка — новая линия проекта: в ней можно менять что угодно, но main изменится только с вашего явного разрешения.',
+          uz: 'Branch - loyihaning yangi oqimi: unda xohlagancha o\'zgartirish qilasiz, lekin main faqat siz ruxsat berganingizgacha o\'zgarmaydi.',
+          ru: 'Ветка - новая линия проекта: в ней можно менять что угодно, но main изменится только с вашего явного разрешения.',
         },
       },
       {
@@ -1246,7 +1246,7 @@ git merge new-feature         # слить её
           {
             id: 'p1',
             left: { uz: 'Branch', ru: 'Ветка' },
-            right: { id: 'p1', uz: "Alohida oqim — main buzilmaydi", ru: 'Отдельная линия — main не затрагивается' },
+            right: { id: 'p1', uz: "Alohida oqim - main buzilmaydi", ru: 'Отдельная линия - main не затрагивается' },
           },
           {
             id: 'p2',
@@ -1280,8 +1280,8 @@ git merge new-feature         # слить её
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: 'Main — barcha uchun ishlaydigan kod. Unga tekshiruvsiz yozish buzilish, xatosiz o\'zgarish va murakkab tarixga olib keladi. Diskga bu hech qanday aloqasi yo\'q.',
-          ru: 'Main — код, работающий у всех. Писать туда без проверки — значит рискнуть сломать всё, впустить непроверенное и запутать историю. К диску это отношения не имеет.',
+          uz: 'Main - barcha uchun ishlaydigan kod. Unga tekshiruvsiz yozish buzilish, xatosiz o\'zgarish va murakkab tarixga olib keladi. Diskga bu hech qanday aloqasi yo\'q.',
+          ru: 'Main - код, работающий у всех. Писать туда без проверки - значит рискнуть сломать всё, впустить непроверенное и запутать историю. К диску это отношения не имеет.',
         },
       },
       {
@@ -1293,8 +1293,8 @@ git merge new-feature         # слить её
         },
         answer: 'true',
         explain: {
-          uz: 'To\'g\'ri: branch — alohida oqim. Main faqat merge yoki PR qabul qilingandagina o\'zgaradi — shu orada xato uchun joy bor.',
-          ru: 'Верно: ветка — отдельная линия. Main меняется только после merge или принятого PR — так остаётся место для ошибки.',
+          uz: 'To\'g\'ri: branch - alohida oqim. Main faqat merge yoki PR qabul qilingandagina o\'zgaradi - shu orada xato uchun joy bor.',
+          ru: 'Верно: ветка - отдельная линия. Main меняется только после merge или принятого PR - так остаётся место для ошибки.',
         },
       },
     ],

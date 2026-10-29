@@ -1,5 +1,5 @@
 /**
- * Scored assessments — one per learning track.
+ * Scored assessments - one per learning track.
  *
  * Questions are drawn at start time from the exercises of the track's own
  * modules (see lib/assessment.js), so an assessment always evaluates material

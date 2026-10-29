@@ -1,19 +1,19 @@
 /**
- * Curriculum — Cybersecurity path › Domain: Ethical testing (offensive / pentest)
+ * Curriculum - Cybersecurity path › Domain: Ethical testing (offensive / pentest)
  *
  * Shape (validated by scripts/validate-curriculum.js via lib/grade.validateExercise):
  *   module: { slug, title:{uz,ru}, content:{uz,ru}, kind, xp_reward, exercises:[...] }
  *   kind: 'lesson' | 'checkpoint'   (checkpoint = end-of-domain trophy node)
  *
  * Rules for authors:
- *   - Lesson prose: short. 6–14 markdown lines per language.
+ *   - Lesson prose: short. 6-14 markdown lines per language.
  *   - Every exercise: bilingual q + explain, beginner level, no trick questions.
- *   - CONCEPTUAL only — no exploit instructions, no tool commands, no payloads.
+ *   - CONCEPTUAL only - no exploit instructions, no tool commands, no payloads.
  *     Ethics and authorization come first; the goal is understanding, not a recipe.
  *   - Exercise ids: e1..eN in delivery order.
  *   - Uzbek: simple, modern Uzbek Latin. Russian: natural, not machine-translated.
  *   - Any string containing a straight ' MUST be double-quoted (or a template
- *     literal) — a ' inside a single-quoted string breaks the file.
+ *     literal) - a ' inside a single-quoted string breaks the file.
  */
 
 module.exports = [
@@ -25,28 +25,28 @@ module.exports = [
     content: {
       uz: `## Etika va ruxsat (authorization)
 
-**Axloqiy xakerlik** — faqat **ruxsat bilan** tekshirish. Ruxsatsiz sinash — jinoyat, hatto "yaxshi maqsad" bilan bo'lsa ham.
+**Axloqiy xakerlik** - faqat **ruxsat bilan** tekshirish. Ruxsatsiz sinash - jinoyat, hatto "yaxshi maqsad" bilan bo'lsa ham.
 
 **Asosiy hujjatlar:**
-- **Ruxsat (authorization)** — yozma rozilik: kim, nimani, qachon sinaydi.
-- **Scope** — aniq chegaralar: qaysi tizimlar kiradi, qaysilari **hech qachon** tegmaydi.
-- **Rules of engagement** — qoidalar: vaqt, usul, nima qilish mumkin yoki mumkin emas.
+- **Ruxsat (authorization)** - yozma rozilik: kim, nimani, qachon sinaydi.
+- **Scope** - aniq chegaralar: qaysi tizimlar kiradi, qaysilari **hech qachon** tegmaydi.
+- **Rules of engagement** - qoidalar: vaqt, usul, nima qilish mumkin yoki mumkin emas.
 
-**Qoida:** scope tashqarisidagi tizim — taqiqlangan. "Tasodifan topdim" ham ruxsat bermaydi.
+**Qoida:** scope tashqarisidagi tizim - taqiqlangan. "Tasodifan topdim" ham ruxsat bermaydi.
 
-> **Xavfsizlik:** birinchi qadam — texnika emas, **huquqiy asos**. Ruxsatsiz test — karyera va erkinlikni yo'qotadigan xato.`,
+> **Xavfsizlik:** birinchi qadam - texnika emas, **huquqiy asos**. Ruxsatsiz test - karyera va erkinlikni yo'qotadigan xato.`,
       ru: `## Этика и разрешение (authorization)
 
-**Этичный хакинг** — проверка **только с разрешения**. Тестирование без разрешения — преступление, даже с «благими намерениями».
+**Этичный хакинг** - проверка **только с разрешения**. Тестирование без разрешения - преступление, даже с «благими намерениями».
 
 **Основные документы:**
-- **Разрешение (authorization)** — письменное согласие: кто, что и когда тестирует.
-- **Scope** — чёткие границы: какие системы входят, а каких **никогда** не касаются.
-- **Rules of engagement** — правила: время, методы, что можно и что нельзя.
+- **Разрешение (authorization)** - письменное согласие: кто, что и когда тестирует.
+- **Scope** - чёткие границы: какие системы входят, а каких **никогда** не касаются.
+- **Rules of engagement** - правила: время, методы, что можно и что нельзя.
 
-**Правило:** система за пределами scope — запрещена. «Случайно нашёл» тоже не даёт разрешения.
+**Правило:** система за пределами scope - запрещена. «Случайно нашёл» тоже не даёт разрешения.
 
-> **Безопасность:** первый шаг — не техника, а **правовое основание**. Тест без разрешения — ошибка, которая стоит карьеры и свободы.`,
+> **Безопасность:** первый шаг - не техника, а **правовое основание**. Тест без разрешения - ошибка, которая стоит карьеры и свободы.`,
     },
     exercises: [
       {
@@ -64,8 +64,8 @@ module.exports = [
         ],
         answer: 'a',
         explain: {
-          uz: "Ruxsat — asos. Ruxsatsiz sinash jinoyat hisoblanadi, natijasi qanday bo'lishidan qat'i nazar.",
-          ru: 'Разрешение — основа. Тестирование без разрешения является преступлением независимо от результата.',
+          uz: "Ruxsat - asos. Ruxsatsiz sinash jinoyat hisoblanadi, natijasi qanday bo'lishidan qat'i nazar.",
+          ru: 'Разрешение - основа. Тестирование без разрешения является преступлением независимо от результата.',
         },
       },
       {
@@ -73,12 +73,12 @@ module.exports = [
         type: 'tf',
         q: {
           uz: "Agar zaiflik tasodifan topilsa, uni sinab ko'rish mumkin, chunki ruxsat shart emas.",
-          ru: 'Если уязвимость найдена случайно, её можно проверить — разрешение не нужно.',
+          ru: 'Если уязвимость найдена случайно, её можно проверить - разрешение не нужно.',
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — scope tashqarisidagi tizim taqiqlangan. Tasodifan topilgan narsa ham ruxsat bermaydi.",
-          ru: 'Нет — система вне scope запрещена. Случайно найденная вещь тоже не даёт разрешения.',
+          uz: "Yo'q - scope tashqarisidagi tizim taqiqlangan. Tasodifan topilgan narsa ham ruxsat bermaydi.",
+          ru: 'Нет - система вне scope запрещена. Случайно найденная вещь тоже не даёт разрешения.',
         },
       },
       {
@@ -96,8 +96,8 @@ module.exports = [
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Scope, usullar va vaqt — oldindan yozma kelishiladi. 'Xohlagan tizim' esa aynan taqiqlangan narsa.",
-          ru: 'Scope, методы и время согласуют заранее письменно. А «любая система» — как раз запрещённое.',
+          uz: "Scope, usullar va vaqt - oldindan yozma kelishiladi. 'Xohlagan tizim' esa aynan taqiqlangan narsa.",
+          ru: 'Scope, методы и время согласуют заранее письменно. А «любая система» - как раз запрещённое.',
         },
       },
       {
@@ -116,7 +116,7 @@ module.exports = [
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Authorization rozilik, scope chegara, rules of engagement qoidalar, out of scope esa tegish taqiqlangan hudud.",
-          ru: 'Authorization — согласие, scope — границы, rules of engagement — правила, а out of scope — запретная зона.',
+          ru: 'Authorization - согласие, scope - границы, rules of engagement - правила, а out of scope - запретная зона.',
         },
       },
     ],
@@ -130,26 +130,26 @@ module.exports = [
     content: {
       uz: `## Razvedka (reconnaissance)
 
-**Razvedka** — hujumdan oldin ma'lumot yig'ish. Qancha ko'p bilsang, shuncha aniq ishlaysan.
+**Razvedka** - hujumdan oldin ma'lumot yig'ish. Qancha ko'p bilsang, shuncha aniq ishlaysan.
 
 **Turlari:**
-- **Passiv** — tizimga tegmasdan yig'ish (ochiq manbalar, OSINT): domen, xodimlar, texnologiyalar.
-- **Aktiv** — tizimga so'rov yuborib tekshirish (ko'proq iz qoldiradi).
+- **Passiv** - tizimga tegmasdan yig'ish (ochiq manbalar, OSINT): domen, xodimlar, texnologiyalar.
+- **Aktiv** - tizimga so'rov yuborib tekshirish (ko'proq iz qoldiradi).
 
 **Nima qidiriladi:** domenlar, IP diapazonlar, ochiq xizmatlar, ishlatilgan texnologiyalar, ochiq hujjatlar.
 
-> **Xavfsizlik:** passiv razvedka ko'pincha yetarli — ochiq ma'lumotning o'zi katta sirni ochadi. Shu sabab tashkilotlar "ochiq" ma'lumotni ham boshqarishi kerak.`,
+> **Xavfsizlik:** passiv razvedka ko'pincha yetarli - ochiq ma'lumotning o'zi katta sirni ochadi. Shu sabab tashkilotlar "ochiq" ma'lumotni ham boshqarishi kerak.`,
       ru: `## Разведка (reconnaissance)
 
-**Разведка** — сбор информации до атаки. Чем больше знаешь, тем точнее действуешь.
+**Разведка** - сбор информации до атаки. Чем больше знаешь, тем точнее действуешь.
 
 **Виды:**
-- **Пассивная** — сбор без касания системы (открытые источники, OSINT): домены, сотрудники, технологии.
-- **Активная** — проверка с запросами к системе (оставляет больше следов).
+- **Пассивная** - сбор без касания системы (открытые источники, OSINT): домены, сотрудники, технологии.
+- **Активная** - проверка с запросами к системе (оставляет больше следов).
 
 **Что ищут:** домены, диапазоны IP, открытые сервисы, используемые технологии, открытые документы.
 
-> **Безопасность:** пассивной разведки часто достаточно — открытые данные сами раскрывают большой секрет. Поэтому организации должны управлять даже «открытой» информацией.`,
+> **Безопасность:** пассивной разведки часто достаточно - открытые данные сами раскрывают большой секрет. Поэтому организации должны управлять даже «открытой» информацией.`,
     },
     exercises: [
       {
@@ -176,12 +176,12 @@ module.exports = [
         type: 'tf',
         q: {
           uz: "Razvedka hujumdan oldingi bosqich bo'lib, ko'proq ma'lumot aniqroq harakat beradi.",
-          ru: 'Разведка — этап перед атакой: больше данных даёт более точные действия.',
+          ru: 'Разведка - этап перед атакой: больше данных даёт более точные действия.',
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — ma'lumot qancha ko'p bo'lsa, keyingi bosqichlar shuncha aniq va samarali bo'ladi.",
-          ru: 'Верно — чем больше данных, тем точнее и эффективнее последующие этапы.',
+          uz: "To'g'ri - ma'lumot qancha ko'p bo'lsa, keyingi bosqichlar shuncha aniq va samarali bo'ladi.",
+          ru: 'Верно - чем больше данных, тем точнее и эффективнее последующие этапы.',
         },
       },
       {
@@ -199,8 +199,8 @@ module.exports = [
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Domen, IP, xizmatlar va ochiq hujjatlar — qonuniy va foydali ma'lumot. Shaxsiy sirlarni yig'ish esa etikaga zid.",
-          ru: 'Домены, IP, сервисы и открытые документы — законные и полезные данные. А сбор личных тайн противоречит этике.',
+          uz: "Domen, IP, xizmatlar va ochiq hujjatlar - qonuniy va foydali ma'lumot. Shaxsiy sirlarni yig'ish esa etikaga zid.",
+          ru: 'Домены, IP, сервисы и открытые документы - законные и полезные данные. А сбор личных тайн противоречит этике.',
         },
       },
       {
@@ -219,7 +219,7 @@ module.exports = [
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Passiv tegmasdan, aktiv so'rov bilan, OSINT ochiq manbadan, footprinting esa nishon haqida umumiy tasvirni chizadi.",
-          ru: 'Пассивная — без касания, активная — с запросами, OSINT — из открытых источников, а footprinting рисует общую картину цели.',
+          ru: 'Пассивная - без касания, активная - с запросами, OSINT - из открытых источников, а footprinting рисует общую картину цели.',
         },
       },
     ],
@@ -233,26 +233,26 @@ module.exports = [
     content: {
       uz: `## Skanerlash va sanab chiqish (enumeration)
 
-**Skanerlash** — nishonda qaysi port va xizmat ochiqligini aniqlash. Bu — "xarita" chizish.
+**Skanerlash** - nishonda qaysi port va xizmat ochiqligini aniqlash. Bu - "xarita" chizish.
 
-**Enumeration** — har bir ochiq xizmat haqida chuqurroq ma'lumot: versiya, sozlama, foydalanuvchilar.
+**Enumeration** - har bir ochiq xizmat haqida chuqurroq ma'lumot: versiya, sozlama, foydalanuvchilar.
 
 **Nima uchun:** eski versiya yoki noto'g'ri sozlama ko'pincha ma'lum zaiflikni bildiradi.
 
-**Muhim:** skanerlash shovqinli bo'lishi mumkin — tizim logiga tushadi. Shuning uchun **ruxsat** va **vaqt** kelishilgan bo'lishi shart.
+**Muhim:** skanerlash shovqinli bo'lishi mumkin - tizim logiga tushadi. Shuning uchun **ruxsat** va **vaqt** kelishilgan bo'lishi shart.
 
-> **Xavfsizlik:** skaner zaiflikni **topadi**, lekin isbotlamaydi. Ba'zan "topilgan" narsa noto'g'ri (false positive) bo'ladi — tekshirish kerak.`,
+> **Xavfsizlik:** skaner zaiflikni **topadi**, lekin isbotlamaydi. Ba'zan "topilgan" narsa noto'g'ri (false positive) bo'ladi - tekshirish kerak.`,
       ru: `## Сканирование и перечисление (enumeration)
 
-**Сканирование** — определить, какие порты и сервисы открыты на цели. Это составление «карты».
+**Сканирование** - определить, какие порты и сервисы открыты на цели. Это составление «карты».
 
-**Enumeration** — более глубокие сведения о каждом открытом сервисе: версия, настройка, пользователи.
+**Enumeration** - более глубокие сведения о каждом открытом сервисе: версия, настройка, пользователи.
 
 **Зачем:** старая версия или неверная настройка часто указывают на известную уязвимость.
 
-**Важно:** сканирование бывает шумным — оно попадает в логи системы. Поэтому **разрешение** и **время** должны быть согласованы.
+**Важно:** сканирование бывает шумным - оно попадает в логи системы. Поэтому **разрешение** и **время** должны быть согласованы.
 
-> **Безопасность:** сканер **находит** уязвимость, но не доказывает её. Иногда «найденное» оказывается ложным (false positive) — нужна проверка.`,
+> **Безопасность:** сканер **находит** уязвимость, но не доказывает её. Иногда «найденное» оказывается ложным (false positive) - нужна проверка.`,
     },
     exercises: [
       {
@@ -270,8 +270,8 @@ module.exports = [
         ],
         answer: 'a',
         explain: {
-          uz: "Enumeration har bir ochiq xizmat bo'yicha versiya, sozlama va foydalanuvchilarni aniqlaydi — skanerdan keyingi qadam.",
-          ru: 'Enumeration определяет версию, настройку и пользователей по каждому открытому сервису — шаг после сканирования.',
+          uz: "Enumeration har bir ochiq xizmat bo'yicha versiya, sozlama va foydalanuvchilarni aniqlaydi - skanerdan keyingi qadam.",
+          ru: 'Enumeration определяет версию, настройку и пользователей по каждому открытому сервису - шаг после сканирования.',
         },
       },
       {
@@ -279,12 +279,12 @@ module.exports = [
         type: 'tf',
         q: {
           uz: "Skaner topgan hamma narsa haqiqiy zaiflik (false positive yo'q)",
-          ru: 'Всё, что нашёл сканер, — реальная уязвимость (ложных нет).',
+          ru: 'Всё, что нашёл сканер, - реальная уязвимость (ложных нет).',
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — skaner noto'g'ri natija (false positive) berishi mumkin. Har bir topilmani qo'lda tekshirish kerak.",
-          ru: 'Нет — сканер может дать ложный результат (false positive). Каждую находку нужно проверять вручную.',
+          uz: "Yo'q - skaner noto'g'ri natija (false positive) berishi mumkin. Har bir topilmani qo'lda tekshirish kerak.",
+          ru: 'Нет - сканер может дать ложный результат (false positive). Каждую находку нужно проверять вручную.',
         },
       },
       {
@@ -302,8 +302,8 @@ module.exports = [
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Portlar, versiyalar va sozlamalar — asosiy ma'lumot. Ular ma'lum zaifliklarga ishora qiladi.",
-          ru: 'Порты, версии и настройки — основные данные. Они указывают на известные уязвимости.',
+          uz: "Portlar, versiyalar va sozlamalar - asosiy ma'lumot. Ular ma'lum zaifliklarga ishora qiladi.",
+          ru: 'Порты, версии и настройки - основные данные. Они указывают на известные уязвимости.',
         },
       },
       {
@@ -317,12 +317,12 @@ module.exports = [
           { id: 'p1', left: { uz: 'Skanerlash', ru: 'Сканирование' }, right: { uz: 'Ochiq port va xizmatlarni topadi', ru: 'Находит открытые порты и сервисы' } },
           { id: 'p2', left: { uz: 'Enumeration', ru: 'Enumeration' }, right: { uz: 'Xizmat haqida chuqur malumot', ru: 'Глубокие данные о сервисе' } },
           { id: 'p3', left: { uz: 'False positive', ru: 'False positive' }, right: { uz: "Noto'g'ri topilma", ru: 'Ложная находка' } },
-          { id: 'p4', left: { uz: 'Versiya', ru: 'Версия' }, right: { uz: "Eski bo'lsa xavf manbai", ru: 'Если старая — источник риска' } },
+          { id: 'p4', left: { uz: 'Versiya', ru: 'Версия' }, right: { uz: "Eski bo'lsa xavf manbai", ru: 'Если старая - источник риска' } },
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Skanerlash ochiq narsani topadi, enumeration chuqurlashtiradi, false positive yolg'on natija, eski versiya esa xavf tug'diradi.",
-          ru: 'Сканирование находит открытое, enumeration углубляет, false positive — ложный результат, а старая версия создаёт риск.',
+          ru: 'Сканирование находит открытое, enumeration углубляет, false positive - ложный результат, а старая версия создаёт риск.',
         },
       },
     ],
@@ -336,28 +336,28 @@ module.exports = [
     content: {
       uz: `## Ekspluatatsiya asoslari (exploitation)
 
-**Ekspluatatsiya** — topilgan zaiflikdan **ruxsat doirasida** foydalanib, uning ta'sirini ko'rsatish.
+**Ekspluatatsiya** - topilgan zaiflikdan **ruxsat doirasida** foydalanib, uning ta'sirini ko'rsatish.
 
-**Maqsad — isbot, zarar emas:**
+**Maqsad - isbot, zarar emas:**
 - Eng kam ta'sir bilan isbotlash (proof of concept, PoC).
 - Faqat kerakli qadamni bajarish, keyin **to'xtash**.
 - Ma'lumotni ko'chirmaslik va o'zgartirmaslik.
 
 **Nima uchun muhim:** rahbariyat "zaiflik bor" degan gapga emas, **ko'rsatilgan ta'sirga** ishonadi.
 
-> **Xavfsizlik:** ekspluatatsiya paytida chegaradan chiqib ketish oson. Isbot yetganda to'xtash — professionallik belgisi.`,
+> **Xavfsizlik:** ekspluatatsiya paytida chegaradan chiqib ketish oson. Isbot yetganda to'xtash - professionallik belgisi.`,
       ru: `## Основы эксплуатации (exploitation)
 
-**Эксплуатация** — использование найденной уязвимости **в рамках разрешения**, чтобы показать её влияние.
+**Эксплуатация** - использование найденной уязвимости **в рамках разрешения**, чтобы показать её влияние.
 
-**Цель — доказательство, а не вред:**
+**Цель - доказательство, а не вред:**
 - Доказать с минимальным воздействием (proof of concept, PoC).
 - Выполнить только нужный шаг, затем **остановиться**.
 - Не копировать и не изменять данные.
 
 **Почему это важно:** руководство верит не словам «есть уязвимость», а **продемонстрированному влиянию**.
 
-> **Безопасность:** при эксплуатации легко выйти за рамки. Остановиться, когда доказательство получено, — признак профессионализма.`,
+> **Безопасность:** при эксплуатации легко выйти за рамки. Остановиться, когда доказательство получено, - признак профессионализма.`,
     },
     exercises: [
       {
@@ -375,8 +375,8 @@ module.exports = [
         ],
         answer: 'a',
         explain: {
-          uz: "Maqsad — isbot, zarar emas: eng kam ta'sir bilan zaiflikni ko'rsatish va to'xtash.",
-          ru: 'Цель — доказательство, а не вред: показать уязвимость с минимальным воздействием и остановиться.',
+          uz: "Maqsad - isbot, zarar emas: eng kam ta'sir bilan zaiflikni ko'rsatish va to'xtash.",
+          ru: 'Цель - доказательство, а не вред: показать уязвимость с минимальным воздействием и остановиться.',
         },
       },
       {
@@ -388,8 +388,8 @@ module.exports = [
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — isbot yetganda to'xtash kerak. Scope tashqarisiga chiqish ruxsatni buzadi.",
-          ru: 'Нет — когда доказательство получено, нужно остановиться. Выход за scope нарушает разрешение.',
+          uz: "Yo'q - isbot yetganda to'xtash kerak. Scope tashqarisiga chiqish ruxsatni buzadi.",
+          ru: 'Нет - когда доказательство получено, нужно остановиться. Выход за scope нарушает разрешение.',
         },
       },
       {
@@ -407,8 +407,8 @@ module.exports = [
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Kam ta'sir, qayta ko'rsatish va hujjat — ishonchli isbot. Ma'lumotni ko'chirish esa etikaga zid va ruxsatdan tashqari.",
-          ru: 'Минимальное воздействие, воспроизводимость и документ — надёжное доказательство. А копирование данных противоречит этике и выходит за разрешение.',
+          uz: "Kam ta'sir, qayta ko'rsatish va hujjat - ishonchli isbot. Ma'lumotni ko'chirish esa etikaga zid va ruxsatdan tashqari.",
+          ru: 'Минимальное воздействие, воспроизводимость и документ - надёжное доказательство. А копирование данных противоречит этике и выходит за разрешение.',
         },
       },
       {
@@ -426,8 +426,8 @@ module.exports = [
         ],
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
-          uz: "PoC — isbot, eng kam ta'sir — zararni minimallashtirish, reproducible — qayta ko'rsatish, to'xtash esa isbot yetganda tugatish.",
-          ru: 'PoC — доказательство, минимальное воздействие — уменьшение ущерба, reproducible — воспроизводимость, а остановка — завершение по достижении доказательства.',
+          uz: "PoC - isbot, eng kam ta'sir - zararni minimallashtirish, reproducible - qayta ko'rsatish, to'xtash esa isbot yetganda tugatish.",
+          ru: 'PoC - доказательство, минимальное воздействие - уменьшение ущерба, reproducible - воспроизводимость, а остановка - завершение по достижении доказательства.',
         },
       },
     ],
@@ -441,24 +441,24 @@ module.exports = [
     content: {
       uz: `## Huquq oshirish va yonlama harakatlanish
 
-**Privilege escalation (huquq oshirish)** — past huquqdan yuqori huquqqa (masalan, oddiy foydalanuvchidan admin) chiqish.
+**Privilege escalation (huquq oshirish)** - past huquqdan yuqori huquqqa (masalan, oddiy foydalanuvchidan admin) chiqish.
 
-- **Vertikal** — pastdan yuqoriga (foydalanuvchi → admin).
-- **Gorizontal** — teng darajadan boshqa hisobga (bir foydalanuvchidan boshqasiga).
+- **Vertikal** - pastdan yuqoriga (foydalanuvchi → admin).
+- **Gorizontal** - teng darajadan boshqa hisobga (bir foydalanuvchidan boshqasiga).
 
-**Lateral movement (yonlama harakatlanish)** — bitta tizimdan boshqasiga o'tish, ko'pincha bir xil parol yoki kalit tufayli.
+**Lateral movement (yonlama harakatlanish)** - bitta tizimdan boshqasiga o'tish, ko'pincha bir xil parol yoki kalit tufayli.
 
 **Himoya tomoni:** segmentatsiya, eng kam imtiyoz va **har xil parol** bunday zanjirni uzadi.
 
 > **Xavfsizlik:** buzg'unchi ko'pincha bitta kichik kirishdan boshlaydi, keyin huquq oshirib, ichkarida tarqaladi. Shu sabab har bir qadam muhim.`,
       ru: `## Повышение привилегий и перемещение
 
-**Privilege escalation (повышение привилегий)** — переход с низких прав на высокие (например, от обычного пользователя к админу).
+**Privilege escalation (повышение привилегий)** - переход с низких прав на высокие (например, от обычного пользователя к админу).
 
-- **Вертикальное** — снизу вверх (пользователь → админ).
-- **Горизонтальное** — с одного равного уровня на другой аккаунт (от одного пользователя к другому).
+- **Вертикальное** - снизу вверх (пользователь → админ).
+- **Горизонтальное** - с одного равного уровня на другой аккаунт (от одного пользователя к другому).
 
-**Lateral movement (перемещение вбок)** — переход с одной системы на другую, часто из-за одинакового пароля или ключа.
+**Lateral movement (перемещение вбок)** - переход с одной системы на другую, часто из-за одинакового пароля или ключа.
 
 **Со стороны защиты:** сегментация, наименьшие привилегии и **разные пароли** разрывают такую цепочку.
 
@@ -480,8 +480,8 @@ module.exports = [
         ],
         answer: 'a',
         explain: {
-          uz: "Vertikal — pastdan yuqoriga (foydalanuvchi → admin). Gorizontal esa teng darajadan boshqa hisobga.",
-          ru: 'Вертикальное — снизу вверх (пользователь → админ). А горизонтальное — с одного равного уровня на другой аккаунт.',
+          uz: "Vertikal - pastdan yuqoriga (foydalanuvchi → admin). Gorizontal esa teng darajadan boshqa hisobga.",
+          ru: 'Вертикальное - снизу вверх (пользователь → админ). А горизонтальное - с одного равного уровня на другой аккаунт.',
         },
       },
       {
@@ -493,8 +493,8 @@ module.exports = [
         },
         answer: 'true',
         explain: {
-          uz: "To'g'ri — bir xil parol yoki kalit bir tizimdan boshqasiga o'tishni osonlashtiradi. Shu sabab har joyda har xil parol kerak.",
-          ru: 'Верно — одинаковый пароль или ключ облегчает переход с одной системы на другую. Поэтому везде нужны разные пароли.',
+          uz: "To'g'ri - bir xil parol yoki kalit bir tizimdan boshqasiga o'tishni osonlashtiradi. Shu sabab har joyda har xil parol kerak.",
+          ru: 'Верно - одинаковый пароль или ключ облегчает переход с одной системы на другую. Поэтому везде нужны разные пароли.',
         },
       },
       {
@@ -512,7 +512,7 @@ module.exports = [
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Segmentatsiya, eng kam imtiyoz va har xil parol zanjirni uzadi. Bitta admin parol esa aksincha — hammasini ochadi.",
+          uz: "Segmentatsiya, eng kam imtiyoz va har xil parol zanjirni uzadi. Bitta admin parol esa aksincha - hammasini ochadi.",
           ru: 'Сегментация, наименьшие привилегии и разные пароли разрывают цепочку. А один админский пароль наоборот открывает всё.',
         },
       },
@@ -532,7 +532,7 @@ module.exports = [
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Vertikal pastdan yuqoriga, gorizontal tengdan tengga, lateral movement tizimlararo, segmentatsiya esa tarqalishni to'sadi.",
-          ru: 'Вертикальное — снизу вверх, горизонтальное — от равного к равному, lateral movement — между системами, а сегментация останавливает распространение.',
+          ru: 'Вертикальное - снизу вверх, горизонтальное - от равного к равному, lateral movement - между системами, а сегментация останавливает распространение.',
         },
       },
     ],
@@ -546,30 +546,30 @@ module.exports = [
     content: {
       uz: `## Hisobot va tuzatish (reporting)
 
-Tekshiruvning **asosiy mahsuloti — hisobot**. Usiz butun ish behuda.
+Tekshiruvning **asosiy mahsuloti - hisobot**. Usiz butun ish behuda.
 
 **Hisobotda nima bo'ladi:**
-- **Topilma** — zaiflik tavsifi va dalil.
-- **Jiddiylik** — ta'sir va ehtimollik asosida baho.
-- **Qayta ko'rsatish** — muammoni qanday takrorlash mumkin.
-- **Tavsiya (remediation)** — qanday tuzatish kerak.
+- **Topilma** - zaiflik tavsifi va dalil.
+- **Jiddiylik** - ta'sir va ehtimollik asosida baho.
+- **Qayta ko'rsatish** - muammoni qanday takrorlash mumkin.
+- **Tavsiya (remediation)** - qanday tuzatish kerak.
 
-**Tartib:** eng jiddiysidan boshlash. Har bir topilma **tushunarli tilda** yozilsin — texnik va rahbariyat ikkisi ham o'qiy olsin.
+**Tartib:** eng jiddiysidan boshlash. Har bir topilma **tushunarli tilda** yozilsin - texnik va rahbariyat ikkisi ham o'qiy olsin.
 
-> **Xavfsizlik:** "topdim" bilan ish tugamaydi. Tuzatilishi va qayta tekshirilishi kerak — aks holda zaiflik joyida qoladi.`,
+> **Xavfsizlik:** "topdim" bilan ish tugamaydi. Tuzatilishi va qayta tekshirilishi kerak - aks holda zaiflik joyida qoladi.`,
       ru: `## Отчёт и устранение (reporting)
 
-**Главный продукт проверки — отчёт**. Без него вся работа напрасна.
+**Главный продукт проверки - отчёт**. Без него вся работа напрасна.
 
 **Что содержит отчёт:**
-- **Находка** — описание уязвимости и доказательство.
-- **Серьёзность** — оценка на основе влияния и вероятности.
-- **Воспроизведение** — как повторить проблему.
-- **Рекомендация (remediation)** — как исправить.
+- **Находка** - описание уязвимости и доказательство.
+- **Серьёзность** - оценка на основе влияния и вероятности.
+- **Воспроизведение** - как повторить проблему.
+- **Рекомендация (remediation)** - как исправить.
 
-**Порядок:** начинать с самого серьёзного. Каждая находка должна быть **на понятном языке** — чтобы её поняли и технари, и руководство.
+**Порядок:** начинать с самого серьёзного. Каждая находка должна быть **на понятном языке** - чтобы её поняли и технари, и руководство.
 
-> **Безопасность:** на «нашёл» работа не заканчивается. Нужно исправить и перепроверить — иначе уязвимость останется на месте.`,
+> **Безопасность:** на «нашёл» работа не заканчивается. Нужно исправить и перепроверить - иначе уязвимость останется на месте.`,
     },
     exercises: [
       {
@@ -587,8 +587,8 @@ Tekshiruvning **asosiy mahsuloti — hisobot**. Usiz butun ish behuda.
         ],
         answer: 'a',
         explain: {
-          uz: "Hisobot — asosiy natija: topilmalar, jiddiylik, qayta ko'rsatish va tuzatish tavsiyalari.",
-          ru: 'Отчёт — главный результат: находки, серьёзность, воспроизведение и рекомендации по устранению.',
+          uz: "Hisobot - asosiy natija: topilmalar, jiddiylik, qayta ko'rsatish va tuzatish tavsiyalari.",
+          ru: 'Отчёт - главный результат: находки, серьёзность, воспроизведение и рекомендации по устранению.',
         },
       },
       {
@@ -600,8 +600,8 @@ Tekshiruvning **asosiy mahsuloti — hisobot**. Usiz butun ish behuda.
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — qarorni rahbariyat qabul qiladi. Hisobot texnik va tushunarli tilda bo'lishi kerak.",
-          ru: 'Нет — решение принимает руководство. Отчёт должен быть техническим и при этом понятным.',
+          uz: "Yo'q - qarorni rahbariyat qabul qiladi. Hisobot texnik va tushunarli tilda bo'lishi kerak.",
+          ru: 'Нет - решение принимает руководство. Отчёт должен быть техническим и при этом понятным.',
         },
       },
       {
@@ -619,8 +619,8 @@ Tekshiruvning **asosiy mahsuloti — hisobot**. Usiz butun ish behuda.
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Topilma, jiddiylik va tuzatish — hisobotning asosi. Tafsilotsiz yozuv tuzatishga yordam bermaydi.",
-          ru: 'Находка, серьёзность и устранение — основа отчёта. Запись без деталей не поможет исправить.',
+          uz: "Topilma, jiddiylik va tuzatish - hisobotning asosi. Tafsilotsiz yozuv tuzatishga yordam bermaydi.",
+          ru: 'Находка, серьёзность и устранение - основа отчёта. Запись без деталей не поможет исправить.',
         },
       },
       {
@@ -639,7 +639,7 @@ Tekshiruvning **asosiy mahsuloti — hisobot**. Usiz butun ish behuda.
         match_answer: { p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4' },
         explain: {
           uz: "Topilma muammoni tasvirlaydi, jiddiylik ta'sirni baholaydi, reproducible qayta ko'rsatishni, remediation esa tuzatishni bildiradi.",
-          ru: 'Находка описывает проблему, серьёзность оценивает влияние, reproducible означает воспроизводимость, а remediation — способ устранения.',
+          ru: 'Находка описывает проблему, серьёзность оценивает влияние, reproducible означает воспроизводимость, а remediation - способ устранения.',
         },
       },
     ],
@@ -674,8 +674,8 @@ Etik (ruxsatli) test bo'yicha bilimingizni tekshiring: ruxsat, razvedka, skanerl
         ],
         answer: 'a',
         explain: {
-          uz: "Ruxsat va scope — poydevor. Ularsiz har qanday 'test' jinoyat hisoblanadi.",
-          ru: 'Разрешение и scope — основа. Без них любой «тест» является преступлением.',
+          uz: "Ruxsat va scope - poydevor. Ularsiz har qanday 'test' jinoyat hisoblanadi.",
+          ru: 'Разрешение и scope - основа. Без них любой «тест» является преступлением.',
         },
       },
       {
@@ -694,8 +694,8 @@ Etik (ruxsatli) test bo'yicha bilimingizni tekshiring: ruxsat, razvedka, skanerl
         ],
         order: ['i1', 'i2', 'i3', 'i4', 'i5'],
         explain: {
-          uz: "Ruxsat → razvedka → skanerlash → ekspluatatsiya → hisobot. Ruxsat birinchi, hisobot oxirgi — va eng muhim natijalardan biri.",
-          ru: 'Разрешение → разведка → сканирование → эксплуатация → отчёт. Разрешение первым, отчёт последним — и он один из главных результатов.',
+          uz: "Ruxsat → razvedka → skanerlash → ekspluatatsiya → hisobot. Ruxsat birinchi, hisobot oxirgi - va eng muhim natijalardan biri.",
+          ru: 'Разрешение → разведка → сканирование → эксплуатация → отчёт. Разрешение первым, отчёт последним - и он один из главных результатов.',
         },
       },
       {
@@ -707,8 +707,8 @@ Etik (ruxsatli) test bo'yicha bilimingizni tekshiring: ruxsat, razvedka, skanerl
         },
         answer: 'false',
         explain: {
-          uz: "Yo'q — niyat emas, ruxsat muhim. Ruxsatsiz sinash jinoyat hisoblanadi.",
-          ru: 'Нет — важно не намерение, а разрешение. Тестирование без разрешения является преступлением.',
+          uz: "Yo'q - niyat emas, ruxsat muhim. Ruxsatsiz sinash jinoyat hisoblanadi.",
+          ru: 'Нет - важно не намерение, а разрешение. Тестирование без разрешения является преступлением.',
         },
       },
       {
@@ -745,8 +745,8 @@ Etik (ruxsatli) test bo'yicha bilimingizni tekshiring: ruxsat, razvedka, skanerl
         ],
         answers: ['a', 'b', 'c'],
         explain: {
-          uz: "Scope tashqarisi, ma'lumot o'g'irlash va ruxsatsiz test — taqiqlangan. Topilmani hisobotga yozish esa talab qilinadi.",
-          ru: 'Выход за scope, кража данных и тест без разрешения — запрещены. А запись находки в отчёт, наоборот, обязательна.',
+          uz: "Scope tashqarisi, ma'lumot o'g'irlash va ruxsatsiz test - taqiqlangan. Topilmani hisobotga yozish esa talab qilinadi.",
+          ru: 'Выход за scope, кража данных и тест без разрешения - запрещены. А запись находки в отчёт, наоборот, обязательна.',
         },
       },
     ],
