@@ -3,7 +3,7 @@ import LessonView from './lesson-client';
 import knownSlugs from '@/lib/module-slugs.json';
 
 // Static export (GitHub Pages) requires every dynamic route to be enumerated at
-// build time — there is no server to render `/modules/[slug]` on demand. We pull
+// build time - there is no server to render `/modules/[slug]` on demand. We pull
 // the public module catalog (GET /v1/modules is `optionalAuth`, so no token is
 // needed) and pre-render one page per slug. A module added later needs a rebuild
 // to get a page; that is inherent to static hosting.

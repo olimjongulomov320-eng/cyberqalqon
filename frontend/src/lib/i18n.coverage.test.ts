@@ -76,7 +76,7 @@ test('every tr() key used in the source exists in both locales', () => {
 test('the locale dictionaries carry no unused orphan keys for new surfaces', () => {
   // Not every key is a literal (achievement keys are built as `ach_${k}_t`),
   // so this only checks the journey/directory/hint/skill families we added
-  // in the redesign — the ones most likely to drift.
+  // in the redesign - the ones most likely to drift.
   const used = collectKeys();
   const families = ['stage', 'hint', 'prof', 'review', 'discover', 'trend', 'skills', 'correct'];
   const orphans: string[] = [];

@@ -7,12 +7,12 @@ import { ApiError, Exercise, HintResult, fetchHint } from '@/lib/api';
 import { AlertIcon, EyeIcon } from '@/components/icons';
 
 /**
- * GRADUATED HINTS — two levels, none of which is the answer.
+ * GRADUATED HINTS - two levels, none of which is the answer.
  *
  * Level 1 is a strategy line for the exercise type: it ships from the local
  * dictionary, needs no request and leaks nothing.
  * Level 2 asks the server (`POST /v1/modules/:slug/hint`), which derives a
- * partial narrowing from the stored answer — one eliminated option, the number
+ * partial narrowing from the stored answer - one eliminated option, the number
  * of correct choices, the first step of a sequence, one matched pair, or the
  * shape of a typed answer. The full answer never appears in that payload.
  *

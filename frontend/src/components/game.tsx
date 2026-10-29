@@ -38,7 +38,6 @@ export function Flame({ streak, short = false }: { streak: number; short?: boole
       <FlameIcon
         size={16}
         className={streak > 0 ? 'text-warning' : 'text-surface-600'}
-        style={streak > 0 ? { animation: 'cq-flicker 2.4s ease-in-out infinite', transformOrigin: '50% 90%' } : undefined}
       />
       <span className="num">{streak}</span>
       {!short && <span className="text-xs font-medium text-text-secondary">{tr('streakDay')}</span>}

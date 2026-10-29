@@ -142,7 +142,7 @@ export default function SolveChallengePage() {
           <h2 className="mt-5 text-sm font-bold uppercase tracking-wide text-text-muted">{tr('chExamples')}</h2>
           <ul className="mt-2 flex flex-col gap-2">
             {ch.examples.map((x, i) => (
-              <li key={i} className="rounded-xl border border-border bg-surface-900 p-3 font-mono text-xs">
+              <li key={i} className="rounded-lg border border-border bg-surface-900 p-3 font-mono text-xs">
                 <div className="text-text-secondary">{tr('chInput')}: <span className="text-text-primary">{formatCall(ch.entry, x.args)}</span></div>
                 <div className="mt-1 text-text-secondary">{tr('chOutput')}: <span className="text-text-primary">{show(x.expected)}</span></div>
               </li>
@@ -216,7 +216,7 @@ export default function SolveChallengePage() {
           )}
 
           {result?.solved && (
-            <p role="status" className="rounded-xl border border-success/50 bg-success/10 p-3 text-sm font-semibold text-success">
+            <p role="status" className="rounded-lg border border-success/50 bg-success/10 p-3 text-sm font-semibold text-success">
               {tr('chSolvedMsg')} +{result.points} {tr('chPoints')} <span className="font-normal text-text-muted">({tr('chUnverified')})</span>
             </p>
           )}

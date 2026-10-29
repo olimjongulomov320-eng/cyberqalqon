@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 /**
  * CodeMirror 6 editor, loaded lazily (it is only needed on the solve page, so
  * it stays out of every other route's bundle). The editor surface is dark in
- * both themes on purpose — it is the "developer tool" half of the design.
+ * both themes on purpose - it is the "developer tool" half of the design.
  *
  * Tab is NOT bound to indentation: trapping Tab would make the editor a
  * keyboard trap. Press Esc then Tab to leave, as CodeMirror documents.
@@ -74,5 +74,5 @@ export default function CodeEditor({
     }
   }, [value]);
 
-  return <div ref={host} className="h-full min-h-[16rem] overflow-hidden rounded-xl border border-border-light bg-[#282c34]" />;
+  return <div ref={host} className="h-full min-h-[16rem] overflow-hidden rounded-lg border border-border-light bg-[#282c34]" />;
 }

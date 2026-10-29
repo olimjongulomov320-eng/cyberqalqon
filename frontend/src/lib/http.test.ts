@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { performFetch, isAbortError } from './http.ts';
 
-// Rejects with an AbortError when its signal aborts — including when the signal
+// Rejects with an AbortError when its signal aborts - including when the signal
 // was already aborted before the call (retroactive listeners never fire).
 const hangingFetch = ((_url: string, init?: RequestInit) =>
   new Promise<Response>((_resolve, reject) => {

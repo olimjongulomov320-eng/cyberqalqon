@@ -4,8 +4,8 @@ import { appDayKey } from './appday';
 
 /**
  * Client-side hearts: 5 max, one per wrong answer, refilled every new day.
- * Hearts never block learning — at zero the lesson shows a "restore a heart"
- * practice card instead of a hard wall — so this is purely localStorage.
+ * Hearts never block learning - at zero the lesson shows a "restore a heart"
+ * practice card instead of a hard wall - so this is purely localStorage.
  */
 
 import { HEARTS_ENABLED } from './config';
@@ -47,7 +47,7 @@ function persist(next: HeartState) {
   try {
     localStorage.setItem(KEY, JSON.stringify(next));
   } catch {
-    /* storage full or blocked — hearts are cosmetic, never fatal */
+    /* storage full or blocked - hearts are cosmetic, never fatal */
   }
   emit();
 }
@@ -78,7 +78,7 @@ export function restoreHeart() {
   persist({ day: cur.day, n: cur.n + 1 });
 }
 
-/** Live hearts value — re-renders on any change. */
+/** Live hearts value - re-renders on any change. */
 export function useHearts() {
   // Server snapshot = full hearts (localStorage only exists on the client).
   return useSyncExternalStore(subscribe, heartCount, () => MAX_HEARTS);

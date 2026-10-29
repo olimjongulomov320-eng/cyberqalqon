@@ -167,7 +167,7 @@ export function checkAnswer(
 
 /**
  * Level-2 hint for one exercise. Records no attempt, awards no XP. The server
- * derives a partial narrowing from the stored answer — the full answer never
+ * derives a partial narrowing from the stored answer - the full answer never
  * travels in this payload.
  */
 export function fetchHint(slug: string, exerciseId: string) {
@@ -316,7 +316,7 @@ export interface User {
   show_on_leaderboard?: boolean;
 }
 
-/** What the server reveals AFTER grading — never on fetch. */
+/** What the server reveals AFTER grading - never on fetch. */
 export interface Reveal {
   answer?: string;
   answers?: string[];
@@ -326,7 +326,7 @@ export interface Reveal {
 
 export type ExerciseType = 'mc' | 'tf' | 'multi' | 'match' | 'order' | 'input';
 
-/** Derived from the module's position inside its domain — see backend/lib/difficulty.js. */
+/** Derived from the module's position inside its domain - see backend/lib/difficulty.js. */
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 
 /** Per-learner state for one exercise, from the `mistakes` aggregate. */
@@ -348,7 +348,7 @@ export interface OrderItem {
   text: string;
 }
 
-/** An exercise as delivered to the client — answers stripped, text localised.
+/** An exercise as delivered to the client - answers stripped, text localised.
  *  `explain` is absent on fetch; it arrives with the graded /check result.
  *  `hint` is optional, bilingual guidance that does not reveal the answer. */
 export type Exercise =
@@ -544,7 +544,7 @@ export interface AttemptsPayload {
   attempts: AttemptRow[];
   /** Row count matching the requested `result` filter. */
   total: number;
-  /** Whole-history split — independent of the filter, for the summary line. */
+  /** Whole-history split - independent of the filter, for the summary line. */
   correct_total: number;
   wrong_total: number;
   limit: number;
@@ -603,7 +603,7 @@ export interface ProblemsPayload {
     tracks: { slug: string; title: string; icon: string; count: number }[];
     difficulties: { key: Difficulty; count: number }[];
     types: { key: ExerciseType; count: number }[];
-    /** Empty when signed out — status is per-learner, never global. */
+    /** Empty when signed out - status is per-learner, never global. */
     statuses: { key: ProblemStatus; count: number }[];
   };
 }

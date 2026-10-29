@@ -10,7 +10,7 @@ import { ReactNode } from 'react';
 
    The previous version floated seven coloured nodes on infinite loops over a
    violet→cobalt mesh, and then animated its own copy in (opacity + y, staggered
-   0–0.16s). Both are gone: infinite motion is banned, and entrance animation on
+   0-0.16s). Both are gone: infinite motion is banned, and entrance animation on
    ordinary copy is exactly the "fade-up everywhere" tell under review. */
 
 export function AuthBrandPanel({
@@ -23,8 +23,8 @@ export function AuthBrandPanel({
   children?: ReactNode;
 }) {
   return (
-    <div className="relative hidden overflow-hidden rounded-2xl border border-border bg-surface-900 shadow-card edge-light lg:flex lg:flex-col">
-      {/* Static circuit grid — depth without motion. */}
+    <div className="relative hidden overflow-hidden rounded-lg border border-border bg-surface-900 shadow-card edge-light lg:flex lg:flex-col">
+      {/* Static circuit grid - depth without motion. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 opacity-[0.14]"
@@ -37,7 +37,7 @@ export function AuthBrandPanel({
         }}
       />
 
-      {/* A single cyan bloom anchored top-centre — the only glow in the panel. */}
+      {/* A single cyan bloom anchored top-centre - the only glow in the panel. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-500/[0.12] blur-3xl"

@@ -21,10 +21,6 @@
     --warning-light: 251 191 36;  --warning: 245 158 11; --warning-dark: 217 119 6;
     --danger-light: 248 113 113;  --danger: 239 68 68;   --danger-dark: 220 38 38;
     --shadow: 2 6 16;
-    --bloom: 6 182 212;
-    --bloom-alpha: 0.08;
-    --edge-primary: 14 116 144; --edge-secondary: 15 23 42;
-    --edge-success: 21 128 61;  --edge-danger: 153 27 27;
   }
 
   /* Light: bright, friendly, high-contrast text. Surfaces are inverted so the
@@ -45,10 +41,6 @@
     --warning-light: 217 119 6;  --warning: 180 83 9;   --warning-dark: 146 64 14;
     --danger-light: 220 38 38;   --danger: 185 28 28;   --danger-dark: 153 27 27;
     --shadow: 15 23 42;
-    --bloom: 8 145 178;
-    --bloom-alpha: 0.10;
-    --edge-primary: 21 94 117; --edge-secondary: 203 213 225;
-    --edge-success: 22 101 52; --edge-danger: 127 29 29;
   }
   /* Plain white text means "primary text" outside solid fills; in light mode
      that must flip to dark. Solid fills use text-onaccent, which never flips. */
@@ -61,15 +53,6 @@
 
   body {
     @apply bg-bg text-text-primary font-sans antialiased;
-    /* A single, restrained cyan-tinted bloom anchored to the top of the page —
-       the old violet + cobalt + cyan three-radial mesh was the loudest "AI
-       gradient" tell in the build. One light source, one hue. */
-    background-image: radial-gradient(
-      120% 80% at 50% -10%,
-      rgb(var(--bloom) / var(--bloom-alpha)) 0%,
-      rgb(var(--bg) / 0) 55%
-    );
-    background-attachment: fixed;
   }
 
   /* Focus visible — keyboard only */
@@ -114,33 +97,6 @@
 }
 
 @layer components {
-  /* Chunky "3D" button: a solid bottom edge that the button presses into on
-     click. Pure box-shadow + transform, so it never shifts layout. The edge
-     colour comes from --edge (set per variant). */
-  .btn-3d {
-    box-shadow: 0 4px 0 0 rgb(var(--edge));
-    transform: translateY(0);
-    transition-property: transform, box-shadow, background-color, border-color, color;
-  }
-  .btn-3d:active:not(:disabled) {
-    box-shadow: 0 1px 0 0 rgb(var(--edge));
-    transform: translateY(3px);
-  }
-  .btn-3d:disabled { box-shadow: none; transform: translateY(3px); }
-
-  /* Film grain overlay — subtle. Fixed + pointer-events-none so it never
-     repaints a scrolling container. */
-  .grain::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    pointer-events: none;
-    opacity: 0.16;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.34'/%3E%3C/svg%3E");
-  }
-
   /* Top highlight on cards — suggests a single overhead light source. */
   .edge-light {
     box-shadow: inset 0 1px 0 0 rgb(var(--surface-400) / 0.08);
@@ -193,7 +149,6 @@
   .low-bandwidth body {
     background-image: none;
   }
-  .low-bandwidth .grain::before { display: none; }
 
   /* Input base styles */
   .input-base {
@@ -262,13 +217,6 @@
     to { transform: translateY(0); opacity: 1; }
   }
 
-  /* Streak flame: a slow, small flicker so it feels alive, not busy. */
-  @keyframes cq-flicker {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    30% { transform: scale(1.08) rotate(-3deg); }
-    60% { transform: scale(0.97) rotate(2deg); }
-  }
-
   @keyframes cq-fall {
     from { transform: translate3d(0, -2rem, 0) rotate(0deg); opacity: 0.9; }
     to { transform: translate3d(0, 105vh, 0) rotate(420deg); opacity: 0; }
@@ -301,7 +249,7 @@
   @apply rounded-sm bg-surface-800 px-1.5 py-0.5 font-mono text-[0.8125em] text-cyan-300;
 }
 .lesson pre {
-  @apply my-4 overflow-x-auto rounded-xl border border-border bg-surface-950 p-4 font-mono text-[0.8125rem] leading-relaxed text-success;
+  @apply my-4 overflow-x-auto rounded-lg border border-border bg-surface-950 p-4 font-mono text-[0.8125rem] leading-relaxed text-success;
 }
 .lesson pre code { @apply bg-transparent p-0 text-inherit; }
 .lesson blockquote {

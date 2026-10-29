@@ -10,7 +10,7 @@ import { CheckIcon, CloseIcon } from '@/components/icons';
  *
  * The server grades every exercise and returns a `reveal` naming the correct
  * answer plus an authored bilingual `explain` (all 329 exercises have one).
- * These helpers render that payload as human text — they never guess an answer
+ * These helpers render that payload as human text - they never guess an answer
  * and never invent an explanation, which is why the correct-answer branch is
  * driven purely by `reveal`.
  *
@@ -86,8 +86,8 @@ export function answerText(ex: Exercise, value: AnswerValue | undefined, tr: Tr)
  * Why it shows more than a verdict: the brief asks the learner to understand
  * *why* an answer worked. Guessing is only possible when the grader says
  * "wrong" and stops; naming the learner's own answer next to the correct one
- * makes the difference legible, and the explanation — authored per exercise in
- * the curriculum, not generated here — is the concept itself.
+ * makes the difference legible, and the explanation - authored per exercise in
+ * the curriculum, not generated here - is the concept itself.
  *
  * Correctness is never carried by colour alone: each branch has an icon and a
  * text verdict, and the panel is an `aria-live` region so the verdict is
@@ -125,7 +125,7 @@ export function AnswerFeedback({
       aria-live="polite"
       // Slides up on arrival; a wrong answer then gives one gentle shake.
       style={{ animation: correct ? 'cq-rise 0.22s ease-out' : 'cq-rise 0.22s ease-out, cq-shake 0.35s ease 0.22s' }}
-      className={`rounded-xl border p-4 ${
+      className={`rounded-lg border p-4 ${
         correct ? 'border-success/50 bg-success/[0.07]' : 'border-danger/50 bg-danger/[0.07]'
       } ${className}`}
     >

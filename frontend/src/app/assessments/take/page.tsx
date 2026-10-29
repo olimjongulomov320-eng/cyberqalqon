@@ -30,7 +30,7 @@ function formatClock(ms: number) {
  *
  * The server draws the questions, owns the clock and grades; this page only
  * collects answers. Answers are kept in localStorage purely so a reload does
- * not lose typing — they carry no authority.
+ * not lose typing - they carry no authority.
  */
 export default function TakeAssessmentPage() {
   const { lang, user, ready } = useApp();

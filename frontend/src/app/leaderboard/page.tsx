@@ -74,7 +74,7 @@ export default function LeaderboardPage() {
       </div>
 
       {myRank !== null && user && (
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-cyan-500/35 bg-cyan-500/[0.07] px-4 py-3">
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-cyan-500/35 bg-cyan-500/[0.07] px-4 py-3">
           <span className="text-sm font-medium text-cyan-300">
             {period === 'week' ? tr('yourRank') : tr('allTime')}
           </span>
@@ -82,7 +82,7 @@ export default function LeaderboardPage() {
         </div>
       )}
       {myRank === null && user && (
-        <div className="mt-4 rounded-xl border border-border bg-surface-900 px-4 py-3 text-sm text-text-muted">
+        <div className="mt-4 rounded-lg border border-border bg-surface-900 px-4 py-3 text-sm text-text-muted">
           {period === 'week' ? tr('notRanked') : tr('notRankedBody')}
         </div>
       )}
@@ -120,7 +120,7 @@ export default function LeaderboardPage() {
               return (
                 <li key={entry.user_id}>
                   <div
-                    className={`flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${
+                    className={`flex items-center gap-3 rounded-lg border px-4 py-3 transition-colors ${
                       isMe
                         ? 'border-cyan-500/40 bg-cyan-500/[0.06]'
                         : entry.rank <= 3

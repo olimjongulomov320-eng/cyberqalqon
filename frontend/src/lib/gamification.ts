@@ -17,7 +17,7 @@ export function levelFromXp(totalXp: number): LevelInfo {
   return { level, intoLevel, needed: XP_PER_LEVEL - intoLevel, toNext: XP_PER_LEVEL };
 }
 
-/** Display rank (tier) — grows every two levels so progress stays visible. */
+/** Display rank (tier) - grows every two levels so progress stays visible. */
 export function tierIndex(level: number) {
   return Math.min(Math.floor((level - 1) / 2), 5);
 }

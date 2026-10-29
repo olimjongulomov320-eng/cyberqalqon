@@ -9,7 +9,7 @@ import { Badge, ButtonLink, Card, SectionHeading, Skeleton } from '@/components/
 
 /**
  * Learning tracks with two separate measures per track: completion (lessons
- * finished — activity) and mastery (demonstrated correctness — see
+ * finished - activity) and mastery (demonstrated correctness - see
  * backend/lib/mastery.js). They are shown side by side so one is never
  * mistaken for the other.
  */

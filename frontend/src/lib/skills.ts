@@ -1,5 +1,5 @@
 /**
- * Skill proficiency — derived ONLY from what the learner demonstrated.
+ * Skill proficiency - derived ONLY from what the learner demonstrated.
  *
  * XP, streaks and time spent never enter this calculation: a domain counts as
  * mastered only when every module is completed AND the graded answers in it
@@ -38,11 +38,11 @@ export function accuracyOf(s: Pick<DomainSkillStat, 'correct' | 'wrong'>): numbe
 
 /**
  * The published rule:
- *   notStarted   — nothing completed and no graded answers yet
- *   learning     — started, but not every module is completed
- *   needsPractice— every module completed, yet accuracy below the bar (or no
+ *   notStarted   - nothing completed and no graded answers yet
+ *   learning     - started, but not every module is completed
+ *   needsPractice- every module completed, yet accuracy below the bar (or no
  *                  graded answers to prove it)
- *   mastered     — every module completed AND accuracy ≥ MASTERY_ACCURACY
+ *   mastered     - every module completed AND accuracy ≥ MASTERY_ACCURACY
  */
 export function proficiency(s: DomainSkillStat): Proficiency {
   const attempts = s.correct + s.wrong;

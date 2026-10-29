@@ -49,7 +49,7 @@ const PROF_TONE: Record<Proficiency, 'neutral' | 'primary' | 'warning' | 'succes
 };
 
 /**
- * SKILL MATRIX — stage 06 (master).
+ * SKILL MATRIX - stage 06 (master).
  *
  * Proficiency comes from demonstrated performance only: real module completion
  * plus real graded accuracy per domain (`lib/skills` holds the published rule,
@@ -75,9 +75,9 @@ function SkillMatrix({ stats }: { stats: StatsPayload }) {
         <span className="text-[0.6875rem] text-text-muted">{tr('skillsMatrixHint')}</span>
       </div>
 
-      {/* Improvement over time — hidden when either 7-day window has too few
+      {/* Improvement over time - hidden when either 7-day window has too few
           graded answers, because a number off two answers is noise. */}
-      <div className="mb-2.5 rounded-xl border border-border bg-surface-900 px-3.5 py-2.5">
+      <div className="mb-2.5 rounded-lg border border-border bg-surface-900 px-3.5 py-2.5">
         <p className="text-[0.6875rem] font-bold uppercase tracking-wide text-text-muted">
           {tr('trendTitle')}
         </p>
@@ -103,7 +103,7 @@ function SkillMatrix({ stats }: { stats: StatsPayload }) {
         )}
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-surface-900 shadow-card edge-light">
+      <div className="overflow-hidden rounded-lg border border-border bg-surface-900 shadow-card edge-light">
         <ul className="divide-y divide-border/60">
           {rows.map(s => {
             const level = proficiency(s);
@@ -125,7 +125,7 @@ function SkillMatrix({ stats }: { stats: StatsPayload }) {
                     </span>
                     <span aria-hidden="true">·</span>
                     <span>
-                      {tr('accuracy')} {acc === null ? '—' : `${acc}%`}
+                      {tr('accuracy')} {acc === null ? '-' : `${acc}%`}
                     </span>
                   </p>
                   <span aria-hidden="true" className="mt-1.5 flex h-1 w-full overflow-hidden rounded-full bg-surface-800">
@@ -150,7 +150,7 @@ function SkillMatrix({ stats }: { stats: StatsPayload }) {
 /**
  * `dd.MM · HH:mm`, formatted by hand rather than through `Intl`.
  * Both uz and ru read day-first dates, and the ICU data behind an Uzbek locale
- * tag varies by build — a fixed numeric shape is the same everywhere and never
+ * tag varies by build - a fixed numeric shape is the same everywhere and never
  * degrades into a raw key or a Cyrillic month name.
  */
 function formatWhen(iso: string) {
@@ -165,7 +165,7 @@ function formatWhen(iso: string) {
  *
  * Fetched here rather than folded into `fetchStats` so the profile does not
  * pay for a full history on every visit, and so paging stays independent of the
- * stats cache. Rows are strictly this account's — the endpoint takes no user id.
+ * stats cache. Rows are strictly this account's - the endpoint takes no user id.
  */
 function HistoryCard({ lang }: { lang: Lang }) {
   const tr = makeT(lang);
@@ -505,7 +505,7 @@ export default function ProfilePage() {
               </div>
             </Card>
 
-            {/* Skill matrix — the Master view: proficiency from demonstrated
+            {/* Skill matrix - the Master view: proficiency from demonstrated
                 performance, printed rule, honest "not started" rows. */}
             <SkillMatrix stats={stats} />
 
@@ -581,7 +581,7 @@ export default function ProfilePage() {
               </Card>
             )}
 
-            {/* Submission history — this account's graded attempts, newest first. */}
+            {/* Submission history - this account's graded attempts, newest first. */}
             <HistoryCard lang={lang} />
 
             {/* Achievements */}

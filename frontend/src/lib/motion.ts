@@ -1,20 +1,20 @@
 import type { Variants, Transition } from 'framer-motion';
 
 /**
- * Motion system — single source of truth for animation durations and easing.
+ * Motion system - single source of truth for animation durations and easing.
  *
  * Scope, after the mentor review: motion exists for *interaction feedback* only.
- * Container entrances were removed entirely — no page fade-up, no per-child
- * stagger, no question rise, no scroll reveals — so ordinary content is painted
+ * Container entrances were removed entirely - no page fade-up, no per-child
+ * stagger, no question rise, no scroll reveals - so ordinary content is painted
  * fully visible the moment it renders and can never shift after paint.
  *
  * What remains is deliberately short and purposeful:
- *   · answerCorrect / answerWrong — the exercise reply;
- *   · dialogIn / overlayFade / scaleIn — modal + overlay state changes;
- *   · tapScale — press feedback on tactile surfaces.
+ *   · answerCorrect / answerWrong - the exercise reply;
+ *   · dialogIn / overlayFade / scaleIn - modal + overlay state changes;
+ *   · tapScale - press feedback on tactile surfaces.
  *
  * Rules:
- *   · transform/opacity only — never layout properties;
+ *   · transform/opacity only - never layout properties;
  *   · gated by MotionConfig reducedMotion="user" (AppShell), so OS "reduce
  *     motion" skips transforms and keeps quick opacity fades.
  */
@@ -63,7 +63,7 @@ export const overlayFade: Variants = {
   visible: { opacity: 1, transition: { duration: DUR.fast } },
 };
 
-/** Opacity-only fade — the reduced-motion-safe default for inline reveals. */
+/** Opacity-only fade - the reduced-motion-safe default for inline reveals. */
 export const fadeIn: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: DUR.base, ease: EASE } },

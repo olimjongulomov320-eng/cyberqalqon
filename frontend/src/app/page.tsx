@@ -77,7 +77,7 @@ export default function HomePage() {
 
     return (
       <div className="flex flex-col">
-        {/* Asymmetric hero — copy on the left, the real interactive preview on
+        {/* Asymmetric hero - copy on the left, the real interactive preview on
             the right. The preview is the product itself, not a screenshot. */}
         <section className="grid grid-cols-1 items-center gap-10 pt-4 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:pt-10">
           <div className="flex flex-col items-start gap-5">
@@ -105,7 +105,7 @@ export default function HomePage() {
           </div>
 
           <div className="relative lg:mt-8">
-            {/* Single cyan bloom behind the card — the only glow on the page. */}
+            {/* Single cyan bloom behind the card - the only glow on the page. */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 -z-10 rounded-[2rem] bg-cyan-500/10 blur-3xl"
@@ -115,7 +115,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* How it works — an editorial numbered sequence, not three identical
+        {/* How it works - an editorial numbered sequence, not three identical
             cards. The count is the structure. */}
         <section aria-labelledby="how-h" className="mt-16 border-t border-border/60 pt-10">
           <p id="how-h" className="label mb-6">{tr('howItWorks')}</p>
@@ -157,7 +157,7 @@ export default function HomePage() {
         <XPChip xp={user.total_xp} />
       </header>
 
-      {/* Progress snapshot — deliberately tighter (12px) than the
+      {/* Progress snapshot - deliberately tighter (12px) than the
           subject sections below (32px). */}
       <div className="mt-4 flex flex-col gap-3">
 
@@ -165,7 +165,7 @@ export default function HomePage() {
         {continueCtx ? (
           <Link
             href={`/modules/${continueCtx.slug}`}
-            className="group flex items-center gap-3.5 rounded-xl border border-cyan-500/40 bg-cyan-500/[0.08] p-4 shadow-card transition-colors hover:bg-cyan-500/[0.14]"
+            className="group flex items-center gap-3.5 rounded-lg border border-cyan-500/40 bg-cyan-500/[0.08] p-4 shadow-card transition-colors hover:bg-cyan-500/[0.14]"
           >
             <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-cyan-400 text-text-inverse">
               <PlayIcon size={20} />
@@ -188,7 +188,7 @@ export default function HomePage() {
         ) : (
           <Link
             href="/learn"
-            className="group flex items-center gap-3.5 rounded-xl border border-border bg-surface-900 p-4 shadow-card transition-colors hover:bg-surface-800"
+            className="group flex items-center gap-3.5 rounded-lg border border-border bg-surface-900 p-4 shadow-card transition-colors hover:bg-surface-800"
           >
             <span aria-hidden="true" className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-surface-800 text-cyan-300">
               <CompassIcon size={22} />
@@ -237,7 +237,7 @@ export default function HomePage() {
         </Card>
       </div>
 
-      {/* Learning paths + skill mastery — built from the real /paths data the
+      {/* Learning paths + skill mastery - built from the real /paths data the
           dashboard already fetches. "Mastery" here is honest: a domain counts as
           mastered only when every one of its modules is completed. */}
       {paths.length > 0 && (

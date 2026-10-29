@@ -43,7 +43,15 @@ verify a "solved" claim and hidden tests are delivered to the client, so challen
 points are self-reported and are kept out of XP and the leaderboard. A server-side
 judge (e.g. Judge0) would be needed to change that.
 
+## Icons
+
+Icons are never emoji and never hand-drawn. Paths, domains, tracks and achievements
+carry an **icon key** (for example `'shield-check'`, `'terminal-window'`). Keys are the
+names in `CONTENT_ICONS` in `frontend/src/components/icons.tsx` (Phosphor, one weight).
+To use a new glyph, import it from `@phosphor-icons/react/dist/ssr` and add one line to
+that registry; a backend test fails if curriculum data uses a key that is not registered.
+
 ## Switches
 
-- `NEXT_PUBLIC_HEARTS_ENABLED=false` (frontend build env) turns hearts off.
+- `NEXT_PUBLIC_HEARTS_ENABLED=true` (frontend build env) turns hearts on; they are off by default.
 - Theme: light / dark / system toggle in the header; tokens live in `frontend/src/app/globals.css`.

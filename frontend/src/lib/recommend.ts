@@ -1,5 +1,5 @@
 /**
- * Review recommendations — every rule here runs over real stored performance
+ * Review recommendations - every rule here runs over real stored performance
  * (graded answers from `exercise_attempts` / `mistakes`) and returns an empty
  * list when the data does not support a claim. The UI explains the rule it
  * used; nothing in this module can invent a weakness or a score.
@@ -19,7 +19,7 @@ export interface HarderCandidate extends DomainSkillStat {
 
 /**
  * Domains where the learner has enough graded answers and clears the accuracy
- * bar, strongest first. Empty when nothing qualifies — the caller shows the
+ * bar, strongest first. Empty when nothing qualifies - the caller shows the
  * rule instead of a fake suggestion.
  */
 export function harderReady(

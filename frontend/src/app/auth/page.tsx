@@ -125,7 +125,7 @@ export default function AuthPage() {
   const tr = makeT(lang);
   const router = useRouter();
   // Read `?next=` lazily on the client only. Nothing rendered depends on it, so
-  // it never causes a hydration mismatch — and avoiding `useSearchParams` keeps
+  // it never causes a hydration mismatch - and avoiding `useSearchParams` keeps
   // the form server-rendered instead of flashing a Suspense fallback.
   // `safeNextPath` only allows same-origin relative paths, so a crafted link
   // cannot redirect a freshly signed-in user to an external origin.
@@ -251,7 +251,7 @@ export default function AuthPage() {
       <div className="flex flex-col justify-center py-2 sm:py-6">
         {/* mobile brand mark */}
         <div className="mb-8 flex flex-col items-center text-center lg:items-start lg:text-left">
-          <span className="grid h-14 w-14 place-items-center rounded-2xl border border-border bg-surface-900 shadow-card edge-light lg:hidden">
+          <span className="grid h-14 w-14 place-items-center rounded-lg border border-border bg-surface-900 shadow-card edge-light lg:hidden">
             <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={32} height={32} priority />
           </span>
           <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-text-primary lg:mt-0">
@@ -266,7 +266,7 @@ export default function AuthPage() {
         <div
           role="tablist"
           aria-label={tr('login')}
-          className="relative mb-6 grid grid-cols-2 gap-1 rounded-xl border border-border bg-surface-900 p-1"
+          className="relative mb-6 grid grid-cols-2 gap-1 rounded-lg border border-border bg-surface-900 p-1"
         >
           {(['login', 'register'] as const).map(m => (
             <button

@@ -70,7 +70,7 @@ function Text({ role = 'banner' }: { role?: 'banner' | 'alert' | 'status' }) {
 /* ── Workspace rail ──────────────────────────────────────────────────────────
    The learner's place in the domain sequence plus the lesson text, so an
    exercise can be answered without leaving the workspace. States come from
-   `/paths` — the same real data the Discover directory renders. */
+   `/paths` - the same real data the Discover directory renders. */
 
 function RailBlocks({
   seq,
@@ -88,7 +88,7 @@ function RailBlocks({
 
   return (
     <>
-      <div className="rounded-xl border border-border bg-surface-900 p-3">
+      <div className="rounded-lg border border-border bg-surface-900 p-3">
         <p className="label truncate text-cyan-300">
           {seq?.domainTitle ?? module.domain_title ?? tr('modules')}
         </p>
@@ -106,7 +106,7 @@ function RailBlocks({
       {seq && (
         <nav
           aria-label={tr('sequenceLabel')}
-          className="overflow-hidden rounded-xl border border-border bg-surface-900"
+          className="overflow-hidden rounded-lg border border-border bg-surface-900"
         >
           <p className="border-b border-border/60 px-3 py-2 text-[0.6875rem] font-bold uppercase tracking-wide text-text-muted">
             {tr('sequenceLabel')}
@@ -178,7 +178,7 @@ function RailBlocks({
       )}
 
       {showNotes && module.content && (
-        <details className="group overflow-hidden rounded-xl border border-border bg-surface-900">
+        <details className="group overflow-hidden rounded-lg border border-border bg-surface-900">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2.5 text-[0.6875rem] font-bold uppercase tracking-wide text-text-muted [&::-webkit-details-marker]:hidden">
             {tr('lessonNotes')}
             <ChevronRightIcon
@@ -196,7 +196,7 @@ function RailBlocks({
   );
 }
 
-/** Collapsed summary on mobile, sticky column on desktop — same blocks. */
+/** Collapsed summary on mobile, sticky column on desktop - same blocks. */
 function LessonRail({
   seq,
   module,
@@ -213,7 +213,7 @@ function LessonRail({
   return (
     <>
       <details className="group mb-3 lg:hidden">
-        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-xl border border-border bg-surface-900 px-3 py-2.5 text-sm font-semibold text-text-primary [&::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-lg border border-border bg-surface-900 px-3 py-2.5 text-sm font-semibold text-text-primary [&::-webkit-details-marker]:hidden">
           <span className="truncate">
             {seq?.domainTitle ?? module.domain_title ?? tr('modules')}
             {seq && (
@@ -290,7 +290,7 @@ export default function LessonView({ slug }: { slug: string }) {
   const heartsLostOnWrong = useRef(false);
   const topRef = useRef<HTMLDivElement>(null);
   const exitRef = useRef<HTMLDivElement>(null);
-  // XP when the learner pressed "Start lesson" — lets the celebration screen
+  // XP when the learner pressed "Start lesson" - lets the celebration screen
   // tell whether this run pushed them over a level boundary (real, computed
   // from actual XP; nothing is invented).
   const lessonStartXp = useRef<number | null>(null);
@@ -298,8 +298,8 @@ export default function LessonView({ slug }: { slug: string }) {
   // Refetch on slug AND language: switching lang with a lesson open must reload
   // the localised title/content/exercises instead of serving the previous
   // language. `alive` discards stale responses if the slug changes mid-flight.
-  // An in-progress quiz keeps its position — exercise ids are stable across
-  // languages — but the graded reveal is cleared so the explanation re-localises.
+  // An in-progress quiz keeps its position - exercise ids are stable across
+  // languages - but the graded reveal is cleared so the explanation re-localises.
   useEffect(() => {
     let alive = true;
     setLoadError(null);
@@ -355,7 +355,7 @@ export default function LessonView({ slug }: { slug: string }) {
         }
       })
       .catch(() => {
-        /* optional context — the lesson works without it */
+        /* optional context - the lesson works without it */
       });
     return () => {
       alive = false;
@@ -519,7 +519,7 @@ export default function LessonView({ slug }: { slug: string }) {
   // Keyboard-first answering: digits pick an option, Enter checks the answer /
   // advances. Ignored while typing in a field (except Enter on the single-line
   // answer input, which submits) and whenever a modifier key is held, so we
-  // never shadow browser or assistive shortcuts. Presentation only — grading
+  // never shadow browser or assistive shortcuts. Presentation only - grading
   // still happens server-side.
   useEffect(() => {
     if (phase !== 'active') return;
@@ -630,7 +630,7 @@ export default function LessonView({ slug }: { slug: string }) {
               </div>
             )}
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-border bg-surface-950/60 px-4 py-3 text-sm">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-border bg-surface-950/60 px-4 py-3 text-sm">
               <span className="num inline-flex items-center gap-1.5 text-xs text-text-secondary">
                 <CheckIcon size={14} className="text-cyan-400" />
                 {exercises.length} {tr('challenge').toLowerCase()}
@@ -677,7 +677,7 @@ export default function LessonView({ slug }: { slug: string }) {
           <div className="flex flex-col items-center gap-4 text-center">
             <span
               aria-hidden="true"
-              className="grid h-16 w-16 place-items-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
+              className="grid h-16 w-16 place-items-center rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
             >
               {complete.is_checkpoint ? <TrophyIcon size={30} /> : <SparkleIcon size={30} />}
             </span>
@@ -694,7 +694,7 @@ export default function LessonView({ slug }: { slug: string }) {
               <div
                 role="status"
                 aria-live="polite"
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-cyan-500/40 bg-cyan-500/[0.08] px-4 py-3 text-left"
+                className="flex w-full items-center justify-center gap-3 rounded-lg border border-cyan-500/40 bg-cyan-500/[0.08] px-4 py-3 text-left"
               >
                 <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-cyan-500/15 text-cyan-300">
                   <SparkleIcon size={20} />
@@ -709,12 +709,12 @@ export default function LessonView({ slug }: { slug: string }) {
             )}
 
             <div role="status" aria-live="polite" className="flex flex-wrap items-center justify-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-xl border border-warning/30 bg-warning/10 px-4 py-2 text-xl font-extrabold text-warning">
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-warning/30 bg-warning/10 px-4 py-2 text-xl font-extrabold text-warning">
                 <BoltIcon size={20} />
                 <span className="num">+{complete.xp_earned}</span>
                 <span className="sr-only">XP</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface-900 px-4 py-2 text-lg font-bold text-text-primary">
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-900 px-4 py-2 text-lg font-bold text-text-primary">
                 <FlameIcon size={20} className="text-danger" />
                 <span className="num">{complete.streak}</span>
                 <span className="sr-only">{tr('streak')}</span>
@@ -876,7 +876,7 @@ export default function LessonView({ slug }: { slug: string }) {
           )}
         </Card>
 
-        {/* Feedback panel — verdict, your answer vs the correct one, and the
+        {/* Feedback panel - verdict, your answer vs the correct one, and the
             authored explanation. Shared with the arena and review session. */}
         {checked && ex && (
           <AnswerFeedback
@@ -890,7 +890,7 @@ export default function LessonView({ slug }: { slug: string }) {
           />
         )}
 
-        {/* Graduated hints — strategy first, then a derived narrowing from the
+        {/* Graduated hints - strategy first, then a derived narrowing from the
             server. Hidden once graded: the feedback panel already carries the
             explanation. */}
         {!checked && ex && (

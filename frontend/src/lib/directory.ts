@@ -1,5 +1,5 @@
 /**
- * The Discover directory's derivation — pure, so filtering, the default-open
+ * The Discover directory's derivation - pure, so filtering, the default-open
  * domain and a domain's status label are unit-testable instead of buried in
  * render code.
  */
@@ -75,7 +75,7 @@ export function filterDirectory(path: LearningPath, { filter, query }: Directory
   return { domains, moduleCount };
 }
 
-/** Domains of every path, flattened — handy for counts and lookups. */
+/** Domains of every path, flattened - handy for counts and lookups. */
 export function allDomains(paths: LearningPath[]): Domain[] {
   return paths.flatMap(p => p.domains);
 }
@@ -102,7 +102,7 @@ export function nextCheckpoint(paths: LearningPath[]): { slug: string; domainTit
   return null;
 }
 
-/** Row status for a domain, from its own module states — never invented. */
+/** Row status for a domain, from its own module states - never invented. */
 export function domainStatus(d: Pick<Domain, 'modules'>): DomainRowStatus {
   const { modules } = d;
   if (modules.length === 0) return 'available';

@@ -3,7 +3,7 @@
  *
  * While a key is running, further calls with the same key share its promise
  * instead of firing a second task. This is the client-side guard against
- * duplicate mutations — a double-tapped "Check" or "Finish", or two effects
+ * duplicate mutations - a double-tapped "Check" or "Finish", or two effects
  * racing on mount, collapse into one request.
  *
  * A key is released as soon as the task settles, so an explicit, user-driven

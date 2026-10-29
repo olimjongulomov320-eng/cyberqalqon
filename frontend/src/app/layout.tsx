@@ -7,7 +7,7 @@ import AppShell from '@/components/AppShell';
 import SkipLink from '@/components/SkipLink';
 
 // Manrope instead of Inter: geometric, semi-condensed, unmistakably not the
-// default UI font — and it ships a cyrillic subset, so the ru locale never
+// default UI font - and it ships a cyrillic subset, so the ru locale never
 // falls back mid-sentence.
 const sans = Manrope({
   subsets: ['latin', 'cyrillic'],
@@ -21,7 +21,7 @@ const mono = JetBrains_Mono({
   variable: '--font-mono',
 });
 
-const TITLE = 'CyberQalqon — kiber xavfsizlikni oʻrganish';
+const TITLE = 'CyberQalqon - kiber xavfsizlikni oʻrganish';
 
 // GitHub Pages serves the app from a sub-path; mirrored here so URLs written by
 // hand (the manifest) match the prefixed ones Next generates.
@@ -82,7 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Applies the saved/system theme before first paint (no flash). */}
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
       </head>
-      <body className="grain">
+      <body>
         <AppProvider>
           <SkipLink />
           <AppShell>{children}</AppShell>

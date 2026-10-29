@@ -14,7 +14,7 @@ export default function PracticeTabs() {
     { href: '/challenges', label: 'tabChallenges' },
   ];
   return (
-    <nav aria-label={tr('navPractice')} className="mb-5 inline-flex rounded-xl border border-border bg-surface-900 p-1">
+    <nav aria-label={tr('navPractice')} className="mb-5 inline-flex rounded-lg border border-border bg-surface-900 p-1">
       {tabs.map(t => {
         const active = pathname.startsWith(t.href);
         return (

@@ -80,7 +80,7 @@ test('status chips narrow modules and drop empty domains', () => {
     todo.domains.map(d => d.slug),
     ['networking', 'linux']
   );
-  // networking: dns-deep (current) · linux: shell-basics (open) — the
+  // networking: dns-deep (current) · linux: shell-basics (open) - the
   // completed and locked ones drop out.
   assert.equal(todo.moduleCount, 2);
 

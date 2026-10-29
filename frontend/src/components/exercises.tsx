@@ -46,7 +46,7 @@ function optionClass(state: 'idle' | 'paired' | 'selected' | 'correct' | 'wrong'
     case 'selected':
       return 'border-cyan-500/70 bg-cyan-500/15 text-white';
     // Paired (assigned but not the active selection): a raised neutral surface
-    // — distinct from flat `idle` and cyan `selected` by elevation, border
+    // - distinct from flat `idle` and cyan `selected` by elevation, border
     // weight and text tone rather than hue alone.
     case 'paired':
       return 'border-border-light bg-surface-700 text-text-primary';

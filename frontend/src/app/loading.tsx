@@ -5,10 +5,10 @@
 export default function Loading() {
   return (
     <div className="flex flex-col pt-2" aria-busy="true" aria-live="polite">
-      <div className="skeleton h-7 w-40 rounded-xl" />
+      <div className="skeleton h-7 w-40 rounded-lg" />
       <div className="skeleton mt-3 h-4 w-64 rounded-md" />
-      <div className="skeleton mt-8 h-32 w-full rounded-2xl" />
-      <div className="skeleton mt-3 h-24 w-full rounded-2xl" />
+      <div className="skeleton mt-8 h-32 w-full rounded-lg" />
+      <div className="skeleton mt-3 h-24 w-full rounded-lg" />
       <span className="sr-only">Loading…</span>
     </div>
   );

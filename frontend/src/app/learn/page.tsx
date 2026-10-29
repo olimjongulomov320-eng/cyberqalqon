@@ -21,7 +21,7 @@ import {
   nextCheckpoint,
   pathTotals,
 } from '@/lib/directory';
-import PathTrail from '@/components/PathTrail';
+import LessonTable from '@/components/LessonTable';
 import Journey from '@/components/Journey';
 import { Badge, ButtonLink, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
 import {
@@ -40,7 +40,7 @@ import {
 } from '@/components/icons';
 
 /**
- * DISCOVER — stage 01 of the journey.
+ * DISCOVER - stage 01 of the journey.
  *
  * This page used to paint a card per domain with every module of all 80
  * modules exposed as its own bordered row (~92 cards on first paint). It is
@@ -144,7 +144,7 @@ function DomainRow({
               {tr('discoverEmptyBody')}
             </p>
           ) : (
-            <PathTrail domainSlug={domain.slug} modules={visible} completed={domain.completed} all={domain.modules} />
+            <LessonTable modules={visible} all={domain.modules} />
           )}
         </div>
       )}
@@ -173,9 +173,9 @@ function Rail({
   return (
     <div
       aria-label={tr('quickActions')}
-      className="overflow-hidden rounded-xl border border-border bg-surface-900 shadow-card edge-light lg:sticky lg:top-20"
+      className="overflow-hidden rounded-lg border border-border bg-surface-900 shadow-card edge-light lg:sticky lg:top-20"
     >
-      {/* 02 · Learn — the real continue target */}
+      {/* 02 · Learn - the real continue target */}
       <section className="p-3.5">
         <p className="label text-cyan-300">{tr('continueLearning')}</p>
         {continueTarget ? (
@@ -207,7 +207,7 @@ function Rail({
         )}
       </section>
 
-      {/* 03 · Practice — straight into the arena.
+      {/* 03 · Practice - straight into the arena.
           On phones the three lower blocks collapse to one dense row each:
           the directory below must still start within the first screen. Every
           link stays reachable; only the supporting copy waits for `lg`. */}
@@ -225,7 +225,7 @@ function Rail({
         </ButtonLink>
       </section>
 
-      {/* 04 · Apply — the next reachable assessment, else advanced tasks */}
+      {/* 04 · Apply - the next reachable assessment, else advanced tasks */}
       <section className="border-t border-border/60 p-3 lg:p-3.5">
         <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-text-muted">
           <TrophyIcon size={13} aria-hidden="true" /> {tr('stageApply')}
@@ -268,7 +268,7 @@ function Rail({
         )}
       </section>
 
-      {/* 05 · Review — real weak topics only, honest when there are none */}
+      {/* 05 · Review - real weak topics only, honest when there are none */}
       <section className="border-t border-border/60 p-3 lg:p-3.5">
         <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-text-muted">
           <RefreshIcon size={13} aria-hidden="true" /> {tr('stageReview')}
@@ -402,7 +402,7 @@ function LearnInner() {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-border bg-surface-900 p-5">
+      <div className="rounded-lg border border-border bg-surface-900 p-5">
         <ErrorNote>
           {error.isTimeout
             ? tr('timeoutError')
@@ -452,7 +452,7 @@ function LearnInner() {
         }}
       />
 
-      {/* Overall progress for the selected path — one line, real counts. */}
+      {/* Overall progress for the selected path - one line, real counts. */}
       <div className="flex items-center gap-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
           {tr('pathOverall')}
@@ -548,10 +548,10 @@ function LearnInner() {
             </p>
           </div>
 
-          {/* The directory: ONE bordered container, rows divided — not a card
+          {/* The directory: ONE bordered container, rows divided - not a card
               grid. */}
           {visibleDomains.length === 0 ? (
-            <div className="rounded-xl border border-border bg-surface-900">
+            <div className="rounded-lg border border-border bg-surface-900">
               <EmptyState
                 icon={<SearchIcon size={26} className="text-text-muted" />}
                 title={tr('discoverEmptyTitle')}
@@ -572,7 +572,7 @@ function LearnInner() {
               />
             </div>
           ) : (
-            <div className="divide-y divide-border/60 overflow-hidden rounded-xl border border-border bg-surface-900 shadow-card edge-light">
+            <div className="divide-y divide-border/60 overflow-hidden rounded-lg border border-border bg-surface-900 shadow-card edge-light">
               {visibleDomains.map(d => (
                 <DomainRow
                   key={d.slug}

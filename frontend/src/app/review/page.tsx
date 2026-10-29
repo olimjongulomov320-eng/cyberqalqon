@@ -69,7 +69,7 @@ export default function PracticePage() {
 
   // Real performance behind this hub's recommendations: missed questions come
   // from the graded-attempt timeline, "ready for harder" from per-domain
-  // accuracy. Both fail soft — an error degrades to an empty section with an
+  // accuracy. Both fail soft - an error degrades to an empty section with an
   // honest message, never to an invented suggestion.
   const [missed, setMissed] = useState<AttemptRow[] | null>(null);
   const [skillDomains, setSkillDomains] = useState<DomainSkillStat[]>([]);
@@ -137,7 +137,7 @@ export default function PracticePage() {
   };
 
   /**
-   * Grade the current question immediately (stateless — recording happens once
+   * Grade the current question immediately (stateless - recording happens once
    * on final submit), then lock it so the learner sees the reveal right away
    * instead of only at the end of the session.
    */
@@ -204,7 +204,7 @@ export default function PracticePage() {
           </div>
         ) : (
           <Card className="p-6 text-center">
-            <span aria-hidden="true" className="mx-auto grid h-14 w-14 place-items-center rounded-xl border border-border bg-surface-800 text-cyan-300">
+            <span aria-hidden="true" className="mx-auto grid h-14 w-14 place-items-center rounded-lg border border-border bg-surface-800 text-cyan-300">
               <TargetIcon size={26} />
             </span>
             <p className="mt-3 text-sm text-text-secondary">{tr('signInToAnswer')}</p>
@@ -256,7 +256,7 @@ export default function PracticePage() {
 
         <Journey className="mb-5" />
 
-        {/* Recommended session — the learner's weakest module, most-missed
+        {/* Recommended session - the learner's weakest module, most-missed
             exercises first (server-selected from real recorded mistakes). */}
         {session && (
           <Card className="mb-4 flex items-center justify-between gap-3 border-cyan-500/30 bg-cyan-500/[0.06] p-4">
@@ -280,7 +280,7 @@ export default function PracticePage() {
           />
         ) : (
           <div className="flex flex-col gap-6">
-            {/* Previously missed questions — from this account's real graded
+            {/* Previously missed questions - from this account's real graded
                 history, newest verdict per task (see lib/recommend). */}
             <section aria-labelledby="missed-h">
               <SectionHeading
@@ -296,14 +296,14 @@ export default function PracticePage() {
                   <Skeleton className="h-14 w-full" />
                 </div>
               ) : missedList.length === 0 ? (
-                <div className="rounded-xl border border-border bg-surface-900 px-4 py-3.5">
+                <div className="rounded-lg border border-border bg-surface-900 px-4 py-3.5">
                   <p className="text-sm font-semibold text-text-primary">
                     {tr('reviewMissedEmpty')}
                   </p>
                   <p className="mt-0.5 text-xs text-text-muted">{tr('reviewMissedEmptyBody')}</p>
                 </div>
               ) : (
-                <div className="overflow-hidden rounded-xl border border-border bg-surface-900">
+                <div className="overflow-hidden rounded-lg border border-border bg-surface-900">
                   <ul className="divide-y divide-border/60">
                     {missedList.map(a => (
                       <li key={a.id} className="flex items-center gap-3 px-3 py-2.5">
@@ -337,7 +337,7 @@ export default function PracticePage() {
             {(data?.topics.length ?? 0) > 0 && (
               <section aria-labelledby="weak-h">
                 <SectionHeading><span id="weak-h">{tr('weakTopics')}</span></SectionHeading>
-                <div className="overflow-hidden rounded-xl border border-border bg-surface-900">
+                <div className="overflow-hidden rounded-lg border border-border bg-surface-900">
                   <ul className="divide-y divide-border/60">
                     {data?.topics.map(t => (
                       <li key={t.slug} className="flex items-center gap-3 px-3 py-2.5">
@@ -375,7 +375,7 @@ export default function PracticePage() {
               </section>
             )}
 
-            {/* Ready for a harder challenge — the rule is printed, and when no
+            {/* Ready for a harder challenge - the rule is printed, and when no
                 domain qualifies the section says so instead of guessing. */}
             <section aria-labelledby="harder-h">
               <SectionHeading>
@@ -383,14 +383,14 @@ export default function PracticePage() {
               </SectionHeading>
               <p className="mb-2 px-1 text-xs text-text-muted">{tr('reviewHarderBody')}</p>
               {harder.length === 0 ? (
-                <div className="rounded-xl border border-border bg-surface-900 px-4 py-3.5">
+                <div className="rounded-lg border border-border bg-surface-900 px-4 py-3.5">
                   <p className="text-sm font-semibold text-text-primary">
                     {tr('reviewHarderEmpty')}
                   </p>
                   <p className="mt-0.5 text-xs text-text-muted">{tr('reviewHarderEmptyBody')}</p>
                 </div>
               ) : (
-                <div className="overflow-hidden rounded-xl border border-border bg-surface-900">
+                <div className="overflow-hidden rounded-lg border border-border bg-surface-900">
                   <ul className="divide-y divide-border/60">
                     {harder.map(c => (
                       <li key={c.slug} className="flex items-center gap-3 px-3 py-2.5">
@@ -419,8 +419,8 @@ export default function PracticePage() {
               )}
             </section>
 
-            {/* Arena shortcut — the practice stage in one line */}
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface-900 px-4 py-3">
+            {/* Arena shortcut - the practice stage in one line */}
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface-900 px-4 py-3">
               <div className="min-w-0">
                 <p className="flex items-center gap-1.5 text-sm font-bold text-white">
                   <CodeIcon size={15} aria-hidden="true" className="text-cyan-300" />
@@ -523,7 +523,7 @@ export default function PracticePage() {
           <div className="flex flex-col items-center gap-3 text-center">
             <span
               aria-hidden="true"
-              className="grid h-16 w-16 place-items-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
+              className="grid h-16 w-16 place-items-center rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
             >
               <CheckIcon size={30} />
             </span>
@@ -540,7 +540,7 @@ export default function PracticePage() {
               <div
                 role="status"
                 aria-live="polite"
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-cyan-500/40 bg-cyan-500/[0.08] px-4 py-3 text-left"
+                className="flex w-full items-center justify-center gap-3 rounded-lg border border-cyan-500/40 bg-cyan-500/[0.08] px-4 py-3 text-left"
               >
                 <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-cyan-500/15 text-cyan-300">
                   <SparkleIcon size={20} />

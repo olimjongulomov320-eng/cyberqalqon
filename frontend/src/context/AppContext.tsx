@@ -68,7 +68,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setLangState(l);
     localStorage.setItem('cq_lang', l);
     // Best effort. The profile copy of the language is a nice-to-have, not the
-    // source of truth — a failed PATCH must never block the UI switch.
+    // source of truth - a failed PATCH must never block the UI switch.
     if (localStorage.getItem('cq_token')) {
       updateMe({ lang: l }).catch(() => {});
     }

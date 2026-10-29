@@ -1,5 +1,5 @@
 /**
- * The six-stage learning journey — pure, so the strip on every learning route
+ * The six-stage learning journey - pure, so the strip on every learning route
  * is driven by one tested definition instead of five hand-rolled navs.
  *
  *   01 discover → the skill directory
@@ -53,7 +53,7 @@ export function journeyStages({ continueSlug, checkpointSlug }: JourneySources =
 
 /**
  * Which stage the current route represents. A checkpoint lesson counts as
- * "apply" — that is what an end-of-domain assessment is — while a regular
+ * "apply" - that is what an end-of-domain assessment is - while a regular
  * lesson counts as "learn". Unknown routes return null and the strip renders
  * with nothing marked rather than guessing.
  */

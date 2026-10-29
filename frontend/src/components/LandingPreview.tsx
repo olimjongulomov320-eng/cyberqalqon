@@ -8,7 +8,7 @@ import { CheckIcon, CloseIcon, PlayIcon } from '@/components/icons';
 /**
  * Self-contained, non-functional product preview shown on the signed-out
  * landing page. It demonstrates the exercise interaction (pick → instant
- * correct/wrong feedback + XP chip) with purely local state — it never calls
+ * correct/wrong feedback + XP chip) with purely local state - it never calls
  * the API and makes no claims about real usage.
  */
 
@@ -24,7 +24,7 @@ export default function LandingPreview() {
 
   return (
     <Card className="p-5">
-      {/* Session header — mirrors the real lesson chrome */}
+      {/* Session header - mirrors the real lesson chrome */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <span aria-hidden="true" className="grid h-9 w-9 place-items-center rounded-lg bg-cyan-400 text-text-inverse">

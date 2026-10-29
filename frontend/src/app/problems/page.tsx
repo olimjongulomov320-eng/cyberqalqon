@@ -73,7 +73,7 @@ const STATUS_KEY: Record<ProblemStatus, string> = {
   solved: 'statusSolved',
 };
 
-/** What a correct answer means for each exercise type — real semantics of the
+/** What a correct answer means for each exercise type - real semantics of the
  *  grader (backend/lib/grade.js), shown before the learner commits. */
 const CORRECT_KEY: Record<ExerciseType, string> = {
   mc: 'correctMc',
@@ -98,12 +98,12 @@ const chipClass = (active: boolean) =>
   }`;
 
 /**
- * Problem Arena — a filterable view over the *real* curriculum.
+ * Problem Arena - a filterable view over the *real* curriculum.
  *
  * Every row is an existing exercise (329 of them), served through the same
  * answer-stripping serializer the lesson uses. Solving calls the same
  * `POST /modules/:slug/check` endpoint, so XP, attempt recording and
- * explanations are the real ones — this page adds no second grading path and
+ * explanations are the real ones - this page adds no second grading path and
  * no fake content.
  *
  * Why the solver lives on this route instead of /problems/[module]/[exercise]:
@@ -629,7 +629,7 @@ export default function ProblemsPage() {
                         type="button"
                         onClick={() => selectProblem(p)}
                         aria-current={active ? 'true' : undefined}
-                        className={`w-full rounded-xl border px-4 py-3 text-left transition-colors ${
+                        className={`w-full rounded-lg border px-4 py-3 text-left transition-colors ${
                           active
                             ? 'border-cyan-500/40 bg-cyan-500/[0.06]'
                             : p.solved
@@ -698,7 +698,7 @@ export default function ProblemsPage() {
             {!selectedId ? (
               <Card className="p-6">
                 <div className="flex flex-col items-center gap-3 py-8 text-center">
-                  <span className="grid h-14 w-14 place-items-center rounded-xl border border-border bg-surface-800 text-cyan-300">
+                  <span className="grid h-14 w-14 place-items-center rounded-lg border border-border bg-surface-800 text-cyan-300">
                     <TargetIcon size={26} />
                   </span>
                   <p className="text-base font-semibold text-white">{tr('selectProblem')}</p>
@@ -742,7 +742,7 @@ export default function ProblemsPage() {
                     objective (this exercise is one step of it), the domain is
                     the skill being practised, and difficulty/status come from
                     the curriculum and the learner's own attempts. No invented
-                    scenario prose — the exercise's own question is the task. */}
+                    scenario prose - the exercise's own question is the task. */}
                 <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
                   {tr('missionBrief')}
                 </p>
@@ -795,7 +795,7 @@ export default function ProblemsPage() {
                 </div>
 
                 {/* Graduated hints: strategy first, then a server-derived
-                    narrowing — never the answer. Available only before a
+                    narrowing - never the answer. Available only before a
                     graded attempt. */}
                 {user && !result && (
                   <HintLadder
