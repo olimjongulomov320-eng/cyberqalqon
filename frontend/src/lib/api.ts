@@ -729,3 +729,66 @@ export function submitAssessment(id: string, answers: { n: number; value: Answer
     body: JSON.stringify({ answers }),
   });
 }
+
+// ── Coding challenges (run in the browser; results are self-reported) ─────────
+export type ChallengeDifficulty = 'easy' | 'medium' | 'hard';
+export type ChallengeStatus = 'new' | 'attempted' | 'solved';
+
+export interface ChallengeSummary {
+  slug: string;
+  title: string;
+  difficulty: ChallengeDifficulty;
+  points: number;
+  tags: string[];
+  language: 'python';
+  module: string;
+  needs_review: boolean;
+  tests_total: number;
+  status: ChallengeStatus;
+}
+
+export interface ChallengeList {
+  challenges: ChallengeSummary[];
+  total: number;
+  facets: { difficulties: { key: ChallengeDifficulty; count: number }[]; tags: string[] };
+  /** null when signed out. Self-reported, so `verified` is always false. */
+  summary: { solved: number; total: number; points: number; verified: false } | null;
+}
+
+export interface ChallengeDetail extends Omit<ChallengeSummary, 'status'> {
+  statement: string;
+  constraints: string;
+  starter: string;
+  entry: string;
+  examples: { args: unknown[]; expected: unknown }[];
+  tests: { args: unknown[]; expected: unknown; hidden: boolean }[];
+}
+
+export function fetchChallenges(params: {
+  lang: string;
+  difficulty?: ChallengeDifficulty;
+  tag?: string;
+  status?: ChallengeStatus;
+  q?: string;
+}) {
+  const q = new URLSearchParams({ lang: params.lang });
+  if (params.difficulty) q.set('difficulty', params.difficulty);
+  if (params.tag) q.set('tag', params.tag);
+  if (params.status) q.set('status', params.status);
+  if (params.q) q.set('q', params.q);
+  return req<ChallengeList>(`/challenges?${q}`);
+}
+
+export function fetchChallenge(slug: string, lang: string) {
+  return req<{
+    challenge: ChallengeDetail;
+    progress: { status: ChallengeStatus; best_passed: number; attempts: number } | null;
+  }>(`/challenges/${encodeURIComponent(slug)}?lang=${lang}`);
+}
+
+export function submitChallenge(slug: string, body: { passed: number; total: number; code: string }) {
+  return req<{ solved: boolean; best_passed: number; attempts: number; total: number; points: number; verified: false }>(
+    `/challenges/${encodeURIComponent(slug)}/submit`,
+    { method: 'POST', body: JSON.stringify(body) }
+  );
+}

@@ -1,4 +1,5 @@
 'use client';
+import PracticeTabs from '@/components/PracticeTabs';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
@@ -395,6 +396,7 @@ export default function ProblemsPage() {
 
   return (
     <div>
+      <PracticeTabs />
       <div className="mb-6">
         <div className="mb-3 flex items-center justify-between gap-3">
           <Link

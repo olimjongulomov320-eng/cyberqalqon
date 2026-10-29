@@ -15,7 +15,7 @@ type NavItem = { href: string; label: string; also?: string[] };
 const NAV: NavItem[] = [
   { href: '/', label: 'navHome' },
   { href: '/learn', label: 'navLearn' },
-  { href: '/problems', label: 'navPractice' },
+  { href: '/problems', label: 'navPractice', also: ['/challenges'] },
   { href: '/assessments', label: 'navAssessments' },
   { href: '/profile', label: 'navProgress', also: ['/review', '/leaderboard', '/practice'] },
 ];

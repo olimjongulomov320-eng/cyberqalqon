@@ -13,7 +13,7 @@
 const CHALLENGES = require('../curriculum/challenges');
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
-const MAX_CODE_BYTES = 20_000;
+const MAX_CODE_BYTES = 12_000; // below the 16 kb JSON body limit so this check is reachable
 
 const bySlug = new Map(CHALLENGES.map(c => [c.slug, c]));
 

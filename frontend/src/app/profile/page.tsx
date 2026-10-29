@@ -1,4 +1,5 @@
 'use client';
+import ChallengeStats from '@/components/ChallengeStats';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { Lang, makeT } from '@/lib/i18n';
@@ -667,6 +668,8 @@ export default function ProfilePage() {
                 )}
               </div>
             </Card>
+
+            <ChallengeStats />
 
             <div className="mt-6 grid grid-cols-2 gap-2">
               <ButtonLink href="/leaderboard" variant="secondary" size="sm" className="justify-center">

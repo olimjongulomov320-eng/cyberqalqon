@@ -16,7 +16,7 @@ import {
 const TABS = [
   { href: '/', label: 'navHome', Icon: HomeIcon, also: [] as string[] },
   { href: '/learn', label: 'navLearn', Icon: BookIcon, also: [] as string[] },
-  { href: '/problems', label: 'navPractice', Icon: CodeIcon, also: [] as string[] },
+  { href: '/problems', label: 'navPractice', Icon: CodeIcon, also: ['/challenges'] as string[] },
   { href: '/assessments', label: 'navAssessments', Icon: TargetIcon, also: [] as string[] },
   { href: '/profile', label: 'navProgress', Icon: UserIcon, also: ['/review', '/leaderboard', '/practice'] },
 ] as const;
