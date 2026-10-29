@@ -1,4 +1,5 @@
 'use client';
+import { stagger } from '@/lib/motion';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
@@ -85,16 +86,16 @@ export default function HomePage() {
                 badge sitting in the classic "small label over the headline"
                 slot; the tagline already appears in the footer, so the
                 headline now opens the page at full display weight. */}
-            <h1 className="display min-w-0 text-balance">{tr('heroTitle')}</h1>
+            <h1 className="display stagger-item min-w-0 text-balance" style={stagger(0)}>{tr('heroTitle')}</h1>
 
-            <p className="max-w-[46ch] text-base leading-relaxed text-text-secondary text-pretty">{tr('heroBody')}</p>
+            <p className="stagger-item max-w-[46ch] text-base leading-relaxed text-text-secondary text-pretty" style={stagger(1)}>{tr('heroBody')}</p>
 
-            <ButtonLink href="/auth" size="lg" className="group">
+            <ButtonLink href="/auth" size="lg" className="stagger-item group" style={stagger(2)}>
               {tr('ctaStart')}
               <ArrowRightIcon size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
             </ButtonLink>
 
-            <ul className="mt-1 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
+            <ul className="stagger-item mt-1 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2" style={stagger(3)}>
               {features.map(({ Icon, label }) => (
                 <li key={label} className="flex items-center gap-2 text-[0.8125rem] font-medium text-text-secondary">
                   <Icon size={16} className="shrink-0 text-cyan-400" />
@@ -104,7 +105,7 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <div className="relative lg:mt-8">
+          <div className="stagger-item relative lg:mt-8" style={stagger(2)}>
             {/* Single cyan bloom behind the card - the only glow on the page. */}
             <div
               aria-hidden="true"

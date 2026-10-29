@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import LogoMark from '@/components/LogoMark';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -278,7 +278,7 @@ export default function AuthPage() {
         {/* mobile brand mark */}
         <div className="mb-8 flex flex-col items-center text-center lg:items-start lg:text-left">
           <span className="grid h-14 w-14 place-items-center rounded-lg border border-border bg-surface-900 shadow-card edge-light lg:hidden">
-            <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={32} height={32} priority />
+            <LogoMark size={32} />
           </span>
           <p className="label mt-4 text-cyan-400 lg:mt-0">{tr('authSecureLabel')}</p>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-text-primary">

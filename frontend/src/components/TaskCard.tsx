@@ -1,4 +1,5 @@
 'use client';
+import { stagger } from '@/lib/motion';
 import { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -57,6 +58,7 @@ export default function TaskCard({
   const [shown, setShown] = useState<Shown | null>(null);
   const [xp, setXp] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [flash, setFlash] = useState(false);
 
   const solved = status === 'solved';
   const ready = isAnswerReady(ex, value);
@@ -72,6 +74,7 @@ export default function TaskCard({
       setCanReveal(res.can_reveal);
       if (res.correct) {
         setStatus('solved');
+        setFlash(true);
         setXp(res.xp_earned);
         if (res.explain && res.reveal) setShown({ explain: res.explain, reveal: res.reveal, viaSolution: false });
       } else {
@@ -104,7 +107,8 @@ export default function TaskCard({
   return (
     <section
       aria-labelledby={`task-${ex.id}`}
-      className={`rounded-lg border bg-surface-900 ${solved ? 'border-success/40' : 'border-border'}`}
+      style={stagger(index)}
+      className={`stagger-item rounded-lg border bg-surface-900 transition-colors duration-300 ${solved ? 'border-success/40' : 'border-border'} ${flash ? 'solved-flash' : ''}`}
     >
       <header className="flex flex-wrap items-center gap-2 border-b border-border/60 px-4 py-2.5">
         <h3 id={`task-${ex.id}`} className="text-sm font-bold text-text-primary">

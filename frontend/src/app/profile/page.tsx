@@ -1,7 +1,10 @@
 'use client';
 import { ContentIcon } from '@/components/icons';
 import ChallengeStats from '@/components/ChallengeStats';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import SlidingIndicator from '@/components/SlidingIndicator';
+import CountUp from '@/components/CountUp';
+import { stagger } from '@/lib/motion';
 import Link from 'next/link';
 import ActivityMap from '@/components/ActivityMap';
 import { appDayKey } from '@/lib/appday';
@@ -366,19 +369,19 @@ function KpiStrip({ stats }: { stats: StatsPayload }) {
   const { lang } = useApp();
   const tr = makeT(lang);
   const items = [
-    { Icon: BoltIcon, label: tr('totalXp'), value: stats.profile.total_xp, sub: `${stats.week_xp} / ${tr('weekShort')}`, tone: 'text-warning' },
-    { Icon: FlameIcon, label: tr('streak'), value: stats.profile.current_streak ?? 0, sub: `${tr('bestStreak')}: ${stats.profile.longest_streak ?? 0}`, tone: 'text-text-primary' },
-    { Icon: BookIcon, label: tr('lessonsShort'), value: stats.profile.modules_completed ?? 0, sub: undefined, tone: 'text-text-primary' },
-    { Icon: CheckIcon, label: tr('statsTitle'), value: stats.accuracy === null ? '-' : `${stats.accuracy}%`, sub: `${stats.answers_correct + stats.answers_wrong} ${tr('answersTotal').toLowerCase()}`, tone: 'text-success' },
+    { Icon: BoltIcon, label: tr('totalXp'), value: stats.profile.total_xp as number | null, suffix: '', sub: `${stats.week_xp} / ${tr('weekShort')}`, tone: 'text-warning' },
+    { Icon: FlameIcon, label: tr('streak'), value: (stats.profile.current_streak ?? 0) as number | null, suffix: '', sub: `${tr('bestStreak')}: ${stats.profile.longest_streak ?? 0}`, tone: 'text-text-primary' },
+    { Icon: BookIcon, label: tr('lessonsShort'), value: (stats.profile.modules_completed ?? 0) as number | null, suffix: '', sub: undefined as string | undefined, tone: 'text-text-primary' },
+    { Icon: CheckIcon, label: tr('statsTitle'), value: stats.accuracy as number | null, suffix: '%', sub: `${stats.answers_correct + stats.answers_wrong} ${tr('answersTotal').toLowerCase()}`, tone: 'text-success' },
   ];
   return (
     <dl className="grid grid-cols-2 divide-border overflow-hidden rounded-lg border border-border bg-surface-900 sm:grid-cols-4 sm:divide-x [&>div]:border-border max-sm:[&>div:nth-child(n+3)]:border-t max-sm:[&>div:nth-child(even)]:border-l">
-      {items.map(({ Icon, label, value, sub, tone }) => (
-        <div key={label} className="p-4">
+      {items.map(({ Icon, label, value, suffix, sub, tone }, i) => (
+        <div key={label} className="stagger-item p-4" style={stagger(i)}>
           <dt className="flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">
             <Icon size={14} /> {label}
           </dt>
-          <dd className={`num mt-1.5 text-2xl font-bold ${tone}`}>{value}</dd>
+          <dd className={`num mt-1.5 text-2xl font-bold ${tone}`}>{value === null ? '-' : <CountUp value={value} suffix={suffix} />}</dd>
           {sub && <p className="num mt-0.5 text-xs text-text-muted">{sub}</p>}
         </div>
       ))}
@@ -400,10 +403,10 @@ function TracksTable({ tracks }: { tracks: Track[] }) {
         <span />
       </div>
       <ul className="divide-y divide-border/60">
-        {tracks.map(t => {
+        {tracks.map((t, i) => {
           const st = t.mastery?.state ?? 'not_started';
           return (
-            <li key={t.slug} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-4 py-3 md:grid-cols-[minmax(0,1fr)_7rem_11rem_7rem]">
+            <li key={t.slug} style={stagger(i)} className="stagger-item grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-4 py-3 md:grid-cols-[minmax(0,1fr)_7rem_11rem_7rem]">
               <p className="flex min-w-0 items-center gap-2 text-sm font-semibold text-text-primary">
                 <ContentIcon name={t.icon} size={18} className="shrink-0 text-cyan-300" />
                 <span className="truncate">{t.title}</span>
@@ -441,6 +444,7 @@ export default function ProfilePage() {
   const { lang, user, setUser, logout, ready } = useApp();
   const tr = makeT(lang);
 
+  const tabsRef = useRef<HTMLDivElement>(null);
   const [tab, setTab] = useState<Tab>('overview');
   const [stats, setStats] = useState<StatsPayload | null>(null);
   const [tracks, setTracks] = useState<Track[] | null>(null);
@@ -533,7 +537,7 @@ export default function ProfilePage() {
       </header>
 
       {/* Tabs */}
-      <div role="tablist" aria-label={tr('navProgress')} className="mt-6 flex gap-1 overflow-x-auto border-b border-border">
+      <div ref={tabsRef} role="tablist" aria-label={tr('navProgress')} className="relative mt-6 flex gap-1 overflow-x-auto border-b border-border">
         {TABS.map(t => (
           <button
             key={t.key}
@@ -542,13 +546,14 @@ export default function ProfilePage() {
             aria-selected={tab === t.key}
             aria-controls={`panel-${t.key}`}
             onClick={() => selectTab(t.key)}
-            className={`-mb-px shrink-0 border-b-2 px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
-              tab === t.key ? 'border-cyan-400 text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
+            className={`shrink-0 px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
+              tab === t.key ? 'text-text-primary' : 'text-text-muted hover:text-text-primary'
             }`}
           >
             {tr(t.label)}
           </button>
         ))}
+        <SlidingIndicator containerRef={tabsRef} activeKey={tab} />
       </div>
 
       {error && (
@@ -623,10 +628,10 @@ export default function ProfilePage() {
                 <p className="px-4 pb-4 pt-2 text-sm text-text-muted">{tr('achievementsEmpty')}</p>
               ) : (
                 <ul className="grid grid-cols-2 gap-2 px-4 pb-4 pt-3 sm:grid-cols-3 lg:grid-cols-4">
-                  {stats.achievements.map(a => {
+                  {stats.achievements.map((a, i) => {
                     const meta = achievementMeta(a.key, lang, tr);
                     return (
-                      <li key={a.key} className="flex items-center gap-2.5 rounded-md border border-border bg-surface-950/60 px-3 py-2">
+                      <li key={a.key} style={stagger(i)} className="stagger-item flex items-center gap-2.5 rounded-md border border-border bg-surface-950/60 px-3 py-2">
                         <ContentIcon name={meta?.icon ?? 'medal'} size={20} className="shrink-0 text-warning" />
                         <span className="text-xs font-semibold text-text-primary">{meta?.title ?? a.key}</span>
                       </li>

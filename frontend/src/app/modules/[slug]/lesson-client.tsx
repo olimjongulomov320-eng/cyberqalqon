@@ -1,4 +1,6 @@
 'use client';
+import { stagger } from '@/lib/motion';
+import CountUp from '@/components/CountUp';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
@@ -138,16 +140,16 @@ export default function LessonView({ slug }: { slug: string }) {
           <p className="mt-1 text-sm text-text-secondary">{module.title}</p>
 
           <dl className="mt-5 grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-md border border-border p-3">
-              <dd className="num text-xl font-bold text-warning">+{complete.xp_earned}</dd>
+            <div className="stagger-item rounded-md border border-border p-3" style={stagger(1)}>
+              <dd className="text-xl font-bold text-warning">+<CountUp value={complete.xp_earned} /></dd>
               <dt className="mt-0.5 text-xs text-text-muted">XP</dt>
             </div>
-            <div className="rounded-md border border-border p-3">
-              <dd className="num text-xl font-bold text-text-primary">{complete.accuracy}%</dd>
+            <div className="stagger-item rounded-md border border-border p-3" style={stagger(2)}>
+              <dd className="text-xl font-bold text-text-primary"><CountUp value={complete.accuracy} suffix="%" /></dd>
               <dt className="mt-0.5 text-xs text-text-muted">{tr('accuracy')}</dt>
             </div>
-            <div className="rounded-md border border-border p-3">
-              <dd className="num text-xl font-bold text-text-primary">{complete.streak}</dd>
+            <div className="stagger-item rounded-md border border-border p-3" style={stagger(3)}>
+              <dd className="text-xl font-bold text-text-primary"><CountUp value={complete.streak} /></dd>
               <dt className="mt-0.5 text-xs text-text-muted">{tr('streak')}</dt>
             </div>
           </dl>

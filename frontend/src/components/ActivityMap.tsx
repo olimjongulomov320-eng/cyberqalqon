@@ -39,12 +39,12 @@ export default function ActivityMap({ activity, today, weeks = 12 }: { activity:
           gridAutoFlow: 'column',
         }}
       >
-        {cells.map(c => (
+        {cells.map((c, i) => (
           <span
             key={c.day}
+            style={{ background: c.future ? 'transparent' : FILL[c.level], ['--col' as string]: Math.floor(i / 7) } as React.CSSProperties}
             title={c.future ? undefined : `${c.day}: ${c.answers}`}
-            className="aspect-square rounded-[2px]"
-            style={{ background: c.future ? 'transparent' : FILL[c.level] }}
+            className="cell-in aspect-square rounded-[2px]"
           />
         ))}
       </div>

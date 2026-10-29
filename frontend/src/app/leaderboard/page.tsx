@@ -1,4 +1,5 @@
 'use client';
+import { stagger } from '@/lib/motion';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -115,10 +116,10 @@ export default function LeaderboardPage() {
           </Card>
         ) : (
           <ol className="space-y-2">
-            {rows.map(entry => {
+            {rows.map((entry, i) => {
               const isMe = user?.id === entry.user_id;
               return (
-                <li key={entry.user_id}>
+                <li key={entry.user_id} className="stagger-item" style={stagger(i)}>
                   <div
                     className={`flex items-center gap-3 rounded-lg border px-4 py-3 transition-colors ${
                       isMe

@@ -77,3 +77,11 @@ export const scaleIn: Variants = {
 
 /** Shared press feedback for pressable surfaces (framer-motion `whileTap`). */
 export const tapScale = { scale: 0.985 };
+
+/**
+ * Index for the CSS `.stagger-item` utility. The delay is `--i * 45ms`, capped
+ * so a long list never makes the last row wait more than about half a second.
+ */
+export function stagger(index: number, cap = 12): React.CSSProperties {
+  return { ['--i' as string]: Math.max(0, Math.min(index, cap)) } as React.CSSProperties;
+}

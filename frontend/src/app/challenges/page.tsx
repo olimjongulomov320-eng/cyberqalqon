@@ -1,4 +1,5 @@
 'use client';
+import { stagger } from '@/lib/motion';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
@@ -119,8 +120,8 @@ export default function ChallengesPage() {
           </Card>
         ) : (
           <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {data.challenges.map(c => (
-              <li key={c.slug}>
+            {data.challenges.map((c, i) => (
+              <li key={c.slug} className="stagger-item" style={stagger(i)}>
                 <Link href={`/challenges/solve?slug=${c.slug}`} className="block h-full">
                   <Card hover className="flex h-full flex-col gap-3 p-4">
                     <div className="flex items-start justify-between gap-3">

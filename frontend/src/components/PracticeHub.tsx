@@ -1,4 +1,5 @@
 'use client';
+import CountUp from '@/components/CountUp';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
@@ -62,9 +63,9 @@ export default function PracticeHub() {
   if (!hub) return <Skeleton className="mb-6 h-28 w-full" />;
 
   const kpis = [
-    { label: tr('hubQuestions'), value: `${hub.qSolved}/${hub.qTotal}` },
-    { label: tr('hubChallenges'), value: `${hub.cSolved}/${hub.cTotal}`, sub: `${hub.points} ${tr('chPoints')}` },
-    { label: tr('statsTitle'), value: hub.accuracy === null ? '-' : `${hub.accuracy}%` },
+    { label: tr('hubQuestions'), value: hub.qSolved, of: hub.qTotal, suffix: '' },
+    { label: tr('hubChallenges'), value: hub.cSolved, of: hub.cTotal, suffix: '', sub: `${hub.points} ${tr('chPoints')}` },
+    { label: tr('statsTitle'), value: hub.accuracy, of: null as number | null, suffix: '%' },
   ];
 
   return (
@@ -73,7 +74,10 @@ export default function PracticeHub() {
         {kpis.map(k => (
           <div key={k.label} className="p-3.5">
             <dt className="font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">{k.label}</dt>
-            <dd className="num mt-1 text-xl font-bold text-text-primary">{k.value}</dd>
+            <dd className="num mt-1 text-xl font-bold text-text-primary">
+              {k.value === null ? '-' : <CountUp value={k.value} suffix={k.suffix} />}
+              {k.of !== null && <span className="text-text-muted">/{k.of}</span>}
+            </dd>
             {k.sub && <p className="num mt-0.5 text-[0.6875rem] text-warning">{k.sub}</p>}
           </div>
         ))}

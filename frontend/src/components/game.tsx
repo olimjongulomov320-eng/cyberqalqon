@@ -1,9 +1,8 @@
 'use client';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
-import { useEffect, useRef, useState } from 'react';
 import { levelFromXp } from '@/lib/gamification';
-import { valueAt } from '@/lib/countUp';
+import { useCountUp } from '@/components/CountUp';
 import { MAX_HEARTS } from '@/lib/hearts';
 import { BoltIcon, ContentIcon, FlameIcon, HeartIcon, SparkleIcon } from '@/components/icons';
 
@@ -47,33 +46,6 @@ export function Flame({ streak, short = false }: { streak: number; short?: boole
 }
 
 /* ── XP chip + level ───────────────────────────────────────────────────────── */
-/** Counts up to `target` when it grows (reduced motion: jumps straight there). */
-function useCountUp(target: number) {
-  const [shown, setShown] = useState(target);
-  const from = useRef(target);
-  useEffect(() => {
-    if (from.current === target) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) {
-      from.current = target;
-      setShown(target);
-      return;
-    }
-    const start = performance.now();
-    const origin = from.current;
-    let raf = 0;
-    const tick = (now: number) => {
-      const v = valueAt(origin, target, now - start);
-      setShown(v);
-      if (v !== target) raf = requestAnimationFrame(tick);
-      else from.current = target;
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target]);
-  return shown;
-}
-
 export function XPChip({ xp, showLevel = false }: { xp: number; showLevel?: boolean }) {
   const shown = useCountUp(xp);
   const level = showLevel ? levelFromXp(xp) : null;

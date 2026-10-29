@@ -203,7 +203,7 @@ export function Progress({
       className={`progress-base ${className}`}
     >
       <div
-        className={`progress-fill ${PROGRESS_TONES[tone]}`}
+        className={`progress-fill fill-x ${PROGRESS_TONES[tone]}`}
         style={{ transform: `scaleX(${pct / 100})` }}
       />
       {showLabel && (

@@ -1,3 +1,4 @@
+import { stagger } from '@/lib/motion';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -46,13 +47,13 @@ export default function LessonTable({ modules, all }: { modules: PathModule[]; a
         <span />
       </div>
       <ol className="divide-y divide-border/60">
-        {modules.map(m => {
+        {modules.map((m, i) => {
           const locked = m.state === 'locked';
           const number = all.indexOf(m) + 1;
           const action =
             m.state === 'done' ? tr('rowReview') : tr('startLesson');
           return (
-            <li key={m.slug} className={`grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 ${COLS} ${locked ? 'opacity-70' : ''}`}>
+            <li key={m.slug} style={stagger(i)} className={`stagger-item grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 ${COLS} ${locked ? 'opacity-70' : ''}`}>
               <span className="grid place-items-center">
                 <Status state={m.state} />
               </span>

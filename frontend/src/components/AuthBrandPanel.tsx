@@ -1,5 +1,5 @@
 'use client';
-import Image from 'next/image';
+import LogoMark from '@/components/LogoMark';
 import { ReactNode } from 'react';
 import Wordmark from '@/components/Wordmark';
 
@@ -40,7 +40,7 @@ export function AuthBrandPanel({
 
       <div className="relative z-10 flex h-full flex-col justify-between gap-16 p-10">
         <div className="flex items-center gap-3">
-          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={34} height={34} className="shrink-0" priority />
+          <LogoMark size={34} className="shrink-0" />
           <Wordmark className="text-lg" />
         </div>
 

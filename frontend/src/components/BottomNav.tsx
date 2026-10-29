@@ -1,5 +1,7 @@
 'use client';
 import Link from 'next/link';
+import { useRef } from 'react';
+import SlidingIndicator from '@/components/SlidingIndicator';
 import { usePathname } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -25,6 +27,7 @@ export default function BottomNav() {
   const { lang } = useApp();
   const tr = makeT(lang);
   const pathname = usePathname();
+  const listRef = useRef<HTMLUListElement>(null);
 
   return (
     <nav
@@ -32,16 +35,13 @@ export default function BottomNav() {
       className="fixed inset-x-0 bottom-0 z-nav border-t border-border bg-surface-950/90 backdrop-blur-md supports-[backdrop-filter]:bg-surface-950/80 sm:hidden"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <ul className="mx-auto flex max-w-3xl items-stretch">
+      <ul ref={listRef} className="relative mx-auto flex max-w-3xl items-stretch">
         {TABS.map(tab => {
           const active =
             tab.href === '/' ? pathname === '/' : [tab.href, ...tab.also].some(h => pathname.startsWith(h));
           const Icon = tab.Icon;
           return (
             <li key={tab.href} className="relative flex-1">
-              {active && (
-                <span aria-hidden="true" className="absolute inset-x-5 top-0 h-0.5 rounded-full bg-cyan-400" />
-              )}
               <Link
                 href={tab.href}
                 aria-current={active ? 'page' : undefined}
@@ -55,6 +55,7 @@ export default function BottomNav() {
             </li>
           );
         })}
+        <SlidingIndicator containerRef={listRef} activeKey={pathname ?? ''} offsetClass="top-0" />
       </ul>
     </nav>
   );

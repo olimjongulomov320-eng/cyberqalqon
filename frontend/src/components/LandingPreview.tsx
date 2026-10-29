@@ -26,7 +26,7 @@ export default function LandingPreview() {
     <Card className="overflow-hidden p-0">
       {/* Task bar: the same facts as the real lesson header, in console type. */}
       <div className="flex items-center justify-between gap-3 border-b border-border bg-surface-950/60 px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">
-        <span>
+        <span className="caret">
           {tr('lesson')} <span className="num font-bold text-text-secondary">1/3</span>
         </span>
         <span className="num font-bold text-warning">+3 XP</span>

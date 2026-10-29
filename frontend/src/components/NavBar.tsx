@@ -1,9 +1,11 @@
 'use client';
+import SlidingIndicator from '@/components/SlidingIndicator';
+import LogoMark from '@/components/LogoMark';
 import Wordmark from '@/components/Wordmark';
 import { Avatar } from '@/components/ui';
 import ThemeToggle from '@/components/ThemeToggle';
-import Image from 'next/image';
 import Link from 'next/link';
+import { useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { Lang, LANGS, makeT } from '@/lib/i18n';
@@ -26,6 +28,7 @@ export default function NavBar() {
   const { user, lang, setLang, lowBandwidth, setLowBandwidth } = useApp();
   const tr = makeT(lang);
   const pathname = usePathname();
+  const navRef = useRef<HTMLElement>(null);
 
   const isActive = (item: NavItem) =>
     item.href === '/'
@@ -40,7 +43,7 @@ export default function NavBar() {
           aria-label={tr('appName')}
           className="-ml-1 flex items-center gap-2.5 rounded-lg px-1 py-1 transition-opacity hover:opacity-85"
         >
-          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={28} height={28} className="shrink-0" priority />
+          <LogoMark size={28} className="shrink-0" />
           {/* The wordmark is dropped below 360px: at that width the brand lockup
               plus the language / low-traffic / profile controls no longer fit on
               one row (they used to push the header ~15px past the viewport). The
@@ -48,7 +51,7 @@ export default function NavBar() {
           <Wordmark className="hidden text-[0.9375rem] min-[360px]:inline" />
         </Link>
 
-        <nav aria-label={tr('tracks')} className="hidden items-center gap-1 sm:flex">
+        <nav ref={navRef} aria-label={tr('tracks')} className="relative hidden items-center gap-1 sm:flex">
           {NAV.map(item => {
             const active = isActive(item);
             return (
@@ -57,15 +60,14 @@ export default function NavBar() {
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
                 className={`rounded-sm px-2.5 py-1.5 font-mono text-[0.75rem] font-medium tracking-wide transition-colors ${
-                  active
-                    ? 'bg-surface-800 text-white'
-                    : 'text-text-secondary hover:bg-surface-900 hover:text-text-primary'
+                  active ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
                 {tr(item.label)}
               </Link>
             );
           })}
+          <SlidingIndicator containerRef={navRef} activeKey={pathname ?? ''} />
         </nav>
 
         <div className="flex items-center gap-1.5">

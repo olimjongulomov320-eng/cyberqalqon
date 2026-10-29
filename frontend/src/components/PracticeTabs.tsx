@@ -1,5 +1,7 @@
 'use client';
 import Link from 'next/link';
+import { useRef } from 'react';
+import SlidingIndicator from '@/components/SlidingIndicator';
 import { usePathname } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
@@ -10,13 +12,14 @@ export default function PracticeTabs() {
   const { lang } = useApp();
   const tr = makeT(lang);
   const pathname = usePathname();
+  const ref = useRef<HTMLElement>(null);
   const tabs = [
     { href: '/problems', label: 'tabQuestions' },
     { href: '/challenges', label: 'tabChallenges' },
   ];
   return (
     <>
-    <nav aria-label={tr('navPractice')} className="mb-5 inline-flex rounded-lg border border-border bg-surface-900 p-1">
+    <nav ref={ref} aria-label={tr('navPractice')} className="relative mb-5 flex gap-1 border-b border-border">
       {tabs.map(t => {
         const active = pathname.startsWith(t.href);
         return (
@@ -32,6 +35,7 @@ export default function PracticeTabs() {
           </Link>
         );
       })}
+      <SlidingIndicator containerRef={ref} activeKey={pathname} />
     </nav>
     <PracticeHub />
     </>

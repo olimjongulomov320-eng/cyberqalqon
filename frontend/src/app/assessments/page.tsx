@@ -1,4 +1,5 @@
 'use client';
+import { stagger } from '@/lib/motion';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
@@ -119,12 +120,13 @@ export default function AssessmentsPage() {
               <span />
             </div>
             <ul className="divide-y divide-border/60">
-              {scored.map(a => {
+              {scored.map((a, i) => {
                 const st = readiness(a);
                 return (
                   <li
                     key={a.slug}
-                    className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 py-3 md:grid-cols-[minmax(0,1fr)_6rem_6rem_8rem_8rem]"
+                    style={stagger(i)}
+                    className="stagger-item grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 py-3 md:grid-cols-[minmax(0,1fr)_6rem_6rem_8rem_8rem]"
                   >
                     <div className="min-w-0">
                       <p className="flex items-center gap-2 text-sm font-semibold text-text-primary">

@@ -1,4 +1,5 @@
 'use client';
+import { stagger } from '@/lib/motion';
 import { ContentIcon } from '@/components/icons';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -21,7 +22,7 @@ function TrackCard({ track, tr }: { track: Track; tr: (k: string) => string }) {
     state === 'mastered' ? tr('masteryMastered') : state === 'practising' ? tr('masteryPractising') : tr('masteryNotStarted');
 
   return (
-    <Card className="flex h-full flex-col gap-3 p-4">
+    <Card hover className="flex h-full flex-col gap-3 p-4">
       <div className="flex items-start gap-3">
         <ContentIcon name={track.icon} size={26} className="shrink-0 text-cyan-300" />
         <div className="min-w-0 flex-1">
@@ -105,8 +106,8 @@ export default function TracksSection() {
         <Skeleton className="h-40 w-full" />
       ) : (
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {data.tracks.map(t => (
-            <li key={t.slug}>
+          {data.tracks.map((t, i) => (
+            <li key={t.slug} className="stagger-item" style={stagger(i)}>
               <TrackCard track={t} tr={tr} />
             </li>
           ))}
