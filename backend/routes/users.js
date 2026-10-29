@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
+const { forget: forgetSession } = require('../lib/sessions');
 const { DAY_START, WEEK_START, APP_TZ } = require('../lib/time');
 const { trendFromCounts } = require('../lib/stats');
 
@@ -405,6 +406,7 @@ router.delete('/me', deleteLimiter, async (req, res, next) => {
       return res.status(403).json({ error: { code: 'CONFIRMATION_FAILED', message: 'Confirmation failed.' } });
     }
     await pool.query(`DELETE FROM users WHERE id = $1`, [req.user.id]);
+    forgetSession(req.user.id);
     res.status(204).end();
   } catch (err) {
     next(err);

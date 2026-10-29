@@ -244,6 +244,7 @@ async function setup() {
   /* ── 3. v2 columns ───────────────────────────────────────────────────── */
   for (const sql of [
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS email              TEXT UNIQUE`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS token_version   INTEGER NOT NULL DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS current_streak  INTEGER NOT NULL DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS longest_streak  INTEGER NOT NULL DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS last_streak_date DATE`,

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { verifyTelegramInitData } = require('../middleware/auth');
+const { forget: forgetSession } = require('../lib/sessions');
 const { sendMail, canSendMail } = require('../lib/mailer');
 const { RESET_TTL_MINUTES, generateToken, hashToken, passwordProblem } = require('../lib/passwordReset');
 
@@ -48,7 +49,7 @@ const bad = (res, message) =>
 const DUMMY_HASH = bcrypt.hashSync('cyberqalqon-timing-pad', BCRYPT_ROUNDS);
 
 function signToken(user) {
-  return jwt.sign({ id: user.id, display_name: user.display_name }, JWT_SECRET, { expiresIn: JWT_TTL });
+  return jwt.sign({ id: user.id, display_name: user.display_name, v: user.token_version ?? 0 }, JWT_SECRET, { expiresIn: JWT_TTL });
 }
 
 // POST /auth/telegram
@@ -69,12 +70,12 @@ router.post('/telegram', async (req, res, next) => {
        ON CONFLICT (telegram_id) DO UPDATE
          SET telegram_username = EXCLUDED.telegram_username,
              last_active_at = now()
-       RETURNING id, display_name, total_xp, lang, (xmax = 0) AS is_new_user`,
+       RETURNING id, display_name, total_xp, lang, token_version, (xmax = 0) AS is_new_user`,
       [tgUser.id, tgUser.username ?? null, displayName, safeLang]
     );
 
-    const user = rows[0];
-    res.status(user.is_new_user ? 201 : 200).json({ token: signToken(user), user, is_new_user: user.is_new_user });
+    const { token_version, ...user } = rows[0];
+    res.status(user.is_new_user ? 201 : 200).json({ token: signToken({ ...user, token_version }), user, is_new_user: user.is_new_user });
   } catch (err) {
     next(err);
   }
@@ -151,7 +152,7 @@ router.post('/login', loginLimiter, async (req, res, next) => {
     const value = isEmail ? identifier.toLowerCase() : identifier.toLowerCase();
 
     const { rows } = await pool.query(
-      `SELECT id, display_name, total_xp, lang, email, password_hash FROM users WHERE ${field} = $1`,
+      `SELECT id, display_name, total_xp, lang, email, token_version, password_hash FROM users WHERE ${field} = $1`,
       [value]
     );
 
@@ -160,9 +161,9 @@ router.post('/login', loginLimiter, async (req, res, next) => {
       return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Invalid credentials.' } });
     }
 
-    const { password_hash, ...user } = rows[0];
+    const { password_hash, token_version, ...user } = rows[0];
     await pool.query(`UPDATE users SET last_active_at = now() WHERE id = $1`, [user.id]);
-    res.json({ token: signToken(user), user });
+    res.json({ token: signToken({ ...user, token_version }), user });
   } catch (err) {
     next(err);
   }
@@ -255,9 +256,10 @@ router.post('/reset', resetLimiter, async (req, res, next) => {
       await client.query('ROLLBACK');
       return res.status(400).json({ error: { code: 'INVALID_TOKEN', message: 'Invalid or expired link.' } });
     }
-    await client.query(`UPDATE users SET password_hash = $2 WHERE id = $1`, [rows[0].user_id, hash]);
+    await client.query(`UPDATE users SET password_hash = $2, token_version = token_version + 1 WHERE id = $1`, [rows[0].user_id, hash]);
     await client.query(`DELETE FROM password_resets WHERE user_id = $1`, [rows[0].user_id]);
     await client.query('COMMIT');
+    forgetSession(rows[0].user_id);
     res.json({ ok: true });
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {});

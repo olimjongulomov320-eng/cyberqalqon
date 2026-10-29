@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const { isCurrent } = require('../lib/sessions');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -15,16 +16,26 @@ function parseBearer(req) {
 }
 
 // Attaches req.user if token is valid; never rejects
-function optionalAuth(req, _res, next) {
-  req.user = parseBearer(req);
-  next();
+async function optionalAuth(req, _res, next) {
+  try {
+    const claims = parseBearer(req);
+    req.user = claims && (await isCurrent(claims)) ? claims : null;
+    next();
+  } catch (err) {
+    next(err);
+  }
 }
 
 // Rejects with 401 if no valid token
-function requireAuth(req, res, next) {
-  req.user = parseBearer(req);
-  if (!req.user) return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Valid JWT required.' } });
-  next();
+async function requireAuth(req, res, next) {
+  try {
+    const claims = parseBearer(req);
+    req.user = claims && (await isCurrent(claims)) ? claims : null;
+    if (!req.user) return res.status(401).json({ error: { code: 'UNAUTHORIZED', message: 'Valid JWT required.' } });
+    next();
+  } catch (err) {
+    next(err);
+  }
 }
 
 // Verify Telegram Web App initData signature
