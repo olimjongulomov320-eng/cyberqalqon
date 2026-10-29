@@ -2,13 +2,15 @@
 import { ContentIcon } from '@/components/icons';
 import ChallengeStats from '@/components/ChallengeStats';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import ActivityMap from '@/components/ActivityMap';
+import { appDayKey } from '@/lib/appday';
 import { useApp } from '@/context/AppContext';
 import { Lang, makeT } from '@/lib/i18n';
-import { ApiError, AttemptRow, StatsPayload, deleteAccount, fetchAttempts, fetchStats, updateMe } from '@/lib/api';
+import { ActivityDay, ApiError, AttemptRow, StatsPayload, Track, deleteAccount, fetchActivity, fetchAttempts, fetchStats, fetchTracks, updateMe } from '@/lib/api';
 import { accuracyOf, proficiency, sortForMatrix, type Proficiency } from '@/lib/skills';
 import { achievementMeta, tierIndex, tierKey, levelFromXp } from '@/lib/gamification';
 import { RingProgress } from '@/components/game';
-import Journey from '@/components/Journey';
 import { Avatar, Badge, Button, ButtonLink, Card, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
 import {
   BoltIcon,
@@ -350,63 +352,153 @@ function DeleteAccount({ lang }: { lang: Lang }) {
   );
 }
 
+type Tab = 'overview' | 'skills' | 'history' | 'settings';
+const TABS: { key: Tab; label: string }[] = [
+  { key: 'overview', label: 'tabOverview' },
+  { key: 'skills', label: 'tabSkills' },
+  { key: 'history', label: 'tabHistory' },
+  { key: 'settings', label: 'tabSettings' },
+];
+const isTab = (v: string | null): v is Tab => TABS.some(t => t.key === v);
+
+/** One bordered strip of key numbers instead of a stack of separate cards. */
+function KpiStrip({ stats }: { stats: StatsPayload }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
+  const items = [
+    { Icon: BoltIcon, label: tr('totalXp'), value: stats.profile.total_xp, sub: `${stats.week_xp} / ${tr('weekShort')}`, tone: 'text-warning' },
+    { Icon: FlameIcon, label: tr('streak'), value: stats.profile.current_streak ?? 0, sub: `${tr('bestStreak')}: ${stats.profile.longest_streak ?? 0}`, tone: 'text-text-primary' },
+    { Icon: BookIcon, label: tr('lessonsShort'), value: stats.profile.modules_completed ?? 0, sub: undefined, tone: 'text-text-primary' },
+    { Icon: CheckIcon, label: tr('statsTitle'), value: stats.accuracy === null ? '-' : `${stats.accuracy}%`, sub: `${stats.answers_correct + stats.answers_wrong} ${tr('answersTotal').toLowerCase()}`, tone: 'text-success' },
+  ];
+  return (
+    <dl className="grid grid-cols-2 divide-border overflow-hidden rounded-lg border border-border bg-surface-900 sm:grid-cols-4 sm:divide-x [&>div]:border-border max-sm:[&>div:nth-child(n+3)]:border-t max-sm:[&>div:nth-child(even)]:border-l">
+      {items.map(({ Icon, label, value, sub, tone }) => (
+        <div key={label} className="p-4">
+          <dt className="flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">
+            <Icon size={14} /> {label}
+          </dt>
+          <dd className={`num mt-1.5 text-2xl font-bold ${tone}`}>{value}</dd>
+          {sub && <p className="num mt-0.5 text-xs text-text-muted">{sub}</p>}
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/** Tracks table: where each track stands (lessons done, demonstrated mastery). */
+function TracksTable({ tracks }: { tracks: Track[] }) {
+  const { lang } = useApp();
+  const tr = makeT(lang);
+  const stateKey = { not_started: 'masteryNotStarted', practising: 'masteryPractising', mastered: 'masteryMastered' } as const;
+  return (
+    <Card className="overflow-hidden">
+      <div className="hidden grid-cols-[minmax(0,1fr)_7rem_11rem_7rem] gap-3 border-b border-border/60 bg-surface-950/40 px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted md:grid">
+        <span>{tr('colTrack')}</span>
+        <span>{tr('colLessons')}</span>
+        <span>{tr('colMastery')}</span>
+        <span />
+      </div>
+      <ul className="divide-y divide-border/60">
+        {tracks.map(t => {
+          const st = t.mastery?.state ?? 'not_started';
+          return (
+            <li key={t.slug} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-4 py-3 md:grid-cols-[minmax(0,1fr)_7rem_11rem_7rem]">
+              <p className="flex min-w-0 items-center gap-2 text-sm font-semibold text-text-primary">
+                <ContentIcon name={t.icon} size={18} className="shrink-0 text-cyan-300" />
+                <span className="truncate">{t.title}</span>
+              </p>
+              <p className="num order-3 text-xs text-text-secondary md:order-none md:text-sm">
+                {t.completion.completed}/{t.completion.total}
+              </p>
+              <p className="order-4 flex flex-wrap items-center gap-2 md:order-none">
+                <Badge tone={st === 'mastered' ? 'success' : st === 'practising' ? 'primary' : 'neutral'}>{tr(stateKey[st])}</Badge>
+                {t.mastery && t.mastery.distinct > 0 && (
+                  <span className="num text-xs text-text-muted">{t.mastery.distinct} / {t.mastery.accuracy ?? 0}%</span>
+                )}
+              </p>
+              <div className="row-start-1 col-start-2 justify-self-end md:row-start-auto md:col-start-auto">
+                {t.next ? (
+                  <Link
+                    href={`/modules/${t.next.slug}`}
+                    className="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs font-semibold text-text-primary transition-colors hover:bg-surface-800"
+                  >
+                    {t.completion.completed > 0 ? tr('trackContinue') : tr('trackStart')}
+                  </Link>
+                ) : (
+                  <Badge tone="success">{tr('trackCompleted')}</Badge>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </Card>
+  );
+}
+
 export default function ProfilePage() {
   const { lang, user, setUser, logout, ready } = useApp();
   const tr = makeT(lang);
 
+  const [tab, setTab] = useState<Tab>('overview');
   const [stats, setStats] = useState<StatsPayload | null>(null);
+  const [tracks, setTracks] = useState<Track[] | null>(null);
+  const [activity, setActivity] = useState<ActivityDay[] | null>(null);
   const [error, setError] = useState<ApiError | null>(null);
-  const [saving, setSaving] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<string | null>(null);
 
-  const load = async () => {
-    try {
-      setStats(await fetchStats(lang));
-    } catch (err) {
-      setError(err as ApiError);
-    }
+  // Remember the tab in the URL (?tab=) so a reload or shared link lands on it.
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get('tab');
+    if (isTab(t)) setTab(t);
+  }, []);
+  const selectTab = (t: Tab) => {
+    setTab(t);
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', t);
+    window.history.replaceState(null, '', url);
   };
 
   useEffect(() => {
-    if (user) load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!user) return;
+    let alive = true;
+    fetchStats(lang).then(s => alive && setStats(s)).catch(e => alive && setError(e as ApiError));
+    fetchTracks(lang).then(d => alive && setTracks(d.tracks)).catch(() => alive && setTracks([]));
+    fetchActivity(84).then(d => alive && setActivity(d.activity)).catch(() => alive && setActivity([]));
+    return () => {
+      alive = false;
+    };
   }, [lang, user?.id]);
 
   const patch = async (p: { display_name?: string; daily_goal_xp?: number; show_on_leaderboard?: boolean }) => {
     try {
-      setSaving(p.daily_goal_xp ? String(p.daily_goal_xp) : 'name');
       const updated = await updateMe(p);
       setUser(updated);
       setSavedAt(new Date().toISOString());
       setTimeout(() => setSavedAt(null), 1600);
     } catch (err) {
       setError(err as ApiError);
-    } finally {
-      setSaving(null);
     }
   };
 
   if (!ready) {
     return (
-      <div>
-        <div className="flex flex-col gap-3">
-          <Skeleton className="h-24 w-full rounded-lg" />
-          <Skeleton className="h-40 w-full rounded-lg" />
-        </div>
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-40 w-full" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div>
-        <Card className="p-6 text-center">
-          <p className="text-sm text-text-secondary">{tr('signInToAnswer')}</p>
-          <div className="mt-4 flex justify-center gap-2">
-            <ButtonLink href="/auth">{tr('login')}</ButtonLink>
-          </div>
-        </Card>
-      </div>
+      <Card className="p-6 text-center">
+        <p className="text-sm text-text-secondary">{tr('signInToAnswer')}</p>
+        <div className="mt-4 flex justify-center gap-2">
+          <ButtonLink href="/auth">{tr('login')}</ButtonLink>
+        </div>
+      </Card>
     );
   }
 
@@ -414,255 +506,196 @@ export default function ProfilePage() {
   const tier = tr(tierKey(tierIndex(level.level)));
   const goal = stats?.profile.daily_goal_xp ?? user.daily_goal_xp ?? 20;
 
-  const stats_ = [
-    { Icon: BoltIcon, label: tr('totalXp'), value: stats?.profile.total_xp, tone: 'text-warning' },
-    { Icon: FlameIcon, label: tr('streak'), value: stats?.profile.current_streak ?? 0, tone: 'text-danger' },
-    { Icon: TrophyBadgeIcon, label: tr('bestStreak'), value: stats?.profile.longest_streak ?? 0, tone: 'text-cyan-300' },
-    { Icon: BookIcon, label: tr('lessonsShort'), value: stats?.profile.modules_completed ?? 0, tone: 'text-text-secondary' },
-  ];
+  // "Next up": the started-but-unfinished track closest to done, else the first track with a lesson to take.
+  const next =
+    tracks
+      ?.filter(t => t.next && t.completion.completed > 0)
+      .sort((a, b) => b.completion.completed / b.completion.total - a.completion.completed / a.completion.total)[0] ??
+    tracks?.find(t => t.next) ??
+    null;
 
   return (
     <div>
-      <div className="flex flex-col">
-        <header className="flex flex-col items-center gap-3 text-center">
-          <div className="relative">
-            <Avatar emoji={user.avatar_emoji} name={user.display_name} size="lg" ring />
+      {/* Identity + level */}
+      <header className="flex flex-wrap items-center gap-4">
+        <Avatar name={user.display_name} size="xl" />
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-2xl font-bold tracking-tight text-text-primary">{user.display_name}</h1>
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <Badge>{tier}</Badge>
+            <span className="num font-mono text-xs text-text-muted">Lv.{level.level}</span>
+            <span className="num font-mono text-xs text-text-muted">{level.intoLevel}/{level.toNext} XP</span>
           </div>
-          <div>
-            <h1 className="display">{user.display_name}</h1>
-            <div className="mt-1 flex items-center justify-center gap-1.5">
-              <Badge>{tier}</Badge>
-              <span className="num text-xs text-text-muted">Lv.{level.level}</span>
-            </div>
+          <div className="mt-2 h-1.5 w-full max-w-sm overflow-hidden rounded-sm bg-surface-700" aria-hidden="true">
+            <div className="fill-x h-full bg-cyan-400" style={{ transform: `scaleX(${level.intoLevel / level.toNext})`, transformOrigin: 'left' }} />
           </div>
-        </header>
+        </div>
+      </header>
 
-        <Journey className="mt-3" />
+      {/* Tabs */}
+      <div role="tablist" aria-label={tr('navProgress')} className="mt-6 flex gap-1 overflow-x-auto border-b border-border">
+        {TABS.map(t => (
+          <button
+            key={t.key}
+            role="tab"
+            id={`tab-${t.key}`}
+            aria-selected={tab === t.key}
+            aria-controls={`panel-${t.key}`}
+            onClick={() => selectTab(t.key)}
+            className={`-mb-px shrink-0 border-b-2 px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
+              tab === t.key ? 'border-cyan-400 text-text-primary' : 'border-transparent text-text-muted hover:text-text-primary'
+            }`}
+          >
+            {tr(t.label)}
+          </button>
+        ))}
+      </div>
 
-        {error && (
-          <Card>
-            <ErrorNote>{error.message}</ErrorNote>
-          </Card>
-        )}
+      {error && (
+        <div className="mt-4">
+          <ErrorNote>{error.message}</ErrorNote>
+        </div>
+      )}
 
-        {!stats ? (
-          <div className="flex flex-col gap-3">
-            <Skeleton className="h-24 w-full rounded-lg" />
-            <Skeleton className="h-40 w-full rounded-lg" />
-          </div>
-        ) : (
-          <>
-            {/* Level progress */}
-            <Card className="mt-5 p-4">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-bold text-white">{tr('levelProgress')}</span>
-                <span className="num text-xs text-text-muted">
-                  {level.intoLevel}/{level.toNext} XP
-                </span>
-              </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-surface-700">
-                <div
-                  className="fill-x h-full rounded-full bg-cyan-400"
-                  style={{ transform: `scaleX(${level.intoLevel / level.toNext})`, transformOrigin: 'left' }}
-                />
-              </div>
+      <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-6">
+        {tab === 'overview' && (
+          <div className="flex flex-col gap-6">
+            {!stats ? <Skeleton className="h-24 w-full" /> : <KpiStrip stats={stats} />}
+
+            <Card className="p-4">
+              <h2 className="mb-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-text-muted">{tr('activityTitle')}</h2>
+              {activity ? <ActivityMap activity={activity} today={appDayKey()} /> : <Skeleton className="h-24 w-full" />}
             </Card>
 
-            {/* Stat cards */}
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {stats_.map(({ Icon, label, value, tone }) => (
-                <Card key={label} className="flex flex-col items-center gap-1.5 p-3 text-center">
-                  <Icon size={18} className={tone} />
-                  <span className="num text-xl font-extrabold text-white">{value}</span>
-                  <span className="text-[0.6875rem] text-text-muted">{label}</span>
-                </Card>
-              ))}
-            </div>
-
-            {/* Accuracy */}
-            <Card className="mt-3 p-4">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <span className="text-sm font-bold text-white">{tr('statsTitle')}</span>
-                  <p className="num mt-1 text-xs text-text-secondary">
-                    {tr('answersTotal')}: {stats.answers_correct + stats.answers_wrong}
-                  </p>
-                  <p className="num mt-0.5 flex items-center gap-2 text-xs">
-                    <span className="inline-flex items-center gap-1 text-success">
-                      <CheckIcon size={13} /> {stats.answers_correct}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-danger">
-                      <CloseIcon size={13} /> {stats.answers_wrong}
-                    </span>
-                  </p>
-                </div>
-                <RingProgress
-                  value={stats.accuracy ?? 0}
-                  max={100}
-                  size={54}
-                  label={<span className="num text-sm font-extrabold text-white">{stats.accuracy ?? 0}%</span>}
-                />
-              </div>
-            </Card>
-
-            {/* Skill matrix - the Master view: proficiency from demonstrated
-                performance, printed rule, honest "not started" rows. */}
-            <SkillMatrix stats={stats} />
-
-            {/* Strong / weak topics */}
-            {stats.strong_topics.length > 0 || stats.weak_topics.length > 0 ? (
-              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {stats.strong_topics.length > 0 && (
-                  <Card className="overflow-hidden">
-                    <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-success">{tr('strongest')}</p>
-                    <ul className="divide-y divide-border">
-                      {stats.strong_topics.slice(0, 4).map(t => (
-                        <li key={t.slug} className="flex items-center gap-2.5 px-4 py-2.5">
-                          <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={16} /></span>
-                          <span className="min-w-0 flex-1 truncate text-sm text-text-primary">{t.title}</span>
-                          <span className="num text-xs font-bold text-success">{t.accuracy}%</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </Card>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <Card className="flex flex-col p-4">
+                <h2 className="mb-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-text-muted">{tr('nextUpTitle')}</h2>
+                {!tracks ? (
+                  <Skeleton className="h-16 w-full" />
+                ) : next && next.next ? (
+                  <>
+                    <p className="flex items-center gap-2 text-sm font-semibold text-text-primary">
+                      <ContentIcon name={next.icon} size={18} className="text-cyan-300" /> {next.title}
+                    </p>
+                    <p className="mt-1 text-sm text-text-secondary">{next.next.title}</p>
+                    <p className="num mt-1 text-xs text-text-muted">{next.completion.completed}/{next.completion.total} {tr('trackLessons').toLowerCase()}</p>
+                    <div className="mt-auto pt-4">
+                      <ButtonLink href={`/modules/${next.next.slug}`} size="sm">
+                        {next.completion.completed > 0 ? tr('trackContinue') : tr('trackStart')}
+                      </ButtonLink>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-sm text-text-muted">{tr('nextUpDone')}</p>
                 )}
-                {stats.weak_topics.length > 0 && (
-                  <Card className="overflow-hidden">
-                    <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-danger">{tr('weakTopics')}</p>
-                    <ul className="divide-y divide-border">
-                      {stats.weak_topics.slice(0, 4).map(t => (
-                        <li key={t.slug} className="flex items-center gap-2.5 px-4 py-2.5">
-                          <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={16} /></span>
+              </Card>
+
+              <Card className="flex flex-col p-4">
+                <h2 className="mb-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-text-muted">{tr('sharpenTitle')}</h2>
+                {!stats ? (
+                  <Skeleton className="h-16 w-full" />
+                ) : stats.weak_topics.length > 0 ? (
+                  <>
+                    <ul className="divide-y divide-border/60">
+                      {stats.weak_topics.slice(0, 3).map(t => (
+                        <li key={t.slug} className="flex items-center gap-2.5 py-2">
+                          <DomainIcon slug={t.slug} size={16} className="text-cyan-300" />
                           <span className="min-w-0 flex-1 truncate text-sm text-text-primary">{t.title}</span>
                           <span className="num text-xs font-bold text-danger">{t.accuracy}%</span>
                         </li>
                       ))}
                     </ul>
-                    {/* Weak topics are only useful if they lead somewhere: the
-                        review session already builds a drill from real mistakes. */}
-                    <div className="px-4 pb-4 pt-1">
-                      <ButtonLink href="/review" variant="secondary" size="sm" className="w-full justify-center">
-                        <RefreshIcon size={14} />
-                        {tr('pathReviewAction')}
+                    <div className="mt-auto pt-4">
+                      <ButtonLink href="/review" variant="secondary" size="sm">
+                        <RefreshIcon size={14} /> {tr('pathReviewAction')}
                       </ButtonLink>
                     </div>
-                  </Card>
+                  </>
+                ) : (
+                  <p className="text-sm text-text-muted">{tr('sharpenNone')}</p>
                 )}
-              </div>
-            ) : (
-              <Card className="mt-6">
-                <EmptyState
-                  icon={<ChartIcon size={26} className="text-text-muted" />}
-                  title={tr('noStatsYet')}
-                  body={tr('noStatsBody')}
-                />
               </Card>
-            )}
+            </div>
 
-            {/* Recent activity */}
-            {stats.recent.length > 0 && (
-              <Card className="mt-6 overflow-hidden">
-                <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-text-secondary">{tr('recentActivity')}</p>
-                <ul className="divide-y divide-border">
-                  {stats.recent.slice(0, 5).map((r, i) => {
-                    const ActivityIcon = r.kind === 'review' ? RefreshIcon : r.kind === 'correct' ? TargetIcon : BookIcon;
-                    return (
-                      <li key={i} className="flex items-center gap-3 px-4 py-2.5">
-                        <ActivityIcon size={16} className="shrink-0 text-text-muted" />
-                        <span className="min-w-0 flex-1 truncate text-sm text-text-primary">
-                          {tr(ACTIVITY_LABEL[r.kind] ?? 'activityLesson')}
-                          {r.module_title ? ` · ${r.module_title}` : ''}
-                        </span>
-                        <span className="num shrink-0 text-xs font-bold text-warning">+{r.amount}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </Card>
-            )}
-
-            {/* Submission history - this account's graded attempts, newest first. */}
-            <HistoryCard lang={lang} />
-
-            {/* Achievements */}
-            <Card className="mt-6 overflow-hidden">
-              <p className="px-4 pt-3 text-xs font-bold uppercase tracking-wider text-warning">{tr('achievements')}</p>
-              {stats.achievements.length === 0 ? (
-                <p className="px-4 pb-4 pt-1 text-sm text-text-muted">{tr('achievementsEmpty')}</p>
+            <Card className="overflow-hidden">
+              <h2 className="px-4 pt-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-text-muted">{tr('achievements')}</h2>
+              {!stats || stats.achievements.length === 0 ? (
+                <p className="px-4 pb-4 pt-2 text-sm text-text-muted">{tr('achievementsEmpty')}</p>
               ) : (
-                <ul className="grid grid-cols-2 gap-2 px-4 pb-4 pt-2 sm:grid-cols-3">
+                <ul className="grid grid-cols-2 gap-2 px-4 pb-4 pt-3 sm:grid-cols-3 lg:grid-cols-4">
                   {stats.achievements.map(a => {
                     const meta = achievementMeta(a.key, lang, tr);
                     return (
-                      <li key={a.key} className="flex flex-col items-center gap-1 rounded-md border border-border bg-surface-950/60 px-2 py-3 text-center">
-                        <ContentIcon name={meta?.icon ?? 'medal'} size={26} className="text-warning" />
-                        <span className="text-xs font-bold text-text-primary">{meta?.title ?? a.key}</span>
-                        <span className="text-[0.625rem] text-text-muted">{tr('achievedOn')}</span>
+                      <li key={a.key} className="flex items-center gap-2.5 rounded-md border border-border bg-surface-950/60 px-3 py-2">
+                        <ContentIcon name={meta?.icon ?? 'medal'} size={20} className="shrink-0 text-warning" />
+                        <span className="text-xs font-semibold text-text-primary">{meta?.title ?? a.key}</span>
                       </li>
                     );
                   })}
                 </ul>
               )}
             </Card>
+          </div>
+        )}
 
-            {/* Settings: daily goal and visibility */}
-            <Card className="mt-8 p-4">
-              <div className="flex flex-col gap-5">
-                <div>
-                  <p className="mb-2 text-sm font-bold text-white">{tr('dailyGoal')}</p>
-                  <div className="flex flex-wrap gap-1.5" role="group" aria-label={tr('dailyGoal')}>
-                    {GOALS.map(g => (
-                      <button
-                        key={g}
-                        type="button"
-                        onClick={() => patch({ daily_goal_xp: g })}
-                        aria-pressed={goal === g}
-                        className={`rounded-md border px-3.5 py-1.5 text-sm font-bold transition-colors ${
-                          goal === g
-                            ? 'border-cyan-400 bg-cyan-500/15 text-white'
-                            : 'border-border bg-surface-900 text-text-secondary hover:border-border-light'
-                        }`}
-                      >
-                        <span className="num">{g}</span>
-                      </button>
-                    ))}
-                  </div>
+        {tab === 'skills' && (
+          <div className="flex flex-col gap-6">
+            {!tracks ? <Skeleton className="h-48 w-full" /> : <TracksTable tracks={tracks} />}
+            <p className="text-xs text-text-muted">{tr('masteryRule')}</p>
+            {stats && <SkillMatrix stats={stats} />}
+            <ChallengeStats />
+          </div>
+        )}
+
+        {tab === 'history' && <HistoryCard lang={lang} />}
+
+        {tab === 'settings' && (
+          <div className="flex max-w-xl flex-col gap-6">
+            <Card className="flex flex-col gap-5 p-4">
+              <div>
+                <p className="mb-2 text-sm font-bold text-text-primary">{tr('dailyGoal')}</p>
+                <div className="flex flex-wrap gap-1.5" role="group" aria-label={tr('dailyGoal')}>
+                  {GOALS.map(g => (
+                    <button
+                      key={g}
+                      type="button"
+                      onClick={() => patch({ daily_goal_xp: g })}
+                      aria-pressed={goal === g}
+                      className={`rounded-md border px-3.5 py-1.5 text-sm font-bold transition-colors ${
+                        goal === g ? 'border-cyan-400 bg-cyan-500/15 text-text-primary' : 'border-border bg-surface-900 text-text-secondary hover:border-border-light'
+                      }`}
+                    >
+                      <span className="num">{g}</span>
+                    </button>
+                  ))}
                 </div>
-
-                <label className="flex items-center gap-2.5 text-sm text-text-secondary">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 accent-cyan-500"
-                    checked={user.show_on_leaderboard !== false}
-                    onChange={e => patch({ show_on_leaderboard: e.target.checked })}
-                  />
-                  {tr('showOnLeaderboard')}
-                </label>
-
-                {savedAt && (
-                  <p role="status" aria-live="polite" className="inline-flex items-center gap-1.5 text-xs font-semibold text-success">
-                    <CheckIcon size={14} /> {tr('nameSaved')}
-                  </p>
-                )}
               </div>
+              <label className="flex items-center gap-2.5 text-sm text-text-secondary">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 accent-cyan-500"
+                  checked={user.show_on_leaderboard !== false}
+                  onChange={e => patch({ show_on_leaderboard: e.target.checked })}
+                />
+                {tr('showOnLeaderboard')}
+              </label>
+              {savedAt && (
+                <p role="status" aria-live="polite" className="inline-flex items-center gap-1.5 text-xs font-semibold text-success">
+                  <CheckIcon size={14} /> {tr('nameSaved')}
+                </p>
+              )}
             </Card>
 
-            <ChallengeStats />
-
-            <div className="mt-6 grid grid-cols-2 gap-2">
-              <ButtonLink href="/leaderboard" variant="secondary" size="sm" className="justify-center">
-                {tr('leaderboard')}
-              </ButtonLink>
-              <ButtonLink href="/review" variant="secondary" size="sm" className="justify-center">
-                {tr('reviewSession')}
-              </ButtonLink>
+            <div className="grid grid-cols-2 gap-2">
+              <ButtonLink href="/leaderboard" variant="secondary" size="sm" className="justify-center">{tr('leaderboard')}</ButtonLink>
+              <ButtonLink href="/review" variant="secondary" size="sm" className="justify-center">{tr('reviewSession')}</ButtonLink>
             </div>
 
-            <Button variant="secondary" className="mt-3 w-full justify-center" onClick={logout}>
-              {tr('logout')}
-            </Button>
-            <DeleteAccount lang={lang} />
-          </>
+            <div>
+              <Button variant="secondary" className="w-full justify-center" onClick={logout}>{tr('logout')}</Button>
+              <DeleteAccount lang={lang} />
+            </div>
+          </div>
         )}
       </div>
     </div>

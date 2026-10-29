@@ -22,7 +22,6 @@ import {
   pathTotals,
 } from '@/lib/directory';
 import LessonTable from '@/components/LessonTable';
-import Journey from '@/components/Journey';
 import { Badge, ButtonLink, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
 import {
   ArrowRightIcon,
@@ -439,13 +438,6 @@ function LearnInner() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Journey
-        sources={{
-          continueSlug: data.continue?.slug ?? null,
-          checkpointSlug: checkpoint?.slug ?? null,
-        }}
-      />
-
       {/* Overall progress for the selected path - one line, real counts. */}
       <div className="flex items-center gap-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">

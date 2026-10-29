@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
-const { DAY_START, WEEK_START } = require('../lib/time');
+const { DAY_START, WEEK_START, APP_TZ } = require('../lib/time');
 const { trendFromCounts } = require('../lib/stats');
 
 const router = Router();
@@ -262,6 +262,27 @@ router.get('/me/progress', async (req, res, next) => {
       [req.user.id]
     );
     res.json({ progress: rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /users/me/activity?days=84 - graded answers per application day, for the
+// activity map. Days with no activity are simply absent.
+router.get('/me/activity', async (req, res, next) => {
+  try {
+    const days = Math.min(366, Math.max(7, Number.parseInt(req.query.days, 10) || 84));
+    const { rows } = await pool.query(
+      `SELECT to_char((answered_at AT TIME ZONE '${APP_TZ}')::date, 'YYYY-MM-DD') AS day,
+              COUNT(*)::int AS answers,
+              COUNT(*) FILTER (WHERE correct)::int AS correct
+         FROM exercise_attempts
+        WHERE user_id = $1 AND answered_at >= now() - ($2 || ' days')::interval
+        GROUP BY 1
+        ORDER BY 1`,
+      [req.user.id, String(days)]
+    );
+    res.json({ days, activity: rows });
   } catch (err) {
     next(err);
   }

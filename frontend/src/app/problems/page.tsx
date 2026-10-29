@@ -21,7 +21,6 @@ import {
 } from '@/lib/api';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { AnswerFeedback } from '@/components/feedback';
-import Journey from '@/components/Journey';
 import HintLadder from '@/components/HintLadder';
 import {
   Badge,
@@ -428,7 +427,6 @@ export default function ProblemsPage() {
         </p>
       </div>
 
-      <Journey className="mb-4" />
 
       {data && (
         <Card className="mb-4 p-4">

@@ -803,3 +803,14 @@ export function submitChallenge(slug: string, body: { passed: number; total: num
     { method: 'POST', body: JSON.stringify(body) }
   );
 }
+
+// ── Activity map ──────────────────────────────────────────────────────────────
+export interface ActivityDay {
+  day: string; // YYYY-MM-DD in the application timezone
+  answers: number;
+  correct: number;
+}
+
+export function fetchActivity(days = 84) {
+  return req<{ days: number; activity: ActivityDay[] }>(`/users/me/activity?days=${days}`);
+}

@@ -19,7 +19,6 @@ import {
 } from '@/lib/api';
 import type { DomainSkillStat } from '@/lib/skills';
 import { dedupeLatest, harderReady } from '@/lib/recommend';
-import Journey from '@/components/Journey';
 import { ExerciseRenderer, isAnswerReady } from '@/components/exercises';
 import { AnswerFeedback } from '@/components/feedback';
 import { XPChip } from '@/components/game';
@@ -254,7 +253,6 @@ export default function PracticePage() {
           </p>
         </header>
 
-        <Journey className="mb-5" />
 
         {/* Recommended session - the learner's weakest module, most-missed
             exercises first (server-selected from real recorded mistakes). */}
