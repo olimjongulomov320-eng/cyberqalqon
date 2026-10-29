@@ -215,6 +215,32 @@ async function setup() {
     CREATE UNIQUE INDEX IF NOT EXISTS uq_assessment_one_open
         ON assessment_attempts (user_id, assessment_slug) WHERE status = 'in_progress'`);
 
+  // Coding challenges (content lives in code). Results are SELF-REPORTED by the
+  // browser runner — see lib/challenges.js for the trust model. Kept apart from
+  // xp_events on purpose: unverified points must not reach the leaderboard.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS challenge_progress (
+      user_id         UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      challenge_slug  TEXT NOT NULL,
+      solved          BOOLEAN NOT NULL DEFAULT false,
+      best_passed     INTEGER NOT NULL DEFAULT 0,
+      attempts        INTEGER NOT NULL DEFAULT 0,
+      first_solved_at TIMESTAMPTZ,
+      PRIMARY KEY (user_id, challenge_slug)
+    )`);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS challenge_submissions (
+      id             BIGSERIAL PRIMARY KEY,
+      user_id        UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      challenge_slug TEXT NOT NULL,
+      passed         INTEGER NOT NULL,
+      total          INTEGER NOT NULL,
+      solved         BOOLEAN NOT NULL,
+      code           TEXT NOT NULL,
+      created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+    )`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_challenge_submissions_user ON challenge_submissions (user_id, challenge_slug, created_at DESC)`);
+
   /* ── 3. v2 columns ───────────────────────────────────────────────────── */
   for (const sql of [
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS email              TEXT UNIQUE`,

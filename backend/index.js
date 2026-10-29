@@ -16,6 +16,7 @@ const leaderboardRouter = require('./routes/leaderboard');
 const usersRouter       = require('./routes/users');
 const tracksRouter      = require('./routes/tracks');
 const assessmentsRouter = require('./routes/assessments');
+const challengesRouter  = require('./routes/challenges');
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
@@ -66,6 +67,7 @@ app.use('/v1/auth',        authRouter);
 app.use('/v1/paths',       pathsRouter);
 app.use('/v1/tracks',      tracksRouter);
 app.use('/v1/assessments', assessmentsRouter);
+app.use('/v1/challenges',  challengesRouter);
 app.use('/v1/modules',     modulesRouter);   // per-route limiters live inside
 app.use('/v1/modules',     hintsRouter);     // POST /:slug/hint (shares the path)
 app.use('/v1/problems',    problemsRouter);  // read-only view over the curriculum
