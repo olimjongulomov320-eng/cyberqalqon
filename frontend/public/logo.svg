@@ -8,12 +8,12 @@
     (src/components/icons.tsx), so the mark and the interface icons read as one
     system. Legible at 28px in the nav and at favicon sizes.
 
-    The shield body is filled with the app's surface colour (#0f172a) so the mark
+    The shield body is filled with the app's surface colour (#0b100e) so the mark
     holds its shape on the dark header while the cyan outline keeps it legible on
     light backgrounds (favicon, PWA tile).
   -->
   <path d="M12 3.4 5.25 6.1v5.5c0 4.3 2.9 7.7 6.75 9.2 3.85-1.5 6.75-4.9 6.75-9.2V6.1Z"
-        fill="#0f172a" stroke="#22d3ee" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round"/>
-  <circle cx="12" cy="10.6" r="2.1" fill="#22d3ee"/>
-  <rect x="11.05" y="12.2" width="1.9" height="3.4" rx="0.95" fill="#22d3ee"/>
+        fill="#0b100e" stroke="#39d98a" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="12" cy="10.6" r="2.1" fill="#39d98a"/>
+  <rect x="11.05" y="12.2" width="1.9" height="3.4" rx="0.95" fill="#39d98a"/>
 </svg>

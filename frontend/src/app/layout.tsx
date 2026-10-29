@@ -67,7 +67,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#080c14',
+  themeColor: '#060908',
   width: 'device-width',
   initialScale: 1,
   // maximumScale is deliberately not set. Clamping it blocks pinch-zoom, which

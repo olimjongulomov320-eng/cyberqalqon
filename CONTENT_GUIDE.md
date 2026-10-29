@@ -60,4 +60,4 @@ that registry; a backend test fails if curriculum data uses a key that is not re
 ## Switches
 
 - `NEXT_PUBLIC_HEARTS_ENABLED=true` (frontend build env) turns hearts on; they are off by default.
-- Theme: light / dark / system toggle in the header; tokens live in `frontend/src/app/globals.css`.
+- Theme: light / dark / system toggle in the header; tokens live in `frontend/src/app/globals.css`. The look is a security console: near-black surfaces, one signal-green accent (the token keeps its old name `cyan-*`, the values are green), monospace labels, tight corners. Change the accent by editing the `--cyan-*` variables.

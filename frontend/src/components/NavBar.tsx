@@ -44,7 +44,7 @@ export default function NavBar() {
               plus the language / low-traffic / profile controls no longer fit on
               one row (they used to push the header ~15px past the viewport). The
               logo mark, page title and bottom nav still carry the brand. */}
-          <span className="hidden text-[0.9375rem] font-bold tracking-tight text-white min-[360px]:inline">{tr('appName')}</span>
+          <span className="hidden font-mono text-[0.9375rem] font-bold tracking-tight text-white min-[360px]:inline">{tr('appName')}</span>
         </Link>
 
         <nav aria-label={tr('tracks')} className="hidden items-center gap-1 sm:flex">
@@ -55,7 +55,7 @@ export default function NavBar() {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
-                className={`rounded-md px-2.5 py-1.5 text-[0.8125rem] font-medium transition-colors ${
+                className={`rounded-sm px-2.5 py-1.5 font-mono text-[0.75rem] font-medium tracking-wide transition-colors ${
                   active
                     ? 'bg-surface-800 text-white'
                     : 'text-text-secondary hover:bg-surface-900 hover:text-text-primary'

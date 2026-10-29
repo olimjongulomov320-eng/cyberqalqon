@@ -189,7 +189,7 @@ export function NewAchievementChip({ title }: { title: string }) {
 }
 
 /* ── Confetti for the celebration screen ───────────────────────────────────── */
-const CONFETTI_COLORS = ['#22d3ee', '#4ade80', '#fbbf24', '#f8fafc'];
+const CONFETTI_COLORS = ['#39d98a', '#82f0b4', '#fbbf24', '#e8f0ec'];
 
 export function Confetti({ show }: { show: boolean }) {
   if (!show) return null;

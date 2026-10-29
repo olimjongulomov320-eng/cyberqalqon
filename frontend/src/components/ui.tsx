@@ -108,7 +108,7 @@ export function SectionHeading({
       {/* A real heading step (17px) above the 15px body - the old `text-sm`
           (13px) heading sat *below* body size, so every section read as a
           caption instead of a landmark. Weight + white carry the rest. */}
-      <h2 className="text-lg font-bold tracking-tight text-text-primary">{children}</h2>
+      <h2 className="text-lg font-bold tracking-tight text-text-primary before:mr-2 before:font-mono before:text-cyan-400 before:content-['>']">{children}</h2>
       {action}
     </div>
   );
@@ -136,7 +136,7 @@ export function Badge({
   className?: string;
 }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-semibold tracking-wide ${BADGE_TONES[tone]} ${className}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-sm px-2 py-0.5 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider ${BADGE_TONES[tone]} ${className}`}>
       {children}
     </span>
   );

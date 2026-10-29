@@ -61,12 +61,13 @@ module.exports = {
         'focus': '0 0 0 2px rgb(var(--bg)), 0 0 0 4px rgb(var(--cyan-400) / 0.55)',
       },
       borderRadius: {
-        'xs': '4px',
-        'sm': '6px',
-        'md': '10px',
-        'lg': '14px',
-        'xl': '18px',
-        '2xl': '22px',
+        // Console look: tight corners. One scale, used everywhere.
+        'xs': '2px',
+        'sm': '3px',
+        'md': '4px',
+        'lg': '6px',
+        'xl': '8px',
+        '2xl': '10px',
         'full': '9999px',
       },
       spacing: {
