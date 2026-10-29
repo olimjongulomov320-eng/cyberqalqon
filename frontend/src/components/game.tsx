@@ -1,7 +1,9 @@
 'use client';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
+import { useEffect, useRef, useState } from 'react';
 import { levelFromXp } from '@/lib/gamification';
+import { valueAt } from '@/lib/countUp';
 import { MAX_HEARTS } from '@/lib/hearts';
 import { BoltIcon, FlameIcon, HeartIcon, SparkleIcon } from '@/components/icons';
 
@@ -33,7 +35,11 @@ export function Flame({ streak, short = false }: { streak: number; short?: boole
   const tr = makeT(lang);
   return (
     <span className="inline-flex items-center gap-1 text-sm font-bold text-text-primary">
-      <FlameIcon size={16} className={streak > 0 ? 'text-warning' : 'text-surface-600'} />
+      <FlameIcon
+        size={16}
+        className={streak > 0 ? 'text-warning' : 'text-surface-600'}
+        style={streak > 0 ? { animation: 'cq-flicker 2.4s ease-in-out infinite', transformOrigin: '50% 90%' } : undefined}
+      />
       <span className="num">{streak}</span>
       {!short && <span className="text-xs font-medium text-text-secondary">{tr('streakDay')}</span>}
       <span className="sr-only">{tr('streak')}</span>
@@ -42,13 +48,41 @@ export function Flame({ streak, short = false }: { streak: number; short?: boole
 }
 
 /* ── XP chip + level ───────────────────────────────────────────────────────── */
+/** Counts up to `target` when it grows (reduced motion: jumps straight there). */
+function useCountUp(target: number) {
+  const [shown, setShown] = useState(target);
+  const from = useRef(target);
+  useEffect(() => {
+    if (from.current === target) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      from.current = target;
+      setShown(target);
+      return;
+    }
+    const start = performance.now();
+    const origin = from.current;
+    let raf = 0;
+    const tick = (now: number) => {
+      const v = valueAt(origin, target, now - start);
+      setShown(v);
+      if (v !== target) raf = requestAnimationFrame(tick);
+      else from.current = target;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target]);
+  return shown;
+}
+
 export function XPChip({ xp, showLevel = false }: { xp: number; showLevel?: boolean }) {
+  const shown = useCountUp(xp);
   const level = showLevel ? levelFromXp(xp) : null;
   return (
     <span className="inline-flex items-center gap-1 rounded-md border border-warning/25 bg-warning/10 px-2 py-0.5 text-[0.8125rem] font-bold text-warning">
       <BoltIcon size={14} className="shrink-0" />
-      <span className="num">{xp}</span>
-      <span className="sr-only">XP</span>
+      <span className="num" aria-hidden="true">{shown}</span>
+      <span className="sr-only">{xp} XP</span>
       {level && (
         <>
           <span className="text-text-muted">·</span>

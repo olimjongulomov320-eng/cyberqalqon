@@ -123,6 +123,8 @@ export function AnswerFeedback({
   return (
     <section
       aria-live="polite"
+      // Slides up on arrival; a wrong answer then gives one gentle shake.
+      style={{ animation: correct ? 'cq-rise 0.22s ease-out' : 'cq-rise 0.22s ease-out, cq-shake 0.35s ease 0.22s' }}
       className={`rounded-xl border p-4 ${
         correct ? 'border-success/50 bg-success/[0.07]' : 'border-danger/50 bg-danger/[0.07]'
       } ${className}`}

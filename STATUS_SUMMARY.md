@@ -85,3 +85,11 @@ core loop, design language, architecture) see **[CONCEPT.md](CONCEPT.md)**.
 - Limitation: lessons reveal answers, so this is a self-check, not a proctored
   certificate, and the UI says so. Assessment results do not feed mastery yet.
 
+## Redesign & coding challenges
+
+- Design tokens are CSS variables (light + dark, AA-checked by `contrast.test.ts`);
+  3D buttons; theme toggle. The learning path is a winding trail of lesson nodes.
+- Coding challenges: 13 Python drafts, CodeMirror editor, Pyodide worker. Results are
+  browser-run and self-reported (not XP). See `CONTENT_GUIDE.md`.
+- Server now enforces lesson unlock order (403 `MODULE_LOCKED`).
+

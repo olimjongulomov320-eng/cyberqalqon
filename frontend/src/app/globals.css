@@ -256,6 +256,19 @@
     90% { transform: translateX(1px); }
   }
 
+  /* Feedback banner / next question: slides up 8px while fading in. */
+  @keyframes cq-rise {
+    from { transform: translateY(8px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Streak flame: a slow, small flicker so it feels alive, not busy. */
+  @keyframes cq-flicker {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    30% { transform: scale(1.08) rotate(-3deg); }
+    60% { transform: scale(0.97) rotate(2deg); }
+  }
+
   @keyframes cq-fall {
     from { transform: translate3d(0, -2rem, 0) rotate(0deg); opacity: 0.9; }
     to { transform: translate3d(0, 105vh, 0) rotate(420deg); opacity: 0; }

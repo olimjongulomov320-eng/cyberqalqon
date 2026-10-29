@@ -862,14 +862,15 @@ export default function LessonView({ slug }: { slug: string }) {
         <div className="flex flex-1 flex-col justify-center">
         <Card className="p-4 sm:p-5">
           {ex ? (
-            <ExerciseRenderer
-              key={ex.id}
-              ex={ex}
-              value={value}
-              onChange={setValue}
-              locked={Boolean(checked)}
-              reveal={checked?.reveal}
-            />
+            <div key={ex.id} style={{ animation: 'cq-rise 0.2s ease-out' }}>
+              <ExerciseRenderer
+                ex={ex}
+                value={value}
+                onChange={setValue}
+                locked={Boolean(checked)}
+                reveal={checked?.reveal}
+              />
+            </div>
           ) : (
             <Skeleton className="h-40 w-full" />
           )}
