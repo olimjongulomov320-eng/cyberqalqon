@@ -228,6 +228,7 @@ export default function HomePage() {
                 max={level.toNext}
                 size={46}
                 stroke={5}
+                ariaLabel={tr('levelProgress')}
                 label={<span className="num text-[0.625rem] font-bold text-text-primary">{level.intoLevel}</span>}
               />
               <Link href="/profile" className="text-[0.6875rem] font-medium text-cyan-400 hover:underline">

@@ -382,7 +382,7 @@ function KpiStrip({ stats }: { stats: StatsPayload }) {
             <Icon size={14} /> {label}
           </dt>
           <dd className={`num mt-1.5 text-2xl font-bold ${tone}`}>{value === null ? '-' : <CountUp value={value} suffix={suffix} />}</dd>
-          {sub && <p className="num mt-0.5 text-xs text-text-muted">{sub}</p>}
+          {sub && <dd className="num mt-0.5 text-xs text-text-muted">{sub}</dd>}
         </div>
       ))}
     </dl>

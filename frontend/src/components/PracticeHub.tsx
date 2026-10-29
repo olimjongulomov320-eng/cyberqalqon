@@ -79,7 +79,7 @@ export default function PracticeHub() {
               {k.value === null ? '-' : <CountUp value={k.value} suffix={k.suffix} />}
               {k.of !== null && <span className="text-text-muted">/{k.of}</span>}
             </dd>
-            {k.sub && <p className="num mt-0.5 text-[0.6875rem] text-warning">{k.sub}</p>}
+            {k.sub && <dd className="num mt-0.5 text-[0.6875rem] text-warning">{k.sub}</dd>}
           </div>
         ))}
       </dl>

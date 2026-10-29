@@ -489,7 +489,7 @@ function LearnInner() {
                     }`}
                   >
                     <span className="truncate">{p.title}</span>
-                    <span className="num text-[0.625rem] font-semibold opacity-70">
+                    <span className="num text-[0.625rem] font-semibold">
                       {t.done}/{t.total}
                     </span>
                   </button>

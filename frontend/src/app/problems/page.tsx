@@ -527,7 +527,7 @@ export default function ProblemsPage() {
                   className={chipClass(difficulty === key)}
                 >
                   {tr(DIFF_KEY[key])}
-                  <span className="num opacity-70">{count}</span>
+                  <span className="num">{count}</span>
                 </button>
               );
             })}

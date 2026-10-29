@@ -72,6 +72,7 @@ export function RingProgress({
   stroke = 6,
   className = '',
   label,
+  ariaLabel,
 }: {
   value: number;
   max: number;
@@ -79,6 +80,8 @@ export function RingProgress({
   stroke?: number;
   className?: string;
   label?: React.ReactNode;
+  /** Accessible name; `label` is the visible text inside the ring. */
+  ariaLabel?: string;
 }) {
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
@@ -90,7 +93,7 @@ export function RingProgress({
       aria-valuemin={0}
       aria-valuemax={max}
       aria-valuenow={Math.min(value, max)}
-      aria-label={typeof label === 'string' ? label : undefined}
+      aria-label={ariaLabel ?? (typeof label === 'string' ? label : undefined)}
       className={`relative inline-grid place-items-center ${className}`}
       style={{ width: size, height: size }}
     >
@@ -124,6 +127,7 @@ export function DailyGoal({ dailyXp, goal }: { dailyXp: number; goal: number }) 
       <RingProgress
         value={dailyXp}
         max={goal}
+        ariaLabel={tr('dailyGoal')}
         label={
           <span className="text-[0.6875rem] font-bold leading-tight">
             <span className="num block text-xs">{Math.min(dailyXp, goal)}</span>

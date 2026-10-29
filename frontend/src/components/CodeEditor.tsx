@@ -44,15 +44,17 @@ export default function CodeEditor({
         extensions: [
           basicSetup,
           python(),
+          // Earlier extensions win, so this has to come before oneDark's own rules.
+          EditorView.theme({
+            '&': { height: '100%', fontSize: '14px' },
+            '.cm-activeLine': { backgroundColor: 'rgba(0, 0, 0, 0.18)' },
+            '.cm-scroller': { fontFamily: 'var(--font-mono), ui-monospace, monospace', minHeight: '16rem' },
+          }),
           oneDark,
           keymap.of([{ key: 'Mod-Enter', run: () => (onRunRef.current?.(), true) }]),
           EditorView.contentAttributes.of({ 'aria-label': label }),
           EditorView.updateListener.of(u => {
             if (u.docChanged) onChangeRef.current(u.state.doc.toString());
-          }),
-          EditorView.theme({
-            '&': { height: '100%', fontSize: '14px' },
-            '.cm-scroller': { fontFamily: 'var(--font-mono), ui-monospace, monospace', minHeight: '16rem' },
           }),
         ],
       });
