@@ -13,6 +13,7 @@ const {
   CORRECT_XP,
 } = require('../lib/gamification');
 const { validateLessonSubmission } = require('../lib/grade');
+const { lockedByAssessment, LOCK_RESPONSE } = require('../lib/assessmentLock');
 
 const router = Router();
 
@@ -134,6 +135,8 @@ router.post('/:slug/check', lessonLimiter, requireAuth, async (req, res, next) =
       return res.status(404).json({ error: { code: 'EXERCISE_NOT_FOUND', message: 'Exercise not found.' } });
     }
 
+    if (await lockedByAssessment(req.user.id, m.slug, ex.id)) return res.status(423).json(LOCK_RESPONSE);
+
     const correct = grade(ex, value);
     const attempt = await recordAttempt(req.user.id, m.id, ex.id, correct);
 
@@ -184,6 +187,8 @@ router.post('/:slug/practice', lessonLimiter, requireAuth, async (req, res, next
     if (!ex) {
       return res.status(404).json({ error: { code: 'EXERCISE_NOT_FOUND', message: 'Exercise not found.' } });
     }
+
+    if (await lockedByAssessment(req.user.id, m.slug, ex.id)) return res.status(423).json(LOCK_RESPONSE);
 
     // Practice only re-asks questions the learner has already met in /check, so
     // it can never be used to read answers for exercises they have not seen.

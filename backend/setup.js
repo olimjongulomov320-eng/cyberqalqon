@@ -189,6 +189,32 @@ async function setup() {
   await pool.query(`CREATE INDEX IF NOT EXISTS idx_password_resets_user ON password_resets (user_id)`);
   await pool.query(`DELETE FROM password_resets WHERE expires_at < now() - interval '1 day'`);
 
+  // Scored assessments: the server stores which questions it drew (refs), the
+  // answers it received and the grade it computed. One open paper per
+  // (user, assessment); pass-XP is unique per (user, assessment).
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS assessment_attempts (
+      id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id         UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      assessment_slug TEXT NOT NULL,
+      status          TEXT NOT NULL DEFAULT 'in_progress'
+                      CHECK (status IN ('in_progress', 'submitted', 'expired')),
+      refs            JSONB NOT NULL,
+      answers         JSONB NOT NULL DEFAULT '[]'::jsonb,
+      pass_mark       INTEGER NOT NULL,
+      total           INTEGER NOT NULL,
+      score           INTEGER,
+      percent         INTEGER,
+      passed          BOOLEAN,
+      started_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+      expires_at      TIMESTAMPTZ NOT NULL,
+      submitted_at    TIMESTAMPTZ
+    )`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_assessment_attempts_user ON assessment_attempts (user_id, assessment_slug, started_at DESC)`);
+  await pool.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS uq_assessment_one_open
+        ON assessment_attempts (user_id, assessment_slug) WHERE status = 'in_progress'`);
+
   /* ── 3. v2 columns ───────────────────────────────────────────────────── */
   for (const sql of [
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS email              TEXT UNIQUE`,
@@ -337,6 +363,9 @@ async function setup() {
      WHERE x.kind = 'lesson' AND y.kind = 'lesson'
        AND x.user_id = y.user_id AND x.module_id = y.module_id
        AND (x.created_at, x.id) > (y.created_at, y.id)`);
+  await pool.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS uq_xp_assessment_once
+        ON xp_events (user_id, exercise_id) WHERE kind = 'assessment'`);
   await pool.query(`
     CREATE UNIQUE INDEX IF NOT EXISTS uq_xp_lesson_once
         ON xp_events (user_id, module_id) WHERE kind = 'lesson'`);

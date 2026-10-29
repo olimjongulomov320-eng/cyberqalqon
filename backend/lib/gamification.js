@@ -31,6 +31,7 @@ const ACHIEVEMENTS = [
   { key: 'xp_2000',         test: async (u, _x, _ctx, db) => (await totalXp(u, db)) >= 2000 },
   { key: 'reviewer',        test: async (u, _x, ctx) => Boolean(ctx.reviewed) },
   { key: 'checkpoint',      test: async (u, _x, ctx) => Boolean(ctx.checkpoint) },
+  { key: 'assessment_pass', test: async (u, _x, ctx) => Boolean(ctx.assessmentPassed) },
   { key: 'network_explorer', test: (u, _x, _ctx, db) => domainDone(u, 'networking', db) },
   { key: 'linux_penguin',   test: (u, _x, _ctx, db) => domainDone(u, 'linux', db) },
   { key: 'web_defender',    test: (u, _x, _ctx, db) => domainDone(u, 'web-security', db) },

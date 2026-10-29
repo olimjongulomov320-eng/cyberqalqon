@@ -18,6 +18,7 @@ const {
 } = require('../lib/idempotency');
 
 const rateLimit = require('express-rate-limit');
+const { anyLockedByAssessment, LOCK_RESPONSE } = require('../lib/assessmentLock');
 
 const router = Router();
 const reviewLimiter = rateLimit({ windowMs: 60_000, max: 20, standardHeaders: true });
@@ -149,6 +150,10 @@ router.post('/submit', reviewLimiter, requireAuth, async (req, res, next) => {
       seenIds.add(a.id);
       return true;
     });
+
+    if (await anyLockedByAssessment(req.user.id, module_slug, answers.map(a => a.id))) {
+      return res.status(423).json(LOCK_RESPONSE);
+    }
 
     const { rows } = await pool.query(
       `SELECT id, exercises FROM modules WHERE slug = $1 AND is_published`,

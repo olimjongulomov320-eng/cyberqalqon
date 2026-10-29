@@ -3,6 +3,7 @@ const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const { hintLevel2 } = require('../lib/hints');
+const { lockedByAssessment, LOCK_RESPONSE } = require('../lib/assessmentLock');
 
 const router = Router();
 
@@ -40,6 +41,8 @@ router.post('/:slug/hint', hintLimiter, requireAuth, async (req, res, next) => {
     if (!ex) {
       return res.status(404).json({ error: { code: 'EXERCISE_NOT_FOUND', message: 'Exercise not found.' } });
     }
+
+    if (await lockedByAssessment(req.user.id, req.params.slug, ex.id)) return res.status(423).json(LOCK_RESPONSE);
 
     res.json(hintLevel2(ex));
   } catch (err) {
