@@ -38,16 +38,16 @@ type ButtonVariant = 'primary' | 'secondary' | 'success' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 
 const BUTTON_BASE =
-  'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-spring active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-cyan-400';
+  'inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-spring disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-cyan-400';
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   // Solid, single-accent fills. No gradients — the old cyan→cyan gradient
   // buttons were the loudest generic tell in the shell.
-  primary: 'bg-cyan-400 text-text-inverse shadow-[0_8px_20px_-10px_rgb(6_182_212_/_0.75)] hover:bg-cyan-300',
-  secondary: 'bg-surface-800 text-text-primary border border-border hover:bg-surface-700 hover:border-border-light',
-  success: 'bg-success text-text-inverse hover:bg-success-light',
-  ghost: 'text-text-secondary hover:text-text-primary hover:bg-surface-800',
-  danger: 'bg-danger-dark text-white hover:bg-danger focus-visible:ring-danger',
+  primary: 'btn-3d [--edge:var(--edge-primary)] bg-cyan-400 text-text-inverse hover:bg-cyan-300',
+  secondary: 'btn-3d [--edge:var(--edge-secondary)] bg-surface-800 text-text-primary border border-border hover:bg-surface-700 hover:border-border-light',
+  success: 'btn-3d [--edge:var(--edge-success)] bg-success text-text-inverse hover:bg-success-light',
+  ghost: 'text-text-secondary hover:text-text-primary hover:bg-surface-800 active:scale-[0.98]',
+  danger: 'btn-3d [--edge:var(--edge-danger)] bg-danger-dark text-onaccent hover:bg-danger focus-visible:ring-danger',
 };
 
 const BUTTON_SIZES: Record<ButtonSize, string> = {

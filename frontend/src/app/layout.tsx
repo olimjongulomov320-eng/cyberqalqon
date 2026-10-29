@@ -1,3 +1,4 @@
+import { THEME_BOOTSTRAP } from '@/lib/theme';
 import type { Metadata, Viewport } from 'next';
 import { Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -76,7 +77,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="uz" className={`${sans.variable} ${mono.variable}`}>
+    <html lang="uz" className={`${sans.variable} ${mono.variable}`} data-theme="dark" suppressHydrationWarning>
+      <head>
+        {/* Applies the saved/system theme before first paint (no flash). */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
+      </head>
       <body className="grain">
         <AppProvider>
           <SkipLink />

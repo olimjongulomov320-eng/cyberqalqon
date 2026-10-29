@@ -3,9 +3,56 @@
 @tailwind utilities;
 
 @layer base {
+  /* Design tokens. Values are "R G B" triplets so Tailwind can add alpha.
+     Dark is the brand default; light is applied by [data-theme='light'] (set
+     before first paint by the inline script in layout.tsx). */
   :root {
     color-scheme: dark;
+    --bg: 8 12 20;
+    --surface-50: 248 250 252; --surface-100: 241 245 249; --surface-200: 226 232 240;
+    --surface-300: 203 213 225; --surface-400: 148 163 184; --surface-500: 100 116 139;
+    --surface-600: 71 85 105;   --surface-700: 51 65 85;    --surface-800: 30 41 59;
+    --surface-900: 15 23 42;    --surface-950: 8 12 20;
+    --text-primary: 248 250 252; --text-secondary: 148 163 184;
+    --text-muted: 130 150 173;   --text-inverse: 4 18 26;
+    --border: 30 41 59; --border-light: 51 65 85;
+    --cyan-300: 103 232 249; --cyan-400: 34 211 238; --cyan-500: 6 182 212; --cyan-600: 8 145 178;
+    --success-light: 74 222 128;  --success: 34 197 94;  --success-dark: 22 163 74;
+    --warning-light: 251 191 36;  --warning: 245 158 11; --warning-dark: 217 119 6;
+    --danger-light: 248 113 113;  --danger: 239 68 68;   --danger-dark: 220 38 38;
+    --shadow: 2 6 16;
+    --bloom: 6 182 212;
+    --bloom-alpha: 0.08;
+    --edge-primary: 14 116 144; --edge-secondary: 15 23 42;
+    --edge-success: 21 128 61;  --edge-danger: 153 27 27;
   }
+
+  /* Light: bright, friendly, high-contrast text. Surfaces are inverted so the
+     existing role-based classes (page = 950, card = 900, raised = 800/700) keep
+     their meaning. Accent/semantic colours are darkened to stay AA on white. */
+  :root[data-theme='light'] {
+    color-scheme: light;
+    --bg: 238 242 247;
+    --surface-50: 15 23 42;    --surface-100: 30 41 59;   --surface-200: 51 65 85;
+    --surface-300: 71 85 105;  --surface-400: 100 116 139; --surface-500: 148 163 184;
+    --surface-600: 203 213 225; --surface-700: 226 232 240; --surface-800: 241 245 249;
+    --surface-900: 255 255 255; --surface-950: 238 242 247;
+    --text-primary: 15 23 42; --text-secondary: 71 85 105;
+    --text-muted: 90 107 128; --text-inverse: 255 255 255;
+    --border: 226 232 240; --border-light: 203 213 225;
+    --cyan-300: 21 94 117; --cyan-400: 14 116 144; --cyan-500: 8 145 178; --cyan-600: 14 116 144;
+    --success-light: 34 197 94;  --success: 21 128 61;  --success-dark: 22 101 52;
+    --warning-light: 217 119 6;  --warning: 180 83 9;   --warning-dark: 146 64 14;
+    --danger-light: 220 38 38;   --danger: 185 28 28;   --danger-dark: 153 27 27;
+    --shadow: 15 23 42;
+    --bloom: 8 145 178;
+    --bloom-alpha: 0.10;
+    --edge-primary: 21 94 117; --edge-secondary: 203 213 225;
+    --edge-success: 22 101 52; --edge-danger: 127 29 29;
+  }
+  /* Plain white text means "primary text" outside solid fills; in light mode
+     that must flip to dark. Solid fills use text-onaccent, which never flips. */
+  :root[data-theme='light'] .text-white { color: rgb(var(--text-primary)); }
 
   html {
     scroll-behavior: smooth;
@@ -19,8 +66,8 @@
        gradient" tell in the build. One light source, one hue. */
     background-image: radial-gradient(
       120% 80% at 50% -10%,
-      rgb(6 182 212 / 0.08) 0%,
-      rgb(8 12 20 / 0) 55%
+      rgb(var(--bloom) / var(--bloom-alpha)) 0%,
+      rgb(var(--bg) / 0) 55%
     );
     background-attachment: fixed;
   }
@@ -67,6 +114,20 @@
 }
 
 @layer components {
+  /* Chunky "3D" button: a solid bottom edge that the button presses into on
+     click. Pure box-shadow + transform, so it never shifts layout. The edge
+     colour comes from --edge (set per variant). */
+  .btn-3d {
+    box-shadow: 0 4px 0 0 rgb(var(--edge));
+    transform: translateY(0);
+    transition-property: transform, box-shadow, background-color, border-color, color;
+  }
+  .btn-3d:active:not(:disabled) {
+    box-shadow: 0 1px 0 0 rgb(var(--edge));
+    transform: translateY(3px);
+  }
+  .btn-3d:disabled { box-shadow: none; transform: translateY(3px); }
+
   /* Film grain overlay — subtle. Fixed + pointer-events-none so it never
      repaints a scrolling container. */
   .grain::before {
@@ -82,7 +143,7 @@
 
   /* Top highlight on cards — suggests a single overhead light source. */
   .edge-light {
-    box-shadow: inset 0 1px 0 0 rgb(148 163 184 / 0.06);
+    box-shadow: inset 0 1px 0 0 rgb(var(--surface-400) / 0.08);
   }
 
   /* Section label — small caps micro-label */

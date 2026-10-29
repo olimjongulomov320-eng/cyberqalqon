@@ -1,4 +1,5 @@
 'use client';
+import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -66,6 +67,7 @@ export default function NavBar() {
         </nav>
 
         <div className="flex items-center gap-1.5">
+          <ThemeToggle />
           <LangToggle lang={lang} setLang={setLang} label={tr('languageLabel')} />
           <LowBandwidthToggle on={lowBandwidth} toggle={() => setLowBandwidth(!lowBandwidth)} label={tr('lowBandwidth')} />
 

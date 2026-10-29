@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+/** A themed colour: CSS variable holding an "R G B" triplet, alpha-aware. */
+const v = name => `rgb(var(--${name}) / <alpha-value>)`;
+
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
@@ -9,86 +12,53 @@ module.exports = {
       },
       colors: {
         // ── Palette ────────────────────────────────────────────────────────────
-        // One interactive accent, locked project-wide: cyan. The brand mark is
-        // the same cyan family, so the UI never fights the logo.
+        // Every themed colour is a CSS variable (src/app/globals.css) holding an
+        // "R G B" triplet, so one class works in light AND dark and Tailwind's
+        // opacity modifiers (bg-cyan-500/15) keep working. Change a colour in
+        // one place: the variable.
         //
         //   cyan     → every interactive surface (buttons, links, focus, active)
         //   warning  → XP / rewards            success → correct / completion
         //   danger   → errors / wrong answers  surface/bg/text/border → neutral
-        //
-        // Do not introduce a second accent hue. Violet, cobalt and lime were
-        // removed from the old palette precisely so the accent cannot drift.
-
-        // Accent: restrained cyan / teal
+        //   onaccent → white text on solid saturated fills (same in both themes)
         cyan: {
           50:  '#ecfeff',
           100: '#cffafe',
           200: '#a5f3fc',
-          300: '#67e8f9',  // brightest — hover / emphasis text
-          400: '#22d3ee',  // solid interactive fill + links/icons on dark
-          500: '#06b6d4',  // brand mark + tint base (bg-cyan-500/10 …)
-          600: '#0891b2',
+          300: v('cyan-300'),  // emphasis text / hover
+          400: v('cyan-400'),  // solid interactive fill + links/icons
+          500: v('cyan-500'),  // brand mark + tint base (bg-cyan-500/10 …)
+          600: v('cyan-600'),
           700: '#0e7490',
           800: '#155e75',
           900: '#164e63',
           950: '#083344',
         },
-        // Semantic colors
-        success: {
-          light: '#4ade80',
-          DEFAULT: '#22c55e',
-          dark: '#16a34a',
-        },
-        warning: {
-          light: '#fbbf24',
-          DEFAULT: '#f59e0b',
-          dark: '#d97706',
-        },
-        danger: {
-          light: '#f87171',
-          DEFAULT: '#ef4444',
-          dark: '#dc2626',
-        },
-        // Surfaces — cool navy family (one grey temperature across the app)
+        success: { light: v('success-light'), DEFAULT: v('success'), dark: v('success-dark') },
+        warning: { light: v('warning-light'), DEFAULT: v('warning'), dark: v('warning-dark') },
+        danger:  { light: v('danger-light'),  DEFAULT: v('danger'),  dark: v('danger-dark') },
         surface: {
-          50:  '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#080c14',  // deepest navy
+          50: v('surface-50'), 100: v('surface-100'), 200: v('surface-200'), 300: v('surface-300'),
+          400: v('surface-400'), 500: v('surface-500'), 600: v('surface-600'), 700: v('surface-700'),
+          800: v('surface-800'), 900: v('surface-900'), 950: v('surface-950'),
         },
-        // Background — deep navy (never pure black)
-        bg: {
-          DEFAULT: '#080c14',
-        },
-        // Text
+        bg: { DEFAULT: v('bg') },
         text: {
-          primary:   '#f8fafc',
-          secondary: '#94a3b8',
-          // AA-checked on every surface it is used on (bg 6.44, surface-900
-          // 5.88, surface-800 4.82) — the old #64748b failed all three.
-          muted:     '#8296ad',
-          inverse:   '#04121a',
+          primary:   v('text-primary'),
+          secondary: v('text-secondary'),
+          muted:     v('text-muted'),
+          inverse:   v('text-inverse'),
         },
-        // Borders
-        border: {
-          DEFAULT: '#1e293b',
-          light:   '#334155',
-        },
+        border: { DEFAULT: v('border'), light: v('border-light') },
+        onaccent: '#ffffff',
       },
       boxShadow: {
         // Shadows are tinted to the navy background hue (never pure black) and
         // suggest a single top light source via the `edge` inset.
-        'card': '0 1px 2px 0 rgb(2 6 16 / 0.5), 0 10px 26px -12px rgb(2 6 16 / 0.75)',
-        'card-hover': '0 2px 6px 0 rgb(2 6 16 / 0.55), 0 18px 40px -16px rgb(2 6 16 / 0.85)',
+        'card': '0 1px 2px 0 rgb(var(--shadow) / 0.5), 0 10px 26px -12px rgb(var(--shadow) / 0.75)',
+        'card-hover': '0 2px 6px 0 rgb(var(--shadow) / 0.55), 0 18px 40px -16px rgb(var(--shadow) / 0.85)',
         'edge': 'inset 0 1px 0 0 rgb(148 163 184 / 0.06)',
-        'focus': '0 0 0 2px rgb(8 12 20), 0 0 0 4px rgb(34 211 238 / 0.55)',
+        'focus': '0 0 0 2px rgb(var(--bg)), 0 0 0 4px rgb(var(--cyan-400) / 0.55)',
       },
       borderRadius: {
         'xs': '4px',
