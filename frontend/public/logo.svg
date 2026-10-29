@@ -1,19 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none">
   <!--
-    CyberQalqon brand mark — a single shield with a keyhole.
-
-    Deliberately plain: one silhouette, one accent, no gradients, no glow
-    filters, no sparks, no scan lines, no hex texture. It is drawn on the same
-    24px grid and 1.75 stroke weight as the first-party icon family
-    (src/components/icons.tsx), so the mark and the interface icons read as one
-    system. Legible at 28px in the nav and at favicon sizes.
-
-    The shield body is filled with the app's surface colour (#0b100e) so the mark
-    holds its shape on the dark header while the cyan outline keeps it legible on
-    light backgrounds (favicon, PWA tile).
+    CyberQalqon mark: a "Q" (Qalqon = shield) drawn as an octagonal guard ring,
+    open at the lower right where the Q's tail exits, with a terminal prompt
+    inside. One shape, one accent colour, no gradients or glow. Same 24px grid
+    as the interface icons; legible at 28px and as a favicon.
   -->
-  <path d="M12 3.4 5.25 6.1v5.5c0 4.3 2.9 7.7 6.75 9.2 3.85-1.5 6.75-4.9 6.75-9.2V6.1Z"
-        fill="#0b100e" stroke="#39d98a" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round"/>
-  <circle cx="12" cy="10.6" r="2.1" fill="#39d98a"/>
-  <rect x="11.05" y="12.2" width="1.9" height="3.4" rx="0.95" fill="#39d98a"/>
+  <path d="M15.29 19.95 L8.71 19.95 L4.05 15.29 L4.05 8.71 L8.71 4.05 L15.29 4.05 L19.95 8.71 L19.95 15.29" stroke="#39d98a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M9 9.2 12.2 12 9 14.8" stroke="#39d98a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12.9 14.8H15.1" stroke="#39d98a" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M17.1 17.1 20.6 20.6" stroke="#39d98a" stroke-width="2.2" stroke-linecap="round"/>
 </svg>

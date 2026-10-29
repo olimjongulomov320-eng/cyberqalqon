@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { ReactNode } from 'react';
+import Wordmark from '@/components/Wordmark';
 
 /* ── Brand panel for auth screens ─────────────────────────────────────────────
    Desktop only. A static, editorial counterweight to the form: the real product
@@ -46,7 +47,7 @@ export function AuthBrandPanel({
       <div className="relative z-10 flex h-full flex-col justify-between gap-16 p-10">
         <div className="flex items-center gap-3">
           <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={34} height={34} className="shrink-0" priority />
-          <span className="text-lg font-extrabold tracking-tight text-white">CyberQalqon</span>
+          <Wordmark className="text-lg" />
         </div>
 
         <div>

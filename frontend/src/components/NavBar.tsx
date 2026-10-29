@@ -1,4 +1,5 @@
 'use client';
+import Wordmark from '@/components/Wordmark';
 import { Avatar } from '@/components/ui';
 import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
@@ -44,7 +45,7 @@ export default function NavBar() {
               plus the language / low-traffic / profile controls no longer fit on
               one row (they used to push the header ~15px past the viewport). The
               logo mark, page title and bottom nav still carry the brand. */}
-          <span className="hidden font-mono text-[0.9375rem] font-bold tracking-tight text-white min-[360px]:inline">{tr('appName')}</span>
+          <Wordmark className="hidden text-[0.9375rem] min-[360px]:inline" />
         </Link>
 
         <nav aria-label={tr('tracks')} className="hidden items-center gap-1 sm:flex">
