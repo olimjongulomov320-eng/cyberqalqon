@@ -369,10 +369,10 @@ function KpiStrip({ stats }: { stats: StatsPayload }) {
   const { lang } = useApp();
   const tr = makeT(lang);
   const items = [
-    { Icon: BoltIcon, label: tr('totalXp'), value: stats.profile.total_xp as number | null, suffix: '', sub: `${stats.week_xp} / ${tr('weekShort')}`, tone: 'text-warning' },
+    { Icon: BoltIcon, label: tr('totalXp'), value: stats.profile.total_xp as number | null, suffix: '', sub: `+${stats.week_xp} ${tr('weekXpShort')}`, tone: 'text-warning' },
     { Icon: FlameIcon, label: tr('streak'), value: (stats.profile.current_streak ?? 0) as number | null, suffix: '', sub: `${tr('bestStreak')}: ${stats.profile.longest_streak ?? 0}`, tone: 'text-text-primary' },
     { Icon: BookIcon, label: tr('lessonsShort'), value: (stats.profile.modules_completed ?? 0) as number | null, suffix: '', sub: undefined as string | undefined, tone: 'text-text-primary' },
-    { Icon: CheckIcon, label: tr('statsTitle'), value: stats.accuracy as number | null, suffix: '%', sub: `${stats.answers_correct + stats.answers_wrong} ${tr('answersTotal').toLowerCase()}`, tone: 'text-success' },
+    { Icon: CheckIcon, label: tr('accuracy'), value: stats.accuracy as number | null, suffix: '%', sub: `${tr('answersTotal')}: ${stats.answers_correct + stats.answers_wrong}`, tone: 'text-success' },
   ];
   return (
     <dl className="grid grid-cols-2 divide-border overflow-hidden rounded-lg border border-border bg-surface-900 sm:grid-cols-4 sm:divide-x [&>div]:border-border max-sm:[&>div:nth-child(n+3)]:border-t max-sm:[&>div:nth-child(even)]:border-l">
@@ -569,7 +569,21 @@ export default function ProfilePage() {
 
             <Card className="p-4">
               <h2 className="mb-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-text-muted">{tr('activityTitle')}</h2>
-              {activity ? <ActivityMap activity={activity} today={appDayKey()} /> : <Skeleton className="h-24 w-full" />}
+              {activity ? (
+                <div className="flex flex-wrap items-start gap-x-12 gap-y-5">
+                  <ActivityMap activity={activity} today={appDayKey()} />
+                  <dl className="grid grid-cols-3 gap-x-8 gap-y-1 sm:grid-cols-1">
+                    <div>
+                      <dt className="font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">{tr('activityAnswers')}</dt>
+                      <dd className="num text-2xl font-bold text-text-primary">{activity.reduce((n, a) => n + a.answers, 0)}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">{tr('activityActive')}</dt>
+                      <dd className="num text-2xl font-bold text-text-primary">{activity.filter(a => a.answers > 0).length}</dd>
+                    </div>
+                  </dl>
+                </div>
+              ) : <Skeleton className="h-24 w-full" />}
             </Card>
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -599,14 +613,14 @@ export default function ProfilePage() {
                 <h2 className="mb-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-text-muted">{tr('sharpenTitle')}</h2>
                 {!stats ? (
                   <Skeleton className="h-16 w-full" />
-                ) : stats.weak_topics.length > 0 ? (
+                ) : stats.weak_topics.some(t => t.accuracy < 80) ? (
                   <>
                     <ul className="divide-y divide-border/60">
-                      {stats.weak_topics.slice(0, 3).map(t => (
+                      {stats.weak_topics.filter(t => t.accuracy < 80).slice(0, 3).map(t => (
                         <li key={t.slug} className="flex items-center gap-2.5 py-2">
                           <DomainIcon slug={t.slug} size={16} className="text-cyan-300" />
                           <span className="min-w-0 flex-1 truncate text-sm text-text-primary">{t.title}</span>
-                          <span className="num text-xs font-bold text-danger">{t.accuracy}%</span>
+                          <span className={`num text-xs font-bold ${t.accuracy >= 80 ? 'text-success' : t.accuracy >= 50 ? 'text-warning' : 'text-danger'}`}>{t.accuracy}%</span>
                         </li>
                       ))}
                     </ul>

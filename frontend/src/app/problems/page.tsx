@@ -406,20 +406,7 @@ export default function ProblemsPage() {
     <div>
       <PracticeTabs />
       <div className="mb-6">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <Link
-            href="/review"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-text-muted transition-colors hover:text-text-primary"
-          >
-            <ArrowLeftIcon size={16} />
-            {tr('back')}
-          </Link>
-          <Badge tone="primary">
-            <CodeIcon size={12} />
-            {tr('navProblems')}
-          </Badge>
-        </div>
-        <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+        <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">
           {tr('problemsTitle')}
         </h1>
         <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-text-secondary">
@@ -428,37 +415,12 @@ export default function ProblemsPage() {
       </div>
 
 
-      {data && (
-        <Card className="mb-4 p-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <p className="flex items-baseline gap-1.5">
-              <span className="num text-2xl font-extrabold text-white">{data.solved_total}</span>
-              <span className="num text-sm font-semibold text-text-muted">
-                / {data.catalogue_total}
-              </span>
-              <span className="text-sm text-text-muted">{tr('problemsSolved')}</span>
-            </p>
-            <p className="text-xs text-text-muted">
-              <span className="num font-semibold text-text-secondary">{data.total}</span>{' '}
-              {tr('problemsCount')}
-            </p>
-          </div>
-          <Progress
-            className="mt-3"
-            value={data.solved_total}
-            max={Math.max(1, data.catalogue_total)}
-            tone="success"
-            label={tr('problemsProgress')}
-          />
-        </Card>
-      )}
-
       <Card className="mb-4 p-4">
         {/* grid-cols-1 = minmax(0,1fr): keeps the single-column mobile form
             from being floored by an input's intrinsic width (see the list grid
             comment below). */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <label className="block">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
+          <label className="block sm:col-span-2">
             <span className="form-label">{tr('problemSearch')}</span>
             <span className="relative block">
               <SearchIcon

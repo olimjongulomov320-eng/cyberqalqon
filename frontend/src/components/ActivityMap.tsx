@@ -25,17 +25,17 @@ export default function ActivityMap({ activity, today, weeks = 12 }: { activity:
   const cells = grid.flat();
   const activeDays = cells.filter(c => c.answers > 0).length;
   const run = currentRun(activity, today);
-  const summary = `${activeDays} ${tr('activityActive')}, ${run} ${tr('activityRun')}`;
+  const summary = `${tr('activityActive')}: ${activeDays}, ${tr('activityRun')}: ${run}`;
 
   return (
     <div>
       <div
         role="img"
         aria-label={summary}
-        className="grid gap-[3px]"
+        className="grid w-max gap-1"
         style={{
-          gridTemplateColumns: `repeat(${weeks}, minmax(0, 1fr))`,
-          gridTemplateRows: 'repeat(7, auto)',
+          gridTemplateColumns: `repeat(${weeks}, 16px)`,
+          gridTemplateRows: 'repeat(7, 16px)',
           gridAutoFlow: 'column',
         }}
       >
@@ -44,15 +44,15 @@ export default function ActivityMap({ activity, today, weeks = 12 }: { activity:
             key={c.day}
             style={{ background: c.future ? 'transparent' : FILL[c.level], ['--col' as string]: Math.floor(i / 7) } as React.CSSProperties}
             title={c.future ? undefined : `${c.day}: ${c.answers}`}
-            className="cell-in aspect-square rounded-[2px]"
+            className="cell-in h-4 w-4 rounded-[3px]"
           />
         ))}
       </div>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[0.6875rem] text-text-muted">
         <span>
-          <span className="num font-bold text-text-primary">{activeDays}</span> {tr('activityActive')}
+          {tr('activityActive')}: <span className="num font-bold text-text-primary">{activeDays}</span>
           <span aria-hidden="true"> | </span>
-          <span className="num font-bold text-text-primary">{run}</span> {tr('activityRun')}
+          {tr('activityRun')}: <span className="num font-bold text-text-primary">{run}</span>
         </span>
         <span aria-hidden="true" className="flex items-center gap-1">
           {tr('activityLess')}

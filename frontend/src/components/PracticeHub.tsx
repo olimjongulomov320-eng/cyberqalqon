@@ -49,7 +49,8 @@ export default function PracticeHub() {
           cTotal: c.summary?.total ?? c.challenges.length,
           points: c.summary?.points ?? 0,
           accuracy: s.accuracy,
-          weak: s.weak_topics[0] ?? null,
+          // Only suggest a topic that genuinely needs work (under 80%), not any with a miss.
+          weak: s.weak_topics.find(t => t.accuracy < 80) ?? null,
           nextChallenge: next,
         });
       })
@@ -65,11 +66,11 @@ export default function PracticeHub() {
   const kpis = [
     { label: tr('hubQuestions'), value: hub.qSolved, of: hub.qTotal, suffix: '' },
     { label: tr('hubChallenges'), value: hub.cSolved, of: hub.cTotal, suffix: '', sub: `${hub.points} ${tr('chPoints')}` },
-    { label: tr('statsTitle'), value: hub.accuracy, of: null as number | null, suffix: '%' },
+    { label: tr('accuracy'), value: hub.accuracy, of: null as number | null, suffix: '%' },
   ];
 
   return (
-    <section aria-label={tr('hubTitle')} className="mb-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+    <section aria-label={tr('hubTitle')} className="mb-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:items-start">
       <dl className="grid grid-cols-3 divide-x divide-border overflow-hidden rounded-lg border border-border bg-surface-900">
         {kpis.map(k => (
           <div key={k.label} className="p-3.5">

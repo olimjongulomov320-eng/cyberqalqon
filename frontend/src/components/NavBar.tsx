@@ -48,7 +48,7 @@ export default function NavBar() {
               plus the language / low-traffic / profile controls no longer fit on
               one row (they used to push the header ~15px past the viewport). The
               logo mark, page title and bottom nav still carry the brand. */}
-          <Wordmark className="hidden text-[0.9375rem] min-[360px]:inline" />
+          <Wordmark className="hidden text-[0.9375rem] min-[420px]:inline" />
         </Link>
 
         <nav ref={navRef} aria-label={tr('tracks')} className="relative hidden items-center gap-1 sm:flex">
