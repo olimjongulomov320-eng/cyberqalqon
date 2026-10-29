@@ -589,7 +589,7 @@ export default function LearnPage() {
         <p className="label mb-2 flex items-center gap-1.5 text-cyan-300">
           <CompassIcon size={14} aria-hidden="true" /> {tr('stageDiscover')}
         </p>
-        <h1 className="display">{tr('discoverTitle')}</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">{tr('discoverTitle')}</h1>
         <p className="mt-1.5 max-w-[62ch] text-sm text-text-secondary">{tr('discoverSubtitle')}</p>
       </header>
       <LearnInner />

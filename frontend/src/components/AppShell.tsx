@@ -82,12 +82,14 @@ function Footer() {
   const { lang } = useApp();
   const tr = makeT(lang);
   return (
-    <footer className="mx-auto hidden w-full max-w-7xl items-center justify-between gap-4 border-t border-border/60 px-4 pb-8 pt-5 text-xs text-text-muted sm:flex sm:px-6 lg:px-8">
-      <p>CyberQalqon · {tr('tagline')}</p>
-      <nav className="flex gap-4">
-        <Link href="/privacy" className="transition-colors hover:text-text-secondary">{tr('privacy')}</Link>
-        <Link href="/terms" className="transition-colors hover:text-text-secondary">{tr('terms')}</Link>
-      </nav>
+    <footer className="mx-auto hidden w-full max-w-7xl px-4 pb-8 sm:block sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between gap-4 border-t border-border/60 pt-5 text-xs text-text-muted">
+        <p>CyberQalqon | {tr('tagline')}</p>
+        <nav className="flex gap-4">
+          <Link href="/privacy" className="transition-colors hover:text-text-secondary">{tr('privacy')}</Link>
+          <Link href="/terms" className="transition-colors hover:text-text-secondary">{tr('terms')}</Link>
+        </nav>
+      </div>
     </footer>
   );
 }

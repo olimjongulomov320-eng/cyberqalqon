@@ -1,4 +1,5 @@
 'use client';
+import { stripLeadingTitle } from '@/lib/lesson';
 import { stagger } from '@/lib/motion';
 import CountUp from '@/components/CountUp';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -217,7 +218,7 @@ export default function LessonView({ slug }: { slug: string }) {
         >
           <h2 className="border-b border-border/60 px-4 py-2.5 text-sm font-bold text-text-primary">{tr('lessonConcept')}</h2>
           <div className="lesson px-5 py-5 text-[0.9375rem] leading-relaxed lg:text-base">
-            <ReactMarkdown>{module.content}</ReactMarkdown>
+            <ReactMarkdown>{stripLeadingTitle(module.content, module.title)}</ReactMarkdown>
           </div>
         </section>
 

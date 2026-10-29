@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { AssessmentSummary, LearningPath, fetchAssessments, fetchPaths } from '@/lib/api';
-import { Badge, ButtonLink, Card, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
+import { Badge, ButtonLink, Card, EmptyState, Skeleton } from '@/components/ui';
 import { CompassIcon, ContentIcon, LockIcon } from '@/components/icons';
 
 type Readiness = 'passed' | 'inprogress' | 'ready' | 'locked';
@@ -91,8 +91,9 @@ export default function AssessmentsPage() {
       )}
 
       {ready && !user && (
-        <div className="mt-4">
-          <ErrorNote>{tr('assessmentsSignIn')}</ErrorNote>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-md border border-border bg-surface-900 px-4 py-3">
+          <p className="text-sm text-text-secondary">{tr('assessmentsSignIn')}</p>
+          <ButtonLink href="/auth?next=/assessments" size="sm">{tr('login')}</ButtonLink>
         </div>
       )}
 
@@ -153,9 +154,7 @@ export default function AssessmentsPage() {
 
                     <div className="order-5 col-span-2 md:order-none md:col-span-1 md:justify-self-end">
                       {st === 'locked' ? (
-                        <span className="inline-flex items-center gap-1.5 text-xs text-text-muted">
-                          <LockIcon size={13} /> {tr('assessNeedLessons')} {a.lessons_required - a.lessons_completed}
-                        </span>
+                        <ButtonLink href="/learn" size="sm" variant="secondary">{tr('navLearn')}</ButtonLink>
                       ) : a.in_progress ? (
                         <ButtonLink href={`/assessments/take?attempt=${a.in_progress.attempt_id}`} size="sm">{tr('assessContinue')}</ButtonLink>
                       ) : (

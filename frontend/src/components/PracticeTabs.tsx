@@ -27,8 +27,8 @@ export default function PracticeTabs() {
             key={t.href}
             href={t.href}
             aria-current={active ? 'page' : undefined}
-            className={`rounded-lg px-4 py-2 text-sm font-bold transition-colors ${
-              active ? 'bg-cyan-400 text-text-inverse' : 'text-text-secondary hover:text-text-primary'
+            className={`px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
+              active ? 'text-text-primary' : 'text-text-muted hover:text-text-primary'
             }`}
           >
             {tr(t.label)}

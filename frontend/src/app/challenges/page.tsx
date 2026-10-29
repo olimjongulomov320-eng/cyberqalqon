@@ -57,6 +57,7 @@ export default function ChallengesPage() {
       <PracticeTabs />
       <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">{tr('chTitle')}</h1>
       <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-text-secondary">{tr('chIntro')}</p>
+      <p className="mt-2 font-mono text-[0.6875rem] uppercase tracking-wider text-warning">{tr('chDraftNote')}</p>
 
       {data?.summary && (
         <p className="num mt-4 text-sm text-text-secondary">
@@ -135,7 +136,6 @@ export default function ChallengesPage() {
                       {c.tags.map(t => (
                         <span key={t} className="rounded-md bg-surface-800 px-2 py-0.5 text-text-secondary">#{t}</span>
                       ))}
-                      {c.needs_review && <Badge tone="warning">{tr('trackDraft')}</Badge>}
                     </div>
                   </Card>
                 </Link>

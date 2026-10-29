@@ -369,7 +369,7 @@ export default function AuthPage() {
             onChange={set('password')}
             onBlur={() => setTouched(t => ({ ...t, password: true }))}
             autoComplete={isRegister ? 'new-password' : 'current-password'}
-            placeholder={tr('passwordPlaceholder')}
+            placeholder={isRegister ? tr('passwordPlaceholder') : undefined}
             invalid={submitted && Boolean(errors.password)}
             show={showPw}
             toggle={() => setShowPw(v => !v)}

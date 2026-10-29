@@ -134,7 +134,7 @@ export default function SolveChallengePage() {
             {ch.needs_review && <Badge tone="warning">{tr('trackDraft')}</Badge>}
           </div>
 
-          <div className="lesson mt-4 text-sm leading-relaxed text-text-secondary">
+          <div className="lesson mt-4 text-[0.9375rem] leading-relaxed lg:text-base">
             <ReactMarkdown>{ch.statement}</ReactMarkdown>
           </div>
 
@@ -149,7 +149,7 @@ export default function SolveChallengePage() {
           </ul>
 
           <h2 className="mt-5 text-sm font-bold uppercase tracking-wide text-text-muted">{tr('chConstraints')}</h2>
-          <p className="mt-2 text-sm text-text-secondary">{ch.constraints}</p>
+          <div className="lesson mt-2 text-sm"><ReactMarkdown>{ch.constraints}</ReactMarkdown></div>
         </section>
 
         {/* Editor (right) */}
