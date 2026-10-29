@@ -21,6 +21,7 @@ import {
   nextCheckpoint,
   pathTotals,
 } from '@/lib/directory';
+import PathTrail from '@/components/PathTrail';
 import Journey from '@/components/Journey';
 import { Badge, ButtonLink, EmptyState, ErrorNote, Progress, Skeleton } from '@/components/ui';
 import {
@@ -50,11 +51,6 @@ import {
  * from `GET /v1/paths` and `GET /users/me/stats`.
  */
 
-const DIFF_KEY: Record<Difficulty, string> = {
-  beginner: 'difficultyBeginner',
-  intermediate: 'difficultyIntermediate',
-  advanced: 'difficultyAdvanced',
-};
 
 const DIFF_TONE: Record<Difficulty, 'success' | 'primary' | 'warning'> = {
   beginner: 'success',
@@ -77,91 +73,6 @@ const chipClass = (active: boolean) =>
   }`;
 
 /* ── Module sequence (shown when a domain is expanded) ───────────────────── */
-
-const NODE_CLASS: Record<PathModule['state'], string> = {
-  done: 'border-success/50 bg-success/15 text-success',
-  current: 'border-cyan-400 bg-cyan-400 text-text-inverse',
-  open: 'border-border-light bg-surface-800 text-text-primary',
-  locked: 'border-border bg-surface-950 text-text-muted',
-};
-
-function ModuleLine({ m, index }: { m: PathModule; index: number }) {
-  const { lang } = useApp();
-  const tr = makeT(lang);
-  const locked = m.state === 'locked';
-
-  const node = (
-    <span
-      aria-hidden="true"
-      className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border text-[0.625rem] font-bold ${NODE_CLASS[m.state]}`}
-    >
-      {m.state === 'done' ? (
-        <CheckIcon size={12} />
-      ) : m.state === 'locked' ? (
-        <LockIcon size={11} />
-      ) : m.state === 'current' ? (
-        <PlayIcon size={11} />
-      ) : (
-        <span className="num">{index + 1}</span>
-      )}
-    </span>
-  );
-
-  const body = (
-    <>
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-1.5">
-          <span
-            className={`truncate text-sm font-medium ${locked ? 'text-text-muted' : 'text-text-primary'}`}
-          >
-            {m.title}
-          </span>
-          {m.kind === 'checkpoint' && <Badge tone="warning">{tr('checkpoint')}</Badge>}
-        </span>
-        <span className="num mt-0.5 block truncate text-[0.6875rem] text-text-muted">
-          {m.exercise_count} {tr('challenge').toLowerCase()}
-          <span aria-hidden="true"> · </span>
-          {m.xp_reward} XP
-          <span aria-hidden="true"> · </span>
-          {tr(DIFF_KEY[m.difficulty])}
-        </span>
-        {locked && m.prerequisite && (
-          <span className="mt-1 block truncate text-[0.6875rem] text-text-muted">
-            {tr('prereqNeeded')} <span className="text-text-secondary">«{m.prerequisite.title}»</span>
-          </span>
-        )}
-      </span>
-      <span className="shrink-0 self-center text-text-muted">
-        {locked ? null : m.state === 'done' ? (
-          <Badge tone="success">{tr('stateDone')}</Badge>
-        ) : m.state === 'current' ? (
-          <Badge tone="primary">{tr('stateCurrent')}</Badge>
-        ) : (
-          <ChevronRightIcon size={16} />
-        )}
-      </span>
-    </>
-  );
-
-  const rowClass =
-    'flex w-full items-start gap-3 px-3 py-2.5 text-left transition-colors sm:px-4';
-
-  return (
-    <li>
-      {locked ? (
-        <div aria-disabled="true" className={`${rowClass} cursor-not-allowed`}>
-          {node}
-          {body}
-        </div>
-      ) : (
-        <Link href={`/modules/${m.slug}`} className={`${rowClass} hover:bg-surface-800/70`}>
-          {node}
-          {body}
-        </Link>
-      )}
-    </li>
-  );
-}
 
 /* ── Domain row ───────────────────────────────────────────────────────────── */
 
@@ -233,11 +144,7 @@ function DomainRow({
               {tr('discoverEmptyBody')}
             </p>
           ) : (
-            <ol className="divide-y divide-border/50 border-t border-border/60 bg-surface-950/40">
-              {visible.map(m => (
-                <ModuleLine key={m.slug} m={m} index={domain.modules.indexOf(m)} />
-              ))}
-            </ol>
+            <PathTrail domainSlug={domain.slug} modules={visible} completed={domain.completed} all={domain.modules} />
           )}
         </div>
       )}
