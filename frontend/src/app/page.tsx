@@ -369,7 +369,7 @@ export default function HomePage() {
               <div className="flex flex-wrap gap-2">
                 {stats.achievements.slice(0, 6).map(a => {
                   const meta = achievementMeta(a.key, lang, tr);
-                  return <AchievementBadge key={a.key} emoji={meta?.emoji ?? '🏅'} title={meta?.title ?? a.key} />;
+                  return <AchievementBadge key={a.key} icon={meta?.icon ?? 'medal'} title={meta?.title ?? a.key} />;
                 })}
               </div>
             </section>

@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
+import { MoonIcon, SunIcon, SystemIcon } from '@/components/icons';
 import { ThemePref, applyTheme, nextTheme, readThemePref, saveThemePref } from '@/lib/theme';
 
-const ICON: Record<ThemePref, string> = { system: '🖥️', light: '☀️', dark: '🌙' };
+const ICON = { system: SystemIcon, light: SunIcon, dark: MoonIcon } as const;
 const LABEL: Record<ThemePref, string> = { system: 'themeSystem', light: 'themeLight', dark: 'themeDark' };
 
 /** Cycles system → light → dark. Follows the OS live while on "system". */
@@ -40,7 +41,7 @@ export default function ThemeToggle() {
       title={`${tr('themeLabel')}: ${tr(LABEL[pref])}`}
       className="grid h-9 w-9 place-items-center rounded-lg text-base text-text-secondary transition-colors hover:bg-surface-800 hover:text-text-primary"
     >
-      <span aria-hidden="true">{ICON[pref]}</span>
+      {(() => { const I = ICON[pref]; return <I size={18} />; })()}
     </button>
   );
 }

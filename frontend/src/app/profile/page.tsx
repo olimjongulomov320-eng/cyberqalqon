@@ -1,4 +1,5 @@
 'use client';
+import { ContentIcon } from '@/components/icons';
 import ChallengeStats from '@/components/ChallengeStats';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
@@ -23,7 +24,6 @@ import {
 } from '@/components/icons';
 
 const GOALS = [10, 20, 30, 50];
-const AVATARS = ['🦊', '🦉', '🐺', '🦁', '🐼', '🦅', '🐯', '🐸'];
 
 const ACTIVITY_LABEL: Record<string, string> = {
   lesson: 'activityLesson',
@@ -372,9 +372,9 @@ export default function ProfilePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang, user?.id]);
 
-  const patch = async (p: { display_name?: string; avatar_emoji?: string; daily_goal_xp?: number; show_on_leaderboard?: boolean }) => {
+  const patch = async (p: { display_name?: string; daily_goal_xp?: number; show_on_leaderboard?: boolean }) => {
     try {
-      setSaving(p.avatar_emoji ? p.avatar_emoji : p.daily_goal_xp ? String(p.daily_goal_xp) : 'name');
+      setSaving(p.daily_goal_xp ? String(p.daily_goal_xp) : 'name');
       const updated = await updateMe(p);
       setUser(updated);
       setSavedAt(new Date().toISOString());
@@ -595,7 +595,7 @@ export default function ProfilePage() {
                     const meta = achievementMeta(a.key, lang, tr);
                     return (
                       <li key={a.key} className="flex flex-col items-center gap-1 rounded-md border border-border bg-surface-950/60 px-2 py-3 text-center">
-                        <span aria-hidden="true" className="text-2xl">{meta?.emoji ?? '🏅'}</span>
+                        <ContentIcon name={meta?.icon ?? 'medal'} size={26} className="text-warning" />
                         <span className="text-xs font-bold text-text-primary">{meta?.title ?? a.key}</span>
                         <span className="text-[0.625rem] text-text-muted">{tr('achievedOn')}</span>
                       </li>
@@ -605,31 +605,9 @@ export default function ProfilePage() {
               )}
             </Card>
 
-            {/* Settings: avatar + daily goal */}
+            {/* Settings: daily goal and visibility */}
             <Card className="mt-8 p-4">
               <div className="flex flex-col gap-5">
-                <div>
-                  <p className="mb-2 text-sm font-bold text-white">{tr('changeAvatar')}</p>
-                  <div className="flex flex-wrap gap-1.5" role="group" aria-label={tr('changeAvatar')}>
-                    {AVATARS.map(a => (
-                      <button
-                        key={a}
-                        type="button"
-                        onClick={() => patch({ avatar_emoji: a })}
-                        aria-pressed={user.avatar_emoji === a}
-                        aria-label={a}
-                        className={`grid h-10 w-10 place-items-center rounded-md border text-xl transition-colors ${
-                          user.avatar_emoji === a
-                            ? 'border-cyan-400 bg-cyan-500/15'
-                            : 'border-border bg-surface-900 hover:border-border-light'
-                        }`}
-                      >
-                        <span aria-hidden="true">{a}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 <div>
                   <p className="mb-2 text-sm font-bold text-white">{tr('dailyGoal')}</p>
                   <div className="flex flex-wrap gap-1.5" role="group" aria-label={tr('dailyGoal')}>

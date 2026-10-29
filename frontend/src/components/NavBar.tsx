@@ -1,4 +1,5 @@
 'use client';
+import { Avatar } from '@/components/ui';
 import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -77,7 +78,7 @@ export default function NavBar() {
               aria-label={user.display_name}
               className="flex items-center gap-1.5 rounded-lg py-1.5 pl-1 pr-2 text-sm font-semibold text-white transition-colors hover:bg-surface-900"
             >
-              <span aria-hidden="true">{user.avatar_emoji}</span>
+              <Avatar name={user.display_name} size="xs" />
               <span className="num inline-flex items-center gap-0.5 text-xs text-warning">
                 <BoltIcon size={13} className="shrink-0" />
                 {user.total_xp}

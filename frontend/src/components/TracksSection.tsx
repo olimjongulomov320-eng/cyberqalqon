@@ -1,4 +1,5 @@
 'use client';
+import { ContentIcon } from '@/components/icons';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
@@ -22,7 +23,7 @@ function TrackCard({ track, tr }: { track: Track; tr: (k: string) => string }) {
   return (
     <Card className="flex h-full flex-col gap-3 p-4">
       <div className="flex items-start gap-3">
-        <span aria-hidden="true" className="text-2xl leading-none">{track.icon}</span>
+        <ContentIcon name={track.icon} size={26} className="shrink-0 text-cyan-300" />
         <div className="min-w-0 flex-1">
           <h3 className="text-sm font-bold leading-snug text-text-primary">{track.title}</h3>
           <p className="mt-0.5 text-xs leading-relaxed text-text-secondary">{track.description}</p>

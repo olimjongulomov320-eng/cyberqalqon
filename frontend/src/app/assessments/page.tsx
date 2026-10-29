@@ -4,7 +4,7 @@ import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { AssessmentSummary, LearningPath, fetchAssessments, fetchPaths } from '@/lib/api';
 import { Badge, ButtonLink, Card, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
-import { CompassIcon, LockIcon } from '@/components/icons';
+import { CompassIcon, ContentIcon, LockIcon } from '@/components/icons';
 
 interface Item {
   slug: string;
@@ -94,7 +94,7 @@ export default function AssessmentsPage() {
               <li key={a.slug}>
                 <Card className="flex h-full flex-col gap-3 p-4">
                   <div className="flex items-start gap-3">
-                    <span aria-hidden="true" className="text-2xl leading-none">{a.icon}</span>
+                    <ContentIcon name={a.icon} size={26} className="shrink-0 text-cyan-300" />
                     <div className="min-w-0 flex-1">
                       <h3 className="text-sm font-bold leading-snug text-text-primary">{a.title}</h3>
                       <p className="mt-0.5 text-xs text-text-secondary">
@@ -151,7 +151,7 @@ export default function AssessmentsPage() {
               <li key={it.slug}>
                 <Card className="flex h-full flex-col gap-3 p-4">
                   <div className="flex items-start gap-3">
-                    <span aria-hidden="true" className="text-2xl leading-none">{it.domainIcon}</span>
+                    <ContentIcon name={it.domainIcon} size={26} className="shrink-0 text-cyan-300" />
                     <div className="min-w-0 flex-1">
                       <h2 className="text-sm font-bold leading-snug text-text-primary">{it.title}</h2>
                       <p className="mt-0.5 text-xs text-text-secondary">{it.domainTitle}</p>

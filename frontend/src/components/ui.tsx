@@ -193,26 +193,35 @@ export function Progress({
 /* ── Avatar ──────────────────────────────────────────────────────────────────── */
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
-// Squircle avatars (rounded squares) instead of the default circle — the
-// emoji avatar is data, the shape is the design decision.
+// Avatars show the learner's initials on a neutral tile. They used to render a
+// chosen emoji; initials read as a professional account marker and carry no
+// cartoon character into the interface.
 const AVATAR_SIZES: Record<AvatarSize, string> = {
-  xs: 'h-6 w-6 text-xs rounded-md',
-  sm: 'h-8 w-8 text-sm rounded-md',
-  md: 'h-10 w-10 text-base rounded-lg',
-  lg: 'h-12 w-12 text-xl rounded-lg',
-  xl: 'h-16 w-16 text-2xl rounded-xl',
-  '2xl': 'h-24 w-24 text-4xl rounded-2xl',
+  xs: 'h-6 w-6 text-[0.625rem] rounded-md',
+  sm: 'h-8 w-8 text-xs rounded-md',
+  md: 'h-10 w-10 text-sm rounded-lg',
+  lg: 'h-12 w-12 text-base rounded-lg',
+  xl: 'h-16 w-16 text-xl rounded-lg',
+  '2xl': 'h-24 w-24 text-3xl rounded-lg',
 };
 
+/** Up to two initials from a display name. Never empty. */
+export function initialsOf(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return '?';
+  const letters = parts.length === 1 ? Array.from(parts[0]).slice(0, 2) : [Array.from(parts[0])[0], Array.from(parts[parts.length - 1])[0]];
+  return letters.join('').toUpperCase();
+}
+
 export function Avatar({
-  emoji,
   name,
   size = 'md',
   ring = false,
   className = '',
   announce = false,
 }: {
-  emoji: string;
+  /** Ignored. Kept so older call sites compile; initials are used instead. */
+  emoji?: string;
   /** The user's display name. Exposed as the avatar's accessible name only
    *  when `announce` is set: every current call site already renders the name
    *  as adjacent visible text, so announcing it here too would duplicate it.
@@ -232,7 +241,7 @@ export function Avatar({
         ring ? 'ring-2 ring-cyan-500/50 ring-offset-2 ring-offset-bg' : ''
       } ${className}`}
     >
-      <span aria-hidden="true" className="opt-center">{emoji}</span>
+      <span aria-hidden="true" className="font-bold tracking-tight">{initialsOf(name)}</span>
     </span>
   );
 }

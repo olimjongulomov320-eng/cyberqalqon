@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { levelFromXp } from '@/lib/gamification';
 import { valueAt } from '@/lib/countUp';
 import { MAX_HEARTS } from '@/lib/hearts';
-import { BoltIcon, FlameIcon, HeartIcon, SparkleIcon } from '@/components/icons';
+import { BoltIcon, ContentIcon, FlameIcon, HeartIcon, SparkleIcon } from '@/components/icons';
 
 /* ── Hearts ────────────────────────────────────────────────────────────────── */
 export function Hearts({ count, label }: { count: number; label: string }) {
@@ -171,10 +171,10 @@ export function DailyGoal({ dailyXp, goal }: { dailyXp: number; goal: number }) 
 }
 
 /* ── Achievement badge / toast ─────────────────────────────────────────────── */
-export function AchievementBadge({ emoji, title }: { emoji: string; title: string }) {
+export function AchievementBadge({ icon, title }: { icon: string; title: string }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-md border border-warning/30 bg-warning/10 px-2.5 py-1 text-xs font-bold text-warning">
-      <span aria-hidden="true">{emoji}</span>
+      <ContentIcon name={icon} size={14} className="shrink-0" />
       <span className="truncate">{title}</span>
     </span>
   );

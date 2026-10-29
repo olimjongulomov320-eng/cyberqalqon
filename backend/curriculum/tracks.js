@@ -22,7 +22,7 @@ const T = (uz, ru) => ({ uz, ru });
 const TRACKS = [
   {
     slug: 'fundamentals',
-    icon: '🧠',
+    icon: 'shield-check',
     order: 1,
     level: 'beginner',
     title: T('Kiber xavfsizlik asoslari', 'Основы кибербезопасности'),
@@ -37,7 +37,7 @@ const TRACKS = [
   },
   {
     slug: 'accounts-and-authentication',
-    icon: '🔑',
+    icon: 'key',
     order: 2,
     title: T('Hisob va autentifikatsiya xavfsizligi', 'Безопасность аккаунтов и аутентификация'),
     description: T('Parollar, ikki bosqichli tasdiq, sessiyalar va kirish huquqlari.', 'Пароли, двухэтапная защита, сессии и права доступа.'),
@@ -51,7 +51,7 @@ const TRACKS = [
   },
   {
     slug: 'phishing-and-social-engineering',
-    icon: '🎣',
+    icon: 'envelope-simple',
     order: 3,
     level: 'beginner',
     title: T('Phishing va ijtimoiy muhandislik', 'Фишинг и социальная инженерия'),
@@ -66,7 +66,7 @@ const TRACKS = [
   },
   {
     slug: 'web-security',
-    icon: '🔐',
+    icon: 'globe',
     order: 4,
     title: T('Veb xavfsizlik asoslari', 'Основы веб-безопасности'),
     description: T('Veb-ilovalardagi keng tarqalgan zaifliklar va himoya.', 'Распространённые уязвимости веб-приложений и защита.'),
@@ -80,7 +80,7 @@ const TRACKS = [
   },
   {
     slug: 'network-security',
-    icon: '🌐',
+    icon: 'tree-structure',
     order: 5,
     title: T('Tarmoq xavfsizligi asoslari', 'Основы сетевой безопасности'),
     description: T('Tarmoq qanday ishlaydi va uni qanday himoya qilish kerak.', 'Как работает сеть и как её защищать.'),
@@ -98,7 +98,7 @@ const TRACKS = [
   },
   {
     slug: 'linux-security',
-    icon: '🐧',
+    icon: 'terminal-window',
     order: 6,
     title: T('Linux va buyruq qatori xavfsizligi', 'Безопасность Linux и командной строки'),
     description: T('Terminal, ruxsatlar, foydalanuvchilar va xavfsiz sozlamalar.', 'Терминал, права, пользователи и безопасные настройки.'),
@@ -115,7 +115,7 @@ const TRACKS = [
   },
   {
     slug: 'privacy-and-data-protection',
-    icon: '🛡️',
+    icon: 'lock-key',
     order: 7,
     level: 'beginner',
     title: T('Maxfiylik va ma’lumotlarni himoya qilish', 'Приватность и защита данных'),
@@ -133,7 +133,7 @@ const TRACKS = [
   },
   {
     slug: 'incident-response',
-    icon: '🚨',
+    icon: 'siren',
     order: 8,
     title: T('Hodisalarni aniqlash va javob', 'Распознавание инцидентов и реагирование'),
     description: T('Monitoring, ogohlantirish, zaifliklar va hodisaga javob bosqichlari.', 'Мониторинг, оповещения, уязвимости и этапы реагирования.'),
