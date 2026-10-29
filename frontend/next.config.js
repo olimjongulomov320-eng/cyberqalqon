@@ -16,7 +16,8 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   workboxOptions: {
     runtimeCaching: [
       {
-        urlPattern: ({ url }) => url.pathname.startsWith('/v1/') || url.hostname.endsWith('onrender.com'),
+        urlPattern: ({ url }) =>
+          url.pathname.startsWith('/v1/') || url.hostname.endsWith('onrender.com') || url.hostname === 'api.pwnedpasswords.com',
         handler: 'NetworkOnly',
       },
     ],

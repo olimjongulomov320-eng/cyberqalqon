@@ -38,12 +38,6 @@ export function AuthBrandPanel({
         }}
       />
 
-      {/* A single cyan bloom anchored top-centre - the only glow in the panel. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-500/[0.12] blur-3xl"
-      />
-
       <div className="relative z-10 flex h-full flex-col justify-between gap-16 p-10">
         <div className="flex items-center gap-3">
           <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={34} height={34} className="shrink-0" priority />

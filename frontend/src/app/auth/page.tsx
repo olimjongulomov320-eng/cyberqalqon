@@ -1,13 +1,14 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, authLogin, authRegister } from '@/lib/api';
 import { safeNextPath } from '@/lib/redirect';
+import { PwnedResult, checkPwned } from '@/lib/pwned';
+import PasswordPolicy from '@/components/PasswordPolicy';
 import { Button, Field, ErrorNote, SuccessNote } from '@/components/ui';
 import { AuthBrandPanel } from '@/components/AuthBrandPanel';
 import { ArrowLeftIcon, CheckIcon, EyeIcon, EyeOffIcon } from '@/components/icons';
@@ -78,6 +79,7 @@ function PasswordInput({
   label,
   error,
   hint,
+  onCaps,
 }: {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -90,6 +92,8 @@ function PasswordInput({
   label: string;
   error?: string;
   hint?: string;
+  /** Reports Caps Lock state so the form can warn before a mistyped password. */
+  onCaps?: (on: boolean) => void;
 }) {
   const { lang } = useApp();
   const tr = makeT(lang);
@@ -101,10 +105,11 @@ function PasswordInput({
           value={value}
           onChange={onChange}
           onBlur={onBlur}
+          onKeyUp={e => onCaps?.(e.getModifierState('CapsLock'))}
           autoComplete={autoComplete}
           placeholder={placeholder}
           aria-invalid={invalid || undefined}
-          className={`input-base pr-11 ${invalid ? 'input-error' : ''}`}
+          className={`input-base pr-11 font-mono ${invalid ? 'input-error' : ''}`}
         />
         <button
           type="button"
@@ -153,8 +158,28 @@ export default function AuthPage() {
   const [showPw, setShowPw] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [terms, setTerms] = useState(false);
+  const [caps, setCaps] = useState(false);
+  const [breach, setBreach] = useState<PwnedResult | 'checking' | null>(null);
 
   const isRegister = mode === 'register';
+
+  // Breach lookup: only while registering and only once the policy is met, and
+  // debounced so typing does not fire a request per keystroke.
+  useEffect(() => {
+    if (!isRegister || !isStrongPassword(form.password)) {
+      setBreach(null);
+      return;
+    }
+    let alive = true;
+    setBreach('checking');
+    const t = window.setTimeout(() => {
+      checkPwned(form.password).then(r => alive && setBreach(r));
+    }, 600);
+    return () => {
+      alive = false;
+      window.clearTimeout(t);
+    };
+  }, [isRegister, form.password]);
 
   const errors = useMemo(() => {
     const e: Partial<Record<keyof typeof form, string>> = {};
@@ -179,7 +204,8 @@ export default function AuthPage() {
             EMAIL_RE.test(form.email) &&
             isStrongPassword(form.password) &&
             form.confirm === form.password &&
-            terms
+            terms &&
+            !(breach && breach !== 'checking' && breach.status === 'pwned')
         )
       : Boolean(form.username.trim() && form.password);
 
@@ -233,19 +259,19 @@ export default function AuthPage() {
         headline={isRegister ? tr('authHeadlineRegister') : tr('authHeadlineLogin')}
         body={isRegister ? tr('authBodyRegister') : tr('authBodyLogin')}
       >
-        <ul className="mt-8 space-y-3">
-          {[tr('authPoint1'), tr('authPoint2'), tr('authPoint3')].map((p, i) => (
-            <li
-              key={i}
-              className="flex items-center gap-3 text-sm text-text-secondary"
-            >
-              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-cyan-500/15 text-cyan-300">
-                <CheckIcon size={13} />
-              </span>
-              {p}
-            </li>
-          ))}
-        </ul>
+        <div className="mt-8 rounded-md border border-border bg-surface-950/50">
+          <p className="border-b border-border px-4 py-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-widest text-text-muted">
+            {tr('secPanelTitle')}
+          </p>
+          <ul className="divide-y divide-border/60">
+            {['secFact1', 'secFact2', 'secFact3', 'secFact4'].map(k => (
+              <li key={k} className="flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary">
+                <CheckIcon size={15} className="shrink-0 text-success" />
+                {tr(k)}
+              </li>
+            ))}
+          </ul>
+        </div>
       </AuthBrandPanel>
 
       <div className="flex flex-col justify-center py-2 sm:py-6">
@@ -254,7 +280,8 @@ export default function AuthPage() {
           <span className="grid h-14 w-14 place-items-center rounded-lg border border-border bg-surface-900 shadow-card edge-light lg:hidden">
             <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.svg`} alt="" width={32} height={32} priority />
           </span>
-          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-text-primary lg:mt-0">
+          <p className="label mt-4 text-cyan-400 lg:mt-0">{tr('authSecureLabel')}</p>
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-text-primary">
             {isRegister ? tr('createAccount') : tr('welcomeBack')}
           </h1>
           <p className="mt-2 max-w-sm text-sm text-text-secondary">
@@ -266,7 +293,7 @@ export default function AuthPage() {
         <div
           role="tablist"
           aria-label={tr('login')}
-          className="relative mb-6 grid grid-cols-2 gap-1 rounded-lg border border-border bg-surface-900 p-1"
+          className="mb-6 grid grid-cols-2 gap-1 rounded-md border border-border bg-surface-900 p-1"
         >
           {(['login', 'register'] as const).map(m => (
             <button
@@ -274,18 +301,11 @@ export default function AuthPage() {
               role="tab"
               aria-selected={mode === m}
               onClick={() => switchMode(m)}
-              className="relative z-10 rounded-lg py-2.5 text-sm font-semibold transition-colors"
+              className={`rounded-sm py-2 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
+                mode === m ? 'bg-cyan-400 text-text-inverse' : 'text-text-muted hover:text-text-primary'
+              }`}
             >
-              {mode === m && (
-                <motion.span
-                  layoutId="auth-tab"
-                  className="absolute inset-0 -z-10 rounded-lg bg-cyan-400 shadow-[0_6px_18px_-8px_rgb(6_182_212_/_0.8)]"
-                  transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-                />
-              )}
-              <span className={mode === m ? 'text-text-inverse' : 'text-text-muted hover:text-text-secondary'}>
-                {m === 'login' ? tr('login') : tr('register')}
-              </span>
+              {m === 'login' ? tr('login') : tr('register')}
             </button>
           ))}
         </div>
@@ -322,7 +342,7 @@ export default function AuthPage() {
               spellCheck={false}
               placeholder={isRegister ? tr('usernamePlaceholder') : tr('loginIdentifierPlaceholder')}
               aria-invalid={submitted && Boolean(errors.username) || undefined}
-              className={`input-base ${submitted && errors.username ? 'input-error' : ''}`}
+              className={`input-base font-mono ${submitted && errors.username ? 'input-error' : ''}`}
             />
           </Field>
 
@@ -338,7 +358,7 @@ export default function AuthPage() {
                 spellCheck={false}
                 placeholder={tr('emailPlaceholder')}
                 aria-invalid={submitted && Boolean(errors.email) || undefined}
-                className={`input-base ${submitted && errors.email ? 'input-error' : ''}`}
+                className={`input-base font-mono ${submitted && errors.email ? 'input-error' : ''}`}
               />
             </Field>
           )}
@@ -354,8 +374,14 @@ export default function AuthPage() {
             show={showPw}
             toggle={() => setShowPw(v => !v)}
             error={touched.password ? errors.password : undefined}
-            hint={isRegister ? tr('passwordHint') : undefined}
+            onCaps={setCaps}
           />
+
+          {caps && (
+            <p role="status" className="-mt-2 font-mono text-[0.6875rem] font-semibold text-warning">
+              {tr('capsOn')}
+            </p>
+          )}
 
           {!isRegister && (
             <p className="-mt-1 text-right text-xs">
@@ -367,6 +393,7 @@ export default function AuthPage() {
 
           {isRegister && (
             <>
+              <PasswordPolicy password={form.password} breach={breach} />
               <PasswordStrength password={form.password} tr={tr} />
               <PasswordInput
                 label={tr('confirmPassword')}
