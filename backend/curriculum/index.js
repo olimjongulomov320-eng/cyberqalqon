@@ -18,6 +18,9 @@ const FILES = [
   { file: 'defensive-security', domain: 'defensive-security' },
   { file: 'cloud-security', domain: 'cloud-security' },
   { file: 'ethical-testing', domain: 'ethical-testing' },
+  // Draft awareness content (needs native-speaker review — see CONTENT_REVIEW.md)
+  { file: 'phishing', domain: 'phishing-awareness' },
+  { file: 'privacy', domain: 'privacy-data' },
   // it-and-crypto.js carries modules for several domains (see `domain` field)
   { file: 'it-and-crypto', domain: null },
 ];
@@ -70,6 +73,12 @@ const DOMAINS = [
   { slug: 'ethical-testing', path: 'cybersecurity', icon: '🎯', order_index: 8,
     title: { uz: 'Etik test', ru: 'Этичное тестирование' },
     description: { uz: "Ruxsat, razvedka, skanerlash, ekspluatatsiya va hisobot.", ru: 'Разрешение, разведка, сканирование, эксплуатация и отчёт.' } },
+  { slug: 'phishing-awareness', path: 'cybersecurity', icon: '🎣', order_index: 9,
+    title: { uz: 'Phishing va ijtimoiy muhandislik', ru: 'Фишинг и социальная инженерия' },
+    description: { uz: 'Shubhali xabarlar, aldov usullari va xavfsiz havolalar.', ru: 'Подозрительные сообщения, приёмы обмана и безопасные ссылки.' } },
+  { slug: 'privacy-data', path: 'cybersecurity', icon: '🛡️', order_index: 10,
+    title: { uz: 'Maxfiylik va ma\'lumot himoyasi', ru: 'Приватность и защита данных' },
+    description: { uz: 'Shaxsiy ma\'lumot, ulashish va sizib chiqishdan keyingi harakatlar.', ru: 'Персональные данные, публикации и действия после утечки.' } },
   { slug: 'it-basics', path: 'it-fundamentals', icon: '⚙️', order_index: 1,
     title: { uz: 'Kompyuter va tizimlar', ru: 'Компьютер и системы' },
     description: { uz: 'Uskuna, operatsion tizim va ularning vazifasi.', ru: 'Железо, операционные системы и их роль.' } },

@@ -3,6 +3,9 @@ const pool = require('../db');
 const { optionalAuth } = require('../middleware/auth');
 const { localizeExercise, TYPES } = require('../lib/grade');
 const { DIFFICULTIES, difficultyForModule } = require('../lib/difficulty');
+const { TRACKS, trackOfModule } = require('../curriculum/tracks');
+
+const TRACK_OF = trackOfModule();
 
 const router = Router();
 
@@ -101,6 +104,7 @@ router.get('/', optionalAuth, async (req, res, next) => {
   try {
     const lang = pickLang(req.query);
     const domain = typeof req.query.domain === 'string' ? req.query.domain.slice(0, 60) : '';
+    const track = TRACKS.some(t => t.slug === req.query.track) ? req.query.track : '';
     const type = TYPES.includes(req.query.type) ? req.query.type : '';
     const difficulty = DIFFICULTIES.includes(req.query.difficulty) ? req.query.difficulty : '';
     const status = STATUSES.includes(req.query.status) ? req.query.status : '';
@@ -133,6 +137,7 @@ router.get('/', optionalAuth, async (req, res, next) => {
           domain_icon: m.domain_icon,
           path_slug: m.path_slug,
           path_title: m.path_title,
+          track_slug: TRACK_OF.get(m.slug) ?? null,
           module_title: m.module_title,
           module_kind: m.kind,
           difficulty: m.difficulty,
@@ -146,6 +151,8 @@ router.get('/', optionalAuth, async (req, res, next) => {
     // counts stay stable while the learner narrows the list.
     const facetDomains = [];
     const domainSeen = new Map();
+    const trackCounts = new Map();
+    for (const p of all) if (p.track_slug) trackCounts.set(p.track_slug, (trackCounts.get(p.track_slug) ?? 0) + 1);
     const facetDifficulty = Object.fromEntries(DIFFICULTIES.map(d => [d, 0]));
     const facetType = Object.fromEntries(TYPES.map(t => [t, 0]));
     const facetStatus = Object.fromEntries(STATUSES.map(s => [s, 0]));
@@ -164,6 +171,7 @@ router.get('/', optionalAuth, async (req, res, next) => {
     const filtered = all.filter(
       p =>
         (!domain || p.domain_slug === domain) &&
+        (!track || p.track_slug === track) &&
         (!type || p.type === type) &&
         (!difficulty || p.difficulty === difficulty) &&
         (!status || p.status === status) &&
@@ -188,6 +196,9 @@ router.get('/', optionalAuth, async (req, res, next) => {
       solved_total: all.filter(p => p.status === 'solved').length,
       facets: {
         domains: facetDomains,
+        tracks: TRACKS.filter(t => trackCounts.has(t.slug)).map(t => ({
+          slug: t.slug, title: t.title[lang], icon: t.icon, count: trackCounts.get(t.slug),
+        })),
         difficulties: DIFFICULTIES.map(key => ({ key, count: facetDifficulty[key] })),
         types: TYPES.map(key => ({ key, count: facetType[key] })),
         statuses: req.user ? STATUSES.map(key => ({ key, count: facetStatus[key] })) : [],

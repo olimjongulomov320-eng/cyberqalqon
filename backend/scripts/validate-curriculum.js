@@ -17,6 +17,8 @@ const DOMAINS = process.env.ONLY
   'cloud-security',
   'ethical-testing',
   'it-and-crypto',
+  'phishing',
+  'privacy',
 ];
 
 const MODULE_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
