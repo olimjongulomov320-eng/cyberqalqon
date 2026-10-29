@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function LeaderboardLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <div className="mx-auto w-full max-w-3xl">{children}</div>;
 }

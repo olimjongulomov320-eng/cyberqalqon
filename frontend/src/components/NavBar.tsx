@@ -37,7 +37,7 @@ export default function NavBar() {
 
   return (
     <header className="sticky top-0 z-nav border-b border-border bg-surface-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-surface-950/70">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
           aria-label={tr('appName')}

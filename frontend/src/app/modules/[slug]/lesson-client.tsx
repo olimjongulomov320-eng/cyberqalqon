@@ -194,7 +194,7 @@ export default function LessonView({ slug }: { slug: string }) {
 
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary [overflow-wrap:anywhere] sm:text-[1.75rem]">{module.title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary [overflow-wrap:anywhere] lg:text-3xl">{module.title}</h1>
           <p className="mt-1 text-sm text-text-secondary">
             {module.kind === 'checkpoint' ? <Badge tone="warning">{tr('checkpoint')}</Badge> : null}{' '}
             <span className="num">{total}</span> {tr('lessonTasks').toLowerCase()} | <span className="num">{module.xp_reward}</span> XP
@@ -209,14 +209,14 @@ export default function LessonView({ slug }: { slug: string }) {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start xl:gap-8 xl:grid-cols-[minmax(0,4fr)_minmax(0,6fr)]">
         {/* Concept */}
         <section
           aria-label={tr('lessonConcept')}
-          className="rounded-lg border border-border bg-surface-900 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto"
+          className="rounded-lg border border-border bg-surface-900 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto"
         >
           <h2 className="border-b border-border/60 px-4 py-2.5 text-sm font-bold text-text-primary">{tr('lessonConcept')}</h2>
-          <div className="lesson px-4 py-4 text-sm">
+          <div className="lesson px-5 py-5 text-[0.9375rem] leading-relaxed lg:text-base">
             <ReactMarkdown>{module.content}</ReactMarkdown>
           </div>
         </section>
@@ -235,7 +235,7 @@ export default function LessonView({ slug }: { slug: string }) {
             />
           ))}
 
-          <div className="sticky bottom-[4.5rem] z-10 sm:bottom-3 flex flex-wrap items-center gap-3 rounded-lg border border-border bg-surface-900/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-surface-900/80">
+          <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-surface-900 p-3 max-lg:sticky max-lg:bottom-[4.5rem] max-lg:z-10 max-lg:bg-surface-900/95 max-lg:backdrop-blur">
             <span className="text-sm text-text-secondary">
               {allSolved ? (
                 <span className="inline-flex items-center gap-1.5 font-semibold text-success">

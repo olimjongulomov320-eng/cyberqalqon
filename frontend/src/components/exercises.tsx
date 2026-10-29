@@ -63,7 +63,7 @@ function Question({ ex, children }: { ex: Exercise; children: React.ReactNode })
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-[1.0625rem] font-bold leading-snug text-white text-pretty sm:text-lg">{ex.q}</h2>
+      <h2 className="text-[1.0625rem] font-bold leading-snug text-text-primary text-pretty sm:text-lg lg:text-xl">{ex.q}</h2>
       {ex.code && (
         <pre className="overflow-x-auto rounded-sm border border-border border-l-2 border-l-cyan-400 bg-surface-950 px-3 py-2.5 font-mono text-[0.8125rem] leading-relaxed text-text-primary">
           <code>{ex.code}</code>
@@ -173,7 +173,7 @@ function SelectOne({
             onClick={() => (locked ? undefined : onChange(multi ? toggleIn(selected, opt.id) : opt.id))}
             onKeyDown={e => onOptionKey(e, i)}
             disabled={locked}
-            className={`flex items-center gap-3 rounded-lg border px-3.5 py-3 text-left text-sm font-medium transition-colors ${
+            className={`flex items-center gap-3 rounded-lg border px-4 py-3.5 text-left text-[0.9375rem] font-medium transition-colors lg:text-base ${
               locked ? 'cursor-default' : 'active:scale-[0.995]'
             } ${optionClass(state)}`}
           >

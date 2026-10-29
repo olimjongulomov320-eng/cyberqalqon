@@ -37,10 +37,11 @@ function Shell({ children }: { children: ReactNode }) {
   // lessons and legal prose stay at a reading-measure column; landing,
   // dashboard, learn map, practice, leaderboard and profile get the wide
   // composition that suits richer layouts.
-  const narrow = Boolean(
-    pathname?.startsWith('/modules') || pathname?.startsWith('/privacy') || pathname?.startsWith('/terms')
-  );
-  const width = narrow ? 'max-w-3xl' : 'max-w-5xl';
+  // Wide laptop screens get a wide column; only long-form prose (legal text)
+  // keeps a reading measure. Pages that are lists by nature (leaderboard,
+  // review) centre themselves at a narrower width in their own layout.
+  const prose = Boolean(pathname?.startsWith('/privacy') || pathname?.startsWith('/terms'));
+  const width = prose ? 'max-w-3xl' : 'max-w-7xl';
 
   // The lesson runner is treated as a test surface: no marketing footer, a
   // flex column so the active question can fill exactly the space between the
@@ -81,7 +82,7 @@ function Footer() {
   const { lang } = useApp();
   const tr = makeT(lang);
   return (
-    <footer className="mx-auto hidden w-full max-w-5xl items-center justify-between gap-4 border-t border-border/60 px-4 pb-8 pt-5 text-xs text-text-muted sm:flex sm:px-6 lg:px-8">
+    <footer className="mx-auto hidden w-full max-w-7xl items-center justify-between gap-4 border-t border-border/60 px-4 pb-8 pt-5 text-xs text-text-muted sm:flex sm:px-6 lg:px-8">
       <p>CyberQalqon · {tr('tagline')}</p>
       <nav className="flex gap-4">
         <Link href="/privacy" className="transition-colors hover:text-text-secondary">{tr('privacy')}</Link>

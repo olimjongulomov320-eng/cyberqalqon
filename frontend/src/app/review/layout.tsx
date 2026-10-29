@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function ReviewLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <div className="mx-auto w-full max-w-4xl">{children}</div>;
 }
