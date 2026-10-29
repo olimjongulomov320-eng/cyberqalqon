@@ -62,6 +62,10 @@ export default function TaskCard({
 
   const solved = status === 'solved';
   const ready = isAnswerReady(ex, value);
+  // A task solved in an earlier visit has no answer on this screen to show, so
+  // it collapses to its prompt and verdict. The options come back, with the
+  // correct one marked, once the learner asks for the explanation.
+  const collapsed = solved && initiallySolved && !shown;
 
   async function check() {
     if (!ready || busy) return;
@@ -124,6 +128,9 @@ export default function TaskCard({
       </header>
 
       <div className="p-4">
+        {collapsed ? (
+          <p className="text-[1.0625rem] font-bold leading-snug text-text-primary text-pretty lg:text-lg">{ex.q}</p>
+        ) : (
         <ExerciseRenderer
           ex={ex}
           value={value}
@@ -134,6 +141,7 @@ export default function TaskCard({
           locked={solved}
           reveal={shown?.reveal}
         />
+        )}
 
         {!solved && (
           <div className="mt-4 flex flex-wrap items-center gap-2">
