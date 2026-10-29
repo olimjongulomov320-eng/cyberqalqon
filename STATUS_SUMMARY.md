@@ -67,6 +67,21 @@ core loop, design language, architecture) see **[CONCEPT.md](CONCEPT.md)**.
 - Navigation: Home, Learn, Practice (`/problems`, now with a track filter),
   Assessments, Progress. Mistake review moved to `/review` (`/practice`
   redirects there); the leaderboard is linked from Progress.
-- Assessments today are the existing end-of-topic checkpoints; separate scored
-  attempts, pass marks and retake history are not built yet.
+- Topic checkpoints are still graded like lessons. Track assessments (Stage 2)
+  are scored on the server — see below.
+
+## Scored assessments (Stage 2)
+
+- One assessment per track (`backend/curriculum/assessments.js`): 10 questions
+  drawn by the server from the track's own exercises, 20-minute limit, 70% pass
+  mark, +40 XP on the first pass only (unique index). Opens once every lesson of
+  the track is completed.
+- `GET /v1/assessments`, `POST /v1/assessments/:slug/start`,
+  `GET /v1/assessments/attempts/:id`, `POST /v1/assessments/attempts/:id/submit`.
+  The client never sees answers before submitting; the server owns the clock
+  (30 s submit grace), grades once and replays the stored result on a repeat.
+- While a paper is open, `/check`, `/practice`, `/hint` and `/review/submit`
+  refuse the drawn exercises (HTTP 423).
+- Limitation: lessons reveal answers, so this is a self-check, not a proctored
+  certificate, and the UI says so. Assessment results do not feed mastery yet.
 
