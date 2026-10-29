@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
-import { LearningPath, fetchPaths } from '@/lib/api';
+import { AssessmentSummary, LearningPath, fetchAssessments, fetchPaths } from '@/lib/api';
 import { Badge, ButtonLink, Card, EmptyState, ErrorNote, Skeleton } from '@/components/ui';
 import { CompassIcon, LockIcon } from '@/components/icons';
 
@@ -27,6 +27,17 @@ export default function AssessmentsPage() {
   const tr = makeT(lang);
   const [items, setItems] = useState<Item[] | null>(null);
   const [failed, setFailed] = useState(false);
+  const [scored, setScored] = useState<AssessmentSummary[] | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetchAssessments(lang)
+      .then(d => alive && setScored(d.assessments))
+      .catch(() => alive && setScored([]));
+    return () => {
+      alive = false;
+    };
+  }, [lang, user?.id]);
 
   useEffect(() => {
     let alive = true;
@@ -73,7 +84,54 @@ export default function AssessmentsPage() {
         </div>
       )}
 
-      <div className="mt-6">
+      <section aria-labelledby="scored-h" className="mt-6">
+        <h2 id="scored-h" className="text-sm font-bold uppercase tracking-wide text-text-muted">{tr('assessTrackTitle')}</h2>
+        {!scored ? (
+          <Skeleton className="mt-3 h-24 w-full" />
+        ) : (
+          <ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {scored.map(a => (
+              <li key={a.slug}>
+                <Card className="flex h-full flex-col gap-3 p-4">
+                  <div className="flex items-start gap-3">
+                    <span aria-hidden="true" className="text-2xl leading-none">{a.icon}</span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-bold leading-snug text-text-primary">{a.title}</h3>
+                      <p className="mt-0.5 text-xs text-text-secondary">
+                        {a.question_count} {tr('assessQuestions')} · {a.time_limit_minutes} {tr('assessMinutes')} · {tr('assessPassMark')} {a.pass_mark}%
+                      </p>
+                    </div>
+                    {a.passed && <Badge tone="success">{tr('assessPassed')}</Badge>}
+                  </div>
+                  {a.attempts > 0 && (
+                    <p className="num text-xs text-text-muted">
+                      {tr('assessBest')}: {a.best_percent}% · {a.attempts} {tr('assessAttempts')}
+                    </p>
+                  )}
+                  <div className="mt-auto flex flex-wrap items-center gap-2">
+                    {a.in_progress ? (
+                      <ButtonLink href={`/assessments/take?attempt=${a.in_progress.attempt_id}`} size="sm">{tr('assessContinue')}</ButtonLink>
+                    ) : a.eligible && user ? (
+                      <ButtonLink href={`/assessments/take?slug=${a.slug}`} size="sm" variant={a.attempts > 0 ? 'secondary' : 'primary'}>
+                        {a.attempts > 0 ? tr('assessRetake') : tr('assessmentStart')}
+                      </ButtonLink>
+                    ) : (
+                      <p className="flex items-center gap-1.5 text-xs text-text-muted">
+                        <LockIcon size={13} />
+                        {tr('assessNeedLessons')} {a.lessons_completed}/{a.lessons_required}
+                      </p>
+                    )}
+                    {a.needs_review && <Badge tone="warning">{tr('trackDraft')}</Badge>}
+                  </div>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <h2 className="mt-10 text-sm font-bold uppercase tracking-wide text-text-muted">{tr('assessCheckpointsTitle')}</h2>
+      <div className="mt-3">
         {failed ? (
           <Card>
             <EmptyState icon={<CompassIcon size={26} className="text-text-muted" />} title={tr('loadError')} body={tr('networkError')} />

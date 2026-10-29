@@ -43,6 +43,7 @@ export const ACHIEVEMENTS: Record<string, AchievementMeta> = {
   xp_2000: { emoji: '👑', titleKey: 'ach_xp_2000_t', descKey: 'ach_xp_2000_d' },
   reviewer: { emoji: '📚', titleKey: 'ach_reviewer_t', descKey: 'ach_reviewer_d' },
   checkpoint: { emoji: '🏁', titleKey: 'ach_checkpoint_t', descKey: 'ach_checkpoint_d' },
+  assessment_pass: { emoji: '🎓', titleKey: 'ach_assessment_pass_t', descKey: 'ach_assessment_pass_d' },
   network_explorer: { emoji: '🌐', titleKey: 'ach_network_explorer_t', descKey: 'ach_network_explorer_d' },
   linux_penguin: { emoji: '🐧', titleKey: 'ach_linux_penguin_t', descKey: 'ach_linux_penguin_d' },
   web_defender: { emoji: '🛡️', titleKey: 'ach_web_defender_t', descKey: 'ach_web_defender_d' },

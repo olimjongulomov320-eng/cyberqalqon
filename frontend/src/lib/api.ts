@@ -648,3 +648,84 @@ export interface TracksPayload {
 export function fetchTracks(lang: string) {
   return req<TracksPayload>(`/tracks?lang=${lang}`);
 }
+
+// ── Scored assessments (server draws, times and grades) ───────────────────────
+export interface AssessmentSummary {
+  slug: string;
+  track_slug: string;
+  icon: string;
+  title: string;
+  question_count: number;
+  pass_mark: number;
+  time_limit_minutes: number;
+  xp: number;
+  needs_review: boolean;
+  lessons_required: number;
+  lessons_completed: number;
+  eligible: boolean;
+  in_progress: { attempt_id: string; expires_at: string } | null;
+  attempts: number;
+  best_percent: number | null;
+  passed: boolean;
+  last_at: string | null;
+}
+
+export type AssessmentQuestion = Exercise & { n: number };
+
+export interface AssessmentPaper {
+  attempt_id: string;
+  assessment: string;
+  title: string;
+  expires_at: string;
+  pass_mark: number;
+  questions: AssessmentQuestion[];
+}
+
+export interface AssessmentResultItem {
+  n: number;
+  module_slug: string;
+  question: string;
+  answered: boolean;
+  correct: boolean;
+  explain: string;
+  reveal: Reveal;
+  exercise: AssessmentQuestion | null;
+}
+
+export interface AssessmentResult {
+  attempt_id: string;
+  assessment: string;
+  status: 'submitted';
+  score: number;
+  total: number;
+  percent: number;
+  pass_mark: number;
+  passed: boolean;
+  per_module: Record<string, { correct: number; total: number }>;
+  items: AssessmentResultItem[];
+  replayed?: boolean;
+  xp_earned?: number;
+  new_achievements?: string[];
+}
+
+export function fetchAssessments(lang: string) {
+  return req<{ assessments: AssessmentSummary[] }>(`/assessments?lang=${lang}`);
+}
+
+export function startAssessment(slug: string, lang: string) {
+  return req<AssessmentPaper>(`/assessments/${encodeURIComponent(slug)}/start?lang=${lang}`, {
+    method: 'POST',
+    body: '{}',
+  });
+}
+
+export function fetchAttempt(id: string, lang: string) {
+  return req<AssessmentPaper | AssessmentResult>(`/assessments/attempts/${encodeURIComponent(id)}?lang=${lang}`);
+}
+
+export function submitAssessment(id: string, answers: { n: number; value: AnswerValue }[], lang: string) {
+  return req<AssessmentResult>(`/assessments/attempts/${encodeURIComponent(id)}/submit?lang=${lang}`, {
+    method: 'POST',
+    body: JSON.stringify({ answers }),
+  });
+}
