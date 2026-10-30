@@ -2,6 +2,7 @@ const { Router } = require('express');
 const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { requireAuth, optionalAuth } = require('../middleware/auth');
+const { isUnder13 } = require('../curriculum/ageGroups');
 const { CHALLENGES, DIFFICULTIES, bySlug, pickLang, summary, detail, validateReport } = require('../lib/challenges');
 
 const router = Router();
@@ -83,6 +84,10 @@ router.post('/:slug/submit', submitLimiter, requireAuth, async (req, res, next) 
   try {
     const c = bySlug.get(req.params.slug);
     if (!c) return res.status(404).json({ error: { code: 'CHALLENGE_NOT_FOUND', message: 'Challenge not found.' } });
+    const { rows: who } = await pool.query('SELECT age_group FROM users WHERE id = $1', [req.user.id]);
+    if (isUnder13(who[0]?.age_group)) {
+      return res.status(403).json({ error: { code: 'AGE_RESTRICTED', message: 'Code challenges are not available for this age group.' } });
+    }
     const v = validateReport(c, req.body);
     if (!v.ok) return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: v.message } });
 

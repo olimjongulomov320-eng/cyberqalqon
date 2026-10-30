@@ -23,6 +23,34 @@ correct, all names/addresses fictional (`example.*` only).
 | `data-breach-what-to-do` | `backend/curriculum/privacy.js` | uz + ru |
 | `checkpoint-privacy` | `backend/curriculum/privacy.js` | uz + ru |
 
+## Age-group paths (draft)
+
+Four new paths, one per age group (1-4 for parents, 5-7, 8-12, 13-17), plus the
+group names and descriptions in `backend/curriculum/ageGroups.js` and the
+age-picker strings in `frontend/src/lib/i18n.ts`. Children's content needs a
+reviewer who works with that age group, not only a language check.
+
+| Module | File | Notes |
+|---|---|---|
+| `screens-at-1-4` | `backend/curriculum/age-parents-1-4.js` | uz + ru, for parents; screen-time figures follow WHO 2019 guidance as understood by the author - an early-years specialist must confirm |
+| `safe-device-for-child` | `backend/curriculum/age-parents-1-4.js` | uz + ru, for parents; screen-time figures follow WHO 2019 guidance as understood by the author - an early-years specialist must confirm |
+| `child-data-and-photos` | `backend/curriculum/age-parents-1-4.js` | uz + ru, for parents; screen-time figures follow WHO 2019 guidance as understood by the author - an early-years specialist must confirm |
+| `first-safety-rules` | `backend/curriculum/age-parents-1-4.js` | uz + ru, for parents; screen-time figures follow WHO 2019 guidance as understood by the author - an early-years specialist must confirm |
+| `secret-words` | `backend/curriculum/age-kids-5-7.js` | uz + ru, read with a grown-up; needs an early-years educator |
+| `ask-a-grown-up` | `backend/curriculum/age-kids-5-7.js` | uz + ru, read with a grown-up; needs an early-years educator |
+| `what-to-say` | `backend/curriculum/age-kids-5-7.js` | uz + ru, read with a grown-up; needs an early-years educator |
+| `be-kind-online` | `backend/curriculum/age-kids-5-7.js` | uz + ru, read with a grown-up; needs an early-years educator |
+| `strong-passwords-kids` | `backend/curriculum/age-kids-8-12.js` | uz + ru; needs a child-safety educator |
+| `fake-messages-and-offers` | `backend/curriculum/age-kids-8-12.js` | uz + ru; needs a child-safety educator |
+| `game-chat-safety` | `backend/curriculum/age-kids-8-12.js` | uz + ru; needs a child-safety educator |
+| `when-someone-is-mean` | `backend/curriculum/age-kids-8-12.js` | uz + ru; needs a child-safety educator |
+| `safe-downloads-kids` | `backend/curriculum/age-kids-8-12.js` | uz + ru; needs a child-safety educator |
+| `digital-footprint` | `backend/curriculum/age-teens-13-17.js` | uz + ru; `pressure-and-blackmail` names no hotline: the project owner must add verified local contacts |
+| `protect-your-accounts` | `backend/curriculum/age-teens-13-17.js` | uz + ru; `pressure-and-blackmail` names no hotline: the project owner must add verified local contacts |
+| `scams-aimed-at-teens` | `backend/curriculum/age-teens-13-17.js` | uz + ru; `pressure-and-blackmail` names no hotline: the project owner must add verified local contacts |
+| `pressure-and-blackmail` | `backend/curriculum/age-teens-13-17.js` | uz + ru; `pressure-and-blackmail` names no hotline: the project owner must add verified local contacts |
+| `ethical-hacking-intro` | `backend/curriculum/age-teens-13-17.js` | uz + ru; `pressure-and-blackmail` names no hotline: the project owner must add verified local contacts |
+
 ## Track copy (draft)
 
 Titles, descriptions and learning objectives for all eight tracks in

@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const { forget: forgetSession } = require('../lib/sessions');
+const { SLUGS: AGE_SLUGS, isAgeGroup, isMinor } = require('../curriculum/ageGroups');
 const { DAY_START, WEEK_START, APP_TZ } = require('../lib/time');
 const { trendFromCounts } = require('../lib/stats');
 
@@ -17,7 +18,7 @@ router.use(requireAuth);
 
 const PROFILE_COLUMNS =
   'id, display_name, avatar_emoji, total_xp, lang, low_bandwidth_mode, created_at, ' +
-  'current_streak, longest_streak, daily_goal_xp, email, show_on_leaderboard';
+  'current_streak, longest_streak, daily_goal_xp, email, show_on_leaderboard, age_group';
 
 async function loadProfile(userId) {
   const { rows } = await pool.query(
@@ -68,12 +69,40 @@ router.patch('/me', async (req, res, next) => {
       sets.push(`low_bandwidth_mode = $${params.length}`);
     }
 
+    // Age group: a self-selected band, never a date of birth. Choosing a minor
+    // group also takes the account off the public leaderboard.
+    let effectiveAge;
+    if (req.body?.age_group !== undefined) {
+      if (!isAgeGroup(req.body.age_group)) {
+        return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: `age_group must be one of ${AGE_SLUGS.join(', ')}` } });
+      }
+      effectiveAge = req.body.age_group;
+      params.push(effectiveAge);
+      sets.push(`age_group = $${params.length}`);
+      if (isMinor(effectiveAge)) sets.push('show_on_leaderboard = false');
+    }
+
     if (req.body?.show_on_leaderboard !== undefined) {
       if (typeof req.body.show_on_leaderboard !== 'boolean') {
         return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'show_on_leaderboard must be a boolean' } });
       }
-      params.push(req.body.show_on_leaderboard);
-      sets.push(`show_on_leaderboard = $${params.length}`);
+      if (effectiveAge === undefined) {
+        const { rows } = await pool.query('SELECT age_group FROM users WHERE id = $1', [req.user.id]);
+        effectiveAge = rows[0]?.age_group;
+      }
+      if (isMinor(effectiveAge)) {
+        // Minors are never listed. Turning it off is a no-op; turning it on is refused.
+        if (req.body.show_on_leaderboard) {
+          return res.status(403).json({ error: { code: 'MINOR_NOT_LISTED', message: 'Accounts for children and teens are not shown on the leaderboard.' } });
+        }
+        if (req.body.age_group === undefined) {
+          params.push(false);
+          sets.push(`show_on_leaderboard = $${params.length}`);
+        }
+      } else {
+        params.push(req.body.show_on_leaderboard);
+        sets.push(`show_on_leaderboard = $${params.length}`);
+      }
     }
 
     if (displayName !== undefined) {

@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const pool = require('../db');
 const { verifyTelegramInitData } = require('../middleware/auth');
 const { forget: forgetSession } = require('../lib/sessions');
+const { isAgeGroup, isMinor } = require('../curriculum/ageGroups');
 const { sendMail, canSendMail } = require('../lib/mailer');
 const { RESET_TTL_MINUTES, generateToken, hashToken, passwordProblem } = require('../lib/passwordReset');
 
@@ -84,12 +85,13 @@ router.post('/telegram', async (req, res, next) => {
 // POST /auth/register — email + username
 router.post('/register', registerLimiter, async (req, res, next) => {
   try {
-    const { username, email, password, display_name, lang = 'uz' } = req.body ?? {};
+    const { username, email, password, display_name, lang = 'uz', age_group: ageGroup } = req.body ?? {};
 
     if (![username, email, password, display_name].every(isStr)) {
       return bad(res, 'username, email, password, display_name must be strings');
     }
     if (password.length > 128) return bad(res, 'password must be at most 128 characters');
+    if (ageGroup !== undefined && !isAgeGroup(ageGroup)) return bad(res, 'age_group is not a known group');
     if (!display_name.trim() || display_name.length > 40) return bad(res, 'display_name: 1-40 characters');
     if (email.length > 254) return bad(res, 'Invalid email format');
 
@@ -115,10 +117,10 @@ router.post('/register', registerLimiter, async (req, res, next) => {
 
     try {
       const { rows } = await pool.query(
-        `INSERT INTO users (username, email, password_hash, display_name, lang)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING id, display_name, total_xp, lang, email`,
-        [username.toLowerCase(), email.toLowerCase(), password_hash, display_name.trim(), safeLang]
+        `INSERT INTO users (username, email, password_hash, display_name, lang, age_group, show_on_leaderboard)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING id, display_name, total_xp, lang, email, age_group`,
+        [username.toLowerCase(), email.toLowerCase(), password_hash, display_name.trim(), safeLang, ageGroup ?? null, !isMinor(ageGroup)]
       );
       res.status(201).json({ token: signToken(rows[0]), user: rows[0] });
     } catch (err) {
@@ -152,7 +154,7 @@ router.post('/login', loginLimiter, async (req, res, next) => {
     const value = isEmail ? identifier.toLowerCase() : identifier.toLowerCase();
 
     const { rows } = await pool.query(
-      `SELECT id, display_name, total_xp, lang, email, token_version, password_hash FROM users WHERE ${field} = $1`,
+      `SELECT id, display_name, total_xp, lang, email, age_group, token_version, password_hash FROM users WHERE ${field} = $1`,
       [value]
     );
 

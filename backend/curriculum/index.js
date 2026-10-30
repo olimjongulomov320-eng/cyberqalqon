@@ -23,11 +23,17 @@ const FILES = [
   { file: 'privacy', domain: 'privacy-data' },
   // it-and-crypto.js carries modules for several domains (see `domain` field)
   { file: 'it-and-crypto', domain: null },
+  // Age-group paths (draft, needs review - see ageGroups.js)
+  { file: 'age-parents-1-4', domain: 'parents-early' },
+  { file: 'age-kids-5-7', domain: 'kids-first-steps' },
+  { file: 'age-kids-8-12', domain: 'kids-online' },
+  { file: 'age-teens-13-17', domain: 'teens-digital' },
 ];
 
 const PATHS = [
   {
     slug: 'cybersecurity',
+    age_group: '18+',
     icon: 'shield-check',
     order_index: 1,
     title: { uz: 'Kiber xavfsizlik', ru: 'Кибербезопасность' },
@@ -38,12 +44,57 @@ const PATHS = [
   },
   {
     slug: 'it-fundamentals',
+    age_group: '18+',
     icon: 'laptop',
     order_index: 2,
     title: { uz: 'IT asoslari', ru: 'IT основы' },
     description: {
       uz: 'Kompyuter, ma\'lumotlar bazasi va versiya nazorati - IT fundamenti.',
       ru: 'Компьютеры, базы данных и контроль версий - фундамент IT.',
+    },
+  },
+  {
+    slug: 'parents-1-4',
+    age_group: '1-4',
+    icon: 'baby',
+    order_index: 10,
+    title: { uz: 'Ota-onalar uchun: 1-4 yosh', ru: 'Для родителей: 1-4 года' },
+    description: {
+      uz: 'Kichkintoyingiz uchun xavfsiz raqamli odatlar - siz uchun qisqa darslar.',
+      ru: 'Безопасные цифровые привычки для малыша - короткие уроки для вас.',
+    },
+  },
+  {
+    slug: 'kids-5-7',
+    age_group: '5-7',
+    icon: 'smiley',
+    order_index: 11,
+    title: { uz: 'Kichkintoylar: 5-7 yosh', ru: 'Малыши: 5-7 лет' },
+    description: {
+      uz: 'Kattalar bilan birga o‘qiladigan oddiy xavfsizlik qoidalari.',
+      ru: 'Простые правила безопасности, которые читают вместе со взрослым.',
+    },
+  },
+  {
+    slug: 'kids-8-12',
+    age_group: '8-12',
+    icon: 'backpack',
+    order_index: 12,
+    title: { uz: 'Maktab o‘quvchilari: 8-12 yosh', ru: 'Школьники: 8-12 лет' },
+    description: {
+      uz: 'Internetda xavfsiz bo‘lish: parollar, o‘yinlar, yolg‘on xabarlar.',
+      ru: 'Как быть в безопасности в сети: пароли, игры, обманные сообщения.',
+    },
+  },
+  {
+    slug: 'teens-13-17',
+    age_group: '13-17',
+    icon: 'student',
+    order_index: 13,
+    title: { uz: 'O‘smirlar: 13-17 yosh', ru: 'Подростки: 13-17 лет' },
+    description: {
+      uz: 'Raqamli iz, hisob himoyasi, firibgarlik va bosimga qarshi harakat.',
+      ru: 'Цифровой след, защита аккаунтов, мошенничество и что делать при давлении.',
     },
   },
 ];
@@ -79,6 +130,18 @@ const DOMAINS = [
   { slug: 'privacy-data', path: 'cybersecurity', icon: 'lock-key', order_index: 10,
     title: { uz: 'Maxfiylik va ma\'lumot himoyasi', ru: 'Приватность и защита данных' },
     description: { uz: 'Shaxsiy ma\'lumot, ulashish va sizib chiqishdan keyingi harakatlar.', ru: 'Персональные данные, публикации и действия после утечки.' } },
+  { slug: 'parents-early', path: 'parents-1-4', icon: 'baby', order_index: 1,
+    title: { uz: 'Kichkintoy va raqamli dunyo', ru: 'Малыш и цифровой мир' },
+    description: { uz: 'Ekran vaqti, xavfsiz qurilma, bola rasmlari va birinchi qoidalar.', ru: 'Экранное время, безопасное устройство, фото ребёнка и первые правила.' } },
+  { slug: 'kids-first-steps', path: 'kids-5-7', icon: 'smiley', order_index: 1,
+    title: { uz: 'Birinchi qadamlar', ru: 'Первые шаги' },
+    description: { uz: 'Maxfiy so‘z, kattalardan so‘rash va mehribon bo‘lish.', ru: 'Секретное слово, спросить взрослого и быть добрым.' } },
+  { slug: 'kids-online', path: 'kids-8-12', icon: 'backpack', order_index: 1,
+    title: { uz: 'Internetda xavfsizlik', ru: 'Безопасность в интернете' },
+    description: { uz: 'Parollar, yolg‘on xabarlar, o‘yin chatlari va zo‘ravonlikka qarshi.', ru: 'Пароли, обманные сообщения, игровые чаты и травля.' } },
+  { slug: 'teens-digital', path: 'teens-13-17', icon: 'student', order_index: 1,
+    title: { uz: 'O‘smirning raqamli hayoti', ru: 'Цифровая жизнь подростка' },
+    description: { uz: 'Raqamli iz, hisoblar, firibgarlik, bosim va kiber kasblar.', ru: 'Цифровой след, аккаунты, мошенничество, давление и кибер-профессии.' } },
   { slug: 'it-basics', path: 'it-fundamentals', icon: 'gear', order_index: 1,
     title: { uz: 'Kompyuter va tizimlar', ru: 'Компьютер и системы' },
     description: { uz: 'Uskuna, operatsion tizim va ularning vazifasi.', ru: 'Железо, операционные системы и их роль.' } },

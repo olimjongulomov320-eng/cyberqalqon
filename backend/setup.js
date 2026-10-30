@@ -245,6 +245,8 @@ async function setup() {
   for (const sql of [
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS email              TEXT UNIQUE`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS token_version   INTEGER NOT NULL DEFAULT 0`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS age_group       TEXT`,
+    `ALTER TABLE paths ADD COLUMN IF NOT EXISTS age_group       TEXT NOT NULL DEFAULT '18+'`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS current_streak  INTEGER NOT NULL DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS longest_streak  INTEGER NOT NULL DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS last_streak_date DATE`,
@@ -280,13 +282,13 @@ async function setup() {
 
   for (const p of paths) {
     await pool.query(
-      `INSERT INTO paths (slug, icon, order_index, title_uz, title_ru, description_uz, description_ru)
-       VALUES ($1,$2,$3,$4,$5,$6,$7)
+      `INSERT INTO paths (slug, icon, order_index, title_uz, title_ru, description_uz, description_ru, age_group)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
        ON CONFLICT (slug) DO UPDATE SET
-         icon = EXCLUDED.icon, order_index = EXCLUDED.order_index,
+         icon = EXCLUDED.icon, order_index = EXCLUDED.order_index, age_group = EXCLUDED.age_group,
          title_uz = EXCLUDED.title_uz, title_ru = EXCLUDED.title_ru,
          description_uz = EXCLUDED.description_uz, description_ru = EXCLUDED.description_ru`,
-      [p.slug, p.icon, p.order_index, p.title.uz, p.title.ru, p.description.uz, p.description.ru]
+      [p.slug, p.icon, p.order_index, p.title.uz, p.title.ru, p.description.uz, p.description.ru, p.age_group ?? '18+']
     );
   }
   for (const d of domains) {

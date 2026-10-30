@@ -4,6 +4,8 @@ import {
   ArrowClockwise,
   ArrowLeft,
   ArrowRight,
+  Baby,
+  Backpack,
   Books,
   Brain,
   BookOpenText,
@@ -27,6 +29,8 @@ import {
   Flame,
   Gear,
   SignOut,
+  Smiley,
+  Student,
   GitBranch,
   Globe,
   GraduationCap,
@@ -167,6 +171,11 @@ export const CONTENT_ICONS: Record<string, ComponentType<PhosphorProps>> = {
   books: Books,
   'flag-checkered': FlagCheckered,
   'graduation-cap': GraduationCap,
+  // age groups
+  baby: Baby,
+  smiley: Smiley,
+  backpack: Backpack,
+  student: Student,
 };
 
 export function hasContentIcon(name: string | null | undefined): boolean {

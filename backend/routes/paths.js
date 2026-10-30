@@ -2,6 +2,7 @@ const { Router } = require('express');
 const pool = require('../db');
 const { optionalAuth } = require('../middleware/auth');
 const { difficultyForModule } = require('../lib/difficulty');
+const { isAgeGroup, DEFAULT_GROUP } = require('../curriculum/ageGroups');
 
 const router = Router();
 
@@ -19,9 +20,10 @@ router.get('/', optionalAuth, async (req, res, next) => {
   try {
     const lang = ['uz', 'ru'].includes(req.query.lang) ? req.query.lang : 'uz';
     const userId = req.user?.id ?? null;
+    const age = isAgeGroup(req.query.age) ? req.query.age : DEFAULT_GROUP;
 
     const [paths, domains, mods, done] = await Promise.all([
-      pool.query(`SELECT slug, icon, order_index, title_uz, title_ru, description_uz, description_ru
+      pool.query(`SELECT slug, icon, order_index, age_group, title_uz, title_ru, description_uz, description_ru
                     FROM paths ORDER BY order_index`),
       pool.query(`SELECT id, slug, path_slug, icon, order_index, title_uz, title_ru, description_uz, description_ru
                     FROM domains ORDER BY path_slug, order_index`),
@@ -84,6 +86,7 @@ router.get('/', optionalAuth, async (req, res, next) => {
     const tree = paths.rows.map(p => ({
       slug: p.slug,
       icon: p.icon,
+      age_group: p.age_group,
       title: p[`title_${lang}`],
       description: p[`description_${lang}`],
       domains: domains.rows
@@ -113,7 +116,10 @@ router.get('/', optionalAuth, async (req, res, next) => {
 
     // Continue target: first non-done module that is unlocked, in path order.
     let cont = null;
-    outer: for (const p of tree) {
+    // The chosen age group's path comes first, so "continue" never sends a
+    // child to the adult course.
+    const ordered = [...tree.filter(p => p.age_group === age), ...tree.filter(p => p.age_group !== age)];
+    outer: for (const p of ordered) {
       for (const d of p.domains) {
         for (const m of d.modules) {
           if (m.state === 'current') {
