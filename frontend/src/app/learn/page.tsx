@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
+import { ageInfo, scopePaths } from '@/lib/ageGroups';
+import AgePicker from '@/components/AgePicker';
 import {
   ApiError,
   Difficulty,
@@ -30,6 +32,7 @@ import {
   CodeIcon,
   CompassIcon,
   DomainIcon,
+  ContentIcon,
   LockIcon,
   PlayIcon,
   RefreshIcon,
@@ -74,11 +77,13 @@ function DomainRow({
   visible,
   open,
   onToggle,
+  showDifficulty,
 }: {
   domain: Domain;
   visible: PathModule[];
   open: boolean;
   onToggle: () => void;
+  showDifficulty: boolean;
 }) {
   const { lang } = useApp();
   const tr = makeT(lang);
@@ -137,7 +142,7 @@ function DomainRow({
               {tr('discoverEmptyBody')}
             </p>
           ) : (
-            <LessonTable modules={visible} all={domain.modules} />
+            <LessonTable modules={visible} all={domain.modules} showDifficulty={showDifficulty} />
           )}
         </div>
       )}
@@ -153,12 +158,15 @@ function Rail({
   checkpoint,
   pathDone,
   pathTotal,
+  showApply,
 }: {
   continueTarget: { slug: string; title: string; position: number; total: number } | null;
   weakTopics: TopicStat[];
   checkpoint: { slug: string; domainTitle: string } | null;
   pathDone: number;
   pathTotal: number;
+  /** The advanced-task / checkpoint block belongs to the adult course only. */
+  showApply: boolean;
 }) {
   const { user, lang } = useApp();
   const tr = makeT(lang);
@@ -219,6 +227,7 @@ function Rail({
       </section>
 
       {/* 04 · Apply - the next reachable assessment, else advanced tasks */}
+      {showApply && (
       <section className="border-t border-border/60 p-3 lg:p-3.5">
         <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-text-muted">
           <TrophyIcon size={13} aria-hidden="true" /> {tr('stageApply')}
@@ -260,6 +269,7 @@ function Rail({
           </>
         )}
       </section>
+      )}
 
       {/* 05 · Review - real weak topics only, honest when there are none */}
       <section className="border-t border-border/60 p-3 lg:p-3.5">
@@ -307,9 +317,12 @@ function Rail({
 /* ── Page ─────────────────────────────────────────────────────────────────── */
 
 function LearnInner() {
-  const { lang, user } = useApp();
+  const { lang, user, ageGroup, setAgeGroup } = useApp();
   const tr = makeT(lang);
+  const age = ageInfo(ageGroup);
 
+  const [showAll, setShowAll] = useState(false);
+  const [changingAge, setChangingAge] = useState(false);
   const [data, setData] = useState<{
     paths: LearningPath[];
     continue: { slug: string; title: string; position: number; total: number } | null;
@@ -327,7 +340,7 @@ function LearnInner() {
     setError(null);
     (async () => {
       try {
-        const res = await fetchPaths(lang);
+        const res = await fetchPaths(lang, ageGroup);
         if (!alive) return;
         setData({ paths: res.paths, continue: res.continue ?? null });
       } catch (err) {
@@ -337,7 +350,10 @@ function LearnInner() {
     return () => {
       alive = false;
     };
-  }, [lang, user?.id]);
+  }, [lang, user?.id, ageGroup]);
+
+  // The age group's own paths first; "all ages" is one click away.
+  const paths = useMemo(() => (data ? scopePaths(data.paths, ageGroup, showAll) : []), [data, ageGroup, showAll]);
 
   // Weak topics power the review block; a failure must never break discovery.
   useEffect(() => {
@@ -362,19 +378,21 @@ function LearnInner() {
     if (fromUrl) {
       const hit = data.paths.find(p => p.domains.some(d => d.slug === fromUrl));
       if (hit) {
+        if (!paths.includes(hit)) setShowAll(true);
         setPathSlug(hit.slug);
         setOpen(new Set([fromUrl]));
         return;
       }
     }
-    const fallback = defaultOpenDomain(data.paths, data.continue?.slug ?? null);
+    const fallback = defaultOpenDomain(paths, data.continue?.slug ?? null);
     setOpen(new Set(fallback ? [fallback] : []));
-    setPathSlug(prev => prev || data.paths[0]?.slug || '');
-  }, [data]);
+    setPathSlug(prev => (paths.some(p => p.slug === prev) ? prev : paths[0]?.slug || ''));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, paths]);
 
   const path = useMemo(
-    () => data?.paths.find(p => p.slug === pathSlug) ?? data?.paths[0] ?? null,
-    [data, pathSlug]
+    () => paths.find(p => p.slug === pathSlug) ?? paths[0] ?? null,
+    [paths, pathSlug]
   );
 
   const { domains: visibleDomains, moduleCount } = useMemo(
@@ -383,7 +401,7 @@ function LearnInner() {
   );
 
   const totals = useMemo(() => (path ? pathTotals(path) : { done: 0, total: 0, pct: 0 }), [path]);
-  const checkpoint = useMemo(() => (data ? nextCheckpoint(data.paths) : null), [data]);
+  const checkpoint = useMemo(() => (data ? nextCheckpoint(paths) : null), [data, paths]);
 
   const toggle = (slug: string) =>
     setOpen(prev => {
@@ -423,7 +441,10 @@ function LearnInner() {
     );
   }
 
-  const isEmpty = data.paths.every(p => p.domains.every(d => d.modules.length === 0));
+  // Difficulty labels and the advanced-task block only make sense for the adult course.
+  const adultPath = (path.age_group ?? '18+') === '18+';
+
+  const isEmpty = paths.every(p => p.domains.every(d => d.modules.length === 0));
 
   if (isEmpty) {
     return (
@@ -438,6 +459,54 @@ function LearnInner() {
 
   return (
     <div className="flex flex-col gap-4">
+      {/* Who the paths are for. A band the learner (or a parent) chose; changing
+          it is one click, and the other ages' paths stay reachable. */}
+      <div className="rounded-lg border border-border bg-surface-900 p-3">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <p className="flex min-w-0 items-center gap-2 text-sm">
+            <ContentIcon name={age.icon} size={18} className="shrink-0 text-cyan-300" />
+            <span className="font-semibold text-text-primary">
+              {tr('ageFor')}: <span className="num">{age.title[lang]}</span>
+            </span>
+            <span className="truncate text-text-muted">{age.who[lang]}</span>
+          </p>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setChangingAge(o => !o)}
+              aria-expanded={changingAge}
+              className="inline-flex min-h-9 items-center rounded-md px-2.5 text-xs font-semibold text-cyan-300 transition-colors hover:bg-surface-800"
+            >
+              {tr('ageChange')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowAll(o => !o)}
+              aria-pressed={showAll}
+              className="inline-flex min-h-9 items-center rounded-md px-2.5 text-xs font-semibold text-text-secondary transition-colors hover:bg-surface-800 hover:text-text-primary"
+            >
+              {showAll ? tr('ageShowMine') : tr('ageShowAll')}
+            </button>
+          </div>
+        </div>
+        {(changingAge || ageGroup === null) && (
+          <div className="mt-3 border-t border-border/60 pt-3">
+            <p className="text-sm font-semibold text-text-primary">{tr('agePickTitle')}</p>
+            <p className="mb-3 mt-0.5 text-xs text-text-muted">{tr('agePickSubtitle')}</p>
+            <AgePicker
+              value={ageGroup}
+              onChange={g => {
+                setAgeGroup(g);
+                setShowAll(false);
+                setChangingAge(false);
+              }}
+            />
+          </div>
+        )}
+        {age.audience === 'parent' && <p className="mt-2 text-xs text-text-muted">{tr('ageParentNote')}</p>}
+        {age.minor && path.age_group !== '18+' && <p className="mt-1 text-xs text-warning">{tr('ageDraftNote')}</p>}
+      </div>
+
       {/* Overall progress for the selected path - one line, real counts. */}
       <div className="flex items-center gap-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
@@ -461,6 +530,7 @@ function LearnInner() {
             checkpoint={checkpoint}
             pathDone={totals.done}
             pathTotal={totals.total}
+            showApply={adultPath}
           />
         </aside>
 
@@ -472,7 +542,7 @@ function LearnInner() {
               aria-label={tr('tracks')}
               className="flex min-w-0 gap-1 overflow-x-auto rounded-lg border border-border bg-surface-900 p-1"
             >
-              {data.paths.map(p => {
+              {paths.map(p => {
                 const t = pathTotals(p);
                 const active = p.slug === path.slug;
                 return (
@@ -566,6 +636,7 @@ function LearnInner() {
                   visible={d.modules}
                   open={open.has(d.slug)}
                   onToggle={() => toggle(d.slug)}
+                  showDifficulty={adultPath}
                 />
               ))}
             </div>

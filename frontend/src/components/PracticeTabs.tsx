@@ -6,16 +6,18 @@ import { usePathname } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import PracticeHub from '@/components/PracticeHub';
+import { isUnder13 } from '@/lib/ageGroups';
 
 /** Switches between the two halves of Practice: questions and coding challenges. */
 export default function PracticeTabs() {
-  const { lang } = useApp();
+  const { lang, ageGroup } = useApp();
   const tr = makeT(lang);
   const pathname = usePathname();
   const ref = useRef<HTMLElement>(null);
+  // Code challenges are not offered under 13 (the API refuses them too).
   const tabs = [
     { href: '/problems', label: 'tabQuestions' },
-    { href: '/challenges', label: 'tabChallenges' },
+    ...(isUnder13(ageGroup) ? [] : [{ href: '/challenges', label: 'tabChallenges' }]),
   ];
   return (
     <>

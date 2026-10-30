@@ -5,6 +5,7 @@ const { localizeExercise, TYPES } = require('../lib/grade');
 const { DIFFICULTIES, difficultyForModule } = require('../lib/difficulty');
 const { TRACKS, trackOfModule } = require('../curriculum/tracks');
 const { searchKey } = require('../lib/uzText');
+const { isAgeGroup, DEFAULT_GROUP } = require('../curriculum/ageGroups');
 
 const TRACK_OF = trackOfModule();
 
@@ -43,6 +44,7 @@ async function loadCatalog(lang) {
             d.order_index  AS domain_order,
             p.slug  AS path_slug,
             p.order_index AS path_order,
+            p.age_group AS path_age,
             p.title_${lang} AS path_title
        FROM modules m
        JOIN domains d ON d.id = m.domain_id
@@ -119,7 +121,11 @@ router.get('/', optionalAuth, async (req, res, next) => {
       });
     }
 
-    const [modules, mistakes] = await Promise.all([loadCatalog(lang), loadMistakes(req.user?.id)]);
+    // The arena shows the age group's own questions: a child never browses the
+    // adult course, and an adult is not shown the lessons written for children.
+    const age = isAgeGroup(req.query.age) ? req.query.age : DEFAULT_GROUP;
+    const [catalog, mistakes] = await Promise.all([loadCatalog(lang), loadMistakes(req.user?.id)]);
+    const modules = catalog.filter(m => (m.path_age ?? DEFAULT_GROUP) === age);
 
     const all = [];
     for (const m of modules) {

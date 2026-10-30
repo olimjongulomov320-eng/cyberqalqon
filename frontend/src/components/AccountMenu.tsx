@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { levelFromXp } from '@/lib/gamification';
+import { isMinor } from '@/lib/ageGroups';
 import { Avatar } from '@/components/ui';
 import {
   BoltIcon,
@@ -51,7 +52,7 @@ function LevelAvatar({ name, fraction }: { name: string; fraction: number }) {
  * click, arrow keys move between items, Esc closes and returns focus.
  */
 export default function AccountMenu() {
-  const { user, lang, lowBandwidth, setLowBandwidth, logout } = useApp();
+  const { user, lang, lowBandwidth, setLowBandwidth, logout, ageGroup } = useApp();
   const tr = makeT(lang);
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -163,9 +164,11 @@ export default function AccountMenu() {
             <Link href="/review" role="menuitem" className={linkCls}>
               <RefreshIcon size={16} /> {tr('reviewTitle')}
             </Link>
-            <Link href="/leaderboard" role="menuitem" className={linkCls}>
-              <TrophyIcon size={16} /> {tr('leaderboard')}
-            </Link>
+            {!isMinor(ageGroup) && (
+              <Link href="/leaderboard" role="menuitem" className={linkCls}>
+                <TrophyIcon size={16} /> {tr('leaderboard')}
+              </Link>
+            )}
           </div>
 
           <div className="border-t border-border p-1.5">

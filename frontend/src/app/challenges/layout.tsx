@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import AgeGate from '@/components/AgeGate';
 
 export const metadata: Metadata = {
   title: 'Kod masalalari',
@@ -6,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function ChallengesLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <AgeGate rule="no-code">{children}</AgeGate>;
 }

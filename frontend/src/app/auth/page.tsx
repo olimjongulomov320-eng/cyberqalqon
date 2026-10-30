@@ -1,4 +1,5 @@
 'use client';
+import AgePicker from '@/components/AgePicker';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LogoMark from '@/components/LogoMark';
@@ -126,7 +127,7 @@ function PasswordInput({
 }
 
 export default function AuthPage() {
-  const { lang, setUser } = useApp();
+  const { lang, setUser, ageGroup, setAgeGroup } = useApp();
   const tr = makeT(lang);
   const router = useRouter();
   // Read `?next=` lazily on the client only. Nothing rendered depends on it, so
@@ -238,6 +239,7 @@ export default function AuthPage() {
             password: form.password,
             display_name: form.display_name.trim(),
             lang,
+            ...(ageGroup ? { age_group: ageGroup } : {}),
           })
         : await authLogin({ identifier: form.username.trim(), password: form.password });
 
@@ -324,6 +326,14 @@ export default function AuthPage() {
                 className={`input-base ${submitted && errors.display_name ? 'input-error' : ''}`}
               />
             </Field>
+          )}
+
+          {isRegister && (
+            <div>
+              <p className="form-label">{tr('ageSettingsTitle')}</p>
+              <AgePicker value={ageGroup} onChange={setAgeGroup} compact />
+              <p className="mt-1.5 text-xs text-text-muted">{tr('agePickSubtitle')}</p>
+            </div>
           )}
 
           <Field

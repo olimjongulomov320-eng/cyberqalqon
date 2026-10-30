@@ -12,6 +12,7 @@ const DIFF_KEY: Record<Difficulty, string> = {
   advanced: 'difficultyAdvanced',
 };
 const COLS = 'md:grid-cols-[1.5rem_minmax(0,1fr)_7.5rem_4.5rem_6.5rem]';
+const COLS_PLAIN = 'md:grid-cols-[1.5rem_minmax(0,1fr)_4.5rem_6.5rem]';
 
 /** Status marker: a filled check when done, a ring when it is the next item, a lock when closed. */
 function Status({ state }: { state: PathModule['state'] }) {
@@ -30,19 +31,29 @@ function Status({ state }: { state: PathModule['state'] }) {
  * difficulty, points and a single action, like a practice problem set. Locked
  * rows say which lesson unlocks them. No decoration beyond the data.
  */
-export default function LessonTable({ modules, all }: { modules: PathModule[]; all: PathModule[] }) {
+export default function LessonTable({
+  modules,
+  all,
+  showDifficulty = true,
+}: {
+  modules: PathModule[];
+  all: PathModule[];
+  /** Difficulty labels are position-derived and only meaningful in the adult course. */
+  showDifficulty?: boolean;
+}) {
   const { lang } = useApp();
   const tr = makeT(lang);
+  const cols = showDifficulty ? COLS : COLS_PLAIN;
 
   return (
     <div className="border-t border-border/60">
       <div
         aria-hidden="true"
-        className={`hidden gap-3 border-b border-border/60 bg-surface-950/40 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-text-muted md:grid ${COLS}`}
+        className={`hidden gap-3 border-b border-border/60 bg-surface-950/40 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-text-muted md:grid ${cols}`}
       >
         <span />
         <span>{tr('colTitle')}</span>
-        <span>{tr('difficultyLabel')}</span>
+        {showDifficulty && <span>{tr('difficultyLabel')}</span>}
         <span>{tr('colPoints')}</span>
         <span />
       </div>
@@ -53,7 +64,7 @@ export default function LessonTable({ modules, all }: { modules: PathModule[]; a
           const action =
             m.state === 'done' ? tr('rowReview') : tr('startLesson');
           return (
-            <li key={m.slug} style={stagger(i)} className={`stagger-item grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 ${COLS} ${locked ? 'opacity-70' : ''}`}>
+            <li key={m.slug} style={stagger(i)} className={`stagger-item grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 ${cols} ${locked ? 'opacity-70' : ''}`}>
               <span className="grid place-items-center">
                 <Status state={m.state} />
               </span>
@@ -67,8 +78,12 @@ export default function LessonTable({ modules, all }: { modules: PathModule[]; a
                 <p className="num mt-0.5 text-xs text-text-muted">
                   {m.exercise_count} {tr('challenge').toLowerCase()}
                   <span className="md:hidden">
-                    {' | '}
-                    <DifficultyTag level={m.difficulty} label={tr(DIFF_KEY[m.difficulty])} />
+                    {showDifficulty && (
+                      <>
+                        {' | '}
+                        <DifficultyTag level={m.difficulty} label={tr(DIFF_KEY[m.difficulty])} />
+                      </>
+                    )}
                     {' | '}
                     {m.xp_reward} XP
                   </span>
@@ -80,7 +95,7 @@ export default function LessonTable({ modules, all }: { modules: PathModule[]; a
                 )}
               </div>
 
-              <span className="hidden md:block"><DifficultyTag level={m.difficulty} label={tr(DIFF_KEY[m.difficulty])} /></span>
+              {showDifficulty && <span className="hidden md:block"><DifficultyTag level={m.difficulty} label={tr(DIFF_KEY[m.difficulty])} /></span>}
               <span className="num hidden text-sm text-text-secondary md:block">{m.xp_reward} XP</span>
 
               <div className="justify-self-end">

@@ -110,6 +110,7 @@ export function authRegister(body: {
   password: string;
   display_name: string;
   lang: string;
+  age_group?: string;
 }) {
   return req<{ token: string; user: User }>('/auth/register', {
     method: 'POST',
@@ -134,9 +135,9 @@ export function authReset(token: string, password: string) {
 }
 
 // ── Learning map ──────────────────────────────────────────────────────────────
-export function fetchPaths(lang: string) {
+export function fetchPaths(lang: string, age?: string | null) {
   return req<{ paths: LearningPath[]; continue: ContinueTarget | null }>(
-    `/paths?lang=${lang}`
+    `/paths?lang=${lang}${age ? `&age=${encodeURIComponent(age)}` : ''}`
   );
 }
 
@@ -217,10 +218,13 @@ export function fetchProblems(params: {
   type?: ExerciseType;
   status?: ProblemStatus;
   q?: string;
+  /** Age group: the arena lists that group's own questions. */
+  age?: string | null;
   limit?: number;
   offset?: number;
 }) {
   const q = new URLSearchParams({ lang: params.lang });
+  if (params.age) q.set('age', params.age);
   if (params.domain) q.set('domain', params.domain);
   if (params.track) q.set('track', params.track);
   if (params.difficulty) q.set('difficulty', params.difficulty);
@@ -272,7 +276,7 @@ export function fetchMe() {
 }
 
 export function updateMe(
-  patch: Partial<Pick<User, 'lang' | 'low_bandwidth_mode' | 'display_name' | 'avatar_emoji' | 'daily_goal_xp' | 'show_on_leaderboard'>>
+  patch: Partial<Pick<User, 'lang' | 'low_bandwidth_mode' | 'display_name' | 'avatar_emoji' | 'daily_goal_xp' | 'show_on_leaderboard' | 'age_group'>>
 ) {
   return req<User>('/users/me', { method: 'PATCH', body: JSON.stringify(patch) });
 }
@@ -318,6 +322,8 @@ export interface User {
   longest_streak?: number;
   daily_goal_xp?: number;
   show_on_leaderboard?: boolean;
+  /** Self-selected age band (never a date of birth); null until chosen. */
+  age_group?: string | null;
 }
 
 /** What the server reveals AFTER grading - never on fetch. */
@@ -416,6 +422,8 @@ export interface Domain {
 
 export interface LearningPath {
   slug: string;
+  /** The age group this path is written for. */
+  age_group?: string;
   icon: string;
   title: string;
   description: string;

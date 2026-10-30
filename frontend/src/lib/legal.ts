@@ -44,6 +44,7 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
             'Oʻquv faoliyati: javoblar, bajarilgan darslar, nazorat natijalari, XP, seriya va yutuqlar',
             'Kod masalalarini topshirganingizda: kodingiz va natija hisobingiz bilan birga saqlanadi',
             'Brauzeringizda: kirish tokeni, til va mavzu sozlamalari, tugallanmagan kod qoralamasi',
+            'Yosh guruhi (masalan, 8-12), agar tanlasangiz. Tugʻilgan sana soʻralmaydi va saqlanmaydi',
             'Telefon raqami talab qilinmaydi va yigʻilmaydi',
           ],
         },
@@ -57,6 +58,13 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
           heading: 'Reyting',
           paragraphs: [
             'Reyting ochiq. Ismingiz va XP miqdoringiz boshqa foydalanuvchilarga koʻrinadi. Profil sozlamalarida reytingda koʻrinmaslikni tanlashingiz mumkin.',
+          ],
+        },
+        {
+          heading: 'Bolalar va oʻsmirlar',
+          paragraphs: [
+            'Yosh guruhini tanlash ixtiyoriy va faqat mos oʻquv yoʻlini koʻrsatish uchun xizmat qiladi. 13 yoshgacha boʻlgan bolalar uchun hisobni ota-onasi yoki vasiysi ochishi tavsiya etiladi; 1-4 yosh boʻlimi ota-onalar uchun yozilgan.',
+            'Bolalar va oʻsmirlar (18 yoshgacha) hisobi hech qachon ommaviy reytingda koʻrsatilmaydi va 13 yoshgacha kod topshiriqlari berilmaydi. Bu qoidalar serverda ham tekshiriladi.',
           ],
         },
         {
@@ -96,6 +104,7 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
             'Учебная активность: ответы, пройденные уроки, результаты проверок, XP, серия и достижения',
             'При отправке решений задач на код: ваш код и результат сохраняются в аккаунте',
             'В вашем браузере: токен входа, настройки языка и темы, черновик незавершённого кода',
+            'Возрастная группа (например, 8-12), если вы её выберете. Дата рождения не запрашивается и не хранится',
             'Номер телефона не требуется и не собирается',
           ],
         },
@@ -109,6 +118,13 @@ export const LEGAL: Record<LegalKind, Record<Lang, LegalDoc>> = {
           heading: 'Рейтинг',
           paragraphs: [
             'Рейтинг открыт. Ваше имя и количество XP видят другие пользователи. В настройках профиля можно отключить показ в рейтинге.',
+          ],
+        },
+        {
+          heading: 'Дети и подростки',
+          paragraphs: [
+            'Выбор возрастной группы необязателен и нужен только для показа подходящего пути обучения. Для детей до 13 лет аккаунт рекомендуется создавать родителю или опекуну; раздел для возраста 1-4 написан для родителей.',
+            'Аккаунты детей и подростков (до 18 лет) никогда не показываются в публичном рейтинге, а детям до 13 лет не предлагаются задачи с кодом. Эти правила проверяются и на сервере.',
           ],
         },
         {

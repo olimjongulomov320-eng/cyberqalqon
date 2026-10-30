@@ -57,7 +57,7 @@ module.exports = [
         q: { uz: 'Parol kimniki?', ru: 'Чей пароль?' },
         options: [
           { id: 'a', uz: 'Faqat meniki', ru: 'Только мой' },
-          { id: 'b', uz: 'Hammaniki', ru: 'Всехний' },
+          { id: 'b', uz: 'Hammaniki', ru: 'Общий' },
           { id: 'c', uz: 'Do‘stimniki', ru: 'Друга' },
         ],
         answer: 'a',

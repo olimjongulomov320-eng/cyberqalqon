@@ -28,7 +28,7 @@ const DIFF_KEY = { easy: 'chEasy', medium: 'chMedium', hard: 'chHard' } as const
  * hides the hub; the catalogues stand on their own.
  */
 export default function PracticeHub() {
-  const { lang, user } = useApp();
+  const { lang, user, ageGroup } = useApp();
   const tr = makeT(lang);
   const [hub, setHub] = useState<Hub | null>(null);
   const [failed, setFailed] = useState(false);
@@ -36,7 +36,7 @@ export default function PracticeHub() {
   useEffect(() => {
     if (!user) return;
     let alive = true;
-    Promise.all([fetchProblems({ lang, limit: 1 }), fetchChallenges({ lang }), fetchStats(lang)])
+    Promise.all([fetchProblems({ lang, limit: 1, age: ageGroup }), fetchChallenges({ lang }), fetchStats(lang)])
       .then(([p, c, s]) => {
         if (!alive) return;
         const order = { easy: 0, medium: 1, hard: 2 } as const;
@@ -58,7 +58,7 @@ export default function PracticeHub() {
     return () => {
       alive = false;
     };
-  }, [lang, user?.id]);
+  }, [lang, user?.id, ageGroup]);
 
   if (!user || failed) return null;
   if (!hub) return <Skeleton className="mb-6 h-28 w-full" />;

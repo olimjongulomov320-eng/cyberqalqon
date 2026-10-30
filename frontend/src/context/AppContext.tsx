@@ -3,16 +3,20 @@ import { createContext, useCallback, useContext, useEffect, useState, ReactNode 
 import { useRouter } from 'next/navigation';
 import { ApiError, UNAUTHORIZED_EVENT, User, fetchMe, updateMe } from '@/lib/api';
 import { Lang, LANGS } from '@/lib/i18n';
+import { AgeGroup, isAgeGroup } from '@/lib/ageGroups';
 
 interface AppState {
   user: User | null;
   lang: Lang;
   lowBandwidth: boolean;
+  /** The chosen age band, or null until someone picks one. */
+  ageGroup: AgeGroup | null;
   /** True until the persisted session has been checked. Pages wait on this. */
   ready: boolean;
   setUser: (u: User | null) => void;
   setLang: (l: Lang) => void;
   setLowBandwidth: (v: boolean) => void;
+  setAgeGroup: (g: AgeGroup) => void;
   logout: () => void;
 }
 
@@ -25,6 +29,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<User | null>(null);
   const [lang, setLangState] = useState<Lang>('uz');
   const [lowBandwidth, setLowBandwidthState] = useState(false);
+  const [ageGroup, setAgeGroupState] = useState<AgeGroup | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -34,13 +39,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     if (localStorage.getItem('cq_low_bw') === '1') setLowBandwidthState(true);
 
+    const storedAge = localStorage.getItem('cq_age');
+    if (isAgeGroup(storedAge)) setAgeGroupState(storedAge);
+
     const token = localStorage.getItem('cq_token');
     if (!token) {
       setReady(true);
       return;
     }
     fetchMe()
-      .then(setUserState)
+      .then(me => {
+        setUserState(me);
+        // The account's choice wins; a choice made before signing in is kept.
+        if (isAgeGroup(me.age_group)) {
+          setAgeGroupState(me.age_group);
+          localStorage.setItem('cq_age', me.age_group);
+        } else if (isAgeGroup(storedAge)) {
+          updateMe({ age_group: storedAge }).then(setUserState).catch(() => {});
+        }
+      })
       .catch(err => {
         // Only a server-side rejection invalidates the session. A timeout or a
         // dropped connection (e.g. the free API waking up) must keep the login.
@@ -62,6 +79,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const setUser = useCallback((u: User | null) => {
     setUserState(u);
     if (u && isLang(u.lang)) setLangState(u.lang);
+    if (u && isAgeGroup(u.age_group)) {
+      setAgeGroupState(u.age_group);
+      localStorage.setItem('cq_age', u.age_group);
+    }
+  }, []);
+
+  const setAgeGroup = useCallback((g: AgeGroup) => {
+    setAgeGroupState(g);
+    localStorage.setItem('cq_age', g);
+    // Best effort, like the language: the local choice already applies. Picking
+    // a minor group also takes the account off the leaderboard, server-side.
+    if (localStorage.getItem('cq_token')) {
+      updateMe({ age_group: g }).then(setUserState).catch(() => {});
+    }
   }, []);
 
   const setLang = useCallback((l: Lang) => {
@@ -99,13 +130,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (typeof caches !== 'undefined') {
       caches.keys().then(keys => keys.forEach(k => void caches.delete(k))).catch(() => {});
     }
+    // The next person on this device should be asked, not inherit a child's group.
+    localStorage.removeItem('cq_age');
+    setAgeGroupState(null);
     setUserState(null);
     router.replace('/auth');
   }, [router]);
 
   return (
     <Ctx.Provider
-      value={{ user, lang, lowBandwidth, ready, setUser, setLang, setLowBandwidth, logout }}
+      value={{ user, lang, lowBandwidth, ageGroup, ready, setUser, setLang, setLowBandwidth, setAgeGroup, logout }}
     >
       {children}
     </Ctx.Provider>

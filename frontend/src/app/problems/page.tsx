@@ -108,7 +108,7 @@ const chipClass = (active: boolean) =>
  * API 329 times). An in-page panel keeps the build deterministic.
  */
 export default function ProblemsPage() {
-  const { lang, user, ready } = useApp();
+  const { lang, user, ready, ageGroup } = useApp();
   const tr = makeT(lang);
 
   const [domain, setDomain] = useState('');
@@ -197,8 +197,9 @@ export default function ProblemsPage() {
       type: type || undefined,
       status: status || undefined,
       q: debouncedSearch || undefined,
+      age: ageGroup ?? undefined,
     }),
-    [lang, domain, track, difficulty, type, status, debouncedSearch]
+    [lang, domain, track, difficulty, type, status, debouncedSearch, ageGroup]
   );
 
   useEffect(() => {

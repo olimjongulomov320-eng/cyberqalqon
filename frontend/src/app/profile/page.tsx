@@ -7,6 +7,8 @@ import CountUp from '@/components/CountUp';
 import { stagger } from '@/lib/motion';
 import Link from 'next/link';
 import ActivityMap from '@/components/ActivityMap';
+import AgePicker from '@/components/AgePicker';
+import { isMinor } from '@/lib/ageGroups';
 import { appDayKey } from '@/lib/appday';
 import { useApp } from '@/context/AppContext';
 import { Lang, makeT } from '@/lib/i18n';
@@ -441,7 +443,8 @@ function TracksTable({ tracks }: { tracks: Track[] }) {
 }
 
 export default function ProfilePage() {
-  const { lang, user, setUser, logout, ready } = useApp();
+  const { lang, user, setUser, logout, ready, ageGroup, setAgeGroup } = useApp();
+  const minor = isMinor(ageGroup ?? user?.age_group);
   const tr = makeT(lang);
 
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -689,15 +692,24 @@ export default function ProfilePage() {
                   ))}
                 </div>
               </div>
-              <label className="flex items-center gap-2.5 text-sm text-text-secondary">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-cyan-500"
-                  checked={user.show_on_leaderboard !== false}
-                  onChange={e => patch({ show_on_leaderboard: e.target.checked })}
-                />
-                {tr('showOnLeaderboard')}
-              </label>
+              <div>
+                <p className="mb-2 text-sm font-bold text-text-primary">{tr('ageSettingsTitle')}</p>
+                <AgePicker value={ageGroup} onChange={setAgeGroup} compact />
+                <p className="mt-2 text-xs text-text-muted">{tr('agePickSubtitle')}</p>
+              </div>
+              {minor ? (
+                <p className="text-xs text-text-muted">{tr('ageMinorNote')}</p>
+              ) : (
+                <label className="flex items-center gap-2.5 text-sm text-text-secondary">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 accent-cyan-500"
+                    checked={user.show_on_leaderboard !== false}
+                    onChange={e => patch({ show_on_leaderboard: e.target.checked })}
+                  />
+                  {tr('showOnLeaderboard')}
+                </label>
+              )}
               {savedAt && (
                 <p role="status" aria-live="polite" className="inline-flex items-center gap-1.5 text-xs font-semibold text-success">
                   <CheckIcon size={14} /> {tr('nameSaved')}
@@ -706,8 +718,8 @@ export default function ProfilePage() {
             </Card>
 
             <div className="grid grid-cols-2 gap-2">
-              <ButtonLink href="/leaderboard" variant="secondary" size="sm" className="justify-center">{tr('leaderboard')}</ButtonLink>
-              <ButtonLink href="/review" variant="secondary" size="sm" className="justify-center">{tr('reviewSession')}</ButtonLink>
+              {!minor && <ButtonLink href="/leaderboard" variant="secondary" size="sm" className="justify-center">{tr('leaderboard')}</ButtonLink>}
+              <ButtonLink href="/review" variant="secondary" size="sm" className={`justify-center ${minor ? 'col-span-2' : ''}`}>{tr('reviewSession')}</ButtonLink>
             </div>
 
             <div>

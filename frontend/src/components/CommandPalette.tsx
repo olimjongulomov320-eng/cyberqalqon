@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { searchKey } from '@/lib/uzText';
+import { isMinor } from '@/lib/ageGroups';
 import {
   BookIcon,
   CodeIcon,
@@ -34,7 +35,7 @@ type Entry = {
  * (combobox + listbox pattern), so a screen reader hears the active option.
  */
 export default function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { user, lang, setLang, lowBandwidth, setLowBandwidth, logout } = useApp();
+  const { user, lang, setLang, lowBandwidth, setLowBandwidth, logout, ageGroup } = useApp();
   const tr = makeT(lang);
   const router = useRouter();
   const [query, setQuery] = useState('');
@@ -51,7 +52,9 @@ export default function CommandPalette({ open, onClose }: { open: boolean; onClo
       { id: 'assess', group: 'searchPages', label: tr('navAssessments'), hint: '/assessments', Icon: TargetIcon, run: go('/assessments') },
       { id: 'progress', group: 'searchPages', label: tr('navProgress'), hint: '/profile', Icon: UserIcon, run: go('/profile') },
       { id: 'review', group: 'searchPages', label: tr('reviewTitle'), hint: '/review', Icon: RefreshIcon, run: go('/review') },
-      { id: 'board', group: 'searchPages', label: tr('leaderboard'), hint: '/leaderboard', Icon: TrophyIcon, run: go('/leaderboard') },
+      ...(isMinor(ageGroup)
+        ? []
+        : [{ id: 'board', group: 'searchPages' as const, label: tr('leaderboard'), hint: '/leaderboard', Icon: TrophyIcon, run: go('/leaderboard') }]),
     ];
     const actions: Entry[] = [
       {
@@ -74,7 +77,7 @@ export default function CommandPalette({ open, onClose }: { open: boolean; onClo
         : { id: 'login', group: 'searchActions', label: tr('login'), hint: '/auth', Icon: UserIcon, run: go('/auth') },
     ];
     return [...pages, ...actions];
-  }, [tr, lang, lowBandwidth, user, router, setLang, setLowBandwidth, logout]);
+  }, [tr, lang, lowBandwidth, user, router, setLang, setLowBandwidth, logout, ageGroup]);
 
   const shown = useMemo(() => {
     const q = searchKey(query.trim());

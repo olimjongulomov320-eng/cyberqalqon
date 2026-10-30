@@ -8,6 +8,9 @@ import { fetchPaths, fetchStats, StatsPayload, LeaderboardEntry, fetchLeaderboar
 import { AchievementBadge, DailyGoal, Flame, RingProgress, XPChip } from '@/components/game';
 import LandingPreview from '@/components/LandingPreview';
 import TracksSection from '@/components/TracksSection';
+import AgePicker from '@/components/AgePicker';
+import { useRouter } from 'next/navigation';
+import { isMinor, scopePaths } from '@/lib/ageGroups';
 import { achievementMeta, levelFromXp, tierIndex, tierKey } from '@/lib/gamification';
 import { Avatar, Badge, ButtonLink, Card, EmptyState, SectionHeading, Skeleton } from '@/components/ui';
 import {
@@ -30,8 +33,10 @@ const ACTIVITY_LABEL: Record<string, string> = {
 };
 
 export default function HomePage() {
-  const { lang, user } = useApp();
+  const { lang, user, ageGroup, setAgeGroup } = useApp();
   const tr = makeT(lang);
+  const router = useRouter();
+  const minor = isMinor(ageGroup);
 
   const [stats, setStats] = useState<StatsPayload | null>(null);
   const [continueCtx, setContinueCtx] = useState<{ slug: string; title: string; position: number; total: number } | null>(null);
@@ -44,13 +49,13 @@ export default function HomePage() {
     let alive = true;
     (async () => {
       try {
-        const [s, p] = await Promise.all([fetchStats(lang), fetchPaths(lang)]);
+        const [s, p] = await Promise.all([fetchStats(lang), fetchPaths(lang, ageGroup)]);
         if (!alive) return;
         setStats(s);
         setContinueCtx(
           p.continue ? { slug: p.continue.slug, title: p.continue.title, position: p.continue.position, total: p.continue.total } : null
         );
-        setPaths(p.paths);
+        setPaths(scopePaths(p.paths, ageGroup, false));
       } catch {
         if (alive) setStatsFailed(true);
       }
@@ -58,14 +63,14 @@ export default function HomePage() {
     return () => {
       alive = false;
     };
-  }, [user, lang]);
+  }, [user, lang, ageGroup]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || minor) return;
     fetchLeaderboard('week', 3)
       .then(d => setTop(d.leaderboard))
       .catch(() => setTop([]));
-  }, [user]);
+  }, [user, minor]);
 
   /* ── Signed out: landing ── */
   if (!user) {
@@ -116,6 +121,19 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Who is learning - choosing a band opens the matching path. */}
+        <section aria-labelledby="age-h" className="mt-14 border-t border-border/60 pt-10">
+          <p id="age-h" className="label mb-1.5">{tr('agePickTitle')}</p>
+          <p className="mb-4 max-w-[60ch] text-sm text-text-secondary">{tr('agePickSubtitle')}</p>
+          <AgePicker
+            value={ageGroup}
+            onChange={g => {
+              setAgeGroup(g);
+              router.push('/learn');
+            }}
+          />
+        </section>
+
         {/* How it works - an editorial numbered sequence, not three identical
             cards. The count is the structure. */}
         <section aria-labelledby="how-h" className="mt-16 border-t border-border/60 pt-10">
@@ -157,6 +175,15 @@ export default function HomePage() {
         </div>
         <XPChip xp={user.total_xp} />
       </header>
+
+      {/* No group chosen yet: ask once, here. The Learn page asks the same. */}
+      {ageGroup === null && (
+        <section aria-labelledby="age-h" className="mt-4 rounded-lg border border-border bg-surface-900 p-4">
+          <p id="age-h" className="text-sm font-semibold text-text-primary">{tr('agePickTitle')}</p>
+          <p className="mb-3 mt-0.5 text-xs text-text-muted">{tr('agePickSubtitle')}</p>
+          <AgePicker value={ageGroup} onChange={setAgeGroup} />
+        </section>
+      )}
 
       {/* Progress snapshot - deliberately tighter (12px) than the
           subject sections below (32px). */}
@@ -312,7 +339,8 @@ export default function HomePage() {
         </section>
       )}
 
-      <TracksSection />
+      {/* The eight tracks are the adult course. */}
+      {!minor && <TracksSection />}
 
       {statsFailed ? (
         <Card className="mt-8">
@@ -401,7 +429,8 @@ export default function HomePage() {
             </section>
           )}
 
-          {/* Leaderboard preview */}
+          {/* Leaderboard preview - never shown to children and teens. */}
+          {!minor && (
           <section aria-labelledby="lb-h">
             <SectionHeading
               action={
@@ -427,6 +456,7 @@ export default function HomePage() {
               )}
             </Card>
           </section>
+          )}
 
           {/* Continue to full path */}
           <ButtonLink href="/learn" size="lg" className="group w-full justify-center lg:col-span-2">

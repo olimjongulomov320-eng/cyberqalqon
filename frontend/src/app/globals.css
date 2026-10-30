@@ -325,3 +325,9 @@
 .lesson td { @apply border-b border-border px-3 py-2 align-top text-text-secondary; }
 .lesson tr:last-child td { @apply border-b-0; }
 .lesson hr { @apply my-6 border-border; }
+
+/* Children (5-7, 8-12): larger reading size and bigger answer targets. */
+.kid-mode .lesson { font-size: 1.1875rem; line-height: 1.85; }
+.kid-mode .lesson h2 { font-size: 1.5rem; }
+.kid-mode [role='radiogroup'] button,
+.kid-mode [role='group'] button { min-height: 3.5rem; font-size: 1.0625rem; }

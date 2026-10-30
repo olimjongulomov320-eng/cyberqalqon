@@ -22,7 +22,9 @@ type Phase = 'loading' | 'ready' | 'done' | 'error';
  * "solved" rule live on the server.
  */
 export default function LessonView({ slug }: { slug: string }) {
-  const { lang, user, setUser, ready: sessionReady } = useApp();
+  const { lang, user, setUser, ready: sessionReady, ageGroup } = useApp();
+  // Children get larger text and bigger answer targets (see .kid-mode in globals.css).
+  const kidMode = ageGroup === '5-7' || ageGroup === '8-12';
   const tr = makeT(lang);
 
   const [phase, setPhase] = useState<Phase>('loading');
@@ -183,7 +185,7 @@ export default function LessonView({ slug }: { slug: string }) {
 
   /* ── Workspace ── */
   return (
-    <div>
+    <div className={kidMode ? 'kid-mode' : undefined}>
       <nav aria-label="breadcrumb" className="mb-3 flex flex-wrap items-center gap-1.5 text-sm text-text-muted">
         <Link href="/learn" className="inline-flex min-h-9 items-center gap-1 font-medium hover:text-text-primary">
           <ArrowLeftIcon size={14} />
