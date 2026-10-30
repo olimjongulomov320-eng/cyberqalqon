@@ -22,12 +22,14 @@ function TrackCard({ track, tr }: { track: Track; tr: (k: string) => string }) {
     state === 'mastered' ? tr('masteryMastered') : state === 'practising' ? tr('masteryPractising') : tr('masteryNotStarted');
 
   return (
-    <Card hover className="flex h-full flex-col gap-3 p-4">
+    <Card hover className="flex h-full flex-col gap-2.5 p-3.5 sm:gap-3 sm:p-4">
       <div className="flex items-start gap-3">
         <ContentIcon name={track.icon} size={26} className="shrink-0 text-cyan-300" />
         <div className="min-w-0 flex-1">
           <h3 className="text-sm font-bold leading-snug text-text-primary">{track.title}</h3>
-          <p className="mt-0.5 text-xs leading-relaxed text-text-secondary">{track.description}</p>
+          {/* Hidden on phones: eight descriptions made the dashboard a very long scroll. */}
+          <p className="mt-0.5 hidden text-xs leading-relaxed text-text-secondary sm:block">{track.description}</p>
+          {track.needs_review && <Badge tone="warning" className="mt-1.5">{tr('trackDraft')}</Badge>}
         </div>
       </div>
 
@@ -68,10 +70,9 @@ function TrackCard({ track, tr }: { track: Track; tr: (k: string) => string }) {
         ) : (
           <Badge tone="success">{tr('trackCompleted')}</Badge>
         )}
-        <Link href={`/problems?track=${track.slug}`} className="text-xs font-semibold text-cyan-300 hover:underline">
+        <Link href={`/problems?track=${track.slug}`} className="inline-flex h-9 items-center px-2 text-xs font-semibold text-cyan-300 hover:underline">
           {tr('trackPractice')}
         </Link>
-        {track.needs_review && <Badge tone="warning">{tr('trackDraft')}</Badge>}
       </div>
     </Card>
   );

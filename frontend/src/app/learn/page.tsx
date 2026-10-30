@@ -484,7 +484,7 @@ function LearnInner() {
                       setPathSlug(p.slug);
                       setOpen(new Set());
                     }}
-                    className={`flex min-w-0 items-center gap-2 rounded-md px-3 py-1.5 text-xs font-bold transition-colors ${
+                    className={`flex min-w-0 items-center gap-2 rounded-md px-3 py-2 text-xs font-bold transition-colors ${
                       active ? 'bg-surface-700 text-white' : 'text-text-muted hover:text-text-primary'
                     }`}
                   >

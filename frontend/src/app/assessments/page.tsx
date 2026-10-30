@@ -139,20 +139,24 @@ export default function AssessmentsPage() {
                       </p>
                     </div>
 
-                    <p className="num order-3 text-xs text-text-secondary md:order-none md:text-sm">
-                      <span className="md:hidden">{tr('colLessons')}: </span>
-                      {a.lessons_completed}/{a.lessons_required}
-                    </p>
-                    <p className="num order-4 text-xs text-text-secondary md:order-none md:text-sm">
-                      <span className="md:hidden">{tr('colBest')}: </span>
-                      {a.best_percent === null ? '-' : `${a.best_percent}%`}
-                      {a.attempts > 0 && <span className="text-text-muted"> ({a.attempts})</span>}
-                    </p>
+                    {/* On phones the two figures share one line next to the action;
+                        from md up they are separate table cells (md:contents). */}
+                    <div className="order-3 flex flex-wrap gap-x-4 gap-y-0.5 md:contents">
+                      <p className="num text-xs text-text-secondary md:text-sm">
+                        <span className="md:hidden">{tr('colLessons')}: </span>
+                        {a.lessons_completed}/{a.lessons_required}
+                      </p>
+                      <p className="num text-xs text-text-secondary md:text-sm">
+                        <span className="md:hidden">{tr('colBest')}: </span>
+                        {a.best_percent === null ? '-' : `${a.best_percent}%`}
+                        {a.attempts > 0 && <span className="text-text-muted"> ({a.attempts})</span>}
+                      </p>
+                    </div>
                     <p className="order-2 justify-self-end md:order-none md:justify-self-start">
                       <Badge tone={STATUS_TONE[st]}>{tr(STATUS_KEY[st])}</Badge>
                     </p>
 
-                    <div className="order-5 col-span-2 md:order-none md:col-span-1 md:justify-self-end">
+                    <div className="order-4 justify-self-end md:order-none md:col-span-1">
                       {st === 'locked' ? (
                         <ButtonLink href="/learn" size="sm" variant="secondary">{tr('navLearn')}</ButtonLink>
                       ) : a.in_progress ? (

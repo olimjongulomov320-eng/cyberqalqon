@@ -185,7 +185,7 @@ export default function LessonView({ slug }: { slug: string }) {
   return (
     <div>
       <nav aria-label="breadcrumb" className="mb-3 flex flex-wrap items-center gap-1.5 text-sm text-text-muted">
-        <Link href="/learn" className="inline-flex items-center gap-1 font-medium hover:text-text-primary">
+        <Link href="/learn" className="inline-flex min-h-9 items-center gap-1 font-medium hover:text-text-primary">
           <ArrowLeftIcon size={14} />
           {tr('navLearn')}
         </Link>

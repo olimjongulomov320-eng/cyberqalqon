@@ -120,11 +120,11 @@ export default function HomePage() {
             cards. The count is the structure. */}
         <section aria-labelledby="how-h" className="mt-16 border-t border-border/60 pt-10">
           <p id="how-h" className="label mb-6">{tr('howItWorks')}</p>
-          <ol className="grid gap-8 sm:grid-cols-3 sm:gap-6">
+          <ol className="grid gap-4 sm:grid-cols-3 sm:gap-6">
             {steps.map((step, i) => (
-              <li key={i} className="flex flex-col gap-3">
-                <span className="num text-[0.8125rem] font-bold text-cyan-400">{String(i + 1).padStart(2, '0')}</span>
-                <span aria-hidden="true" className="h-px w-full bg-border" />
+              <li key={i} className="grid grid-cols-[2rem_minmax(0,1fr)] gap-x-3 border-t border-border/60 pt-4 sm:flex sm:flex-col sm:gap-3 sm:border-t-0 sm:pt-0">
+                <span className="num text-[0.8125rem] font-bold leading-relaxed text-cyan-400">{String(i + 1).padStart(2, '0')}</span>
+                <span aria-hidden="true" className="hidden h-px w-full bg-border sm:block" />
                 <p className="text-[0.9375rem] leading-relaxed text-text-secondary text-pretty">{step}</p>
               </li>
             ))}
@@ -231,7 +231,7 @@ export default function HomePage() {
                 ariaLabel={tr('levelProgress')}
                 label={<span className="num text-[0.625rem] font-bold text-text-primary">{level.intoLevel}</span>}
               />
-              <Link href="/profile" className="text-[0.6875rem] font-medium text-cyan-400 hover:underline">
+              <Link href="/profile" className="inline-flex min-h-9 items-center text-[0.6875rem] font-medium text-cyan-400 hover:underline">
                 {tr('levelProgress')}
               </Link>
             </div>
@@ -246,7 +246,7 @@ export default function HomePage() {
         <section aria-labelledby="paths-h" className="mt-8">
           <SectionHeading
             action={
-              <Link href="/learn" className="text-xs font-medium text-cyan-400 hover:underline">
+              <Link href="/learn" className="inline-flex min-h-9 items-center text-xs font-medium text-cyan-400 hover:underline">
                 {tr('viewPath')}
               </Link>
             }
@@ -336,7 +336,7 @@ export default function HomePage() {
             <section aria-labelledby="weak-h">
               <SectionHeading
                 action={
-                  <Link href="/review" className="text-xs font-medium text-cyan-400 hover:underline">
+                  <Link href="/review" className="inline-flex min-h-9 items-center text-xs font-medium text-cyan-400 hover:underline">
                     {tr('sharpSkills')}
                   </Link>
                 }
@@ -361,7 +361,7 @@ export default function HomePage() {
             <section aria-labelledby="ach-h">
               <SectionHeading
                 action={
-                  <Link href="/profile" className="text-xs font-medium text-cyan-400 hover:underline">
+                  <Link href="/profile" className="inline-flex min-h-9 items-center text-xs font-medium text-cyan-400 hover:underline">
                     {tr('seeAll')}
                   </Link>
                 }
@@ -405,7 +405,7 @@ export default function HomePage() {
           <section aria-labelledby="lb-h">
             <SectionHeading
               action={
-                <Link href="/leaderboard" className="text-xs font-medium text-cyan-400 hover:underline">
+                <Link href="/leaderboard" className="inline-flex min-h-9 items-center text-xs font-medium text-cyan-400 hover:underline">
                   {tr('seeAll')}
                 </Link>
               }

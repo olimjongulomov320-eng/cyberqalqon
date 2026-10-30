@@ -115,7 +115,7 @@ export default function SolveChallengePage() {
 
   return (
     <div>
-      <Link href="/challenges" className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-text-muted hover:text-text-primary">
+      <Link href="/challenges" className="mb-1 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-text-muted hover:text-text-primary">
         <ArrowLeftIcon size={16} /> {tr('chBack')}
       </Link>
 

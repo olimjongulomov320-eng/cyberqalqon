@@ -71,7 +71,7 @@ export default function HintLadder({
   };
 
   const btn =
-    'inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-800 px-2.5 py-1 text-xs font-semibold text-text-secondary transition-colors hover:border-border-light hover:text-text-primary disabled:pointer-events-none disabled:opacity-45';
+    'inline-flex items-center gap-1.5 rounded-md border border-border bg-surface-800 px-3 py-2 text-xs font-semibold text-text-secondary transition-colors hover:border-border-light hover:text-text-primary disabled:pointer-events-none disabled:opacity-45';
 
   const level2 = () => {
     if (!result) return <p className="text-xs text-text-muted">{tr('loading')}</p>;

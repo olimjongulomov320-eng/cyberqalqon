@@ -87,7 +87,7 @@ const errText = (e: unknown) =>
   e instanceof ApiError ? e.message : e instanceof Error ? e.message : String(e);
 
 const chipClass = (active: boolean) =>
-  `inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+  `inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition-colors ${
     active
       ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-300'
       : 'border-border bg-surface-800 text-text-muted hover:text-text-primary'
@@ -117,6 +117,7 @@ export default function ProblemsPage() {
   const [type, setType] = useState<'' | ExerciseType>('');
   const [status, setStatus] = useState<'' | ProblemStatus>('');
   const [search, setSearch] = useState('');
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
   const [data, setData] = useState<ProblemsPayload | null>(null);
@@ -438,6 +439,21 @@ export default function ProblemsPage() {
             </span>
           </label>
 
+          <button
+            type="button"
+            onClick={() => setFiltersOpen(o => !o)}
+            aria-expanded={filtersOpen}
+            aria-controls="problem-filters"
+            className="flex h-11 items-center justify-between rounded-lg border border-border bg-surface-800 px-3 text-sm font-semibold text-text-primary sm:hidden"
+          >
+            <span>
+              {tr('filtersToggle')}
+              {activeFilters > 0 && <span className="num ml-2 rounded-sm bg-cyan-500/15 px-1.5 py-0.5 text-xs text-cyan-300">{activeFilters}</span>}
+            </span>
+            <ChevronRightIcon size={16} className={`transition-transform duration-200 ${filtersOpen ? 'rotate-90' : ''}`} />
+          </button>
+
+          <div id="problem-filters" className={filtersOpen ? 'contents' : 'hidden sm:contents'}>
           <label className="block">
             <span className="form-label">{tr('filterTrack')}</span>
             <select className="input-base" value={track} onChange={e => setTrack(e.target.value)}>
@@ -503,9 +519,10 @@ export default function ProblemsPage() {
           ) : (
             <div className="hidden lg:block" aria-hidden="true" />
           )}
+          </div>
         </div>
 
-        <div className="mt-4">
+        <div className={`mt-4 ${filtersOpen ? '' : 'hidden sm:block'}`}>
           <span className="form-label">{tr('filterDifficulty')}</span>
           <div className="flex flex-wrap gap-2" role="group" aria-label={tr('filterDifficulty')}>
             <button

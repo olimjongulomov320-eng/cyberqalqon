@@ -222,7 +222,7 @@ function LangToggle({
           type="button"
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
-          className={`relative z-10 min-w-8 px-2 py-1.5 text-[0.6875rem] font-bold uppercase tracking-wide transition-colors duration-200 ${
+          className={`relative z-10 min-w-9 px-2 py-2 text-[0.6875rem] font-bold uppercase tracking-wide transition-colors duration-200 ${
             lang === l ? 'text-cyan-300' : 'text-text-muted hover:text-text-secondary'
           }`}
         >

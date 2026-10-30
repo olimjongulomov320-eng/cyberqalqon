@@ -104,7 +104,7 @@ export function SectionHeading({
   action?: ReactNode;
 }) {
   return (
-    <div className="mb-3 flex items-baseline justify-between gap-4">
+    <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
       {/* A real heading step (17px) above the 15px body - the old `text-sm`
           (13px) heading sat *below* body size, so every section read as a
           caption instead of a landmark. Weight + white carry the rest. */}

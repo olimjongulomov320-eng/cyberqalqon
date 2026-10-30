@@ -304,12 +304,12 @@ export default function PracticePage() {
                 <div className="overflow-hidden rounded-lg border border-border bg-surface-900">
                   <ul className="divide-y divide-border/60">
                     {missedList.map(a => (
-                      <li key={a.id} className="flex items-center gap-3 px-3 py-2.5">
+                      <li key={a.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2.5">
                         <span aria-hidden="true" className="shrink-0 text-danger">
                           <CloseIcon size={15} />
                         </span>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium text-text-primary">
+                        <div className="min-w-0 flex-1 basis-0 min-[420px]:basis-40">
+                          <p className="line-clamp-2 text-sm font-medium text-text-primary sm:truncate">
                             {a.question || tr('historyNoQuestion')}
                           </p>
                           <p className="truncate text-xs text-text-muted">{a.module_title}</p>
@@ -318,7 +318,7 @@ export default function PracticePage() {
                           href={`/problems?module=${encodeURIComponent(a.module_slug)}&exercise=${encodeURIComponent(a.exercise_id)}`}
                           variant="secondary"
                           size="sm"
-                          className="shrink-0"
+                          className="w-full shrink-0 justify-center sm:w-auto"
                         >
                           {tr('retryAttempt')}
                         </ButtonLink>
@@ -338,19 +338,19 @@ export default function PracticePage() {
                 <div className="overflow-hidden rounded-lg border border-border bg-surface-900">
                   <ul className="divide-y divide-border/60">
                     {data?.topics.map(t => (
-                      <li key={t.slug} className="flex items-center gap-3 px-3 py-2.5">
+                      <li key={t.slug} className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2.5">
                         <span aria-hidden="true" className="shrink-0 text-cyan-300">
                           <DomainIcon slug={t.slug} size={18} />
                         </span>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-bold text-white">{t.title}</p>
+                        <div className="min-w-0 flex-1 basis-0 min-[420px]:basis-40">
+                          <p className="text-sm font-bold text-white sm:truncate">{t.title}</p>
                           <p className="num text-xs text-text-secondary">
                             {t.wrong} {tr('mistakesCount')} · {t.accuracy}%
                           </p>
                         </div>
                         <span
                           aria-hidden="true"
-                          className="h-1.5 w-12 shrink-0 overflow-hidden rounded-full bg-surface-800 sm:w-16"
+                          className="hidden h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-surface-800 sm:block"
                         >
                           <span
                             className="block h-full rounded-full bg-danger/60"
@@ -361,7 +361,7 @@ export default function PracticePage() {
                           href={`/problems?domain=${encodeURIComponent(t.slug)}`}
                           variant="secondary"
                           size="sm"
-                          className="shrink-0"
+                          className="w-full shrink-0 justify-center sm:w-auto"
                         >
                           {tr('reviewOpenDomain')}
                           <ArrowRightIcon size={14} />
@@ -391,12 +391,12 @@ export default function PracticePage() {
                 <div className="overflow-hidden rounded-lg border border-border bg-surface-900">
                   <ul className="divide-y divide-border/60">
                     {harder.map(c => (
-                      <li key={c.slug} className="flex items-center gap-3 px-3 py-2.5">
+                      <li key={c.slug} className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2.5">
                         <span aria-hidden="true" className="shrink-0 text-cyan-300">
                           <DomainIcon slug={c.slug} size={18} />
                         </span>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-bold text-white">{c.title}</p>
+                        <div className="min-w-0 flex-1 basis-0 min-[420px]:basis-40">
+                          <p className="text-sm font-bold text-white sm:truncate">{c.title}</p>
                           <p className="num text-xs text-text-secondary">
                             {c.accuracy}% · {c.attempts} {tr('answersShort')}
                           </p>
@@ -405,7 +405,7 @@ export default function PracticePage() {
                           href={`/problems?domain=${encodeURIComponent(c.slug)}&difficulty=advanced`}
                           variant="secondary"
                           size="sm"
-                          className="shrink-0"
+                          className="w-full shrink-0 justify-center sm:w-auto"
                         >
                           {tr('reviewOpenDomain')}
                           <ArrowRightIcon size={14} />

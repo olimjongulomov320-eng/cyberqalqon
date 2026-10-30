@@ -454,14 +454,14 @@ export default function AuthPage() {
           {isRegister ? tr('alreadyAccount') : tr('noAccount')}{' '}
           <button
             onClick={() => switchMode(isRegister ? 'login' : 'register')}
-            className="font-semibold text-cyan-400 transition-colors hover:text-cyan-300"
+            className="px-1 py-2 font-semibold text-cyan-400 transition-colors hover:text-cyan-300"
           >
             {isRegister ? tr('login') : tr('register')}
           </button>
         </p>
 
         <p className="mt-6 text-center text-xs text-text-muted">
-          <Link href="/" className="inline-flex items-center gap-1.5 transition-colors hover:text-text-secondary">
+          <Link href="/" className="inline-flex items-center gap-1.5 py-2 transition-colors hover:text-text-secondary">
             <ArrowLeftIcon size={14} />
             {tr('backToHome')}
           </Link>

@@ -59,10 +59,10 @@ export default function LessonTable({ modules, all }: { modules: PathModule[]; a
               </span>
 
               <div className="min-w-0">
-                <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-text-primary">
-                  <span className="num text-text-muted">{number}.</span>
+                <p className="flex items-baseline gap-2 text-sm font-semibold text-text-primary">
+                  <span className="num shrink-0 text-text-muted">{number}.</span>
                   <span className="min-w-0 break-words">{m.title}</span>
-                  {m.kind === 'checkpoint' && <Badge tone="warning">{tr('checkpoint')}</Badge>}
+                  {m.kind === 'checkpoint' && <Badge tone="warning" className="shrink-0 self-center">{tr('checkpoint')}</Badge>}
                 </p>
                 <p className="num mt-0.5 text-xs text-text-muted">
                   {m.exercise_count} {tr('challenge').toLowerCase()}
@@ -85,12 +85,12 @@ export default function LessonTable({ modules, all }: { modules: PathModule[]; a
 
               <div className="justify-self-end">
                 {locked ? (
-                  <span className="text-xs font-medium text-text-muted">{tr('stateLocked')}</span>
+                  <span className="sr-only text-xs font-medium text-text-muted sm:not-sr-only">{tr('stateLocked')}</span>
                 ) : (
                   <Link
                     href={`/modules/${m.slug}`}
                     aria-label={`${action}: ${m.title}`}
-                    className={`inline-flex h-8 items-center rounded-md px-3 text-xs font-semibold transition-colors ${
+                    className={`inline-flex h-9 items-center rounded-md px-3 text-xs md:h-8 font-semibold transition-colors ${
                       m.state === 'current'
                         ? 'bg-cyan-400 text-text-inverse hover:bg-cyan-300'
                         : 'border border-border text-text-primary hover:bg-surface-800'
