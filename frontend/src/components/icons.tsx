@@ -26,6 +26,7 @@ import {
   FlagCheckered,
   Flame,
   Gear,
+  SignOut,
   GitBranch,
   Globe,
   GraduationCap,
@@ -128,6 +129,7 @@ export const HeartIcon = ({ filled = false, ...p }: IconProps & { filled?: boole
 export const BoltIcon = ({ filled = false, ...p }: IconProps & { filled?: boolean }) =>
   filled ? <Lightning weight="fill" size={p.size ?? 20} aria-hidden="true" focusable="false" {...p} /> : <BoltBase {...p} />;
 
+export const SignOutIcon = make(SignOut);
 export const SunIcon = make(Sun);
 export const MoonIcon = make(Moon);
 export const SystemIcon = make(Desktop);
