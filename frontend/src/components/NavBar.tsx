@@ -159,7 +159,6 @@ export default function NavBar() {
             <kbd className="hidden font-sans text-[0.6875rem] text-text-muted lg:block">{mac ? '⌘K' : 'Ctrl K'}</kbd>
           </button>
           <ThemeToggle />
-          <LangToggle lang={lang} setLang={setLang} label={tr('languageLabel')} />
 
           {user ? (
             <div className="ml-1">
@@ -176,6 +175,9 @@ export default function NavBar() {
               </Link>
             </>
           )}
+
+          <span aria-hidden="true" className="mx-1.5 h-5 w-px bg-border" />
+          <LangToggle lang={lang} setLang={setLang} label={tr('languageLabel')} />
         </div>
       </div>
 
@@ -192,6 +194,11 @@ export default function NavBar() {
   );
 }
 
+/**
+ * UZ / RU segmented switch. One thumb slides between the two options (a
+ * transform, so nothing reflows). The page is deliberately not remounted on a
+ * switch: that would discard in-progress lesson answers.
+ */
 function LangToggle({
   lang,
   setLang,
@@ -201,15 +208,22 @@ function LangToggle({
   setLang: (l: Lang) => void;
   label: string;
 }) {
+  const index = Math.max(0, LANGS.indexOf(lang));
   return (
-    <div role="group" aria-label={label} className="flex overflow-hidden rounded-md border border-border">
+    <div role="group" aria-label={label} className="relative flex rounded-md border border-border bg-surface-900/60 p-0.5">
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-0.5 left-0.5 rounded-[4px] bg-cyan-500/20 ring-1 ring-inset ring-cyan-400/40 transition-transform duration-300 ease-spring"
+        style={{ width: `calc((100% - 0.25rem) / ${LANGS.length})`, transform: `translateX(${index * 100}%)` }}
+      />
       {LANGS.map(l => (
         <button
           key={l}
+          type="button"
           onClick={() => setLang(l)}
           aria-pressed={lang === l}
-          className={`px-2 py-1.5 text-[0.6875rem] font-bold uppercase tracking-wide transition-colors ${
-            lang === l ? 'bg-cyan-500/15 text-cyan-300' : 'text-text-muted hover:text-text-secondary'
+          className={`relative z-10 min-w-8 px-2 py-1.5 text-[0.6875rem] font-bold uppercase tracking-wide transition-colors duration-200 ${
+            lang === l ? 'text-cyan-300' : 'text-text-muted hover:text-text-secondary'
           }`}
         >
           {l}
