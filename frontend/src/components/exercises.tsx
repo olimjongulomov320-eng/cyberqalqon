@@ -392,7 +392,7 @@ function Match({
           type="button"
           onClick={clearAll}
           disabled={locked || Object.keys(assignments).length === 0}
-          className="text-xs font-semibold text-text-secondary transition-colors hover:text-white disabled:opacity-40"
+          className="inline-flex min-h-9 items-center px-1 text-xs font-semibold text-text-secondary transition-colors hover:text-white disabled:opacity-40"
         >
           {tr('clearOrder')}
         </button>
