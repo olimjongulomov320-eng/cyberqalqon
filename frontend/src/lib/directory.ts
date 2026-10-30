@@ -5,6 +5,7 @@
  */
 
 import type { Domain, LearningPath, PathModule } from './api';
+import { searchKey } from './uzText.ts';
 
 /** Status chips on the directory. `todo` = unlocked and not yet done. */
 export type DirectoryFilter = 'all' | 'todo' | 'done' | 'locked';
@@ -36,7 +37,7 @@ function stateMatches(state: PathModule['state'], filter: DirectoryFilter): bool
 }
 
 const hasText = (text: string | undefined, q: string) =>
-  Boolean(q) && (text ?? '').toLowerCase().includes(q);
+  Boolean(q) && searchKey(text ?? '').includes(q);
 
 /**
  * Filter one path's domains.
@@ -51,7 +52,7 @@ export function filterDirectory(path: LearningPath, { filter, query }: Directory
   /** Modules currently visible, for the "showing n of m" line. */
   moduleCount: number;
 } {
-  const q = query.trim().toLowerCase();
+  const q = searchKey(query.trim());
   const domains: DirectoryDomain[] = [];
   let moduleCount = 0;
 

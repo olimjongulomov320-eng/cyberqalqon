@@ -4,6 +4,7 @@ const { optionalAuth } = require('../middleware/auth');
 const { localizeExercise, TYPES } = require('../lib/grade');
 const { DIFFICULTIES, difficultyForModule } = require('../lib/difficulty');
 const { TRACKS, trackOfModule } = require('../curriculum/tracks');
+const { searchKey } = require('../lib/uzText');
 
 const TRACK_OF = trackOfModule();
 
@@ -91,7 +92,7 @@ function statusOf(row) {
 
 function matchesQuery(problem, needle) {
   if (!needle) return true;
-  const hay = `${problem.question} ${problem.module_title} ${problem.domain_title}`.toLowerCase();
+  const hay = searchKey(`${problem.question} ${problem.module_title} ${problem.domain_title}`);
   return hay.includes(needle);
 }
 
@@ -108,7 +109,7 @@ router.get('/', optionalAuth, async (req, res, next) => {
     const type = TYPES.includes(req.query.type) ? req.query.type : '';
     const difficulty = DIFFICULTIES.includes(req.query.difficulty) ? req.query.difficulty : '';
     const status = STATUSES.includes(req.query.status) ? req.query.status : '';
-    const query = typeof req.query.q === 'string' ? req.query.q.trim().slice(0, MAX_QUERY).toLowerCase() : '';
+    const query = typeof req.query.q === 'string' ? searchKey(req.query.q.trim().slice(0, MAX_QUERY)) : '';
     const limit = clampInt(req.query.limit, 1, MAX_LIMIT, DEFAULT_LIMIT);
     const offset = clampInt(req.query.offset, 0, 100000, 0);
 

@@ -33,6 +33,7 @@
  */
 
 const crypto = require('crypto');
+const { foldUz } = require('./uzText');
 
 const TYPES = ['mc', 'tf', 'multi', 'match', 'order', 'input'];
 
@@ -79,10 +80,9 @@ function realRightId(ex, viewId) {
   return ex.pairs[(j + matchShift(ex)) % n].id;
 }
 
-/** Trim, lowercase, collapse whitespace, drop trailing punctuation. */
+/** Fold keyboard/spelling variants, collapse whitespace, drop trailing punctuation. */
 function normalize(value) {
-  return String(value ?? '')
-    .toLowerCase()
+  return foldUz(value)
     .replace(/\s+/g, ' ')
     .trim()
     .replace(/[.!?]+$/, '');

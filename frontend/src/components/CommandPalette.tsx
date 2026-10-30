@@ -3,6 +3,7 @@ import { useEffect, useId, useMemo, useRef, useState, type ComponentType } from 
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
+import { searchKey } from '@/lib/uzText';
 import {
   BookIcon,
   CodeIcon,
@@ -76,8 +77,8 @@ export default function CommandPalette({ open, onClose }: { open: boolean; onClo
   }, [tr, lang, lowBandwidth, user, router, setLang, setLowBandwidth, logout]);
 
   const shown = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return q ? entries.filter(e => e.label.toLowerCase().includes(q) || e.hint?.toLowerCase().includes(q)) : entries;
+    const q = searchKey(query.trim());
+    return q ? entries.filter(e => searchKey(e.label).includes(q) || e.hint?.toLowerCase().includes(q)) : entries;
   }, [entries, query]);
 
   useEffect(() => {
