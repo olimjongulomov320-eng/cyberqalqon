@@ -1,5 +1,6 @@
 import { performFetch, isAbortError, REQUEST_TIMEOUT_MS } from './http';
 import { createInFlight } from './inflight';
+import { safeStorage } from './safeStorage';
 import type { DomainSkillStat, SkillTrend } from './skills';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL + '/v1';
@@ -29,7 +30,7 @@ export class ApiError extends Error {
 
 function getToken() {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem('cq_token');
+  return safeStorage.get('cq_token');
 }
 
 async function rawRequest<T>(path: string, options: RequestInit = {}): Promise<T> {

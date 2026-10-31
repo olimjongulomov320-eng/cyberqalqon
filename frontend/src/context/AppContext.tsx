@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { ApiError, UNAUTHORIZED_EVENT, User, fetchMe, updateMe } from '@/lib/api';
 import { Lang, LANGS } from '@/lib/i18n';
 import { AgeGroup, isAgeGroup } from '@/lib/ageGroups';
+import { safeStorage } from '@/lib/safeStorage';
 
 interface AppState {
   user: User | null;
@@ -33,16 +34,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const storedLang = localStorage.getItem('cq_lang');
+    const storedLang = safeStorage.get('cq_lang');
     if (isLang(storedLang)) setLangState(storedLang);
     else if (navigator.language?.startsWith('ru')) setLangState('ru');
 
-    if (localStorage.getItem('cq_low_bw') === '1') setLowBandwidthState(true);
+    if (safeStorage.get('cq_low_bw') === '1') setLowBandwidthState(true);
 
-    const storedAge = localStorage.getItem('cq_age');
+    const storedAge = safeStorage.get('cq_age');
     if (isAgeGroup(storedAge)) setAgeGroupState(storedAge);
 
-    const token = localStorage.getItem('cq_token');
+    const token = safeStorage.get('cq_token');
     if (!token) {
       setReady(true);
       return;
@@ -53,7 +54,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         // The account's choice wins; a choice made before signing in is kept.
         if (isAgeGroup(me.age_group)) {
           setAgeGroupState(me.age_group);
-          localStorage.setItem('cq_age', me.age_group);
+          safeStorage.set('cq_age', me.age_group);
         } else if (isAgeGroup(storedAge)) {
           updateMe({ age_group: storedAge }).then(setUserState).catch(() => {});
         }
@@ -61,7 +62,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       .catch(err => {
         // Only a server-side rejection invalidates the session. A timeout or a
         // dropped connection (e.g. the free API waking up) must keep the login.
-        if (err instanceof ApiError && err.status === 401) localStorage.removeItem('cq_token');
+        if (err instanceof ApiError && err.status === 401) safeStorage.remove('cq_token');
       })
       .finally(() => setReady(true));
   }, []);
@@ -81,34 +82,34 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (u && isLang(u.lang)) setLangState(u.lang);
     if (u && isAgeGroup(u.age_group)) {
       setAgeGroupState(u.age_group);
-      localStorage.setItem('cq_age', u.age_group);
+      safeStorage.set('cq_age', u.age_group);
     }
   }, []);
 
   const setAgeGroup = useCallback((g: AgeGroup) => {
     setAgeGroupState(g);
-    localStorage.setItem('cq_age', g);
+    safeStorage.set('cq_age', g);
     // Best effort, like the language: the local choice already applies. Picking
     // a minor group also takes the account off the leaderboard, server-side.
-    if (localStorage.getItem('cq_token')) {
+    if (safeStorage.get('cq_token')) {
       updateMe({ age_group: g }).then(setUserState).catch(() => {});
     }
   }, []);
 
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
-    localStorage.setItem('cq_lang', l);
+    safeStorage.set('cq_lang', l);
     // Best effort. The profile copy of the language is a nice-to-have, not the
     // source of truth - a failed PATCH must never block the UI switch.
-    if (localStorage.getItem('cq_token')) {
+    if (safeStorage.get('cq_token')) {
       updateMe({ lang: l }).catch(() => {});
     }
   }, []);
 
   const setLowBandwidth = useCallback((v: boolean) => {
     setLowBandwidthState(v);
-    localStorage.setItem('cq_low_bw', v ? '1' : '0');
-    if (localStorage.getItem('cq_token')) {
+    safeStorage.set('cq_low_bw', v ? '1' : '0');
+    if (safeStorage.get('cq_token')) {
       updateMe({ low_bandwidth_mode: v }).catch(() => {});
     }
   }, []);
@@ -116,7 +117,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // A 401 mid-session (expired token) signs out instead of leaving a broken UI.
   useEffect(() => {
     const onUnauthorized = () => {
-      localStorage.removeItem('cq_token');
+      safeStorage.remove('cq_token');
       setUserState(null);
     };
     window.addEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
@@ -124,14 +125,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('cq_token');
+    safeStorage.remove('cq_token');
     // Drop any cached API responses so the next person on this device never
     // sees the previous user's data.
     if (typeof caches !== 'undefined') {
       caches.keys().then(keys => keys.forEach(k => void caches.delete(k))).catch(() => {});
     }
     // The next person on this device should be asked, not inherit a child's group.
-    localStorage.removeItem('cq_age');
+    safeStorage.remove('cq_age');
     setAgeGroupState(null);
     setUserState(null);
     router.replace('/auth');

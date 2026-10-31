@@ -8,6 +8,7 @@ import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, authLogin, authRegister } from '@/lib/api';
 import { safeNextPath } from '@/lib/redirect';
+import { safeStorage } from '@/lib/safeStorage';
 import { PwnedResult, checkPwned } from '@/lib/pwned';
 import PasswordPolicy from '@/components/PasswordPolicy';
 import { Button, Field, ErrorNote, SuccessNote } from '@/components/ui';
@@ -243,7 +244,7 @@ export default function AuthPage() {
           })
         : await authLogin({ identifier: form.username.trim(), password: form.password });
 
-      localStorage.setItem('cq_token', res.token);
+      safeStorage.set('cq_token', res.token);
       setUser(res.user);
       setSuccess(isRegister ? tr('registerSuccess') : tr('loginSuccess'));
       router.replace(next);
