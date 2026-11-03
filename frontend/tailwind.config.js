@@ -55,8 +55,11 @@ module.exports = {
       boxShadow: {
         // Shadows are tinted to the navy background hue (never pure black) and
         // suggest a single top light source via the `edge` inset.
-        'card': '0 1px 2px 0 rgb(var(--shadow) / 0.5), 0 10px 26px -12px rgb(var(--shadow) / 0.75)',
-        'card-hover': '0 2px 6px 0 rgb(var(--shadow) / 0.55), 0 18px 40px -16px rgb(var(--shadow) / 0.85)',
+        // Strengths are per-theme variables: a near-black drop reads as depth
+        // on the dark canvas but as a smudge under white cards in light mode.
+        'card': '0 1px 2px 0 rgb(var(--shadow) / var(--sh-near)), 0 10px 26px -12px rgb(var(--shadow) / var(--sh-far))',
+        'card-hover': '0 2px 6px 0 rgb(var(--shadow) / var(--sh-near-hover)), 0 18px 40px -16px rgb(var(--shadow) / var(--sh-far-hover))',
+        'glow': '0 8px 24px -10px rgb(var(--cyan-400) / 0.55)',
         'edge': 'inset 0 1px 0 0 rgb(148 163 184 / 0.06)',
         'focus': '0 0 0 2px rgb(var(--bg)), 0 0 0 4px rgb(var(--cyan-400) / 0.55)',
       },

@@ -38,7 +38,7 @@ export default function LandingPreview() {
       </div>
 
       {/* Question */}
-      <h3 className="mt-4 text-[1.0625rem] font-bold leading-snug text-text-primary text-pretty before:mr-2 before:font-mono before:text-cyan-400 before:content-['$']">{tr('previewQ')}</h3>
+      <p className="mt-4 text-[1.0625rem] font-bold leading-snug text-text-primary text-pretty before:mr-2 before:font-mono before:text-cyan-400 before:content-['$']">{tr('previewQ')}</p>
 
       {/* Options */}
       <div className="mt-3 flex flex-col gap-2" role="group" aria-label={tr('previewQ')}>

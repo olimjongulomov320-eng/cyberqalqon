@@ -63,15 +63,21 @@ export default function ActivityMap({ activity, today }: { activity: ActivityDay
   );
 }
 
-// Half a year where there is room, one quarter on phones (the grid does not scroll).
+// As much history as fits without scrolling: ten months on wide desktops, half
+// a year on tablets and laptops, one quarter on phones.
 function useWeeks() {
   const [weeks, setWeeks] = useState(13);
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 640px)');
-    const apply = () => setWeeks(mq.matches ? 26 : 13);
+    const sm = window.matchMedia('(min-width: 640px)');
+    const xl = window.matchMedia('(min-width: 1280px)');
+    const apply = () => setWeeks(xl.matches ? 44 : sm.matches ? 26 : 13);
     apply();
-    mq.addEventListener('change', apply);
-    return () => mq.removeEventListener('change', apply);
+    sm.addEventListener('change', apply);
+    xl.addEventListener('change', apply);
+    return () => {
+      sm.removeEventListener('change', apply);
+      xl.removeEventListener('change', apply);
+    };
   }, []);
   return weeks;
 }

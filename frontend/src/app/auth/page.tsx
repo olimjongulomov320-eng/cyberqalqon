@@ -305,7 +305,7 @@ export default function AuthPage() {
               aria-selected={mode === m}
               onClick={() => switchMode(m)}
               className={`rounded-sm py-2 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
-                mode === m ? 'bg-cyan-400 text-text-inverse' : 'text-text-muted hover:text-text-primary'
+                mode === m ? 'bg-cyan-500/15 text-cyan-300 shadow-[inset_0_0_0_1px_rgb(var(--cyan-500)/0.35)]' : 'text-text-muted hover:bg-surface-800 hover:text-text-primary'
               }`}
             >
               {m === 'login' ? tr('login') : tr('register')}

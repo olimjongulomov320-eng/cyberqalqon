@@ -820,6 +820,6 @@ export interface ActivityDay {
   correct: number;
 }
 
-export function fetchActivity(days = 182) {
+export function fetchActivity(days = 308) {
   return req<{ days: number; activity: ActivityDay[] }>(`/users/me/activity?days=${days}`);
 }

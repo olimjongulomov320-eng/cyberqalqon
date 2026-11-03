@@ -27,7 +27,9 @@ function SegmentedTabs({ period, setPeriod }: { period: Period; setPeriod: (p: P
           aria-controls="lb-panel"
           onClick={() => setPeriod(t.id)}
           className={`rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
-            period === t.id ? 'bg-cyan-400 text-text-inverse' : 'text-text-secondary hover:text-text-primary'
+            period === t.id
+              ? 'bg-cyan-500/15 text-cyan-300 shadow-[inset_0_0_0_1px_rgb(var(--cyan-500)/0.35)]'
+              : 'text-text-secondary hover:bg-surface-800 hover:text-text-primary'
           }`}
         >
           {t.label}
@@ -64,7 +66,7 @@ export default function LeaderboardPage() {
   return (
     <div className="flex flex-col">
       <header>
-        <h1 className="display">{tr('leaderboard')}</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">{tr('leaderboard')}</h1>
         <p className="mt-1.5 text-sm text-text-secondary">
           {period === 'week' ? tr('weeklySubtitle') : tr('lbSubtitle')}
         </p>

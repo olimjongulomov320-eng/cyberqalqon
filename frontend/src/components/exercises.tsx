@@ -177,14 +177,28 @@ function SelectOne({
               locked ? 'cursor-default' : 'active:scale-[0.995]'
             } ${optionClass(state)}`}
           >
-            <span
-              aria-hidden="true"
-              className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${
-                isSel ? 'border-cyan-500 bg-cyan-500 text-text-inverse' : 'border-border-light text-transparent'
-              }`}
-            >
-              {multi && isSel ? <CheckIcon size={13} /> : null}
-            </span>
+            {/* The marker says how many answers to pick before the learner
+                reads the hint: a round radio dot for one, a square checkbox
+                for several. */}
+            {multi ? (
+              <span
+                aria-hidden="true"
+                className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border transition-colors ${
+                  isSel ? 'border-cyan-500 bg-cyan-500 text-text-inverse' : 'border-border-light text-transparent'
+                }`}
+              >
+                {isSel ? <CheckIcon size={13} /> : null}
+              </span>
+            ) : (
+              <span
+                aria-hidden="true"
+                className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 transition-colors ${
+                  isSel ? 'border-cyan-500' : 'border-border-light'
+                }`}
+              >
+                <span className={`h-2.5 w-2.5 rounded-full bg-cyan-500 transition-transform duration-150 ease-spring ${isSel ? 'scale-100' : 'scale-0'}`} />
+              </span>
+            )}
             <span>{opt.text}</span>
             {locked && isCorr && <CheckIcon size={16} className="ml-auto shrink-0" />}
             {locked && isSel && !isCorr && <CloseIcon size={16} className="ml-auto shrink-0" />}

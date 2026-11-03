@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
+import { questionCount } from '@/lib/plural';
 import {
   ApiError,
   AnswerValue,
@@ -247,7 +248,7 @@ export default function PracticePage() {
           <p className="label mb-2 flex items-center gap-1.5 text-cyan-300">
             <RefreshIcon size={14} aria-hidden="true" /> {tr('stageReview')}
           </p>
-          <h1 className="display">{tr('reviewTitle')}</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">{tr('reviewTitle')}</h1>
           <p className="mt-1.5 max-w-[62ch] text-sm text-text-secondary">
             {tr('practiceSubtitle')}
           </p>
@@ -262,7 +263,7 @@ export default function PracticePage() {
               <p className="label text-cyan-300">{tr('reviewSession')}</p>
               <p className="truncate text-sm font-bold text-white">{session.module_title}</p>
               <p className="num text-xs text-text-secondary">
-                {exercises.length} {tr('question').toLowerCase()} · {tr('weakest')}
+                {questionCount(exercises.length, lang)} · {tr('weakest')}
               </p>
             </div>
             <Button onClick={start} className="shrink-0">{tr('startLesson')}</Button>

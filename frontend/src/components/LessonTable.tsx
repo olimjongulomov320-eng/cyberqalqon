@@ -2,6 +2,7 @@ import { stagger } from '@/lib/motion';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
+import { questionCount } from '@/lib/plural';
 import type { Difficulty, PathModule } from '@/lib/api';
 import { Badge, DifficultyTag } from '@/components/ui';
 import { CheckIcon, LockIcon } from '@/components/icons';
@@ -76,7 +77,7 @@ export default function LessonTable({
                   {m.kind === 'checkpoint' && <Badge tone="warning" className="shrink-0 self-center">{tr('checkpoint')}</Badge>}
                 </p>
                 <p className="num mt-0.5 text-xs text-text-muted">
-                  {m.exercise_count} {tr('challenge').toLowerCase()}
+                  {questionCount(m.exercise_count, lang)}
                   <span className="md:hidden">
                     {showDifficulty && (
                       <>

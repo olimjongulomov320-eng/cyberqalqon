@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { fetchPaths, fetchStats, StatsPayload, LeaderboardEntry, fetchLeaderboard, LearningPath } from '@/lib/api';
-import { AchievementBadge, DailyGoal, Flame, RingProgress, XPChip } from '@/components/game';
+import { AchievementBadge, DailyGoal, RingProgress, XPChip } from '@/components/game';
 import LandingPreview from '@/components/LandingPreview';
 import TracksSection from '@/components/TracksSection';
 import AgePicker from '@/components/AgePicker';
@@ -15,6 +15,7 @@ import { achievementMeta, levelFromXp, tierIndex, tierKey } from '@/lib/gamifica
 import { Avatar, Badge, ButtonLink, Card, EmptyState, SectionHeading, Skeleton } from '@/components/ui';
 import {
   ArrowRightIcon,
+  BoltIcon,
   BookIcon,
   CheckIcon,
   ChevronRightIcon,
@@ -110,7 +111,7 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <div className="stagger-item relative lg:mt-8" style={stagger(2)}>
+          <div className="stagger-item relative isolate lg:mt-8" style={stagger(2)}>
             {/* Single cyan bloom behind the card - the only glow on the page. */}
             <div
               aria-hidden="true"
@@ -229,40 +230,39 @@ export default function HomePage() {
           </Link>
         )}
 
-        {/* Stats row */}
-        <div className="grid grid-cols-3 gap-2">
-          <Card className="flex flex-col items-center gap-1 p-3 text-center">
-            <Flame streak={stats?.profile.current_streak ?? user.current_streak ?? 0} short />
-            <span className="text-xs text-text-muted">{tr('streak')}</span>
-          </Card>
-          <Card className="flex flex-col items-center gap-1 p-3 text-center">
-            <span className="num text-lg font-extrabold text-text-primary">{stats?.week_xp ?? 0}</span>
-            <span className="text-xs text-text-muted">{tr('weekXp')}</span>
-          </Card>
-          <Card className="flex flex-col items-center gap-1 p-3 text-center">
-            <span className="num text-lg font-extrabold text-text-primary">{stats?.profile.modules_completed ?? 0}</span>
-            <span className="text-xs text-text-muted">{tr('lessonsShort')}</span>
-          </Card>
-        </div>
-
-        {/* Daily goal + level progress */}
-        <Card className="p-4">
-          <div className="flex items-center justify-between gap-3">
+        {/* Status panel: three counters, the daily goal and the level in one
+            instrument strip instead of four loosely centred tiles. */}
+        <Card className="grid grid-cols-3 overflow-hidden lg:grid-cols-[repeat(3,minmax(0,0.8fr))_minmax(0,1.25fr)_minmax(0,1.25fr)]">
+          <Stat label={tr('streak')} icon={<FlameIcon size={13} className={(stats?.profile.current_streak ?? user.current_streak ?? 0) > 0 ? 'text-warning' : ''} />}>
+            {stats?.profile.current_streak ?? user.current_streak ?? 0}
+          </Stat>
+          <Stat label={tr('weekXp')} icon={<BoltIcon size={13} />} className="border-l border-border">
+            {stats?.week_xp ?? 0}
+          </Stat>
+          <Stat label={tr('lessonsShort')} icon={<BookIcon size={13} />} className="border-l border-border">
+            {stats?.profile.modules_completed ?? 0}
+          </Stat>
+          <div className="col-span-3 flex items-center border-t border-border px-4 py-3.5 lg:col-span-1 lg:border-l lg:border-t-0">
             <DailyGoal dailyXp={stats?.daily_xp ?? 0} goal={goal} />
-            <div className="flex flex-col items-end gap-1">
-              <RingProgress
-                value={level.intoLevel}
-                max={level.toNext}
-                size={46}
-                stroke={5}
-                ariaLabel={tr('levelProgress')}
-                label={<span className="num text-[0.625rem] font-bold text-text-primary">{level.intoLevel}</span>}
-              />
-              <Link href="/profile" className="inline-flex min-h-9 items-center text-[0.6875rem] font-medium text-cyan-400 hover:underline">
-                {tr('levelProgress')}
-              </Link>
-            </div>
           </div>
+          <Link
+            href="/profile"
+            className="group col-span-3 flex items-center gap-3 border-t border-border px-4 py-3.5 transition-colors hover:bg-surface-800/60 lg:col-span-1 lg:border-l lg:border-t-0"
+          >
+            <RingProgress
+              value={level.intoLevel}
+              max={level.toNext}
+              ariaLabel={tr('levelProgress')}
+              label={<span className="num text-xs font-bold text-text-primary">{level.level}</span>}
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-text-primary">{tr('levelProgress')}</p>
+              <p className="num mt-0.5 text-xs text-text-secondary">
+                Lv.{level.level} · {level.intoLevel}/{level.toNext} XP
+              </p>
+            </div>
+            <ChevronRightIcon size={16} className="shrink-0 text-text-muted transition-[color,transform] group-hover:translate-x-0.5 group-hover:text-cyan-400" />
+          </Link>
         </Card>
       </div>
 
@@ -373,11 +373,18 @@ export default function HomePage() {
               </SectionHeading>
               <Card as="ul" className="divide-y divide-border overflow-hidden">
                 {stats.weak_topics.slice(0, 3).map(t => (
-                  <li key={t.slug} className="flex items-center gap-3 px-4 py-3">
-                    <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={18} /></span>
-                    <span className="min-w-0 flex-1 truncate text-sm font-medium text-text-primary">{t.title}</span>
-                    <span className="num text-xs text-text-muted">{t.accuracy}%</span>
-                    <ChevronRightIcon size={16} className="shrink-0 text-text-muted" />
+                  <li key={t.slug}>
+                    {/* The row shows a chevron, so it has to go somewhere: the
+                        review session, same as the section's own link. */}
+                    <Link href="/review" className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-800/60">
+                      <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={18} /></span>
+                      <span className="min-w-0 flex-1 truncate text-sm font-medium text-text-primary">{t.title}</span>
+                      <span className="hidden h-1 w-16 shrink-0 overflow-hidden rounded-full bg-surface-800 sm:block" aria-hidden="true">
+                        <span className="fill-x block h-full rounded-full bg-warning/80" style={{ transform: `scaleX(${t.accuracy / 100})` }} />
+                      </span>
+                      <span className="num w-9 text-right text-xs font-semibold text-warning">{t.accuracy}%</span>
+                      <ChevronRightIcon size={16} className="shrink-0 text-text-muted transition-[color,transform] group-hover:translate-x-0.5 group-hover:text-cyan-400" />
+                    </Link>
                   </li>
                 ))}
               </Card>
@@ -459,10 +466,16 @@ export default function HomePage() {
           )}
 
           {/* Continue to full path */}
-          <ButtonLink href="/learn" size="lg" className="group w-full justify-center lg:col-span-2">
-            {tr('viewPath')}
-            <ArrowRightIcon size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
-          </ButtonLink>
+          {/* A closing rule with the path link, not a full-width slab that
+              outweighs everything above it. */}
+          <div className="flex items-center gap-4 lg:col-span-2">
+            <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-transparent to-border-light" />
+            <ButtonLink href="/learn" variant="secondary" className="group">
+              {tr('viewPath')}
+              <ArrowRightIcon size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+            </ButtonLink>
+            <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-l from-transparent to-border-light" />
+          </div>
         </div>
       )}
     </div>
@@ -475,5 +488,20 @@ function Rank({ rank }: { rank: number }) {
     <span className={`num w-5 shrink-0 text-center text-sm font-bold ${tone}`} aria-label={`${rank}`}>
       {rank}
     </span>
+  );
+}
+
+/** One counter in the dashboard status panel: a mono label over a large value. */
+function Stat({ label, icon, children, className = '' }: { label: string; icon: React.ReactNode; children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`flex min-w-0 flex-col justify-between gap-1.5 px-3 py-3.5 sm:px-4 ${className}`}>
+      {/* Labels wrap rather than truncate: "Дневная серия" in a 130px phone
+          column must stay readable. */}
+      <span className="flex min-w-0 items-start gap-1.5 text-text-muted">
+        <span aria-hidden="true" className="mt-px shrink-0">{icon}</span>
+        <span className="label leading-snug">{label}</span>
+      </span>
+      <span className="num text-2xl font-extrabold leading-none tracking-tight text-text-primary">{children}</span>
+    </div>
   );
 }

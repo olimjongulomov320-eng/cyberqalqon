@@ -472,7 +472,7 @@ export default function ProfilePage() {
     let alive = true;
     fetchStats(lang).then(s => alive && setStats(s)).catch(e => alive && setError(e as ApiError));
     fetchTracks(lang).then(d => alive && setTracks(d.tracks)).catch(() => alive && setTracks([]));
-    fetchActivity(182).then(d => alive && setActivity(d.activity)).catch(() => alive && setActivity([]));
+    fetchActivity(308).then(d => alive && setActivity(d.activity)).catch(() => alive && setActivity([]));
     return () => {
       alive = false;
     };
@@ -573,9 +573,9 @@ export default function ProfilePage() {
             <Card className="p-4">
               <h2 className="mb-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-text-muted">{tr('activityTitle')}</h2>
               {activity ? (
-                <div className="flex flex-wrap items-start gap-x-12 gap-y-5">
+                <div className="flex flex-wrap items-start justify-between gap-x-12 gap-y-5">
                   <ActivityMap activity={activity} today={appDayKey()} />
-                  <dl className="grid grid-cols-3 gap-x-8 gap-y-1 sm:grid-cols-1">
+                  <dl className="grid grid-cols-3 gap-x-8 gap-y-4 sm:grid-cols-1 sm:border-l sm:border-border sm:pl-8">
                     <div>
                       <dt className="font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted">{tr('activityAnswers')}</dt>
                       <dd className="num text-2xl font-bold text-text-primary">{activity.reduce((n, a) => n + a.answers, 0)}</dd>

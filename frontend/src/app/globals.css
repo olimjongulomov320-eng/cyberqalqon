@@ -24,8 +24,12 @@
     --warning-light: 251 191 36;  --warning: 245 158 11; --warning-dark: 217 119 6;
     --danger-light: 248 113 113;  --danger: 239 68 68;   --danger-dark: 220 38 38;
     --shadow: 0 4 2;
+    --sh-near: 0.5; --sh-far: 0.75; --sh-near-hover: 0.55; --sh-far-hover: 0.85;
     --grid: 57 217 138;
     --grid-alpha: 0.045;
+    --glow-alpha: 0.075;
+    /* Card face: a whisper of light at the top edge, flat below. */
+    --card-sheen: 0.035;
   }
 
   /* Light: bright, friendly, high-contrast text. Surfaces are inverted so the
@@ -46,8 +50,11 @@
     --warning-light: 217 119 6;  --warning: 168 77 8;   --warning-dark: 146 64 14;
     --danger-light: 220 38 38;   --danger: 185 28 28;   --danger-dark: 153 27 27;
     --shadow: 12 22 17;
+    --sh-near: 0.05; --sh-far: 0.1; --sh-near-hover: 0.07; --sh-far-hover: 0.16;
     --grid: 15 118 70;
     --grid-alpha: 0.05;
+    --glow-alpha: 0.06;
+    --card-sheen: 0;
   }
   /* Plain white text means "primary text" outside solid fills; in light mode
      that must flip to dark. Solid fills use text-onaccent, which never flips. */
@@ -60,12 +67,28 @@
 
   body {
     @apply bg-bg text-text-primary font-sans antialiased;
-    /* Faint console grid: structure, not decoration. Fixed so it never scrolls. */
+    /* One soft pool of signal-green light above the fold: gives the canvas a
+       top, so the page reads as lit from the header down. */
+    background-image: radial-gradient(70rem 32rem at 50% -12rem, rgb(var(--cyan-400) / var(--glow-alpha)), transparent 70%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  /* Faint console grid: structure, not decoration. Fixed so it never scrolls,
+     and masked so it dissolves toward the bottom and edges instead of tiling
+     flat across the whole screen. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background-image:
       linear-gradient(rgb(var(--grid) / var(--grid-alpha)) 1px, transparent 1px),
       linear-gradient(90deg, rgb(var(--grid) / var(--grid-alpha)) 1px, transparent 1px);
     background-size: 44px 44px;
-    background-attachment: fixed;
+    background-position: center top;
+    -webkit-mask-image: radial-gradient(ellipse 100% 85% at 50% 0%, #000 35%, transparent 100%);
+    mask-image: radial-gradient(ellipse 100% 85% at 50% 0%, #000 35%, transparent 100%);
   }
 
   /* Focus visible — keyboard only */
@@ -121,6 +144,7 @@
   /* Top highlight on cards — suggests a single overhead light source. */
   .edge-light {
     box-shadow: inset 0 1px 0 0 rgb(var(--surface-400) / 0.08);
+    background-image: linear-gradient(180deg, rgb(var(--surface-200) / var(--card-sheen)), transparent 7rem);
   }
 
   /* Section label — small caps micro-label */
@@ -150,6 +174,12 @@
        page from scrolling horizontally. */
     @apply text-display font-extrabold tracking-tight text-text-primary text-balance break-words hyphens-auto;
   }
+  /* Auto-hyphenation is only the 320px safety net. Wherever the longest word
+     fits on its own line, break between words: "кибербез-/опасность" in a
+     headline reads as a typo. */
+  @media (min-width: 640px) {
+    .display { hyphens: manual; }
+  }
 
   /* Progress bar fill animation */
   .fill-x {
@@ -173,6 +203,7 @@
   .low-bandwidth body {
     background-image: none;
   }
+  .low-bandwidth body::before { display: none; }
 
   /* Input base styles */
   .input-base {

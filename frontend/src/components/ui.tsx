@@ -23,7 +23,7 @@ export function Card({
     <Tag
       className={`
         rounded-lg ${bordered ? 'border border-border' : ''} bg-surface-900 shadow-card edge-light
-        ${hover ? 'transition-[transform,border-color,box-shadow] duration-200 ease-spring hover:-translate-y-0.5 hover:border-border-light hover:shadow-card-hover' : ''}
+        ${hover ? 'transition-[transform,border-color,box-shadow] duration-200 ease-spring hover:-translate-y-0.5 hover:border-cyan-500/30 hover:shadow-card-hover' : ''}
         ${className}
       `}
       {...rest}
@@ -38,13 +38,15 @@ type ButtonVariant = 'primary' | 'secondary' | 'success' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 
 const BUTTON_BASE =
-  'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-[background-color,border-color,color,transform] duration-150 ease-out active:translate-y-px disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-cyan-400';
+  'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-out active:translate-y-px disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-cyan-400';
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   // Solid, single-accent fills. No gradients - the old cyan→cyan gradient
   // buttons were the loudest generic tell in the shell.
-  primary: 'bg-cyan-400 text-text-inverse hover:bg-cyan-300',
-  secondary: 'bg-surface-800 text-text-primary border border-border hover:bg-surface-700 hover:border-border-light',
+  // Inset top highlight makes the fill read as a physical key; the hover glow
+  // is the one place the accent is allowed to bloom.
+  primary: 'bg-cyan-400 text-text-inverse shadow-[inset_0_1px_0_rgb(255_255_255/0.22)] hover:bg-cyan-300 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.22),0_8px_24px_-10px_rgb(var(--cyan-400)/0.6)]',
+  secondary: 'bg-surface-800 text-text-primary border border-border-light shadow-[inset_0_1px_0_rgb(var(--surface-300)/0.06)] hover:bg-surface-700 hover:border-cyan-500/40',
   success: 'bg-success text-text-inverse hover:bg-success-light',
   ghost: 'text-text-secondary hover:text-text-primary hover:bg-surface-800',
   danger: 'bg-danger-dark text-onaccent hover:bg-danger focus-visible:ring-danger',
@@ -104,7 +106,7 @@ export function SectionHeading({
   action?: ReactNode;
 }) {
   return (
-    <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+    <div className="mb-3.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
       {/* A real heading step (17px) above the 15px body - the old `text-sm`
           (13px) heading sat *below* body size, so every section read as a
           caption instead of a landmark. Weight + white carry the rest. */}
