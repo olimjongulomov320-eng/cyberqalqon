@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
+import { lessonsLeft } from '@/lib/plural';
 import { AssessmentSummary, LearningPath, fetchAssessments, fetchPaths } from '@/lib/api';
 import { Badge, ButtonLink, Card, EmptyState, Skeleton } from '@/components/ui';
 import { CompassIcon, ContentIcon, LockIcon } from '@/components/icons';
@@ -112,7 +113,7 @@ export default function AssessmentsPage() {
           <Card className="overflow-hidden">
             <div
               aria-hidden="true"
-              className="hidden grid-cols-[minmax(0,1fr)_6rem_6rem_8rem_8rem] gap-3 border-b border-border/60 bg-surface-950/40 px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted md:grid"
+              className="hidden grid-cols-[minmax(0,1fr)_6rem_6rem_10.5rem_7rem] gap-3 border-b border-border/60 bg-surface-950/40 px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-wider text-text-muted md:grid"
             >
               <span>{tr('colTrack')}</span>
               <span>{tr('colLessons')}</span>
@@ -127,7 +128,7 @@ export default function AssessmentsPage() {
                   <li
                     key={a.slug}
                     style={stagger(i)}
-                    className="stagger-item grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 py-3 md:grid-cols-[minmax(0,1fr)_6rem_6rem_8rem_8rem]"
+                    className="stagger-item grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 py-3 md:grid-cols-[minmax(0,1fr)_6rem_6rem_10.5rem_7rem]"
                   >
                     <div className="min-w-0">
                       <p className="flex items-center gap-2 text-sm font-semibold text-text-primary">
@@ -153,7 +154,15 @@ export default function AssessmentsPage() {
                       </p>
                     </div>
                     <p className="order-2 justify-self-end md:order-none md:justify-self-start">
-                      <Badge tone={STATUS_TONE[st]}>{tr(STATUS_KEY[st])}</Badge>
+                      {st === 'locked' ? (
+                        // "Locked" on every row said nothing; the count says how far away it is.
+                        <Badge tone="neutral" className="whitespace-nowrap">
+                          <LockIcon size={11} aria-hidden="true" />
+                          {lessonsLeft(Math.max(0, a.lessons_required - a.lessons_completed), lang)}
+                        </Badge>
+                      ) : (
+                        <Badge tone={STATUS_TONE[st]}>{tr(STATUS_KEY[st])}</Badge>
+                      )}
                     </p>
 
                     <div className="order-4 justify-self-end md:order-none md:col-span-1">

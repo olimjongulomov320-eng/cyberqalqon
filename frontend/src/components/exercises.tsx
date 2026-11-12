@@ -65,7 +65,7 @@ function Question({ ex, children }: { ex: Exercise; children: React.ReactNode })
     <div className="flex flex-col gap-4">
       <h2 className="text-[1.0625rem] font-bold leading-snug text-text-primary text-pretty sm:text-lg lg:text-xl">{ex.q}</h2>
       {ex.code && (
-        <pre className="overflow-x-auto rounded-sm border border-border border-l-2 border-l-cyan-400 bg-surface-950 px-3 py-2.5 font-mono text-[0.8125rem] leading-relaxed text-text-primary">
+        <pre className="overflow-x-auto rounded-md border border-border bg-surface-950 px-3 py-2.5 font-mono text-[0.8125rem] leading-relaxed text-text-primary">
           <code>{ex.code}</code>
         </pre>
       )}

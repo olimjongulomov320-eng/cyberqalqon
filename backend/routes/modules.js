@@ -132,7 +132,22 @@ router.get('/:slug', optionalAuth, async (req, res, next) => {
       progress = { ...progress, solved: solved.map(r => r.exercise_id) };
     }
 
+    // The content stays readable as a preview, but a locked lesson says so up
+    // front: otherwise the learner answers, and only then hears MODULE_LOCKED.
+    let lockedByModule = null;
+    if (req.user) {
+      const blocker = await lockedBy(req.user.id, m);
+      if (blocker) {
+        const { rows: b } = await pool.query(
+          `SELECT slug, title_${lang} AS title FROM modules WHERE slug = $1`,
+          [blocker]
+        );
+        lockedByModule = b[0] ?? { slug: blocker, title: blocker };
+      }
+    }
+
     res.json({
+      locked_by: lockedByModule,
       module: {
         slug: m.slug,
         kind: m.kind,

@@ -406,15 +406,7 @@ export default function ProblemsPage() {
 
   return (
     <div>
-      <PracticeTabs />
-      <div className="mb-6">
-        <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">
-          {tr('problemsTitle')}
-        </h1>
-        <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-text-secondary">
-          {tr('problemsSubtitle')}
-        </p>
-      </div>
+      <PracticeTabs title={tr('problemsTitle')} subtitle={tr('problemsSubtitle')} />
 
 
       <Card className="mb-4 p-4">
@@ -692,6 +684,17 @@ export default function ProblemsPage() {
                   <p className="max-w-[32ch] text-sm leading-relaxed text-text-muted">
                     {tr('selectProblemBody')}
                   </p>
+                  {/* The idle pane offers a way in instead of only describing one. */}
+                  {problems.length > 0 && (
+                    <div className="mt-2 flex w-full max-w-[18rem] flex-col gap-2">
+                      <Button onClick={() => selectProblem(problems[0])}>
+                        {tr('startFirstProblem')}
+                      </Button>
+                      <Button variant="secondary" onClick={pickRandom}>
+                        {tr('randomProblem')}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </Card>
             ) : detailLoading ? (

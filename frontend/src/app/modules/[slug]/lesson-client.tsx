@@ -11,7 +11,7 @@ import { ApiError, CompleteResult, Exercise, ModuleDetail, completeModule, fetch
 import { achievementMeta } from '@/lib/gamification';
 import TaskCard, { TaskOutcome } from '@/components/TaskCard';
 import { Badge, Button, ButtonLink, Card, ErrorNote, Progress, Skeleton } from '@/components/ui';
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from '@/components/icons';
+import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, LockIcon } from '@/components/icons';
 
 type Phase = 'loading' | 'ready' | 'done' | 'error';
 
@@ -36,6 +36,7 @@ export default function LessonView({ slug }: { slug: string }) {
   const [finishing, setFinishing] = useState(false);
   const [finishError, setFinishError] = useState<string | null>(null);
   const [complete, setComplete] = useState<CompleteResult | null>(null);
+  const [lockedBy, setLockedBy] = useState<{ slug: string; title: string } | null>(null);
 
   useEffect(() => {
     if (!sessionReady) return;
@@ -46,6 +47,7 @@ export default function LessonView({ slug }: { slug: string }) {
         if (!alive) return;
         setModule(d.module);
         setExercises(d.exercises);
+        setLockedBy(d.locked_by ?? null);
         const s = new Set(d.progress?.solved ?? []);
         setSolved(s);
         setInitiallySolved(s);
@@ -203,7 +205,7 @@ export default function LessonView({ slug }: { slug: string }) {
             <span className="num">{total}</span> {tr('lessonTasks').toLowerCase()} | <span className="num">{module.xp_reward}</span> XP
           </p>
         </div>
-        <div className="w-full sm:w-56">
+        <div className="w-full sm:w-56 sm:rounded-lg sm:border sm:border-border sm:bg-surface-900 sm:px-3 sm:py-2.5">
           <div className="mb-1 flex justify-between text-xs text-text-muted">
             <span>{tr('lessonSolvedOf')}</span>
             <span className="num font-semibold text-text-primary">{solvedCount}/{total}</span>
@@ -211,6 +213,27 @@ export default function LessonView({ slug }: { slug: string }) {
           <Progress value={total ? (solvedCount / total) * 100 : 0} label={tr('lessonSolvedOf')} />
         </div>
       </div>
+
+      {lockedBy && (
+        <div
+          role="status"
+          className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 rounded-lg border border-warning/40 bg-warning/[0.07] px-4 py-3.5"
+        >
+          <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-warning/15 text-warning">
+            <LockIcon size={18} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-text-primary">{tr('lessonLockedTitle')}</p>
+            <p className="mt-0.5 text-sm text-text-secondary">
+              {tr('lessonLockedBody')} <span className="font-semibold text-text-primary">{lockedBy.title}</span>
+            </p>
+          </div>
+          <ButtonLink href={`/modules/${lockedBy.slug}`} size="sm" className="group max-sm:w-full">
+            {tr('lessonLockedGo')}
+            <ArrowRightIcon size={15} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+          </ButtonLink>
+        </div>
+      )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start xl:gap-8 xl:grid-cols-[minmax(0,4fr)_minmax(0,6fr)]">
         {/* Concept */}
@@ -233,7 +256,8 @@ export default function LessonView({ slug }: { slug: string }) {
               ex={ex}
               index={i}
               initiallySolved={initiallySolved.has(ex.id)}
-              canSubmit={Boolean(user)}
+              canSubmit={Boolean(user) && !lockedBy}
+              blockedNote={lockedBy ? tr('lessonLockedTask') : undefined}
               onResult={onResult}
             />
           ))}
@@ -248,7 +272,7 @@ export default function LessonView({ slug }: { slug: string }) {
                 tr('lessonFinishLocked')
               )}
             </span>
-            <Button className="ml-auto" onClick={finish} disabled={!allSolved || finishing || !user}>
+            <Button className="ml-auto" onClick={finish} disabled={!allSolved || finishing || !user || Boolean(lockedBy)}>
               {finishing ? tr('taskChecking') : tr('lessonFinish')}
             </Button>
             {finishError && <p role="alert" className="w-full text-sm text-danger">{finishError}</p>}

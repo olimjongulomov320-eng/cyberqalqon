@@ -36,6 +36,7 @@ export default function TaskCard({
   index,
   initiallySolved,
   canSubmit,
+  blockedNote,
   onResult,
 }: {
   slug: string;
@@ -44,6 +45,8 @@ export default function TaskCard({
   initiallySolved: boolean;
   /** False when signed out: the server needs an account to record attempts. */
   canSubmit: boolean;
+  /** Why answering is unavailable when the learner IS signed in (e.g. a locked lesson). */
+  blockedNote?: string;
   onResult: (id: string, outcome: TaskOutcome) => void;
 }) {
   const { lang } = useApp();
@@ -87,7 +90,12 @@ export default function TaskCard({
       onResult(ex.id, { correct: res.correct, result: res });
     } catch (e) {
       const err = e as ApiError;
-      setError(err.code === 'ASSESSMENT_IN_PROGRESS' ? tr('taskAssessmentLock') : err.isOffline || err.isTimeout ? tr('networkError') : tr('loadError'));
+      setError(
+        err.code === 'ASSESSMENT_IN_PROGRESS' ? tr('taskAssessmentLock')
+        : err.code === 'MODULE_LOCKED' ? tr('lessonLockedMsg')
+        : err.isOffline || err.isTimeout ? tr('networkError')
+        : tr('loadError')
+      );
     } finally {
       setBusy(false);
     }
@@ -153,7 +161,7 @@ export default function TaskCard({
                 {tr('taskShowSolution')}
               </Button>
             )}
-            {!canSubmit && <span className="text-xs text-text-muted">{tr('lessonSignIn')}</span>}
+            {!canSubmit && <span className="text-xs text-text-muted">{blockedNote ?? tr('lessonSignIn')}</span>}
           </div>
         )}
 

@@ -237,7 +237,7 @@ Nega xavfli? Izohga yozilgan \`<script>\` tegi boshqa odamning brauzerida aynan 
     slug: 'phishing-basics',
     kind: 'lesson',
     xp_reward: 30,
-    title: { uz: 'Phishing va ijtimoiy injiqlik', ru: 'Фишинг и социальная инженерия' },
+    title: { uz: 'Phishing va ijtimoiy muhandislik', ru: 'Фишинг и социальная инженерия' },
     content: {
       uz: `## Phishing - odamni aldash
 

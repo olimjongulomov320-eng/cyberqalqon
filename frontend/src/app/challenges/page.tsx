@@ -54,10 +54,11 @@ export default function ChallengesPage() {
 
   return (
     <div>
-      <PracticeTabs />
-      <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">{tr('chTitle')}</h1>
-      <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-text-secondary">{tr('chIntro')}</p>
-      <p className="mt-2 font-mono text-[0.6875rem] uppercase tracking-wider text-warning">{tr('chDraftNote')}</p>
+      <PracticeTabs
+        title={tr('chTitle')}
+        subtitle={tr('chIntro')}
+        note={<p className="mt-1.5 text-xs text-text-muted">{tr('chDraftNote')}</p>}
+      />
 
       {data?.summary && (
         <p className="num mt-4 text-sm text-text-secondary">

@@ -228,7 +228,9 @@ export default function HintLadder({
         <p role="alert" className="mt-2 flex items-start gap-1.5 text-xs text-danger">
           <AlertIcon size={14} className="mt-0.5 shrink-0" />
           <span>
-            {error.isTimeout
+            {error.code === 'MODULE_LOCKED'
+              ? tr('lessonLockedMsg')
+              : error.isTimeout
               ? tr('timeoutError')
               : error.isOffline
                 ? tr('networkError')

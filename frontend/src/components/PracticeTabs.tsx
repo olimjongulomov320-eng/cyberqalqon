@@ -8,8 +8,20 @@ import { makeT } from '@/lib/i18n';
 import PracticeHub from '@/components/PracticeHub';
 import { isUnder13 } from '@/lib/ageGroups';
 
-/** Switches between the two halves of Practice: questions and coding challenges. */
-export default function PracticeTabs() {
+/**
+ * Page head for both halves of Practice: the page's own title first, then the
+ * questions / code-challenges switch, then the stats hub. The title used to sit
+ * below the tabs and the hub, so the page read bottom-up.
+ */
+export default function PracticeTabs({
+  title,
+  subtitle,
+  note,
+}: {
+  title: string;
+  subtitle: string;
+  note?: React.ReactNode;
+}) {
   const { lang, ageGroup } = useApp();
   const tr = makeT(lang);
   const pathname = usePathname();
@@ -21,6 +33,11 @@ export default function PracticeTabs() {
   ];
   return (
     <>
+    <div className="mb-5">
+      <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">{title}</h1>
+      <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-text-secondary">{subtitle}</p>
+      {note}
+    </div>
     <nav ref={ref} aria-label={tr('navPractice')} className="relative mb-5 flex gap-1 border-b border-border">
       {tabs.map(t => {
         const active = pathname.startsWith(t.href);

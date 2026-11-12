@@ -150,7 +150,13 @@ export function fetchModules(lang: string, domain?: string) {
 }
 
 export function fetchModule(slug: string, lang: string) {
-  return req<{ module: ModuleDetail; exercises: Exercise[]; progress: ModuleProgress | null }>(
+  return req<{
+    module: ModuleDetail;
+    exercises: Exercise[];
+    progress: ModuleProgress | null;
+    /** Set when the signed-in learner must finish another lesson first. */
+    locked_by?: { slug: string; title: string } | null;
+  }>(
     `/modules/${encodeURIComponent(slug)}?lang=${lang}`
   );
 }

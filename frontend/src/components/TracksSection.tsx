@@ -32,11 +32,10 @@ function TrackCard({ track, tr }: { track: Track; tr: (k: string) => string }) {
           <ContentIcon name={track.icon} size={21} />
         </span>
         <div className="min-w-0 flex-1">
-          {/* Badge sits under the title on phones so it never squeezes the
-              title into three lines; beside it from sm up. */}
-          <div className="flex flex-col items-start gap-1.5 sm:flex-row sm:justify-between sm:gap-2">
+          {/* needs_review is an editorial status for the content team, not
+              something a learner can act on, so it is not shown here. */}
+          <div>
             <h3 className="text-[0.9375rem] font-bold leading-snug text-text-primary">{track.title}</h3>
-            {track.needs_review && <Badge tone="warning" className="shrink-0 sm:mt-0.5">{tr('trackDraft')}</Badge>}
           </div>
           {/* Hidden on phones: eight descriptions made the dashboard a very long scroll. */}
           <p className="mt-1 hidden text-xs leading-relaxed text-text-secondary sm:block">{track.description}</p>

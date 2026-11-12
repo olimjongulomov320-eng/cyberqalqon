@@ -38,7 +38,7 @@ export function AuthBrandPanel({
         }}
       />
 
-      <div className="relative z-10 flex h-full flex-col justify-between gap-16 p-10">
+      <div className="relative z-10 flex h-full flex-col justify-center gap-12 p-10">
         <div className="flex items-center gap-3">
           <LogoMark size={34} className="shrink-0" />
           <Wordmark className="text-lg" />

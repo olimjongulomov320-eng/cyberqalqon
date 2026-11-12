@@ -38,18 +38,19 @@ type ButtonVariant = 'primary' | 'secondary' | 'success' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 
 const BUTTON_BASE =
-  'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-out active:translate-y-px disabled:pointer-events-none disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-cyan-400';
+  'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-out active:translate-y-px disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg focus-visible:ring-cyan-400';
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   // Solid, single-accent fills. No gradients - the old cyan→cyan gradient
   // buttons were the loudest generic tell in the shell.
   // Inset top highlight makes the fill read as a physical key; the hover glow
-  // is the one place the accent is allowed to bloom.
-  primary: 'bg-cyan-400 text-text-inverse shadow-[inset_0_1px_0_rgb(255_255_255/0.22)] hover:bg-cyan-300 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.22),0_8px_24px_-10px_rgb(var(--cyan-400)/0.6)]',
-  secondary: 'bg-surface-800 text-text-primary border border-border-light shadow-[inset_0_1px_0_rgb(var(--surface-300)/0.06)] hover:bg-surface-700 hover:border-cyan-500/40',
-  success: 'bg-success text-text-inverse hover:bg-success-light',
-  ghost: 'text-text-secondary hover:text-text-primary hover:bg-surface-800',
-  danger: 'bg-danger-dark text-onaccent hover:bg-danger focus-visible:ring-danger',
+  // is the one place the accent is allowed to bloom. Disabled solid buttons go
+  // neutral instead of fading: a 45%-opacity green read as washed-out in light.
+  primary: 'bg-cyan-400 text-text-inverse shadow-[inset_0_1px_0_rgb(255_255_255/0.22)] hover:bg-cyan-300 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.22),0_8px_24px_-10px_rgb(var(--cyan-400)/0.6)] disabled:bg-surface-700 disabled:text-text-muted disabled:shadow-none',
+  secondary: 'bg-surface-800 text-text-primary border border-border-light shadow-[inset_0_1px_0_rgb(var(--surface-300)/0.06)] hover:bg-surface-700 hover:border-cyan-500/40 disabled:opacity-50',
+  success: 'bg-success text-text-inverse hover:bg-success-light disabled:bg-surface-700 disabled:text-text-muted',
+  ghost: 'text-text-secondary hover:text-text-primary hover:bg-surface-800 disabled:opacity-50',
+  danger: 'bg-danger-dark text-onaccent hover:bg-danger focus-visible:ring-danger disabled:opacity-50',
 };
 
 const BUTTON_SIZES: Record<ButtonSize, string> = {

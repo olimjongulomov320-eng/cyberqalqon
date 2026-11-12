@@ -5,6 +5,7 @@ import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ageInfo, scopePaths } from '@/lib/ageGroups';
 import AgePicker from '@/components/AgePicker';
+import TracksSection from '@/components/TracksSection';
 import {
   ApiError,
   Difficulty,
@@ -78,12 +79,16 @@ function DomainRow({
   open,
   onToggle,
   showDifficulty,
+  isCurrent,
 }: {
   domain: Domain;
   visible: PathModule[];
   open: boolean;
   onToggle: () => void;
   showDifficulty: boolean;
+  /** Holds the learner's next lesson. Only this row says "current": every
+   *  domain's first lesson is open, so "active" alone marked them all. */
+  isCurrent: boolean;
 }) {
   const { lang } = useApp();
   const tr = makeT(lang);
@@ -111,7 +116,7 @@ function DomainRow({
           <span className="flex flex-wrap items-center gap-1.5">
             <span className="truncate text-sm font-bold text-white">{domain.title}</span>
             {status === 'done' && <Badge tone="success">{tr('stateDone')}</Badge>}
-            {status === 'active' && <Badge tone="primary">{tr('stateCurrent')}</Badge>}
+            {status !== 'done' && isCurrent && <Badge tone="primary">{tr('stateCurrent')}</Badge>}
             {status === 'locked' && <Badge tone="neutral">{tr('stateLocked')}</Badge>}
           </span>
           <span className="mt-0.5 block truncate text-xs text-text-muted">{domain.description}</span>
@@ -159,6 +164,7 @@ function Rail({
   pathDone,
   pathTotal,
   showApply,
+  part = 'all',
 }: {
   continueTarget: { slug: string; title: string; position: number; total: number } | null;
   weakTopics: TopicStat[];
@@ -167,6 +173,9 @@ function Rail({
   pathTotal: number;
   /** The advanced-task / checkpoint block belongs to the adult course only. */
   showApply: boolean;
+  /** Phones show the continue block above the directory and the rest below it,
+   *  so the catalogue starts on the first screen. */
+  part?: 'all' | 'top' | 'rest';
 }) {
   const { user, lang } = useApp();
   const tr = makeT(lang);
@@ -177,6 +186,7 @@ function Rail({
       className="overflow-hidden rounded-lg border border-border bg-surface-900 shadow-card edge-light lg:sticky lg:top-20"
     >
       {/* 02 · Learn - the real continue target */}
+      {part !== 'rest' && (
       <section className="p-3.5">
         <p className="label text-cyan-300">{tr('continueLearning')}</p>
         {continueTarget ? (
@@ -207,6 +217,10 @@ function Rail({
           <p className="mt-1 text-sm text-text-muted">{tr('pathEmptyBody')}</p>
         )}
       </section>
+      )}
+
+      {part !== 'top' && (
+      <div className={part === 'rest' ? '[&>section:first-child]:border-t-0' : ''}>
 
       {/* 03 · Practice - straight into the arena.
           On phones the three lower blocks collapse to one dense row each:
@@ -310,6 +324,8 @@ function Rail({
           </>
         )}
       </section>
+      </div>
+      )}
     </div>
   );
 }
@@ -524,7 +540,8 @@ function LearnInner() {
         {/* Rail first in DOM so mobile opens with the next real action; on
             desktop it moves to the right column. */}
         <aside className="order-1 lg:order-2">
-          <Rail
+          <div className="lg:hidden">
+            <Rail part="top"
             continueTarget={data.continue}
             weakTopics={weakTopics}
             checkpoint={checkpoint}
@@ -532,6 +549,17 @@ function LearnInner() {
             pathTotal={totals.total}
             showApply={adultPath}
           />
+          </div>
+          <div className="hidden lg:block lg:sticky lg:top-20">
+            <Rail part="all"
+            continueTarget={data.continue}
+            weakTopics={weakTopics}
+            checkpoint={checkpoint}
+            pathDone={totals.done}
+            pathTotal={totals.total}
+            showApply={adultPath}
+          />
+          </div>
         </aside>
 
         <div className="order-2 flex flex-col gap-3 lg:order-1">
@@ -637,6 +665,7 @@ function LearnInner() {
                   open={open.has(d.slug)}
                   onToggle={() => toggle(d.slug)}
                   showDifficulty={adultPath}
+                  isCurrent={(path.domains.find(o => o.slug === d.slug) ?? d).modules.some(m => m.slug === data.continue?.slug)}
                 />
               ))}
             </div>
@@ -645,8 +674,23 @@ function LearnInner() {
           <p className="px-1 text-[0.6875rem] leading-relaxed text-text-muted">
             {tr('skillsRuleShort')}
           </p>
+
+          <div className="lg:hidden">
+            <Rail part="rest"
+            continueTarget={data.continue}
+            weakTopics={weakTopics}
+            checkpoint={checkpoint}
+            pathDone={totals.done}
+            pathTotal={totals.total}
+            showApply={adultPath}
+          />
+          </div>
         </div>
       </div>
+
+      {/* The adult course's tracks, with completion and mastery side by side.
+          They used to sit on the home dashboard; this is where paths live. */}
+      {adultPath && <TracksSection />}
     </div>
   );
 }

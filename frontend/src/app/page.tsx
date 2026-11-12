@@ -4,34 +4,25 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
-import { fetchPaths, fetchStats, StatsPayload, LeaderboardEntry, fetchLeaderboard, LearningPath } from '@/lib/api';
+import { fetchPaths, fetchStats, StatsPayload, LeaderboardEntry, fetchLeaderboard } from '@/lib/api';
 import { AchievementBadge, DailyGoal, RingProgress, XPChip } from '@/components/game';
 import LandingPreview from '@/components/LandingPreview';
-import TracksSection from '@/components/TracksSection';
 import AgePicker from '@/components/AgePicker';
 import { useRouter } from 'next/navigation';
-import { isMinor, scopePaths } from '@/lib/ageGroups';
+import { isMinor } from '@/lib/ageGroups';
 import { achievementMeta, levelFromXp, tierIndex, tierKey } from '@/lib/gamification';
 import { Avatar, Badge, ButtonLink, Card, EmptyState, SectionHeading, Skeleton } from '@/components/ui';
 import {
   ArrowRightIcon,
   BoltIcon,
   BookIcon,
-  CheckIcon,
   ChevronRightIcon,
   CompassIcon,
   DomainIcon,
   FlameIcon,
   PlayIcon,
-  RefreshIcon,
   TargetIcon,
 } from '@/components/icons';
-
-const ACTIVITY_LABEL: Record<string, string> = {
-  lesson: 'activityLesson',
-  correct: 'activityCorrect',
-  review: 'activityReview',
-};
 
 export default function HomePage() {
   const { lang, user, ageGroup, setAgeGroup } = useApp();
@@ -41,7 +32,6 @@ export default function HomePage() {
 
   const [stats, setStats] = useState<StatsPayload | null>(null);
   const [continueCtx, setContinueCtx] = useState<{ slug: string; title: string; position: number; total: number } | null>(null);
-  const [paths, setPaths] = useState<LearningPath[]>([]);
   const [top, setTop] = useState<LeaderboardEntry[] | null>(null);
   const [statsFailed, setStatsFailed] = useState(false);
 
@@ -56,7 +46,6 @@ export default function HomePage() {
         setContinueCtx(
           p.continue ? { slug: p.continue.slug, title: p.continue.title, position: p.continue.position, total: p.continue.total } : null
         );
-        setPaths(scopePaths(p.paths, ageGroup, false));
       } catch {
         if (alive) setStatsFailed(true);
       }
@@ -266,82 +255,6 @@ export default function HomePage() {
         </Card>
       </div>
 
-      {/* Learning paths + skill mastery - built from the real /paths data the
-          dashboard already fetches. "Mastery" here is honest: a domain counts as
-          mastered only when every one of its modules is completed. */}
-      {paths.length > 0 && (
-        <section aria-labelledby="paths-h" className="mt-8">
-          <SectionHeading
-            action={
-              <Link href="/learn" className="inline-flex min-h-9 items-center text-xs font-medium text-cyan-400 hover:underline">
-                {tr('viewPath')}
-              </Link>
-            }
-          >
-            <span id="paths-h">{tr('yourPath')}</span>
-          </SectionHeading>
-          <div className="flex flex-col gap-2">
-            {paths.map(path => {
-              const done = path.domains.reduce((n, d) => n + d.completed, 0);
-              const total = path.domains.reduce((n, d) => n + d.total, 0);
-              const pct = total > 0 ? done / total : 0;
-              return (
-                <Card key={path.slug} className="p-4">
-                  <div className="flex items-center gap-2.5">
-                    <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={path.slug} size={20} /></span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-bold text-white">{path.title}</p>
-                      <p className="num text-xs text-text-muted">
-                        {done}/{total} {tr('modulesDone')} · {Math.round(pct * 100)}%
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-800">
-                    <div
-                      className="fill-x h-full rounded-full bg-cyan-400"
-                      style={{ transform: `scaleX(${pct})`, transformOrigin: 'left' }}
-                    />
-                  </div>
-                  {path.domains.length > 0 && (
-                    <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-6">
-                      {path.domains.map(d => {
-                        const dp = d.total > 0 ? d.completed / d.total : 0;
-                        const mastered = d.total > 0 && d.completed >= d.total;
-                        return (
-                          <li key={d.slug} className="flex min-w-0 items-center gap-2">
-                            <span
-                              aria-hidden="true"
-                              className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border text-[0.625rem] ${
-                                mastered ? 'border-success/40 bg-success/10 text-success' : 'border-border bg-surface-800'
-                              }`}
-                            >
-                              {mastered ? <CheckIcon size={9} /> : <DomainIcon slug={d.slug} size={12} className="text-cyan-300" />}
-                            </span>
-                            <span className="min-w-0 flex-1 truncate text-xs text-text-secondary">{d.title}</span>
-                            <span aria-hidden="true" className="h-1 w-14 shrink-0 overflow-hidden rounded-full bg-surface-800">
-                              <span
-                                className="fill-x block h-full rounded-full bg-cyan-400/70"
-                                style={{ transform: `scaleX(${dp})`, transformOrigin: 'left' }}
-                              />
-                            </span>
-                            <span className="num w-8 shrink-0 text-right text-[0.6875rem] text-text-muted">
-                              {d.completed}/{d.total}
-                            </span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
-                </Card>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* The eight tracks are the adult course. */}
-      {!minor && <TracksSection />}
-
       {statsFailed ? (
         <Card className="mt-8">
           <EmptyState
@@ -356,43 +269,35 @@ export default function HomePage() {
           <Skeleton className="h-32 w-full" />
         </div>
       ) : (
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-8">
-          {/* Supporting sections flow two-up on desktop, so the dashboard stops
-              being one 16px-gapped column of equally weighted blocks. */}
-          {/* Weak topics → practice */}
-          {stats.weak_topics.length > 0 && (
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-x-6">
+          {/* Two supporting blocks only. Paths and tracks live on Learn; the
+              full history lives on Progress. Home answers "what next?". */}
+          {stats.weak_topics.length > 0 ? (
             <section aria-labelledby="weak-h">
-              <SectionHeading
-                action={
-                  <Link href="/review" className="inline-flex min-h-9 items-center text-xs font-medium text-cyan-400 hover:underline">
-                    {tr('sharpSkills')}
-                  </Link>
-                }
-              >
+              <SectionHeading>
                 <span id="weak-h">{tr('weakTopics')}</span>
               </SectionHeading>
-              <Card as="ul" className="divide-y divide-border overflow-hidden">
-                {stats.weak_topics.slice(0, 3).map(t => (
-                  <li key={t.slug}>
-                    {/* The row shows a chevron, so it has to go somewhere: the
-                        review session, same as the section's own link. */}
-                    <Link href="/review" className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-800/60">
-                      <span aria-hidden="true" className="text-cyan-300"><DomainIcon slug={t.slug} size={18} /></span>
-                      <span className="min-w-0 flex-1 truncate text-sm font-medium text-text-primary">{t.title}</span>
-                      <span className="hidden h-1 w-16 shrink-0 overflow-hidden rounded-full bg-surface-800 sm:block" aria-hidden="true">
-                        <span className="fill-x block h-full rounded-full bg-warning/80" style={{ transform: `scaleX(${t.accuracy / 100})` }} />
-                      </span>
-                      <span className="num w-9 text-right text-xs font-semibold text-warning">{t.accuracy}%</span>
-                      <ChevronRightIcon size={16} className="shrink-0 text-text-muted transition-[color,transform] group-hover:translate-x-0.5 group-hover:text-cyan-400" />
-                    </Link>
-                  </li>
-                ))}
-              </Card>
+              <Link
+                href="/review"
+                className="group flex items-center gap-3 rounded-lg border border-warning/30 bg-warning/[0.06] px-4 py-3.5 transition-colors hover:bg-warning/[0.1]"
+              >
+                <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-warning/15 text-warning">
+                  <DomainIcon slug={stats.weak_topics[0].slug} size={20} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-bold text-text-primary">{stats.weak_topics[0].title}</span>
+                  <span className="num block text-xs text-text-secondary">
+                    {tr('accuracy')} {stats.weak_topics[0].accuracy}%
+                    {stats.weak_topics.length > 1 && ` · +${stats.weak_topics.length - 1}`}
+                  </span>
+                </span>
+                <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-cyan-400">
+                  <span className="hidden sm:inline">{tr('sharpSkills')}</span>
+                  <ChevronRightIcon size={16} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </Link>
             </section>
-          )}
-
-          {/* Achievements */}
-          {stats.achievements.length > 0 && (
+          ) : stats.achievements.length > 0 ? (
             <section aria-labelledby="ach-h">
               <SectionHeading
                 action={
@@ -410,31 +315,7 @@ export default function HomePage() {
                 })}
               </div>
             </section>
-          )}
-
-          {/* Recent activity */}
-          {stats.recent.length > 0 && (
-            <section aria-labelledby="act-h">
-              <SectionHeading><span id="act-h">{tr('recentActivity')}</span></SectionHeading>
-              <Card as="ul" className="divide-y divide-border overflow-hidden">
-                {stats.recent.slice(0, 4).map((r, i) => {
-                  const ActivityIcon = r.kind === 'review' ? RefreshIcon : r.kind === 'correct' ? TargetIcon : BookIcon;
-                  return (
-                    <li key={i} className="flex items-center gap-3 px-4 py-2.5">
-                      <ActivityIcon size={16} className="shrink-0 text-text-muted" />
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-text-primary">
-                          {tr(ACTIVITY_LABEL[r.kind] ?? 'activityLesson')}
-                          {r.module_title ? ` · ${r.module_title}` : ''}
-                        </p>
-                      </div>
-                      <span className="num shrink-0 text-xs font-bold text-warning">+{r.amount}</span>
-                    </li>
-                  );
-                })}
-              </Card>
-            </section>
-          )}
+          ) : null}
 
           {/* Leaderboard preview - never shown to children and teens. */}
           {!minor && (
@@ -459,15 +340,12 @@ export default function HomePage() {
                   </li>
                 ))
               ) : (
-                <li className="px-4 py-6 text-center text-sm text-text-muted">{tr('emptyLeaderboardTitle')}</li>
+                <li className="px-4 py-5 text-sm text-text-muted">{tr('emptyLeaderboardTitle')}</li>
               )}
             </Card>
           </section>
           )}
 
-          {/* Continue to full path */}
-          {/* A closing rule with the path link, not a full-width slab that
-              outweighs everything above it. */}
           <div className="flex items-center gap-4 lg:col-span-2">
             <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-transparent to-border-light" />
             <ButtonLink href="/learn" variant="secondary" className="group">
