@@ -37,10 +37,12 @@ services:
         generateValue: true
       - key: NODE_ENV
         value: production
+      # Custom domain first (APP_URL falls back to the first origin). The
+      # github.io origin stays allowed while old links still redirect through it.
       - key: CORS_ORIGIN
-        value: https://olimjongulomov320-eng.github.io
+        value: https://cyber-qalqon.uz,https://www.cyber-qalqon.uz,https://olimjongulomov320-eng.github.io
       - key: APP_URL
-        value: https://olimjongulomov320-eng.github.io/cyberqalqon
+        value: https://cyber-qalqon.uz
       # Password-reset email (Resend). Set both in the Render dashboard to enable it.
       - key: RESEND_API_KEY
         sync: false

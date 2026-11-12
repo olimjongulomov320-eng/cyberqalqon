@@ -44,11 +44,12 @@ jobs:
       - name: Build static export
         working-directory: frontend
         env:
-          # Project Pages are served from https://<user>.github.io/<repo>/.
-          BASE_PATH: /cyberqalqon
+          # Served from the custom domain cyber-qalqon.uz at the root, so no
+          # base path. (The old project URL github.io/cyberqalqon redirects here.)
+          BASE_PATH: ''
           NEXT_PUBLIC_API_URL: https://cyberqalqon-api.onrender.com
           # Absolute base for OG/Twitter preview URLs.
-          NEXT_PUBLIC_SITE_URL: https://olimjongulomov320-eng.github.io/cyberqalqon
+          NEXT_PUBLIC_SITE_URL: https://cyber-qalqon.uz
         run: npm run build
 
       - uses: actions/configure-pages@v5

@@ -37,7 +37,7 @@ The frontend calls the API at `http://localhost:3001` in development
 
 ## Deployment
 
-- **Frontend → GitHub Pages** (project site under `/cyberqalqon/`):
+- **Frontend → GitHub Pages** on the custom domain `cyber-qalqon.uz` (served at the root, no base path):
   `.github/workflows/deploy-pages.yml` builds `frontend/` as a static export on
   every push to `main` that touches `frontend/`, and can be run manually via
   `workflow_dispatch`.
@@ -47,4 +47,4 @@ The frontend calls the API at `http://localhost:3001` in development
 - **Order:** deploy the API first, then rebuild the frontend — the module list is
   fetched at build time, so a frontend rebuild before the API update freezes a
   stale module list.
-- Live: <https://olimjongulomov320-eng.github.io/cyberqalqon/> 
+- Live: <https://cyber-qalqon.uz/> (DNS at ahost.uz: four GitHub Pages A records on `@`, `www` CNAME → `olimjongulomov320-eng.github.io`) 

@@ -232,12 +232,12 @@ tool that happens to look great, not like a movie prop.
   (`scripts/validate-curriculum.js`).
 
 ### 5.3 Deployment
-- **Frontend → GitHub Pages (project site):** `.github/workflows/deploy-pages.yml`
+- **Frontend → GitHub Pages (custom domain `cyber-qalqon.uz`):** `.github/workflows/deploy-pages.yml`
   builds `frontend/` as a static HTML export (`output: 'export'`) and publishes
-  it under the `/cyberqalqon/` base path. The API base defaults to the Render
+  it at the domain root (no base path). The API base defaults to the Render
   URL in production and is overridable via `NEXT_PUBLIC_API_URL`.
 - **Backend → Render:** `render.yaml` provisions the API + free Postgres
-  together; the CORS origin is locked to the GitHub Pages origin and
+  together; the CORS origin is locked to the site's origins and
   `JWT_SECRET` is injected there. An idempotent `setup()` reseeds the
   curriculum on every start, so content changes ship with an ordinary deploy.
 - **Ordering matters:** the module list is fetched at build time, so the API

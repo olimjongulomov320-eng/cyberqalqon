@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   // sets NEXT_PUBLIC_SITE_URL explicitly; this fallback matches it so a build
   // that forgets the variable still advertises the real deployment rather than
   // a stale third-party host.
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://olimjongulomov320-eng.github.io/cyberqalqon'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://cyber-qalqon.uz'),
   title: { default: TITLE, template: '%s · CyberQalqon' },
   description:
     'Qisqa darslar va savollar orqali kiber xavfsizlikni oʻzbek va rus tilida oʻrganing. XP toʻplang, reytingda koʻrinishing.',

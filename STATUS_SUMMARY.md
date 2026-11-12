@@ -24,11 +24,11 @@ core loop, design language, architecture) see **[CONCEPT.md](CONCEPT.md)**.
 
 | Piece | Host | Config |
 |---|---|---|
-| Frontend | GitHub Pages, project site under `/cyberqalqon/` | `.github/workflows/deploy-pages.yml` |
+| Frontend | GitHub Pages, custom domain `cyber-qalqon.uz` | `.github/workflows/deploy-pages.yml` |
 | API | Render | `render.yaml` |
 | Database | Render Postgres (provisioned with the API) | `render.yaml` |
 
-- Live: <https://olimjongulomov320-eng.github.io/cyberqalqon/>
+- Live: <https://cyber-qalqon.uz/>
 - API: <https://cyberqalqon-api.onrender.com>
 
 > **Deploy order matters:** deploy the API first (it reseeds the curriculum on
