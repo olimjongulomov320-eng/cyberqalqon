@@ -304,6 +304,12 @@
     animation: cq-caret 1.1s steps(1) infinite;
   }
   .solved-flash { animation: cq-solved 0.9s ease-out 1; }
+  /* Auth form: ticks pop in, messages rise in, the form shakes once on a
+     failed submit, and the submit button draws its success tick. */
+  .pop-in { animation: cq-pop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .rise-in { animation: cq-rise 0.28s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .shake { animation: cq-shake 0.4s ease-in-out 1; }
+  .check-draw { stroke-dasharray: 1; animation: cq-draw 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both; }
 
   /* Feedback banner / next question: slides up 8px while fading in. */
   @keyframes cq-rise {

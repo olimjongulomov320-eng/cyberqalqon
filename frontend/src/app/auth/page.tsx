@@ -1,17 +1,17 @@
 'use client';
-import AgePicker from '@/components/AgePicker';
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useId, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import LogoMark from '@/components/LogoMark';
 import Link from 'next/link';
+import LogoMark from '@/components/LogoMark';
 import { useApp } from '@/context/AppContext';
 import { makeT } from '@/lib/i18n';
 import { ApiError, authLogin, authRegister } from '@/lib/api';
 import { safeNextPath } from '@/lib/redirect';
 import { safeStorage } from '@/lib/safeStorage';
 import { PwnedResult, checkPwned } from '@/lib/pwned';
-import PasswordPolicy from '@/components/PasswordPolicy';
-import { Button, Field, ErrorNote, SuccessNote } from '@/components/ui';
+import { passwordChecks } from '@/components/PasswordPolicy';
+import { AGE_GROUPS } from '@/lib/ageGroups';
+import { ErrorNote } from '@/components/ui';
 import { AuthBrandPanel } from '@/components/AuthBrandPanel';
 import { ArrowLeftIcon, CheckIcon, EyeIcon, EyeOffIcon } from '@/components/icons';
 
@@ -20,110 +20,126 @@ type Mode = 'login' | 'register';
 const USERNAME_RE = /^[a-zA-Z0-9_]{3,30}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Mirrors the backend rule (see backend/routes/auth.js): 8+ chars with an
- *  uppercase letter, a lowercase letter and a digit. Kept in one place so the
- *  inline validation and the submit gate can never drift apart. */
-function isStrongPassword(pw: string): boolean {
-  return pw.length >= 8 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /\d/.test(pw);
-}
+/** Mirrors the backend rule (backend/routes/auth.js): 8+ chars with an
+ *  uppercase letter, a lowercase letter and a digit. */
+const isStrongPassword = (pw: string) => passwordChecks(pw).every(c => c.ok);
 
-/* ── Password strength ──────────────────────────────────────────────────────── */
+/** 0-4: drives the bar inside the password field. */
 function scorePassword(pw: string): number {
   if (!pw) return 0;
-  let score = 0;
-  if (pw.length >= 8) score++;
-  if (pw.length >= 12) score++;
-  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
-  if (/\d/.test(pw)) score++;
-  if (/[^A-Za-z0-9]/.test(pw)) score++;
-  return Math.min(score, 4);
+  let s = 0;
+  if (pw.length >= 8) s++;
+  if (pw.length >= 12) s++;
+  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) s++;
+  if (/\d/.test(pw)) s++;
+  if (/[^A-Za-z0-9]/.test(pw)) s++;
+  return Math.min(s, 4);
+}
+const BAR_COLOR = ['bg-danger', 'bg-danger', 'bg-warning', 'bg-success', 'bg-success'];
+
+/** "olim.gulomov+cq@mail.uz" -> "olim_gulomov": a valid username from the email,
+ *  or '' when the local part is too short to be one. */
+function suggestUsername(email: string): string {
+  const local = email.split('@')[0] ?? '';
+  const s = local.split('+')[0].toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+  return USERNAME_RE.test(s) ? s : '';
 }
 
-const STRENGTH_META = [
-  { key: 'passwordWeak', color: 'bg-danger', text: 'text-danger' },
-  { key: 'passwordWeak', color: 'bg-danger', text: 'text-danger' },
-  { key: 'passwordMedium', color: 'bg-warning', text: 'text-warning' },
-  { key: 'passwordStrong', color: 'bg-success', text: 'text-success' },
-  { key: 'passwordStrong', color: 'bg-success', text: 'text-success' },
-] as const;
-
-function PasswordStrength({ password, tr }: { password: string; tr: (k: string) => string }) {
-  const score = scorePassword(password);
-  if (!password) return null;
-  const meta = STRENGTH_META[score];
+/* ── Collapsible row: register-only fields open and close in place ─────────── */
+function Reveal({ open, children }: { open: boolean; children: ReactNode }) {
   return (
-    <div className="mt-2" aria-live="polite">
-      <div className="flex gap-1">
-        {[0, 1, 2, 3].map(i => (
-          <span
-            key={i}
-            className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
-              i < score ? meta.color : 'bg-surface-700'
-            }`}
-          />
-        ))}
+    <div
+      className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+      }`}
+      inert={!open}
+    >
+      {/* -mx-1/px-1 and the grandchild's pt-1 leave room for the focus ring. */}
+      <div className="-mx-1 min-h-0 overflow-hidden px-1">
+        <div className="pt-1">{children}</div>
       </div>
-      <p className={`mt-1.5 text-xs font-medium ${meta.text}`}>{tr(meta.key)}</p>
     </div>
   );
 }
 
-/* ── Password input with visibility toggle ──────────────────────────────────── */
-function PasswordInput({
+/* ── Floating-label input ──────────────────────────────────────────────────── */
+function FloatField({
+  label,
   value,
   onChange,
   onBlur,
+  type = 'text',
   autoComplete,
-  placeholder,
-  invalid,
-  show,
-  toggle,
-  label,
+  mono,
   error,
   hint,
-  onCaps,
+  ok,
+  trailing,
+  footer,
+  onKeyUp,
 }: {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: () => void;
-  autoComplete: string;
-  placeholder?: string;
-  invalid?: boolean;
-  show: boolean;
-  toggle: () => void;
   label: string;
+  value: string;
+  onChange: (v: string) => void;
+  onBlur?: () => void;
+  type?: string;
+  autoComplete: string;
+  mono?: boolean;
   error?: string;
   hint?: string;
-  /** Reports Caps Lock state so the form can warn before a mistyped password. */
-  onCaps?: (on: boolean) => void;
+  /** Shows the pop-in tick once the value is valid. */
+  ok?: boolean;
+  trailing?: ReactNode;
+  footer?: ReactNode;
+  onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }) {
-  const { lang } = useApp();
-  const tr = makeT(lang);
+  const id = useId();
+  const msgId = `${id}-msg`;
   return (
-    <Field label={label} error={error} hint={hint} required>
+    <div className="pb-3">
       <div className="relative">
         <input
-          type={show ? 'text' : 'password'}
+          id={id}
+          type={type}
           value={value}
-          onChange={onChange}
+          onChange={e => onChange(e.target.value)}
           onBlur={onBlur}
-          onKeyUp={e => onCaps?.(e.getModifierState('CapsLock'))}
+          onKeyUp={onKeyUp}
           autoComplete={autoComplete}
-          placeholder={placeholder}
-          aria-invalid={invalid || undefined}
-          className={`input-base pr-11 font-mono ${invalid ? 'input-error' : ''}`}
+          autoCapitalize="none"
+          spellCheck={false}
+          placeholder=" "
+          aria-invalid={Boolean(error) || undefined}
+          aria-describedby={error || hint ? msgId : undefined}
+          className={`peer input-base h-14 pb-2 pt-6 ${trailing || ok ? 'pr-11' : ''} ${mono ? 'font-mono' : ''} ${
+            error ? 'input-error' : ''
+          }`}
         />
-        <button
-          type="button"
-          onClick={toggle}
-          aria-label={tr(show ? 'hidePassword' : 'showPassword')}
-          aria-pressed={show}
-          className="absolute right-1 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-lg text-text-muted transition-colors hover:text-text-primary"
+        <label
+          htmlFor={id}
+          className="pointer-events-none absolute left-4 top-1/2 origin-left -translate-y-1/2 text-sm text-text-muted transition-all duration-200 ease-out
+                     peer-focus:top-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-cyan-300
+                     peer-[:not(:placeholder-shown)]:top-[1.15rem] peer-[:not(:placeholder-shown)]:scale-[0.8]
+                     peer-autofill:top-[1.15rem] peer-autofill:scale-[0.8]"
         >
-          {show ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-        </button>
+          {label}
+        </label>
+        <div className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center">
+          {trailing ??
+            (ok && (
+              <span className="pop-in mr-2.5 grid h-5 w-5 place-items-center rounded-full bg-success/15 text-success" aria-hidden="true">
+                <CheckIcon size={13} />
+              </span>
+            ))}
+        </div>
+        {footer}
       </div>
-    </Field>
+      {error ? (
+        <p id={msgId} role="alert" className="form-error rise-in">{error}</p>
+      ) : hint ? (
+        <p id={msgId} className="form-hint rise-in text-xs">{hint}</p>
+      ) : null}
+    </div>
   );
 }
 
@@ -131,42 +147,27 @@ export default function AuthPage() {
   const { lang, setUser, ageGroup, setAgeGroup } = useApp();
   const tr = makeT(lang);
   const router = useRouter();
-  // Read `?next=` lazily on the client only. Nothing rendered depends on it, so
-  // it never causes a hydration mismatch - and avoiding `useSearchParams` keeps
-  // the form server-rendered instead of flashing a Suspense fallback.
-  // `safeNextPath` only allows same-origin relative paths, so a crafted link
-  // cannot redirect a freshly signed-in user to an external origin.
+  // Read `?next=` lazily on the client only (nothing rendered depends on it).
+  // `safeNextPath` only allows same-origin relative paths.
   const next = useMemo(
-    () =>
-      typeof window === 'undefined'
-        ? '/'
-        : safeNextPath(new URLSearchParams(window.location.search).get('next')),
+    () => (typeof window === 'undefined' ? '/' : safeNextPath(new URLSearchParams(window.location.search).get('next'))),
     []
   );
 
   const [mode, setMode] = useState<Mode>('login');
-  const [form, setForm] = useState({
-    display_name: '',
-    username: '',
-    email: '',
-    password: '',
-    confirm: '',
-  });
+  const [form, setForm] = useState({ username: '', email: '', password: '' });
+  const [usernameEdited, setUsernameEdited] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [shake, setShake] = useState(false);
   const [showPw, setShowPw] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [terms, setTerms] = useState(false);
   const [caps, setCaps] = useState(false);
   const [breach, setBreach] = useState<PwnedResult | 'checking' | null>(null);
 
   const isRegister = mode === 'register';
 
-  // Breach lookup: only while registering and only once the policy is met, and
-  // debounced so typing does not fire a request per keystroke.
+  // Breach lookup: only while registering, only once the policy is met, debounced.
   useEffect(() => {
     if (!isRegister || !isStrongPassword(form.password)) {
       setBreach(null);
@@ -183,78 +184,89 @@ export default function AuthPage() {
     };
   }, [isRegister, form.password]);
 
-  const errors = useMemo(() => {
-    const e: Partial<Record<keyof typeof form, string>> = {};
-    if (isRegister) {
-      if (!form.display_name.trim()) e.display_name = tr('displayNameHint');
-      if (!USERNAME_RE.test(form.username)) e.username = tr('usernameHint');
-      if (!EMAIL_RE.test(form.email)) e.email = tr('emailInvalid');
-      if (!isStrongPassword(form.password)) e.password = tr('passwordHint');
-      if (form.confirm && form.confirm !== form.password) e.confirm = tr('passwordMismatch');
-    } else {
-      if (!form.username.trim()) e.username = tr('loginIdentifierHint');
-      if (!form.password) e.password = tr('passwordRequired');
-    }
-    return e;
-  }, [form, isRegister, tr]);
+  const pwned = breach && breach !== 'checking' && breach.status === 'pwned';
+  const checks = passwordChecks(form.password);
+  const score = scorePassword(form.password);
 
-  const valid =
-    isRegister
-      ? Boolean(
-          form.display_name.trim() &&
-            USERNAME_RE.test(form.username) &&
-            EMAIL_RE.test(form.email) &&
-            isStrongPassword(form.password) &&
-            form.confirm === form.password &&
-            terms &&
-            !(breach && breach !== 'checking' && breach.status === 'pwned')
-        )
-      : Boolean(form.username.trim() && form.password);
+  const valid = {
+    email: EMAIL_RE.test(form.email),
+    username: isRegister ? USERNAME_RE.test(form.username) : Boolean(form.username.trim()),
+    password: isRegister ? isStrongPassword(form.password) && !pwned : Boolean(form.password),
+  };
+  const formValid = valid.username && valid.password && (!isRegister || valid.email);
 
-  function set<K extends keyof typeof form>(key: K) {
-    return (e: React.ChangeEvent<HTMLInputElement>) =>
-      setForm(f => ({ ...f, [key]: e.target.value }));
+  const errors = {
+    email: isRegister && touched.email && !valid.email ? tr('emailInvalid') : undefined,
+    username: touched.username && !valid.username ? tr(isRegister ? 'usernameHint' : 'loginIdentifierHint') : undefined,
+    password:
+      touched.password && !valid.password && !(isRegister && form.password && !pwned)
+        ? tr(isRegister ? 'passwordHint' : 'passwordRequired')
+        : undefined,
+  };
+
+  const usernameSuggested = isRegister && !usernameEdited && Boolean(form.username) && form.username === suggestUsername(form.email);
+
+  function setEmail(v: string) {
+    setForm(f => {
+      const nextForm = { ...f, email: v };
+      // Keep the username in step with the email until the learner edits it.
+      if (!usernameEdited && (f.username === '' || f.username === suggestUsername(f.email))) {
+        nextForm.username = suggestUsername(v);
+      }
+      return nextForm;
+    });
   }
 
   function switchMode(m: Mode) {
+    if (m === mode) return;
     setMode(m);
     setError('');
-    setSuccess('');
     setTouched({});
-    setSubmitted(false);
+    setUsernameEdited(form.username !== '');
+  }
+
+  function fail() {
+    setShake(false);
+    requestAnimationFrame(() => setShake(true));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setTouched({ display_name: true, username: true, email: true, password: true, confirm: true });
-    setSubmitted(true);
-    if (!valid) return;
+    if (status !== 'idle') return;
+    setTouched({ email: true, username: true, password: true });
+    if (!formValid) return fail();
 
     setError('');
-    setLoading(true);
+    setStatus('loading');
     try {
       const res = isRegister
         ? await authRegister({
             username: form.username.trim(),
             email: form.email.trim(),
             password: form.password,
-            display_name: form.display_name.trim(),
+            // The name shown on the profile starts as the username; it can be
+            // changed in the profile at any time.
+            display_name: form.username.trim(),
             lang,
             ...(ageGroup ? { age_group: ageGroup } : {}),
           })
         : await authLogin({ identifier: form.username.trim(), password: form.password });
 
       safeStorage.set('cq_token', res.token);
-      setUser(res.user);
-      setSuccess(isRegister ? tr('registerSuccess') : tr('loginSuccess'));
-      router.replace(next);
+      setStatus('done');
+      // Let the tick land before the page changes.
+      window.setTimeout(() => {
+        setUser(res.user);
+        router.replace(next);
+      }, 550);
     } catch (err) {
-      const msg = err instanceof ApiError ? err.message : tr('networkError');
-      setError(msg);
-    } finally {
-      setLoading(false);
+      setStatus('idle');
+      setError(err instanceof ApiError ? err.message : tr('networkError'));
+      fail();
     }
   }
+
+  const selectedAge = AGE_GROUPS.find(g => g.slug === ageGroup);
 
   return (
     <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
@@ -277,35 +289,37 @@ export default function AuthPage() {
         </div>
       </AuthBrandPanel>
 
-      <div className="flex flex-col justify-center py-2 sm:py-6">
-        {/* mobile brand mark */}
-        <div className="mb-8 flex flex-col items-center text-center lg:items-start lg:text-left">
-          <span className="grid h-14 w-14 place-items-center rounded-lg border border-border bg-surface-900 shadow-card edge-light lg:hidden">
+      <div className="mx-auto flex w-full max-w-sm flex-col justify-center py-2 sm:py-6 lg:max-w-none">
+        <div className="mb-6 flex flex-col items-center text-center lg:items-start lg:text-left">
+          {/* Keyed on mode: the mark redraws itself on every switch. */}
+          <span key={mode} className="mb-4 grid h-14 w-14 place-items-center rounded-lg border border-border bg-surface-900 shadow-card edge-light lg:hidden">
             <LogoMark size={32} />
           </span>
-          <p className="label mt-4 text-cyan-400 lg:mt-0">{tr('authSecureLabel')}</p>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-text-primary">
-            {isRegister ? tr('createAccount') : tr('welcomeBack')}
-          </h1>
-          <p className="mt-2 max-w-sm text-sm text-text-secondary">
-            {isRegister ? tr('registerSubtitle') : tr('loginSubtitle')}
-          </p>
+          <div key={`h-${mode}`} className="rise-in">
+            <h1 className="text-3xl font-extrabold tracking-tight text-text-primary">
+              {isRegister ? tr('createAccount') : tr('welcomeBack')}
+            </h1>
+            <p className="mt-2 text-sm text-text-secondary">{isRegister ? tr('registerSubtitle') : tr('loginSubtitle')}</p>
+          </div>
         </div>
 
-        {/* mode tabs */}
-        <div
-          role="tablist"
-          aria-label={tr('login')}
-          className="mb-6 grid grid-cols-2 gap-1 rounded-md border border-border bg-surface-900 p-1"
-        >
+        {/* Mode switch with a sliding indicator */}
+        <div role="tablist" aria-label={tr('login')} className="relative mb-5 grid grid-cols-2 rounded-md border border-border bg-surface-900 p-1">
+          <span
+            aria-hidden="true"
+            className={`absolute bottom-1 left-1 top-1 w-[calc(50%-4px)] rounded-sm bg-cyan-500/15 shadow-[inset_0_0_0_1px_rgb(var(--cyan-500)/0.35)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              isRegister ? 'translate-x-full' : 'translate-x-0'
+            }`}
+          />
           {(['login', 'register'] as const).map(m => (
             <button
               key={m}
+              type="button"
               role="tab"
               aria-selected={mode === m}
               onClick={() => switchMode(m)}
-              className={`rounded-sm py-2 font-mono text-xs font-semibold uppercase tracking-wider transition-colors ${
-                mode === m ? 'bg-cyan-500/15 text-cyan-300 shadow-[inset_0_0_0_1px_rgb(var(--cyan-500)/0.35)]' : 'text-text-muted hover:bg-surface-800 hover:text-text-primary'
+              className={`relative z-10 rounded-sm py-2.5 text-sm font-semibold transition-colors duration-200 ${
+                mode === m ? 'text-cyan-300' : 'text-text-muted hover:text-text-primary'
               }`}
             >
               {m === 'login' ? tr('login') : tr('register')}
@@ -313,163 +327,188 @@ export default function AuthPage() {
           ))}
         </div>
 
-        <form key={mode} onSubmit={handleSubmit} noValidate className="space-y-4">
-          {isRegister && (
-            <Field label={tr('displayName')} error={touched.display_name ? errors.display_name : undefined} required>
-              <input
-                type="text"
-                value={form.display_name}
-                onChange={set('display_name')}
-                onBlur={() => setTouched(t => ({ ...t, display_name: true }))}
-                autoComplete="name"
-                placeholder={tr('displayNamePlaceholder')}
-                aria-invalid={submitted && Boolean(errors.display_name) || undefined}
-                className={`input-base ${submitted && errors.display_name ? 'input-error' : ''}`}
-              />
-            </Field>
-          )}
-
-          {isRegister && (
-            <div>
-              <p className="form-label">{tr('ageSettingsTitle')}</p>
-              <AgePicker value={ageGroup} onChange={setAgeGroup} compact />
-              <p className="mt-1.5 text-xs text-text-muted">{tr('agePickSubtitle')}</p>
-            </div>
-          )}
-
-          <Field
-            label={isRegister ? tr('username') : tr('loginIdentifier')}
-            error={touched.username ? errors.username : undefined}
-            hint={isRegister ? tr('usernameHint') : undefined}
-            required
-          >
-            <input
-              type={isRegister ? 'text' : 'text'}
-              value={form.username}
-              onChange={set('username')}
-              onBlur={() => setTouched(t => ({ ...t, username: true }))}
-              autoComplete={isRegister ? 'username' : 'username'}
-              autoCapitalize="none"
-              spellCheck={false}
-              placeholder={isRegister ? tr('usernamePlaceholder') : tr('loginIdentifierPlaceholder')}
-              aria-invalid={submitted && Boolean(errors.username) || undefined}
-              className={`input-base font-mono ${submitted && errors.username ? 'input-error' : ''}`}
+        <form onSubmit={handleSubmit} noValidate className={shake ? 'shake' : ''} onAnimationEnd={e => e.target === e.currentTarget && setShake(false)}>
+          <Reveal open={isRegister}>
+            <FloatField
+              label={tr('email')}
+              type="email"
+              value={form.email}
+              onChange={setEmail}
+              onBlur={() => setTouched(t => ({ ...t, email: true }))}
+              autoComplete="email"
+              mono
+              ok={valid.email}
+              error={errors.email}
             />
-          </Field>
+          </Reveal>
 
-          {isRegister && (
-            <Field label={tr('email')} error={touched.email ? errors.email : undefined} hint={tr('emailHint')} required>
-              <input
-                type="email"
-                value={form.email}
-                onChange={set('email')}
-                onBlur={() => setTouched(t => ({ ...t, email: true }))}
-                autoComplete="email"
-                autoCapitalize="none"
-                spellCheck={false}
-                placeholder={tr('emailPlaceholder')}
-                aria-invalid={submitted && Boolean(errors.email) || undefined}
-                className={`input-base font-mono ${submitted && errors.email ? 'input-error' : ''}`}
-              />
-            </Field>
-          )}
+          <div className="pt-1">
+            <FloatField
+              label={isRegister ? tr('username') : tr('loginIdentifier')}
+              value={form.username}
+              onChange={v => {
+                setUsernameEdited(true);
+                setForm(f => ({ ...f, username: v }));
+              }}
+              onBlur={() => setTouched(t => ({ ...t, username: true }))}
+              autoComplete="username"
+              mono
+              ok={isRegister && valid.username}
+              error={errors.username}
+              hint={usernameSuggested ? tr('usernameSuggested') : undefined}
+            />
 
-          <PasswordInput
-            label={tr('password')}
-            value={form.password}
-            onChange={set('password')}
-            onBlur={() => setTouched(t => ({ ...t, password: true }))}
-            autoComplete={isRegister ? 'new-password' : 'current-password'}
-            placeholder={isRegister ? tr('passwordPlaceholder') : undefined}
-            invalid={submitted && Boolean(errors.password)}
-            show={showPw}
-            toggle={() => setShowPw(v => !v)}
-            error={touched.password ? errors.password : undefined}
-            onCaps={setCaps}
-          />
+            <FloatField
+              label={tr('password')}
+              type={showPw ? 'text' : 'password'}
+              value={form.password}
+              onChange={v => setForm(f => ({ ...f, password: v }))}
+              onBlur={() => setTouched(t => ({ ...t, password: true }))}
+              onKeyUp={e => setCaps(e.getModifierState('CapsLock'))}
+              autoComplete={isRegister ? 'new-password' : 'current-password'}
+              mono
+              error={errors.password}
+              trailing={
+                <button
+                  type="button"
+                  onClick={() => setShowPw(v => !v)}
+                  aria-label={tr(showPw ? 'hidePassword' : 'showPassword')}
+                  aria-pressed={showPw}
+                  className="grid h-10 w-10 place-items-center rounded-lg text-text-muted transition-colors hover:text-text-primary"
+                >
+                  {showPw ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+                </button>
+              }
+              footer={
+                isRegister && (
+                  <span aria-hidden="true" className="pointer-events-none absolute inset-x-3 bottom-0 h-0.5 overflow-hidden rounded-full">
+                    <span
+                      className={`block h-full origin-left rounded-full transition-[transform,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${BAR_COLOR[score]}`}
+                      style={{ transform: `scaleX(${score / 4})` }}
+                    />
+                  </span>
+                )
+              }
+            />
+          </div>
 
           {caps && (
-            <p role="status" className="-mt-2 font-mono text-[0.6875rem] font-semibold text-warning">
+            <p role="status" className="rise-in -mt-1.5 mb-2 font-mono text-[0.6875rem] font-semibold text-warning">
               {tr('capsOn')}
             </p>
           )}
 
-          {!isRegister && (
-            <p className="-mt-1 text-right text-xs">
-              <Link href="/auth/reset" className="font-semibold text-cyan-300 hover:underline">
-                {tr('forgotPassword')}
+          {/* Login: forgot link. Register: rule pills + breach line. */}
+          <div className="-mt-1 mb-3 min-h-[1.5rem]">
+            {isRegister ? (
+              <div key="rules" className="rise-in" aria-live="polite">
+                <ul className="flex flex-wrap gap-1.5">
+                  {checks.map(c => (
+                    <li
+                      key={c.key}
+                      title={tr(c.key)}
+                      className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[0.6875rem] font-semibold transition-colors duration-300 ${
+                        c.ok ? 'border-success/40 bg-success/10 text-success' : 'border-border text-text-muted'
+                      }`}
+                    >
+                      {c.ok && <CheckIcon size={11} className="pop-in" />}
+                      <span className="sr-only">{tr(c.key)}: </span>
+                      {{ polLen: '8+', polUpper: 'A-Z', polLower: 'a-z', polDigit: '0-9' }[c.key]}
+                    </li>
+                  ))}
+                </ul>
+                {breach && (
+                  <p
+                    className={`rise-in mt-2 font-mono text-[0.6875rem] ${
+                      pwned ? 'font-semibold text-danger' : breach !== 'checking' && breach.status === 'safe' ? 'text-success' : 'text-text-muted'
+                    }`}
+                  >
+                    {breach === 'checking'
+                      ? tr('pwnedChecking')
+                      : breach.status === 'pwned'
+                        ? `${tr('pwnedFound')} ${breach.count.toLocaleString(lang === 'ru' ? 'ru-RU' : 'uz-UZ')}`
+                        : breach.status === 'safe'
+                          ? tr('pwnedSafe')
+                          : tr('pwnedUnknown')}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p key="forgot" className="rise-in text-right text-xs">
+                <Link href="/auth/reset" className="font-semibold text-cyan-300 hover:underline">
+                  {tr('forgotPassword')}
+                </Link>
+              </p>
+            )}
+          </div>
+
+          <Reveal open={isRegister}>
+            <div className="pb-4" role="group" aria-label={tr('ageChipsLabel')}>
+              <p className="form-label">{tr('ageChipsLabel')}</p>
+              <div className="grid grid-cols-5 gap-1.5">
+                {AGE_GROUPS.map(g => {
+                  const on = ageGroup === g.slug;
+                  return (
+                    <button
+                      key={g.slug}
+                      type="button"
+                      aria-pressed={on}
+                      aria-label={`${g.title[lang]} - ${g.who[lang]}`}
+                      onClick={() => setAgeGroup(g.slug)}
+                      className={`rounded-md border py-2 font-mono text-xs font-semibold transition-[color,background-color,border-color,transform] duration-200 active:scale-95 ${
+                        on
+                          ? 'border-cyan-400/60 bg-cyan-500/15 text-cyan-300'
+                          : 'border-border bg-surface-800 text-text-secondary hover:border-surface-500 hover:text-text-primary'
+                      }`}
+                    >
+                      {g.slug}
+                    </button>
+                  );
+                })}
+              </div>
+              <p key={selectedAge?.slug ?? 'none'} className="rise-in mt-1.5 text-xs text-text-muted">
+                {selectedAge ? `${selectedAge.title[lang]} · ${selectedAge.who[lang]}` : tr('agePickSubtitle')}
+              </p>
+            </div>
+          </Reveal>
+
+          {error && (
+            <div className="mb-3 rise-in">
+              <ErrorNote>{error}</ErrorNote>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={status !== 'idle'}
+            className={`relative inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-md text-sm font-bold transition-[background-color,transform,box-shadow] duration-300 active:scale-[0.98] disabled:cursor-default ${
+              status === 'done' ? 'bg-success text-text-inverse' : 'bg-cyan-400 text-text-inverse hover:bg-cyan-300'
+            } ${formValid && status === 'idle' ? 'shadow-[0_6px_20px_-8px_rgb(var(--cyan-400)/0.7)]' : ''}`}
+          >
+            {status === 'loading' ? (
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-text-inverse/30 border-t-text-inverse" aria-label={tr('loading')} />
+            ) : status === 'done' ? (
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-label={tr(isRegister ? 'registerSuccess' : 'loginSuccess')}>
+                <path pathLength={1} className="check-draw" d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            ) : (
+              <span key={mode} className="rise-in">{isRegister ? tr('createAccountBtn') : tr('loginBtn')}</span>
+            )}
+          </button>
+
+          <Reveal open={isRegister}>
+            <p className="pt-3 text-center text-xs leading-relaxed text-text-muted">
+              {tr('agreeLead')}{' '}
+              <Link href="/terms" className="font-medium text-text-secondary underline underline-offset-2 hover:text-cyan-300">
+                {tr('terms')}
+              </Link>{' '}
+              {tr('and')}{' '}
+              <Link href="/privacy" className="font-medium text-text-secondary underline underline-offset-2 hover:text-cyan-300">
+                {tr('privacy')}
               </Link>
             </p>
-          )}
-
-          {isRegister && (
-            <>
-              <PasswordPolicy password={form.password} breach={breach} />
-              <PasswordStrength password={form.password} tr={tr} />
-              <PasswordInput
-                label={tr('confirmPassword')}
-                value={form.confirm}
-                onChange={set('confirm')}
-                onBlur={() => setTouched(t => ({ ...t, confirm: true }))}
-                autoComplete="new-password"
-                placeholder={tr('confirmPasswordPlaceholder')}
-                invalid={submitted && Boolean(errors.confirm)}
-                show={showConfirm}
-                toggle={() => setShowConfirm(v => !v)}
-                error={touched.confirm ? errors.confirm : undefined}
-              />
-              <label className="flex items-start gap-3 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={terms}
-                  onChange={e => setTerms(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border bg-surface-800 text-cyan-400 focus:ring-cyan-400/30"
-                />
-                <span className="text-xs leading-relaxed text-text-secondary">
-                  {tr('termsIAccept')}{' '}
-                  <Link href="/terms" className="font-medium text-cyan-400 underline underline-offset-2 hover:text-cyan-300">
-                    {tr('terms')}
-                  </Link>{' '}
-                  {tr('and')}{' '}
-                  <Link href="/privacy" className="font-medium text-cyan-400 underline underline-offset-2 hover:text-cyan-300">
-                    {tr('privacy')}
-                  </Link>
-                </span>
-              </label>
-            </>
-          )}
-
-          {error && <ErrorNote>{error}</ErrorNote>}
-          {success && !error && <SuccessNote>{success}</SuccessNote>}
-
-          <Button
-            type="submit"
-            size="lg"
-            disabled={loading || (submitted && !valid)}
-            className="w-full"
-          >
-            {loading ? (
-              <>
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-text-inverse/30 border-t-text-inverse" aria-hidden="true" />
-                {tr('loading')}
-              </>
-            ) : isRegister ? (
-              tr('createAccountBtn')
-            ) : (
-              tr('loginBtn')
-            )}
-          </Button>
+          </Reveal>
         </form>
-
-        <p className="mt-6 text-center text-sm text-text-secondary">
-          {isRegister ? tr('alreadyAccount') : tr('noAccount')}{' '}
-          <button
-            onClick={() => switchMode(isRegister ? 'login' : 'register')}
-            className="px-1 py-2 font-semibold text-cyan-400 transition-colors hover:text-cyan-300"
-          >
-            {isRegister ? tr('login') : tr('register')}
-          </button>
-        </p>
 
         <p className="mt-6 text-center text-xs text-text-muted">
           <Link href="/" className="inline-flex items-center gap-1.5 py-2 transition-colors hover:text-text-secondary">
