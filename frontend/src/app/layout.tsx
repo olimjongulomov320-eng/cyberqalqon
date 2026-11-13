@@ -5,6 +5,7 @@ import './globals.css';
 import { AppProvider } from '@/context/AppContext';
 import AppShell from '@/components/AppShell';
 import SkipLink from '@/components/SkipLink';
+import FaviconMotion from '@/components/FaviconMotion';
 
 // Manrope instead of Inter: geometric, semi-condensed, unmistakably not the
 // default UI font - and it ships a cyrillic subset, so the ru locale never
@@ -81,8 +82,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* Applies the saved/system theme before first paint (no flash). */}
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
+        {/* Tab icon, declared here rather than as app/icon.* metadata: Next
+            hydrates metadata links later, and FaviconMotion swaps these hrefs
+            while it plays, which would make React re-insert duplicates. */}
+        <link rel="icon" href={`${BASE_PATH}/icon.png?v=2`} type="image/png" sizes="512x512" data-cq-icon="" />
+        <link rel="icon" href={`${BASE_PATH}/icon.svg?v=2`} type="image/svg+xml" sizes="any" data-cq-icon="" />
       </head>
       <body>
+        <FaviconMotion />
         <AppProvider>
           <SkipLink />
           <AppShell>{children}</AppShell>

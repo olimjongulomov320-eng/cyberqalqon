@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="3 3 18.6 18.6" fill="none">
+  <!-- Tab icon: the mark alone on a transparent ground. A light browser
+       chrome gets a deeper green so the stroke keeps its contrast. -->
+  <style>
+    path { stroke: #16a063; }
+    @media (prefers-color-scheme: dark) { path { stroke: #39d98a; } }
+  </style>
+  <path d="M15.29 19.95 L8.71 19.95 L4.05 15.29 L4.05 8.71 L8.71 4.05 L15.29 4.05 L19.95 8.71 L19.95 15.29" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M9 9.2 12.2 12 9 14.8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12.9 14.8H15.1" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M17.1 17.1 20.6 20.6" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
