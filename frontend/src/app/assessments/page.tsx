@@ -7,7 +7,8 @@ import { makeT } from '@/lib/i18n';
 import { lessonsLeft } from '@/lib/plural';
 import { AssessmentSummary, LearningPath, fetchAssessments, fetchPaths } from '@/lib/api';
 import { Badge, ButtonLink, Card, EmptyState, Skeleton } from '@/components/ui';
-import { CompassIcon, ContentIcon, LockIcon } from '@/components/icons';
+import { BriefcaseIcon, ChevronRightIcon, CompassIcon, ContentIcon, LockIcon } from '@/components/icons';
+import { isUnder13 } from '@/lib/ageGroups';
 
 type Readiness = 'passed' | 'inprogress' | 'ready' | 'locked';
 
@@ -36,7 +37,7 @@ interface Checkpoint {
  * certificate, and the page says so once, plainly.
  */
 export default function AssessmentsPage() {
-  const { lang, user, ready } = useApp();
+  const { lang, user, ready, ageGroup } = useApp();
   const tr = makeT(lang);
 
   const [scored, setScored] = useState<AssessmentSummary[] | null>(null);
@@ -82,6 +83,21 @@ export default function AssessmentsPage() {
     <div>
       <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{tr('assessmentsTitle')}</h1>
       <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-text-secondary">{tr('assessmentsIntro')}</p>
+
+      {/* The mobile bar folds Interviews into this tab, so the way in lives here too. */}
+      {!isUnder13(ageGroup) && (
+        <Link
+          href="/interviews"
+          className="group mt-5 flex items-center gap-3 rounded-md border border-cyan-400/25 bg-cyan-500/5 px-4 py-3 transition-colors hover:border-cyan-400/50"
+        >
+          <BriefcaseIcon size={20} className="shrink-0 text-cyan-300" />
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-semibold text-text-primary">{tr('ivTitle')}</span>
+            <span className="block truncate text-xs text-text-muted">{tr('ivHow2')} · {tr('ivHow3')}</span>
+          </span>
+          <ChevronRightIcon size={16} className="shrink-0 text-text-muted transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      )}
 
       {scored && (
         <p className="num mt-4 font-mono text-sm text-text-secondary">

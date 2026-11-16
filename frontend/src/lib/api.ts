@@ -829,3 +829,136 @@ export interface ActivityDay {
 export function fetchActivity(days = 308) {
   return req<{ days: number; activity: ActivityDay[] }>(`/users/me/activity?days=${days}`);
 }
+
+// ── Mock interviews ───────────────────────────────────────────────────────────
+export type InterviewRoundKind = 'concepts' | 'scenario' | 'coding';
+export type InterviewVerdict = 'ready' | 'close' | 'notyet';
+export interface InterviewDims { knowledge: number; analysis: number; practical: number; time: number }
+
+export interface InterviewRole {
+  slug: string;
+  icon: string;
+  level: 'junior' | 'middle';
+  title: string;
+  summary: string;
+  skills: { key: string; label: string }[];
+  minutes: number;
+  rounds: { kind: InterviewRoundKind; minutes: number }[];
+  needs_review: boolean;
+}
+
+export interface InterviewRoleDetail extends InterviewRole {
+  brief: { title: string; body: string }[];
+  bank: { concepts: number; scenarios: number };
+  modules: { slug: string; title: string }[];
+}
+
+export interface InterviewChoice { q: string; options: string[]; skill: string }
+
+export type InterviewRound =
+  | { kind: 'concepts'; minutes: number; questions: (InterviewChoice & { id: string })[] }
+  | { kind: 'scenario'; minutes: number; scenario: { id: string; title: string; context: string; steps: InterviewChoice[] } }
+  | {
+      kind: 'coding';
+      minutes: number;
+      task: {
+        slug: string;
+        entry: string;
+        title: string;
+        statement: string;
+        constraints: string;
+        starter: string;
+        tests: { args: unknown[]; expected: unknown; hidden: boolean }[];
+      };
+    };
+
+export interface InterviewSession {
+  id: string;
+  started_at: string;
+  deadline_at: string;
+  role: InterviewRole;
+  rounds: InterviewRound[];
+}
+
+export interface InterviewReviewItem {
+  q: string;
+  options: string[];
+  chosen: number | null;
+  answer: number;
+  correct: boolean;
+  why: string;
+  skill: string;
+}
+
+export interface InterviewReport {
+  id: string;
+  role: InterviewRole;
+  started_at: string;
+  finished_at: string;
+  duration_s: number;
+  late: boolean;
+  overall: number;
+  verdict: InterviewVerdict;
+  dims: InterviewDims;
+  rounds: [
+    { kind: 'concepts'; seconds: number; limit_s: number; items: InterviewReviewItem[] },
+    { kind: 'scenario'; seconds: number; limit_s: number; title: string; context: string; items: InterviewReviewItem[] },
+    { kind: 'coding'; seconds: number; limit_s: number; title: string; passed: number; total: number; attempted: boolean; code: string; verified: false },
+  ];
+  skills: {
+    key: string;
+    label: string;
+    ok: number;
+    total: number;
+    score: number;
+    status: 'strong' | 'ok' | 'focus';
+    modules: { slug: string; title: string }[];
+  }[];
+}
+
+export interface InterviewHistoryRow {
+  id: string;
+  role: string;
+  title: string;
+  score: number;
+  verdict: InterviewVerdict;
+  dims: InterviewDims;
+  finished_at: string;
+}
+
+export interface InterviewAnswers {
+  concepts: Record<string, number | null>;
+  scenario: (number | null)[];
+  coding: { passed: number; total: number; code: string } | null;
+  round_seconds: number[];
+}
+
+export function fetchInterviews(lang: string) {
+  return req<{ roles: (InterviewRole & { mine: { best: number; attempts: number } | null })[]; history: InterviewHistoryRow[] }>(
+    `/interviews?lang=${lang}`
+  );
+}
+
+export function fetchInterviewRole(slug: string, lang: string) {
+  return req<{ role: InterviewRoleDetail }>(`/interviews/roles/${encodeURIComponent(slug)}?lang=${lang}`);
+}
+
+export function startInterview(slug: string, lang: string) {
+  return req<{ session: InterviewSession }>(`/interviews/roles/${encodeURIComponent(slug)}/start?lang=${lang}`, {
+    method: 'POST',
+    body: '{}',
+  });
+}
+
+export function fetchInterviewSession(id: string, lang: string) {
+  return req<{ session?: InterviewSession; report?: InterviewReport }>(
+    `/interviews/sessions/${encodeURIComponent(id)}?lang=${lang}`
+  );
+}
+
+export function finishInterview(id: string, answers: InterviewAnswers, lang: string) {
+  return req<{ report: InterviewReport }>(`/interviews/sessions/${encodeURIComponent(id)}/finish?lang=${lang}`, {
+    method: 'POST',
+    body: JSON.stringify(answers),
+  });
+}

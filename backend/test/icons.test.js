@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { PATHS, DOMAINS } = require('../curriculum');
 const { TRACKS } = require('../curriculum/tracks');
+const { ROLES } = require('../curriculum/interviews');
 
 // The frontend registry is TSX, so read its keys as text (no build needed).
 const src = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'src', 'components', 'icons.tsx'), 'utf8');
@@ -19,6 +20,7 @@ test('every icon in curriculum data is a registered icon key, never an emoji', (
     ...PATHS.map(p => ['path ' + p.slug, p.icon]),
     ...DOMAINS.map(d => ['domain ' + d.slug, d.icon]),
     ...TRACKS.map(t => ['track ' + t.slug, t.icon]),
+    ...ROLES.map(r => ['interview ' + r.slug, r.icon]),
   ];
   for (const [what, icon] of used) {
     assert.match(icon, /^[a-z-]+$/, `${what}: "${icon}" is not an icon key`);

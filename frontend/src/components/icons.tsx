@@ -54,6 +54,9 @@ import {
   Sun,
   Target,
   TerminalWindow,
+  ChatCircleDots,
+  Briefcase,
+  Timer,
   TreeStructure,
   Trophy,
   UserCircle,
@@ -125,6 +128,9 @@ export const DatabaseIcon = make(Database);
 export const GitBranchIcon = make(GitBranch);
 export const CodeIcon = make(Code);
 export const LaptopIcon = make(Laptop);
+export const ChatIcon = make(ChatCircleDots);
+export const BriefcaseIcon = make(Briefcase);
+export const TimerIcon = make(Timer);
 
 const HeartBase = make(Heart);
 const BoltBase = make(Lightning);

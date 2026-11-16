@@ -240,6 +240,22 @@ async function setup() {
       created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
     )`);
   await pool.query(`CREATE INDEX IF NOT EXISTS idx_challenge_submissions_user ON challenge_submissions (user_id, challenge_slug, created_at DESC)`);
+  // Mock interviews: one row per sitting. `plan` is the paper (question ids),
+  // `answers` and the scores are written once, at finish.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS interview_sessions (
+      id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id     UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      role_slug   TEXT NOT NULL,
+      plan        JSONB NOT NULL,
+      answers     JSONB,
+      score       INTEGER,
+      dims        JSONB,
+      started_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+      deadline_at TIMESTAMPTZ NOT NULL,
+      finished_at TIMESTAMPTZ
+    )`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_interview_sessions_user ON interview_sessions (user_id, finished_at DESC)`);
 
   /* ── 3. v2 columns ───────────────────────────────────────────────────── */
   for (const sql of [

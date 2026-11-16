@@ -12,6 +12,7 @@ import { useApp } from '@/context/AppContext';
 import { Lang, LANGS, makeT } from '@/lib/i18n';
 import {
   BookIcon,
+  BriefcaseIcon,
   CodeIcon,
   HomeIcon,
   SearchIcon,
@@ -24,7 +25,7 @@ import {
 
 type NavItem = { href: string; label: string; Icon: (p: IconProps) => React.ReactElement; also?: string[] };
 
-// Five destinations. "Practice" is the challenge catalogue; mistake review
+// Six destinations (the bottom bar folds Interviews into Assessments). "Practice" is the challenge catalogue; mistake review
 // (/review) and the leaderboard live under Progress, and `also` keeps Progress
 // highlighted on those pages. The legacy /practice URL redirects to /review.
 const NAV: NavItem[] = [
@@ -32,6 +33,7 @@ const NAV: NavItem[] = [
   { href: '/learn', label: 'navLearn', Icon: BookIcon },
   { href: '/problems', label: 'navPractice', Icon: CodeIcon, also: ['/challenges'] },
   { href: '/assessments', label: 'navAssessments', Icon: TargetIcon },
+  { href: '/interviews', label: 'navInterviews', Icon: BriefcaseIcon },
   { href: '/profile', label: 'navProgress', Icon: UserIcon, also: ['/review', '/leaderboard', '/practice'] },
 ];
 

@@ -309,6 +309,12 @@
   .pop-in { animation: cq-pop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .rise-in { animation: cq-rise 0.28s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .shake { animation: cq-shake 0.4s ease-in-out 1; }
+  /* Interviewer "typing" dots: three staggered breaths, only while it types. */
+  @keyframes cq-typing {
+    0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+    40% { opacity: 1; transform: translateY(-2px); }
+  }
+  .typing-dot { animation: cq-typing 1s ease-in-out infinite; }
   .check-draw { stroke-dasharray: 1; animation: cq-draw 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both; }
 
   /* Feedback banner / next question: slides up 8px while fading in. */
